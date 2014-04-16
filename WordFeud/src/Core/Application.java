@@ -1,4 +1,4 @@
-package WordFeud;
+package Core;
 
 public class Application {
 	
