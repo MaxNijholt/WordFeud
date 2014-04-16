@@ -16,6 +16,6 @@ public abstract class Panel extends JPanel{
 		g.setColor(Color.BLACK);
 		g.fillRect(this.getWidth()/2-50, this.getHeight()/2-50, 100, 100);
 		g.setColor(Color.WHITE);
-		g.drawString(this.getClass().getSimpleName(), this.getWidth()-20, this.getHeight()-20);
+		g.drawString(this.getClass().getSimpleName(), this.getWidth()/2-20, this.getHeight()/2-20);
 	}
 }
