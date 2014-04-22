@@ -2,19 +2,19 @@ package WordFeud;
 
 public class GameStone {
 
+	private int value;
+	private char letter;
 	
-	public GameStone(){
-		
+	public GameStone(int value, char letter){
+		this.value = value;
+		this.letter = letter;
 	}
 	
 	public int getValue(){
-		return 0;
-		
+		return value;
 	}
 	
 	public char getLetter(){
-		return 0;
-		
+		return letter;
 	}
-	
 }
