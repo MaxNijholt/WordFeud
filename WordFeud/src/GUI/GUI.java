@@ -11,11 +11,15 @@ import WordFeud.GameStone;
 public class GUI extends JFrame{
 
 	public GUI(){
-		AdminPanel SP = new AdminPanel();
+		// EDIT HIER JE PANEL!
+		// PanelName PN = new PanelName();
 		this.setPreferredSize(new Dimension(1280,800));
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setContentPane(SP);
+		/*
+		 * UNCOMMENT DIT EN JE PANNEL IN DE PANE!
+		this.setContentPane( PANE HIER);
+		*/
 		this.pack();
 		this.setVisible(true);
 	}
