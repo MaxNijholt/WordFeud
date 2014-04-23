@@ -81,7 +81,7 @@ public class Game {
 	}
 	
 	/**
-	 * get the visibility from the db and return
+	 * get the visibility from the db and return boolean
 	 * @return
 	 */
 	public boolean getVisibility(){
