@@ -12,16 +12,16 @@ public class Field {
 		field = new HashMap<String, Tile>();
 		
 		//initialiseer field
-		for(int i = 0; i < 15; i++){
-			for(int j = 0; j < 15; j++){
+		for(int i = 1; i < 16; i++){
+			for(int j = 1; j < 16; j++){
 				field.put(i + "," + j, new Tile(i, j));
 			}
 		}
 	}
 	
 	public void layGameStone(GameStone gamestone, String location){
-		for(int i = 0; i < 15; i++){
-			for(int j = 0; j < 15; j++){
+		for(int i = 1; i < 16; i++){
+			for(int j = 1; j < 16; j++){
 				if(location.equals(i + "," + j)){
 					//controle of de tile leeg is
 					if(field.get(location).getGameStone() == null ){
@@ -41,8 +41,8 @@ public class Field {
 	}
 	
 	public void removeGameStone(String location){
-		for(int i = 0; i < 15; i++){
-			for(int j = 0; j < 15; j++){
+		for(int i = 1; i < 16; i++){
+			for(int j = 1; j < 16; j++){
 				if(field.get(location).getGameStone() != null ){
 					//leg gamestone op de tile
 					field.get(location).setGameStone(null);
