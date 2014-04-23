@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 public abstract class Panel extends JPanel{
 
 	public Panel(){
-		this.revalidate();
+		
 	}
 
 	public void paintComponent(Graphics g) {
