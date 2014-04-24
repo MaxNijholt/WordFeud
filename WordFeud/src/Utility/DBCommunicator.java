@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DBCommunicator {
 
@@ -34,6 +36,29 @@ public class DBCommunicator {
 
 			while (res.next()) {
 				result = res.getString(1);
+			}
+			res.close();
+			stm.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public static ArrayList<String> requestMoreData(String query) {
+		Connection con;
+		Statement stm;
+		ResultSet res;
+		ArrayList<String> result = new ArrayList<String>();
+		try {
+			Class.forName(CLASS_NAME);
+			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+			stm = con.createStatement();
+			res = stm.executeQuery(query);
+
+			while(res.next()){
+				result.add(res.getString(1));
 			}
 			res.close();
 			stm.close();
