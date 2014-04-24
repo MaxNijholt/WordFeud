@@ -8,7 +8,7 @@ import Utility.WordChecker;
 
 public class Game {
 
-	Field myField;
+	private Field myField;
 	private PointCounter myPC;
 	private WordChecker myWC;
 	
@@ -26,9 +26,11 @@ public class Game {
 	 * @param location
 	 * @return
 	 */
-	public boolean layGameStone(GameStone gamestone, String location){
-		return false;
+	public int layGameStone(GameStone gamestone, String location){
+		myField.layGameStone(gamestone, location);
+		int points = 0;//= myPC.counterPointsTurn(myField.getNewWords());
 		
+		return points;
 	}
 	
 	/**
@@ -52,7 +54,10 @@ public class Game {
 	 * tell the DB
 	 */
 	public void pass(){
-		
+		/*
+		 * tell the DB it's the opponents turn
+		 * tell the DB the turn is passed
+		 */
 	}
 	
 	/**
@@ -60,7 +65,12 @@ public class Game {
 	 * get new gamestones
 	 */
 	public void swapGameStones(){
-		
+		/*
+		 * tell the DB it's the opponents turn
+		 * tell the DB the swapped gamestones
+		 * get new gamestones
+		 * tell the db the new gamestones
+		 */
 	}
 	
 	/**
@@ -68,7 +78,9 @@ public class Game {
 	 * does not end turn
 	 */
 	public void shuffle(){
-		
+		/*
+		 * show the gamestones in a different order
+		 */
 	}
 	
 	/**
@@ -77,7 +89,9 @@ public class Game {
 	 * @param bool
 	 */
 	public void setVisibility(Boolean bool){
-		
+		/*
+		 * tell the DB the new visibility
+		 */
 	}
 	
 	/**
@@ -85,6 +99,9 @@ public class Game {
 	 * @return
 	 */
 	public boolean getVisibility(){
+		/*
+		 * get the visibility from the DB
+		 */
 		return false;
 	}
 }
