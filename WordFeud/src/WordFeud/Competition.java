@@ -1,46 +1,30 @@
 package WordFeud;
 
-import java.sql.Date;
-
 import AccountType.Player;
+import Utility.DBCommunicator;
 
 public class Competition {
+	private int id;
+	private String description;
 
-	public Competition(String name, Date datettime, Boolean visibility){
-		
+	public Competition(int id, String description){
+		this.id = id;
+		this.description = description;
 	}
 	
-	public String getNAme(){
+	public String getName(){
 		return "";
-		
 	}
 	
 	public void addPlayer(Player player){
-		
+		DBCommunicator.writeData("UPDATE deelnemer SET account_naam='" + player.getUsername() + "', competition_id='"+ this.id + "'");
+	}
+
+	public String getCompetitionOwner() {
+		return DBCommunicator.requestData("SELECT ");
 	}
 	
-	public void setVisibility(Boolean bool){
-		
-	}
-	
-	public boolean getVisibility(){
-		return false;
-		
-	}
-	
-	public void disablePlayer(Player player){
-		
-	}
-	
-	public void removePlayer(Player player){
-		
-	}
-	
-	public void setRandomField(Boolean bool){
-		
-	}
-	
-	public boolean getRandomField(){
-		return false;
+	public String getCompetitionDescription() {
+		return DBCommunicator.requestData("SELECT ");
 	}
 }
