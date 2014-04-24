@@ -6,11 +6,11 @@ import AccountType.Player;
 
 public class Competition {
 
-	public Competition(String name, Date datettime, Boolean visibility){
+	public Competition(String name, Date datettime, String boardLayout){
 		
 	}
 	
-	public String getNAme(){
+	public String getName(){
 		return "";
 		
 	}
