@@ -1,7 +1,12 @@
 package Core;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
+import Utility.DBCommunicator;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
@@ -28,19 +33,37 @@ public class Application {
 	 */
 	public Application(){
 		myGui = new GUI(this);
+		
+		try {
+			addCompetition("test", "2014/04/25", "normal");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
 	/**
 	 * create a new competition and write it to the db
+	 * @throws ParseException 
 	 */
-	public void addCompetition(String compName, Date endDate, String boardLayout){
+	public void addCompetition(String compName, String endDate, String boardLayout) throws ParseException{
 		Competition newComp = new Competition(compName, endDate, boardLayout);
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		Calendar cal = Calendar.getInstance();
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        java.util.Date parsed = format.parse(endDate);
+        java.sql.Date sql = new java.sql.Date(parsed.getTime());
+		
+        System.out.println(DBCommunicator.requestData("SELECT id FROM competitie ORDER BY id DESC"));
+		int last = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
+		System.out.println(last);
+		
 		selectedCompetition = newComp;
 		
-		/*
-		 * WRITE TO DB
-		 */
+		
 	}
 	
 	

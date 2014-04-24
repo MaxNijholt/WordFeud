@@ -6,7 +6,7 @@ import AccountType.Player;
 
 public class Competition {
 
-	public Competition(String name, Date datettime, String boardLayout){
+	public Competition(String name, String datettime, String boardLayout){
 		
 	}
 	
