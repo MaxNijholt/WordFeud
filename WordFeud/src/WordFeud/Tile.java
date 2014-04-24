@@ -37,6 +37,10 @@ public class Tile {
 		this.bonusUsed = used;
 	}
 	
+	public void setGameStone(GameStone gamestone){
+		this.gameStone = gamestone;
+	}
+	
 	public void setCoordinates(int posX, int posY){
 		this.xPos = posX;
 		this.yPos = posY;
