@@ -31,7 +31,6 @@ public class DBCommunicator {
 			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 			stm = con.createStatement();
 			res = stm.executeQuery(query + " limit 1;");
-			
 			while(res.next()) {
 				result = res.getString(1);
 			}	
