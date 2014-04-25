@@ -1,16 +1,17 @@
 package Core;
 
-import AccountType.Account;
-import AccountType.Player;
-import GUI.GUI;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
+import AccountType.Account;
+import AccountType.Player;
+import GUI.GUI;
 
 public class Application {
+	private GUI gui = new GUI();
 	
 	public Application(){
-		new GUI();
+		
 	}
 	
 	public void playWord(){
