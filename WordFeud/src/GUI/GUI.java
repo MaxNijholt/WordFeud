@@ -8,13 +8,15 @@ import WordFeud.GameStone;
 @SuppressWarnings("serial")
 public class GUI extends JFrame{
 
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
+	public static final int WIDTH = 1000;
+	public static final int HEIGHT = 600;
+	public static final String TITLE = "Wordfeud";
 	
 	public GUI(){
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(true);
-		this.setContentPane(new ContentPane(new LoginPanel()));
+		this.setResizable(false);
+		this.setTitle(TITLE);
+		this.setContentPane(new LoginPanel());
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
