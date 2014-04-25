@@ -1,3 +1,4 @@
+
 package GUI;
 
 import java.awt.Color;
@@ -27,3 +28,4 @@ public class StatisticsPanel extends JPanel {
 		//g.drawString("Player name", (int) ( 640-g.getFontMetrics().getStringBounds("Player name", g).getWidth()/2 ), 350);
 	}
 }
+

@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public abstract class Panel extends JPanel{
+public abstract class Panel extends JPanel {
 
 	public Panel(){
 		this.revalidate();
