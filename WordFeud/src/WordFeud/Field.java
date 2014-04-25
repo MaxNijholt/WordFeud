@@ -58,4 +58,18 @@ public class Field {
 			}
 		}
 	}
+	
+	public HashMap<String, GameStone> getNewWords(){
+		
+		return newWords;
+		
+	}
+	
+	public HashMap<String, Tile> getTiles(){
+		
+		return field;
+		
+	}
+	
+	
 }
