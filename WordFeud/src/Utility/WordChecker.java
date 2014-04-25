@@ -1,13 +1,13 @@
 package Utility;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import WordFeud.GameStone;
 
 public class WordChecker {
-	HashMap<String, GameStone> field;
-	HashMap<String, GameStone> play;
+	private HashMap<String, GameStone> field;
+	private HashMap<String, GameStone> play;
 	private ArrayList<String> createdWords = new ArrayList<>();
 	private boolean check = false;
 	private String xx = "";
@@ -54,7 +54,7 @@ public class WordChecker {
 		System.out.print("the created words are: ");
 		for (String words : theWords)
 		{
-			System.out.print("<"+words+">");
+			System.out.print("<" + words + ">");
 		}
 	}
 
@@ -94,7 +94,8 @@ public class WordChecker {
 				System.out.print("vertical word: ");
 				System.out.println(word);
 				this.theWords.add(word);
-				// hier moet de controle met de database komen!(ook een stukje lager)
+				// hier moet de controle met de database komen!(ook een stukje
+				// lager)
 				word = "";
 			}
 			else
@@ -115,7 +116,8 @@ public class WordChecker {
 				System.out.print("horizontal word: ");
 				System.out.println(word);
 				this.theWords.add(word);
-				// hier moet de controle met de database komen!(ook een stukje hoger)
+				// hier moet de controle met de database komen!(ook een stukje
+				// hoger)
 				word = "";
 			}
 
