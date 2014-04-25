@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class AdminPanel extends Panel implements ItemListener{
 	
 	
 	public AdminPanel(){
+		this.setPreferredSize(new Dimension(GUI.WIDTH,GUI.HEIGHT));
 		this.playerList.setEditable(true);
 		this.playerList.addItemListener(this);
 		selectPlayer = new JLabel("Select player: ");
