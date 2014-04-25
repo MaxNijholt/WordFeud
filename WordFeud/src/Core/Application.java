@@ -33,34 +33,27 @@ public class Application {
 	 */
 	public Application(){
 		myGui = new GUI(this);
+		currentAccount = new Player("jager684");
 		
-		try {
-			addCompetition("test", "2014/04/25", "normal");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		addCompetition("test", "20140430", "test_competition");
+		
 	}
 	
 	
 	/**
 	 * create a new competition and write it to the db
-	 * @throws ParseException 
+	 * input endDate format yyyymmdd
+	 * 
 	 */
-	public void addCompetition(String compName, String endDate, String boardLayout) throws ParseException{
-		Competition newComp = new Competition(compName, endDate, boardLayout);
+	public void addCompetition(String compName, String endDate, String description){
 		
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-		Calendar cal = Calendar.getInstance();
+		int lastID = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
+		int newID = lastID + 1;
+		
+		
+		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "');");
 
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-        java.util.Date parsed = format.parse(endDate);
-        java.sql.Date sql = new java.sql.Date(parsed.getTime());
-		
-        System.out.println(DBCommunicator.requestData("SELECT id FROM competitie ORDER BY id DESC"));
-		int last = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
-		System.out.println(last);
-		
+		Competition newComp = new Competition(newID);
 		selectedCompetition = newComp;
 		
 		
@@ -156,7 +149,7 @@ public class Application {
 	 */
 	public void switchRoll(String accountType){
 		if(accountType.equals("player")){
-			currentAccount = new Player();
+			currentAccount = new Player("henk"); //henk is for testing
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("moderator")){

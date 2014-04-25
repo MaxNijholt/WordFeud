@@ -2,6 +2,7 @@ package AccountType;
 
 public abstract class Account {
 
+	
 	public Account(){
 		
 	}
@@ -17,8 +18,8 @@ public abstract class Account {
 	}
 	
 	public String getUsername(){
-		return ""; 
-	
+		return null;
+		
 	}
 	
 	public void setUsername(String username){
