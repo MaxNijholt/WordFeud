@@ -12,14 +12,15 @@ public class GUI extends JFrame{
 
 	public GUI(){
 		// EDIT HIER JE PANEL!
-		// PanelName PN = new PanelName();
+		StatisticsPanel PN = new StatisticsPanel();
 		this.setPreferredSize(new Dimension(1280,800));
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		/*
-		 * UNCOMMENT DIT EN JE PANNEL IN DE PANE!
-		this.setContentPane( PANE HIER);
-		*/
+		
+		//UNCOMMENT DIT EN JE PANNEL IN DE PANE!
+		this.setContentPane(PN);
+		
+		
 		this.pack();
 		this.setVisible(true);
 	}
