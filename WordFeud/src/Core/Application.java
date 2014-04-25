@@ -17,9 +17,7 @@ import AccountType.Player;
 import GUI.GUI;
 import GUI.Panel;
 
-/**
- * last update: 23/04
- */
+
 public class Application {
 	
 	Game selectedGame;
