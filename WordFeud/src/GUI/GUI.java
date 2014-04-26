@@ -16,7 +16,7 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new LoginPanel());
+		this.setContentPane(new LoginPanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -31,8 +31,10 @@ public class GUI extends JFrame{
 		
 	}
 	
-	public void switchPanel(JPanel pane){
-		
+	public void switchPanel(JPanel panel){
+		this.getContentPane().removeAll();
+		this.setContentPane(panel);
+		this.revalidate();
 	}
 	
 	public void pass(){

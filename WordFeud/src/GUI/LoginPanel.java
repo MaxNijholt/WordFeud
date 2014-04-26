@@ -27,13 +27,15 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private JTextField 		username;
 	private JPasswordField 	password;
 	private SButton			login, register, spectate, exit;
+	private GUI 			gui;
 	
 	/**
 	 * The panel that is used to log in to our program.
 	 */
-	public LoginPanel() {
+	public LoginPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(null);
+		this.gui = gui;
 		
 		username 	= new JTextField() {
 			public void paintComponent(Graphics g) {
@@ -137,7 +139,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * This method sends you to the register panel
 	 */
 	private void register() {
-		System.out.println("Switch to register panel");
+		gui.switchPanel(new RegisterPanel(gui));
 	}
 	
 	/**
