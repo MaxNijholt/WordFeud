@@ -3,7 +3,6 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -11,14 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import Utility.DBCommunicator;
+import Utility.SButton;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel implements ActionListener {
@@ -28,9 +26,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 */
 	private JTextField 		username;
 	private JPasswordField 	password;
-	private JLabel 			name, pass;
-	private JButton			login, register, spectate, exit;
-	
+	private SButton			login, register, spectate, exit;
 	
 	/**
 	 * The panel that is used to log in to our program.
@@ -39,32 +35,43 @@ public class LoginPanel extends JPanel implements ActionListener {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(null);
 		
-		username 	= new JTextField();
-		password 	= new JPasswordField();
-		name 		= new JLabel("Username");
-		pass 		= new JLabel("Password");
+		username 	= new JTextField() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if(this.getText() == null || (this.getText().length() < 1)) {
+					Graphics2D g2d = (Graphics2D)g.create();
+					g2d.setFont(this.getFont().deriveFont(Font.ITALIC));
+					g2d.setColor(Color.BLACK);
+					g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+					g2d.drawString("Username", 5, 25);
+					g2d.dispose();
+				}
+			}
+		};
+		password 	= new JPasswordField() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if(String.valueOf(this.getPassword()) == null || (String.valueOf(this.getPassword()).length() < 1)) {
+					Graphics2D g2d = (Graphics2D)g.create();
+					g2d.setFont(this.getFont().deriveFont(Font.ITALIC));
+					g2d.setColor(Color.BLACK);
+					g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+					g2d.drawString("Password", 5, 25);
+					g2d.dispose();
+				}
+			}
+		};
 		
-		login 		= new JButton("Login");
-		register 	= new JButton("Register");
-		spectate 	= new JButton("Spectate");
-		exit		= new JButton("Exit");
-
+		login 		= new SButton("Connect", SButton.GREY);
+		register 	= new SButton("Register", SButton.GREY);
+		spectate 	= new SButton("Spectate", SButton.GREY);
+		exit		= new SButton("Exit", SButton.GREY);
+		
 		
 		username.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
-		username.setFont(new Font("Arial", Font.PLAIN, 18));
+		username.setFont(new Font("Arial", Font.PLAIN, 16));
 		password.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
-		password.setFont(new Font("Arial", Font.PLAIN, 30));
-		name.setForeground(Color.BLACK);
-		pass.setForeground(Color.BLACK);
-
-		login.setBorderPainted(false);
-		login.setFocusPainted(false);
-		register.setBorderPainted(false);
-		register.setFocusPainted(false);
-		spectate.setBorderPainted(false);
-		spectate.setFocusPainted(false);
-		exit.setBorderPainted(false);
-		exit.setFocusPainted(false);
+		password.setFont(new Font("Arial", Font.PLAIN, 16));
 		
 		login.addActionListener(this);
 		register.addActionListener(this);
@@ -73,21 +80,17 @@ public class LoginPanel extends JPanel implements ActionListener {
 		
 		this.add(username);
 		this.add(password);
-		this.add(name);
-		this.add(pass);
 		this.add(login);
 		this.add(register);
 		this.add(spectate);
 		this.add(exit);
 		
-		name.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 200, 30);
-		username.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 120, 200, 30);
-		pass.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 - 95 + 100, 200, 30);
-		password.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 - 70 + 100, 200, 30);
-		login.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 - 35 + 100, 200, 30);
-		register.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100, 200, 30);
-		spectate.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 135, 95, 30);
-		exit.setBounds(GUI.WIDTH / 2, GUI.HEIGHT / 2 + 135, 100, 30);
+		username.setBounds(GUI.WIDTH / 2 - 110, GUI.HEIGHT / 2 + 100 - 160, 220, 40);
+		password.setBounds(GUI.WIDTH / 2 - 110, GUI.HEIGHT / 2 - 115 + 100, 220, 40);
+		login.setBounds(GUI.WIDTH / 2 - 110, GUI.HEIGHT / 2 - 70 + 100, 220, 40);
+		register.setBounds(GUI.WIDTH / 2 - 110, GUI.HEIGHT / 2 - 35 + 110, 220, 40);
+		spectate.setBounds(GUI.WIDTH / 2 - 110, GUI.HEIGHT / 2 + 120, 145, 40);
+		exit.setBounds(GUI.WIDTH / 2 + 40, GUI.HEIGHT / 2 + 120, 70, 40);
 	}
 	
 	/**
@@ -96,14 +99,18 @@ public class LoginPanel extends JPanel implements ActionListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		GradientPaint gradient = new GradientPaint(0, 0, new Color(180, 180, 180), getWidth(), getHeight(), new Color(255, 255, 255));
-		g2d.setPaint(gradient);
+		//GradientPaint gradient = new GradientPaint(0, 0, new Color(180, 180, 180), getWidth(), getHeight(), new Color(255, 255, 255));
+		//g2d.setPaint(gradient);
+		g2d.setColor(new Color(94, 94, 94));
 		g2d.fillRect(0, 0, getWidth(), getHeight());
 		
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Arial", Font.BOLD, 100));
 		g2d.drawString(GUI.TITLE, (int) ((GUI.WIDTH / 2) - (g.getFontMetrics().getStringBounds(GUI.TITLE, g).getWidth() / 2)), 150);
+		for(int i = 0; i < 4; i++) {
+			g2d.drawLine(30 + (int)((GUI.WIDTH / 2) - (g.getFontMetrics().getStringBounds(GUI.TITLE, g).getWidth() / 2)), 170 + i, (int)((GUI.WIDTH / 2) - (g.getFontMetrics().getStringBounds(GUI.TITLE, g).getWidth() / 2) + g.getFontMetrics().getStringBounds(GUI.TITLE, g).getWidth()) - 30, 170 + i);
+		}
 	}
 	
 	/**
