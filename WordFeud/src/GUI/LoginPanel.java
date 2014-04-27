@@ -9,14 +9,13 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 import Utility.DBCommunicator;
 import Utility.SButton;
+import Utility.SPasswordField;
+import Utility.STextField;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel implements ActionListener {
@@ -24,8 +23,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 	/*
 	 * Instance Variables
 	 */
-	private JTextField 		username;
-	private JPasswordField 	password;
+	private STextField 		username;
+	private SPasswordField 	password;
 	private SButton			login, register, spectate, exit;
 	private GUI 			gui;
 	
@@ -37,43 +36,13 @@ public class LoginPanel extends JPanel implements ActionListener {
 		this.setLayout(null);
 		this.gui = gui;
 		
-		username 	= new JTextField() {
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				if(this.getText() == null || (this.getText().length() < 1)) {
-					Graphics2D g2d = (Graphics2D)g.create();
-					g2d.setFont(this.getFont().deriveFont(Font.ITALIC));
-					g2d.setColor(Color.BLACK);
-					g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-					g2d.drawString("Username", 5, 25);
-					g2d.dispose();
-				}
-			}
-		};
-		password 	= new JPasswordField() {
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				if(String.valueOf(this.getPassword()) == null || (String.valueOf(this.getPassword()).length() < 1)) {
-					Graphics2D g2d = (Graphics2D)g.create();
-					g2d.setFont(this.getFont().deriveFont(Font.ITALIC));
-					g2d.setColor(Color.BLACK);
-					g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-					g2d.drawString("Password", 5, 25);
-					g2d.dispose();
-				}
-			}
-		};
+		username 	= new STextField("Username");
+		password 	= new SPasswordField("Password");
 		
 		login 		= new SButton("Connect", SButton.GREY);
 		register 	= new SButton("Register", SButton.GREY);
 		spectate 	= new SButton("Spectate", SButton.GREY);
 		exit		= new SButton("Exit", SButton.GREY);
-		
-		
-		username.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
-		username.setFont(new Font("Arial", Font.PLAIN, 16));
-		password.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
-		password.setFont(new Font("Arial", Font.PLAIN, 16));
 		
 		login.addActionListener(this);
 		register.addActionListener(this);
@@ -101,8 +70,6 @@ public class LoginPanel extends JPanel implements ActionListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		//GradientPaint gradient = new GradientPaint(0, 0, new Color(180, 180, 180), getWidth(), getHeight(), new Color(255, 255, 255));
-		//g2d.setPaint(gradient);
 		g2d.setColor(new Color(94, 94, 94));
 		g2d.fillRect(0, 0, getWidth(), getHeight());
 		
@@ -146,6 +113,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * This methods sends you to the spectate panel
 	 */
 	private void spectate() {
+		//TODO: add the panel switcher via the method: 'gui.switchPanel(new SpectatePanel(gui));'
 		System.out.println("switch to spectate panel");
 	}
 

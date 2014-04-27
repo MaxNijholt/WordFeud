@@ -59,7 +59,7 @@ public class SButton extends JButton implements MouseListener {
 		g2d.setFont(new Font("Arial", Font.PLAIN, 16));
 		FontMetrics fm = g2d.getFontMetrics(g2d.getFont());
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.drawString(this.getName(), (this.getWidth() / 2) - (fm.stringWidth(this.getName()) / 2), fm.getHeight() + fm.getHeight() / 3);
+		g2d.drawString(this.getName(), (this.getWidth() / 2) - (fm.stringWidth(this.getName()) / 2), (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
 		g2d.dispose();
 	}
 
