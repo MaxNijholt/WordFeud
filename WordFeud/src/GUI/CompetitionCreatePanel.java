@@ -12,13 +12,17 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 import Utility.SButton;
+import Utility.SComboBox;
+import Utility.SLabel;
 import Utility.STextField;
 
 @SuppressWarnings("serial")
 public class CompetitionCreatePanel extends JPanel implements ActionListener {
 
 	private STextField name;
-	private SButton back;
+	private SLabel nameLabel, compLabel, layoutLabel, signupLabel, typeLabel, inviteLabel;
+	private SButton create, back;
+	private SComboBox comp, layout, type, invite;
 	private GUI gui;
 	
 	public CompetitionCreatePanel(GUI gui) {
@@ -28,15 +32,55 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		
 		name = new STextField("Competition name");
 		
-		back = new SButton("Back", SButton.GREY);
+		nameLabel	= new SLabel("Competition name");
+		compLabel 	= new SLabel("Private Competition");
+		layoutLabel = new SLabel("Board layout");
+		signupLabel = new SLabel("Sign up period");
+		typeLabel 	= new SLabel("Competition type");
+		inviteLabel	= new SLabel("Invite Players");
+		
+		create 		= new SButton("Create", SButton.GREY);
+		back 		= new SButton("Back", SButton.GREY);
+		comp 		= new SComboBox(new String[] {"ON", "OFF"});
+		layout 		= new SComboBox(new String[] {"Random", "Static"});
+		type 		= new SComboBox(new String[] {"Single", "Double", "Triple"});
+		invite		= new SComboBox();
+		for(int i = 0; i < 100; i++) {
+			invite.addItem("Test " + (i + 1));
+		}
 		
 		back.addActionListener(this);
 		
 		this.add(name);
+		this.add(create);
 		this.add(back);
+		this.add(comp);
+		this.add(layout);
+		this.add(type);
+		this.add(invite);
 		
-		name.setBounds(100, 100, 220, 40);
-		back.setBounds(100, 150, 220, 40);
+		this.add(nameLabel);
+		this.add(compLabel);
+		this.add(layoutLabel);
+		this.add(signupLabel);
+		this.add(typeLabel);
+		this.add(inviteLabel);
+		
+		nameLabel.setBounds(100, 100, 220, 40);
+		compLabel.setBounds(100, 150, 220, 40);
+		layoutLabel.setBounds(100, 200, 220, 40);
+		signupLabel.setBounds(100, 250, 220, 40);
+		typeLabel.setBounds(100, 300, 220, 40);
+		inviteLabel.setBounds(660, 100, 220, 40);
+		
+		name.setBounds(330, 100, 220, 40);
+		comp.setBounds(330, 150, 220, 40);
+		layout.setBounds(330, 200, 220, 40);
+		type.setBounds(330, 300, 220, 40);
+		invite.setBounds(660, 150, 220, 40);
+		
+		create.setBounds(100, 350, 220, 40);
+		back.setBounds(330, 350, 220, 40);
 	}
 	
 	public void paintComponent(Graphics g) {
