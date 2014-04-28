@@ -25,6 +25,13 @@ public class Application {
 	 */
 	public Application(){
 		myGui = new GUI(this);
+		//currentAccount = new Player("jager684");
+		
+		
+		//login("henk", "wachtwoord");
+		//selectedCompetition = new Competition(4);
+		//newGame("henk1", true, "NL");
+		//newPlayer("test3", "wachtwoord");
 		
 		
 	}
@@ -73,6 +80,7 @@ public class Application {
 	 * call the playgame method
 	 */
 	public void newGame(String player2, boolean visibility){
+
 		String visible;
 		if(visibility){
 			visible = "openbaar";
@@ -86,7 +94,6 @@ public class Application {
 		
 		DBCommunicator.writeData("INSERT INTO spel (id, competitie_id, toestand_type, account_naam_uitdager, account_naam_tegenstander, moment_uitdaging, reaktie_type, zichtbaarheid_type, bord_naam, letterset_naam)"
 								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
-		
 		playGame(newID);
 	}
 	
