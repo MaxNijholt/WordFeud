@@ -147,11 +147,10 @@ public class Application {
 	/**
 	 * tell game to lay a gamestone
 	 * return the boolean from game
-	 * -------------------------------------------------
 	 */
-	public boolean layGameStone(GameStone gamestone, String location){
-		selectedGame.layGameStone(gamestone, location);
-		return false;
+	public int layGameStone(GameStone gamestone, String location){
+		int retrievedPoints = selectedGame.layGameStone(gamestone, location);
+		return retrievedPoints;
 	}
 	
 	/**
