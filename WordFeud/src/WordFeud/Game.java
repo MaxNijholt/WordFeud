@@ -1,7 +1,5 @@
 package WordFeud;
-/*
- * last update: 23/04
- */
+
 import Utility.PointCounter;
 
 import Utility.WordChecker;
@@ -14,14 +12,18 @@ public class Game {
 	
 	/**
 	 * cronstruct the game
+	 * -------------------------------------------------
 	 */
 	public Game(){
 		myField = new Field();
+		myPC = new PointCounter();
+		myWC = new WordChecker();
 	}
 	
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
+	 * -------------------------------------------------
 	 * @param gamestone
 	 * @param location
 	 * @return
@@ -36,6 +38,7 @@ public class Game {
 	/**
 	 * get the new words from the field
 	 * let the wordchecker check if it is correct
+	 * -------------------------------------------------
 	 */
 	public void playWord(){
 		
@@ -43,6 +46,7 @@ public class Game {
 	
 	/**
 	 * check if the game has ended
+	 * -------------------------------------------------
 	 * @return
 	 */
 	public boolean checkEndGame(){
@@ -52,6 +56,7 @@ public class Game {
 	/**
 	 * pass a turn
 	 * tell the DB
+	 * -------------------------------------------------
 	 */
 	public void pass(){
 		/*
@@ -63,6 +68,7 @@ public class Game {
 	/**
 	 * tell the DB to swap
 	 * get new gamestones
+	 * -------------------------------------------------
 	 */
 	public void swapGameStones(){
 		/*
@@ -76,6 +82,7 @@ public class Game {
 	/**
 	 * shuffle your gamestones around
 	 * does not end turn
+	 * -------------------------------------------------
 	 */
 	public void shuffle(){
 		/*
@@ -86,6 +93,7 @@ public class Game {
 	/**
 	 * set the visibility of a game
 	 * tell the db
+	 * -------------------------------------------------
 	 * @param bool
 	 */
 	public void setVisibility(Boolean bool){
@@ -96,6 +104,7 @@ public class Game {
 	
 	/**
 	 * get the visibility from the db and return boolean
+	 * -------------------------------------------------
 	 * @return
 	 */
 	public boolean getVisibility(){
@@ -103,5 +112,17 @@ public class Game {
 		 * get the visibility from the DB
 		 */
 		return false;
+	}
+
+	/**
+	 * getter and setter
+	 * @return
+	 */
+	public Field getMyField() {
+		return myField;
+	}
+
+	public void setMyField(Field myField) {
+		this.myField = myField;
 	}
 }

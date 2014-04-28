@@ -1,11 +1,5 @@
 package Core;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import Utility.DBCommunicator;
 import WordFeud.Competition;
 import WordFeud.Game;
@@ -15,25 +9,28 @@ import AccountType.Administrator;
 import AccountType.Moderator;
 import AccountType.Player;
 import GUI.GUI;
-import GUI.Panel;
 
 
 public class Application {
 	
-	Game selectedGame;
-	Competition selectedCompetition;
-	Account currentAccount;
-	GUI myGui;
-	
+	private Game selectedGame;
+	private Competition selectedCompetition;
+	private Account currentAccount;
+	private GUI myGui;
+
+
 	/**
 	 * start up the application
 	 * create the Gui
 	 */
 	public Application(){
 		myGui = new GUI(this);
-		currentAccount = new Player("jager684");
+		//currentAccount = new Player("jager684");
 		
-		addCompetition("test", "20140430", "test_competition");
+		//addCompetition("test", "20140430", "test_competition");
+		//newPlayer("henk1", "wachtwoord");
+		//login("henk", "wachtwoord");
+		
 		
 	}
 	
@@ -52,8 +49,7 @@ public class Application {
 		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "');");
 
 		Competition newComp = new Competition(newID);
-		selectedCompetition = newComp;
-		
+		selectedCompetition = newComp;	
 		
 	}
 	
@@ -62,19 +58,26 @@ public class Application {
 	 * write player to the db
 	 * call the login method
 	 */
-	public void newPlayer(String email, String username, String password){
-		/*
-		 * WRITE TO DB
-		 */
+	public boolean newPlayer(String username, String password){
 		
-		this.login(username, password);
+		String getName = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
+		if(getName == null){
+			DBCommunicator.writeData("INSERT INTO account (naam, wachtwoord) VALUES('" + username + "', '" + password + "')");
+			this.login(username, password);
+			return true;
+		}
+		else{
+			System.err.println("username already exists");
+			return false;
+		}
 	}
 	
 	/**
 	 * write game to the db
 	 * call the playgame method
+	 * -------------------------------------------------
 	 */
-	public void newGame(Player player1, Player player2){
+	public void newGame(Player player2, boolean visibility){
 		/*
 		 * WRITE TO DB
 		 */
@@ -87,6 +90,7 @@ public class Application {
 	
 	/**
 	 * create a new game for a competition and write it to the db
+	 * -------------------------------------------------
 	 */
 	public void newCompetitionGame(Player player1, Player player2, Competition compo){
 		/*
@@ -103,8 +107,25 @@ public class Application {
 	 * check if it exists and the password is correct
 	 * create the new player and switch to the Playerpanel
 	 */
-	public boolean login(String username, String Password){
-		return false;
+	public boolean login(String username, String password){
+		String user = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
+		if(user != null){
+			String passwordCheck = DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE naam = '"+ username + "'");
+			if(password.equals(passwordCheck)){
+				currentAccount = new Player(username);
+				myGui.switchPanel(null);
+				System.out.println("logged in as " + currentAccount.getUsername());
+				return true;
+			}
+			else{
+				System.err.println("password is not correct");
+				return false;
+			}
+		}
+		else{
+			System.err.println("username does not exist");
+			return false;
+		}
 		
 	}
 	
@@ -112,6 +133,7 @@ public class Application {
 	 * get game from db
 	 * create the new game
 	 * switch to the gamePanel
+	 * -------------------------------------------------
 	 */
 	public void playGame(String gameID){
 		/*
@@ -125,14 +147,16 @@ public class Application {
 	/**
 	 * tell game to lay a gamestone
 	 * return the boolean from game
+	 * -------------------------------------------------
 	 */
 	public boolean layGameStone(GameStone gamestone, String location){
 		selectedGame.layGameStone(gamestone, location);
 		return false;
 	}
 	
-	/*
+	/**
 	 * get word approval
+	 * -------------------------------------------------
 	 */
 	public boolean getWordApproval(){
 		/*
@@ -144,6 +168,7 @@ public class Application {
 	/**
 	 * create a new account of that type
 	 * switch to his panel
+	 * -------------------------------------------------
 	 */
 	public void switchRoll(String accountType){
 		if(accountType.equals("player")){
@@ -163,6 +188,7 @@ public class Application {
 	/**
 	 * get all account names form the db
 	 * return all accounts the have a name LIKE the given string
+	 * -------------------------------------------------
 	 */
 	public Account[] searchPlayer(String partialname){
 		
@@ -195,6 +221,40 @@ public class Application {
 	 */
 	public void shuffle(){
 		selectedGame.shuffle();
+	}
+	
+	
+	/**
+	 * getters and setters
+	 * @return
+	 */
+	public Game getSelectedGame() {
+		return selectedGame;
+	}
+
+
+	public void setSelectedGame(Game selectedGame) {
+		this.selectedGame = selectedGame;
+	}
+
+
+	public Competition getSelectedCompetition() {
+		return selectedCompetition;
+	}
+
+
+	public void setSelectedCompetition(Competition selectedCompetition) {
+		this.selectedCompetition = selectedCompetition;
+	}
+
+
+	public Account getCurrentAccount() {
+		return currentAccount;
+	}
+
+
+	public void setCurrentAccount(Account currentAccount) {
+		this.currentAccount = currentAccount;
 	}
 	
 }
