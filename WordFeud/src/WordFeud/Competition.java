@@ -6,8 +6,9 @@ import AccountType.Player;
 
 public class Competition {
 
+	int myID;
 	public Competition(int id){
-		
+		myID = id;
 	}
 	
 	public String getName(){
@@ -42,5 +43,9 @@ public class Competition {
 	
 	public boolean getRandomField(){
 		return false;
+	}
+	
+	public int getID(){
+		return myID;
 	}
 }
