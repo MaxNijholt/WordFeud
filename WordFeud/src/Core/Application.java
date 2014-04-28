@@ -30,7 +30,7 @@ public class Application {
 		
 		//login("henk", "wachtwoord");
 		//selectedCompetition = new Competition(4);
-		//newGame("henk1", true, "NL");
+		//newGame("henk1", true);
 		//newPlayer("test3", "wachtwoord");
 		
 		
@@ -80,7 +80,6 @@ public class Application {
 	 * call the playgame method
 	 */
 	public void newGame(String player2, boolean visibility){
-
 		String visible;
 		if(visibility){
 			visible = "openbaar";
