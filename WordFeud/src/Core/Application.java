@@ -27,9 +27,12 @@ public class Application {
 		myGui = new GUI(this);
 		//currentAccount = new Player("jager684");
 		
-		//addCompetition("test", "20140430", "test_competition");
-		//newPlayer("henk1", "wachtwoord");
+		
 		//login("henk", "wachtwoord");
+		//selectedCompetition = new Competition(4);
+		//newGame("henk1", true, "NL");
+		//newPlayer("test3", "wachtwoord");
+		
 		
 		
 	}
@@ -37,19 +40,19 @@ public class Application {
 	
 	/**
 	 * create a new competition and write it to the db
-	 * input endDate format yyyymmdd
+	 * input endDate format yyyymmddHHMMSS
 	 * 
 	 */
-	public void addCompetition(String compName, String endDate, String description){
+	public void addCompetition(String compName, String endDate, String description, int mini, int maxi){
 		
 		int lastID = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
 		int newID = lastID + 1;
 		
 		
-		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "');");
+		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving, minimum_aantal_deelnemers, maximum_aantal_deelnemers) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "' , " + mini + "," + maxi + ");");
 
 		Competition newComp = new Competition(newID);
-		selectedCompetition = newComp;	
+		selectedCompetition = newComp;
 		
 	}
 	
@@ -63,7 +66,8 @@ public class Application {
 		String getName = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
 		if(getName == null){
 			DBCommunicator.writeData("INSERT INTO account (naam, wachtwoord) VALUES('" + username + "', '" + password + "')");
-			this.login(username, password);
+			DBCommunicator.writeData("INSERT INTO accountrol (account_naam, rol_type) VALUES('"+ username + " ', 'Player');");
+			login(username, password);
 			return true;
 		}
 		else{
@@ -75,31 +79,23 @@ public class Application {
 	/**
 	 * write game to the db
 	 * call the playgame method
-	 * -------------------------------------------------
 	 */
-	public void newGame(Player player2, boolean visibility){
-		/*
-		 * WRITE TO DB
-		 */
+	public void newGame(String player2, boolean visibility, String letterSet){
+		String visible;
+		if(visibility){
+			visible = "openbaar";
+		}
+		else{
+			visible = "privé";
+		}
 		
-		/*
-		 * GET GAMEID FROM DB
-		 */
-		this.playGame("");
-	}
-	
-	/**
-	 * create a new game for a competition and write it to the db
-	 * -------------------------------------------------
-	 */
-	public void newCompetitionGame(Player player1, Player player2, Competition compo){
-		/*
-		 * WRITE TO DB
-		 */
-		Game newGame = new Game();
-		selectedGame = newGame;
+		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
+		int newID = lastID + 1;
 		
-		myGui.switchPanel(null);
+		DBCommunicator.writeData("INSERT INTO spel (id, competitie_id, toestand_type, account_naam_uitdager, account_naam_tegenstander, moment_uitdaging, reaktie_type, zichtbaarheid_type, bord_naam, letterset_naam)"
+								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', '" + letterSet + "');");
+		
+		playGame(newID);
 	}
 	
 	/**
@@ -135,18 +131,15 @@ public class Application {
 	 * switch to the gamePanel
 	 * -------------------------------------------------
 	 */
-	public void playGame(String gameID){
-		/*
-		 * GET GAME FROM DB
-		 */
-		Game newGame = new Game();
+	public void playGame(int gameID){
+		Game newGame = new Game(gameID);
 		selectedGame = newGame;
 		myGui.switchPanel(null);
 	}
 	
 	/**
 	 * tell game to lay a gamestone
-	 * return the boolean from game
+	 * return the int from game
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		int retrievedPoints = selectedGame.layGameStone(gamestone, location);

@@ -7,6 +7,7 @@ import Utility.WordChecker;
 public class Game {
 
 	private Field myField;
+	private int myID;
 	private PointCounter myPC;
 	private WordChecker myWC;
 	
@@ -14,7 +15,8 @@ public class Game {
 	 * cronstruct the game
 	 * -------------------------------------------------
 	 */
-	public Game(){
+	public Game(int id){
+		myID = id;
 		myField = new Field();
 		myPC = new PointCounter();
 		myWC = new WordChecker();
