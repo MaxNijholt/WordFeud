@@ -27,12 +27,11 @@ public class Application {
 		myGui = new GUI(this);
 		//currentAccount = new Player("jager684");
 		
-		
 		//login("henk", "wachtwoord");
 		//selectedCompetition = new Competition(4);
 		//newGame("henk1", true);
 		//newPlayer("test3", "wachtwoord");
-		
+		searchPlayer("test");
 		
 	}
 	
@@ -75,6 +74,7 @@ public class Application {
 		}
 	}
 	
+	
 	/**
 	 * write game to the db
 	 * call the playgame method
@@ -107,7 +107,7 @@ public class Application {
 			String passwordCheck = DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE naam = '"+ username + "'");
 			if(password.equals(passwordCheck)){
 				currentAccount = new Player(username);
-				myGui.switchPanel(null);
+				myGui.switchPanel(null);//-----------
 				System.out.println("logged in as " + currentAccount.getUsername());
 				return true;
 			}
@@ -124,15 +124,21 @@ public class Application {
 	}
 	
 	/**
-	 * get game from db
 	 * create the new game
 	 * switch to the gamePanel
-	 * -------------------------------------------------
 	 */
 	public void playGame(int gameID){
-		Game newGame = new Game(gameID);
-		selectedGame = newGame;
-		myGui.switchPanel(null);
+		selectedGame = new Game(gameID);
+		myGui.switchPanel(null);//--------------
+	}
+	
+	/**
+	 * create the new competition
+	 * switch to the competitionpanel
+	 */
+	public void selectCompetition(int compID){
+		selectedCompetition = new Competition(compID);
+		myGui.switchPanel(null);//--------------
 	}
 	
 	/**
@@ -180,7 +186,9 @@ public class Application {
 	 * return all accounts the have a name LIKE the given string
 	 * -------------------------------------------------
 	 */
-	public Account[] searchPlayer(String partialname){
+	public String[] searchPlayer(String partialname){
+		
+		
 		
 		return null;
 	}
