@@ -83,5 +83,29 @@ public class DBCommunicator {
 			e.printStackTrace();
 		}
 	}
+	
+	public static int requestInt(String query) {
+		Connection 	con;
+		Statement	stm;
+		ResultSet 	res;
+		int		result = 0;
+		try {
+			Class.forName(CLASS_NAME);
+			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+			stm = con.createStatement();
+			res = stm.executeQuery(query + " limit 1;");
+			
+			while(res.next()) {
+				result = res.getInt(1);
+			}	
+			res.close();
+			stm.close();
+			con.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 }
