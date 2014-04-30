@@ -2,22 +2,13 @@ package WordFeud;
 
 import java.sql.Date;
 
+import Utility.DBCommunicator;
 import AccountType.Player;
 
 
 @SuppressWarnings("unused")
 public class Competition {
-<<<<<<< HEAD
 
-	int myID;
-	public Competition(int id){
-		myID = id;
-	}
-	
-	public String getName(){
-		return "";
-		
-=======
 	private int id, min, max;
 	private String description, owner, startDate, endDate;
 
@@ -55,45 +46,7 @@ public class Competition {
 	 */
 	public String getStartDate(){
 		return DBCommunicator.requestData("SELECT einde FROM competitie WHERE id='" + this.id + "'");
->>>>>>> 7825287... Last commit to the competition branch
 	}
-	
-	/*
-	 * Method to add a player to the competition
-	 */
-	public void addPlayer(Player player){
-		
-	}
-<<<<<<< HEAD
-	
-	public void setVisibility(Boolean bool){
-		
-	}
-	
-	public boolean getVisibility(){
-		return false;
-		
-	}
-	
-	public void disablePlayer(Player player){
-		
-	}
-	
-	public void removePlayer(Player player){
-		
-	}
-	
-	public void setRandomField(Boolean bool){
-		
-	}
-	
-	public boolean getRandomField(){
-		return false;
-	}
-	
-	public int getID(){
-		return myID;
-=======
 
 	/*
 	 * Method to get the owner of the competition
@@ -121,6 +74,5 @@ public class Competition {
 	 */
 	private int getMaximum() {
 		return DBCommunicator.requestInt("SELECT maximum_aantal FROM competitie WHERE id='" + this.id + "'");
->>>>>>> 7825287... Last commit to the competition branch
 	}
 }
