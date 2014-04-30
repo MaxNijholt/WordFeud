@@ -3,9 +3,9 @@ package AccountType;
 
 public class Player extends Account {
 
-	
-	public Player(){
-		
+	String name;
+	public Player(String name){
+		this.name = name;
 	}
 	
 	public void createCompetition(){
@@ -18,5 +18,10 @@ public class Player extends Account {
 	
 	public void calculateStatistics(){
 		
+	}
+	
+	public String getUsername(){
+		return name; 
+	
 	}
 }

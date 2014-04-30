@@ -3,6 +3,7 @@ package GUI;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Core.Application;
 import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
@@ -12,7 +13,7 @@ public class GUI extends JFrame{
 	public static final int HEIGHT = 600;
 	public static final String TITLE = "Wordfeud";
 	
-	public GUI(){
+	public GUI(Application app){
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
