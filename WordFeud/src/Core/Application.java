@@ -31,7 +31,9 @@ public class Application {
 		//selectedCompetition = new Competition(4);
 		//newGame("henk1", true);
 		//newPlayer("test3", "wachtwoord");
-		searchPlayer("test");
+		//searchPlayer("test");
+		
+		selectedGame = new Game(523);
 		
 	}
 	

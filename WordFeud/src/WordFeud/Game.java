@@ -1,7 +1,7 @@
 package WordFeud;
 
+import Utility.DBCommunicator;
 import Utility.PointCounter;
-
 import Utility.WordChecker;
 
 public class Game {
@@ -20,6 +20,7 @@ public class Game {
 		myField = new Field();
 		myPC = new PointCounter();
 		myWC = new WordChecker();
+		
 	}
 	
 	/**
@@ -32,7 +33,7 @@ public class Game {
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-		int points = 0;//= myPC.counterPointsTurn(myField.getNewWords());
+		int points = myPC.counterPointsTurn(myField.getNewWords());
 		
 		return points;
 	}
@@ -95,13 +96,18 @@ public class Game {
 	/**
 	 * set the visibility of a game
 	 * tell the db
-	 * -------------------------------------------------
 	 * @param bool
 	 */
-	public void setVisibility(Boolean bool){
-		/*
-		 * tell the DB the new visibility
-		 */
+	public void setVisibility(Boolean visibility){
+		String visible;
+		if(visibility){
+			visible = "openbaar";
+		}
+		else{
+			visible = "privé";
+		}
+		
+		DBCommunicator.writeData("UPDATE spel SET zichtbaarheid_type='" + visible + "' WHERE id="+ myID + ";");
 	}
 	
 	/**
@@ -122,9 +128,5 @@ public class Game {
 	 */
 	public Field getMyField() {
 		return myField;
-	}
-
-	public void setMyField(Field myField) {
-		this.myField = myField;
 	}
 }
