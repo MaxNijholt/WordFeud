@@ -32,12 +32,12 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		
 		name = new STextField("Competition name");
 		
-		nameLabel	= new SLabel("Competition name");
-		compLabel 	= new SLabel("Private Competition");
-		layoutLabel = new SLabel("Board layout");
-		signupLabel = new SLabel("Sign up period");
-		typeLabel 	= new SLabel("Competition type");
-		inviteLabel	= new SLabel("Invite Players");
+		nameLabel	= new SLabel("Competition name", SLabel.RIGHT, 220, 40);
+		compLabel 	= new SLabel("Private Competition", SLabel.RIGHT, 220, 40);
+		layoutLabel = new SLabel("Board layout", SLabel.RIGHT, 220, 40);
+		signupLabel = new SLabel("Sign up period", SLabel.RIGHT, 220, 40);
+		typeLabel 	= new SLabel("Competition type", SLabel.RIGHT, 220, 40);
+		inviteLabel	= new SLabel("Invite Players", SLabel.RIGHT, 220, 40);
 		
 		create 		= new SButton("Create", SButton.GREY);
 		back 		= new SButton("Back", SButton.GREY);

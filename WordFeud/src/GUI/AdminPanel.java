@@ -61,7 +61,7 @@ public class AdminPanel extends Panel implements ItemListener {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			System.out.println(playerList.getSelectedItem());
 			ArrayList<String> data = null;
-			data = DBCommunicator.requestMoreData("SELECT naam FROM account WHERE naam LIKE '" + playerList.getSelectedItem() + "%'");
+			//data = DBCommunicator.requestMoreData("SELECT naam FROM account WHERE naam LIKE '" + playerList.getSelectedItem() + "%'");
 			
 			players.clear();
 			playerList.removeAll();
@@ -97,12 +97,10 @@ public class AdminPanel extends Panel implements ItemListener {
 	/*
 	 * Method for a more easy lookup player rights
 	 */
-	private ArrayList<String> getUserRights( String player) {
-		ArrayList<String> data = DBCommunicator
-				.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='"
-						+ player + "'");
+	/*private ArrayList<String> getUserRights( String player) {
+		ArrayList<String> data = DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='"+ player + "'");
 		return data;
-	}
+	}*/
 
 	class ActionAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
