@@ -44,6 +44,7 @@ public class SComboBox extends JPanel implements ActionListener {
 		name.changeTextColor(new Color(100, 100, 100), Color.WHITE);
 		name.drawBackground(true);
 		this.arrow 	= new SButton("\u25BC", SButton.WHITE, 40, 40);
+		arrow.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
 		arrow.setTextColor(Color.BLACK);
 		arrow.addActionListener(this);
 		arrow.setBottomRounded(false);
