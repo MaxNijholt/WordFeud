@@ -4,20 +4,22 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.SLabel;
 import Utility.SPasswordField;
 import Utility.STextField;
+import WordFeud.Login;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel implements ActionListener {
@@ -28,13 +30,14 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private SPasswordField 	password;
 	private SButton 		login, register, spectate, exit;
 	private GUI 			gui;
-
+	private Login 			l;
 	/**
 	 * The panel that is used to log in to our program.
 	 */
 	public LoginPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.gui = gui;
+		this.gui 	= gui;
+		this.l		= new Login(gui);
 		this.setBackground(new Color(94, 94, 94));
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -79,28 +82,18 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * This is a method that is testing with the DBCommunicator if the user name and password are correct
 	 */
 	private void login() {
-		if (DBCommunicator.requestData("SELECT * FROM account WHERE naam = '"
-				+ username.getText() + "'") == null) {
-			JOptionPane.showMessageDialog(this, "That username doesn't exist!");
-			return;
-		}
-		if (DBCommunicator
-				.requestData("SELECT * FROM account WHERE wachtwoord = '"
-						+ String.copyValueOf(password.getPassword()) + "'") == null) {
-			JOptionPane.showMessageDialog(this,
-					"Password does not match the username!");
-			return;
-		}
-
-		if (DBCommunicator.requestData(
-				"SELECT * FROM account WHERE naam = '" + username.getText()
-						+ "'").equals(username.getText())) {
-			if (DBCommunicator.requestData(
-					"SELECT wachtwoord FROM account WHERE wachtwoord = '"
-							+ String.copyValueOf(password.getPassword()) + "'")
-					.equals(String.copyValueOf(password.getPassword()))) {
-				JOptionPane.showMessageDialog(this, "You are logged in!");
-			}
+		String text	= l.login(username.getText(), String.valueOf(password.getPassword()));
+		if(text == "0") {return;}
+		if(text != null) {
+			Graphics2D g2d = (Graphics2D)this.getGraphics();
+			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
+			g2d.setFont(new Font("Arial", Font.BOLD, 16));
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g2d.setColor(Color.RED);
+			g2d.fillRoundRect(10, 10, 335, 30, 10, 10);
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(text, (350 / 2) - (fm.stringWidth(text) / 2), (0 + (50+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
 		}
 	}
 
@@ -112,24 +105,16 @@ public class LoginPanel extends JPanel implements ActionListener {
 	/**
 	 * This methods sends you to the spectator panel
 	 */
-	private void spectate() {System.out.println("switch to spectate panel");}
+	private void spectate() {gui.switchPanel(new SpectatorPanel());}
 
 	/**
 	 * This method is the actionListener for the buttons in the LoginPanel
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(login)) {
-			login();
-		}
-		if (e.getSource().equals(register)) {
-			register();
-		}
-		if (e.getSource().equals(spectate)) {
-			spectate();
-		}
-		if (e.getSource().equals(exit)) {
-			System.exit(0);
-		}
+		if(e.getSource().equals(login)) 	{login();}
+		if(e.getSource().equals(register)) 	{register();}
+		if(e.getSource().equals(spectate)) 	{spectate();}
+		if(e.getSource().equals(exit)) 		{System.exit(0);}
 	}
 
 }

@@ -16,9 +16,9 @@ import javax.swing.JButton;
 public class SButton extends JButton implements MouseListener {
 
 	// Instance Variables
-	private 			int 	state;
-	private 			boolean rounded;
-	private 			Color 	standardColor, hoverColor, clickColor;
+	private 			int 	state, textX;
+	private 			boolean rounded, bottomRounded, rightRounded, topRounded;
+	private 			Color 	standardColor, hoverColor, clickColor, text;
 	
 	// Constants
 	public static final	Color 	ORANGE 	= new Color(201, 80, 46);
@@ -55,7 +55,12 @@ public class SButton extends JButton implements MouseListener {
 		this.setBorderPainted(false);
 		this.addMouseListener(this);
 		this.state = 0;
+		this.textX = 0;
 		this.rounded = true;
+		this.bottomRounded = false;
+		this.rightRounded = false;	
+		this.topRounded = false;
+		this.text = Color.WHITE;
 	}
 	
 	// Private method to calculate the colors
@@ -107,11 +112,23 @@ public class SButton extends JButton implements MouseListener {
 		}
 		else {
 			g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+			if(bottomRounded) {
+				g2d.fillRect(0, 0, getWidth(), 10);
+			}
+			if(rightRounded) {
+				g2d.fillRect(0, 0, 10, getHeight());
+			}
+			if(topRounded) {
+				g2d.fillRect(0, getHeight() - 10, getWidth(), 10);
+			}
 		}
 		g2d.setFont(new Font("Arial", Font.PLAIN, 16));
 		FontMetrics fm = g2d.getFontMetrics(g2d.getFont());
-		g2d.setColor(Color.WHITE);
-		g2d.drawString(this.getName(), (this.getWidth() / 2) - (fm.stringWidth(this.getName()) / 2), (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
+		g2d.setColor(text);
+		int x = 0;
+		if(textX == 0) {x = (this.getWidth() / 2) - (fm.stringWidth(this.getName()) / 2);}
+		if(textX == 1) {x = 5;}
+		g2d.drawString(this.getName(), x, (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
 		g2d.dispose();
 	}
 
@@ -124,6 +141,16 @@ public class SButton extends JButton implements MouseListener {
 	
 	// Setters
 	public void setColor(Color color){calculateColors(color);}
+	public void setColors(Color standardColor, Color hoverColor, Color clickColor) {
+		this.standardColor 	= standardColor;
+		this.hoverColor 	= hoverColor;
+		this.clickColor 	= clickColor;
+	}
+	public void setTextX(int x) {this.textX = x;}
 	public void setRounded(boolean rounded) {this.rounded = rounded;}
+	public void setBottomRounded(boolean rounded) {this.bottomRounded = rounded;}
+	public void setRightRounded(boolean rounded) {this.rightRounded = rounded;}
+	public void setTopRounded(boolean rounded) {this.topRounded = rounded;}
+	public void setTextColor(Color color) {this.text = color;}
 	
 }

@@ -3,20 +3,22 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.SLabel;
 import Utility.SPasswordField;
 import Utility.STextField;
+import WordFeud.Login;
 
 @SuppressWarnings("serial")
 public class RegisterPanel extends JPanel implements ActionListener {
@@ -26,10 +28,12 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	private SPasswordField	password, passwordValidate;
 	private SButton			register, back;
 	private GUI				gui;
+	private Login			l;
 	
 	public RegisterPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.gui = gui;
+		this.gui 	= gui;
+		this.l		= new Login(gui);
 		this.setBackground(new Color(94, 94, 94));
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -62,35 +66,24 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	}
 	
 	private void register() {
-		if(!(username.getText().length() < 1) || !username.getText().isEmpty()) {
-			if(String.valueOf(password.getPassword()).equals(String.valueOf(passwordValidate.getPassword()))) {
-				if(DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '" + username.getText() + "'") != null) {
-					JOptionPane.showMessageDialog(this, "That username is not available");
-					return;
-				}
-				else if(!String.valueOf(password.getPassword()).isEmpty() && String.valueOf(password.getPassword()).length() < 1) {
-					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username.getText() + "', '" + String.copyValueOf(password.getPassword()) +"')");
-					JOptionPane.showMessageDialog(this, "You have been registered!");
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(this, "Passwords do not match!");
-			}
-		}
-		else {
-			JOptionPane.showMessageDialog(this, "Please fill in an username!");
+		String text = l.register(username.getText(), String.valueOf(password.getPassword()), String.valueOf(passwordValidate.getPassword()));
+		if(text == "0") {return;}
+		if(text != null) {
+			Graphics2D g2d 	= (Graphics2D)this.getGraphics();
+			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
+			g2d.setFont(new Font("Arial", Font.BOLD, 16));
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g2d.setColor(Color.RED);
+			g2d.fillRoundRect(10, 10, 335, 30, 10, 10);
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(text, (350 / 2) - (fm.stringWidth(text) / 2), (0 + (50+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
 		}
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(register)) {
-			register();
-		}
-		if(e.getSource().equals(back)) {
-			gui.switchPanel(new LoginPanel(gui));
-		}
-		
+		if(e.getSource().equals(register)) 	{register();}
+		if(e.getSource().equals(back)) 		{gui.switchPanel(new LoginPanel(gui));}
 	}
 	
 }

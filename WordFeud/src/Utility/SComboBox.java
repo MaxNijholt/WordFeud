@@ -1,63 +1,87 @@
 package Utility;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.UIManager;
 
 @SuppressWarnings("serial")
-public class SComboBox extends JComboBox<String> implements ListCellRenderer<Object> {
+public class SComboBox extends JPanel implements ActionListener {
 	
-	public SComboBox(){		
-		this.setBackground(Color.WHITE);
-		this.setForeground(Color.BLACK);
-		this.setFont(new Font("Arial", Font.PLAIN, 16));
-		this.setRenderer(this);
-		this.setForeground(new Color(100, 100, 100));
+	private SLabel	name;
+	private SButton arrow;
+	private JPopupMenu pop;
+	private ArrayList<SButton> items;
+	
+	public SComboBox(int width, int height, String[] items){	
+		this.setPreferredSize(new Dimension(width, height));
+		this.setBackground(new Color(255, 255, 255, 0));
+		this.setOpaque(false);
+		this.setLayout(new BorderLayout());
+		this.pop	= new JPopupMenu();
+		this.items	= new ArrayList<SButton>();
+		pop.setLayout(new GridLayout(0, 1));
+		pop.setOpaque(false);
+		UIManager.put("PopupMenu.background", new Color(255, 255, 255, 0));
+		UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
+		
+		for(int i = 0; i < items.length; i++) {
+			if(i == 0) {
+				this.name	= new SLabel(items[i], SLabel.LEFT, 180, 40);
+				name.setName(items[i]);
+			}
+			addItem(items[i]);
+		}
+		
+		name.changeTextColor(new Color(100, 100, 100), Color.WHITE);
+		name.drawBackground(true);
+		this.arrow 	= new SButton("\u25BC", SButton.WHITE, 40, 40);
+		arrow.setTextColor(Color.BLACK);
+		arrow.addActionListener(this);
+		arrow.setBottomRounded(false);
+		arrow.setRounded(true);
+		arrow.setRightRounded(true);
+		name.setOpaque(false);
+		this.add(name, BorderLayout.WEST);
+		this.add(arrow, BorderLayout.EAST);
 	}
 	
-	public SComboBox(String[] items){		
-		this.setBackground(Color.WHITE);
-		this.setForeground(Color.BLACK);
-		this.setFont(new Font("Arial", Font.PLAIN, 16));
-		this.setRenderer(this);
-		this.setForeground(new Color(100, 100, 100));
-		for(int i = 0; i < items.length; i++) {
-			this.addItem(items[i]);
+	public void addItem(String item) {
+		SButton s = new SButton(item, Color.WHITE, this.getWidth(), this.getHeight());
+		s.setTextColor(new Color(100, 100, 100));
+		s.setRounded(true);
+		s.setTextX(1);
+		if(items.isEmpty()) {s.setTopRounded(true);}
+		else {s.setBottomRounded(true);}
+		s.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
+		s.setPreferredSize(this.getPreferredSize());
+		for(int i = 1; i < items.size(); i++) {
+			items.get(i).setRounded(false);
+		}
+		items.add(s);
+		s.addActionListener(this);
+		pop.add(s);
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		pop.show(this, 0, this.getHeight());
+		for(SButton s:items) {
+			if(e.getSource().equals(s)) {
+				name.setName(s.getName());
+				repaint();
+				pop.setVisible(false);
+			}
 		}
 	}
 	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-	}
-
-	public Component getListCellRendererComponent(JList<?> list, final Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		JLabel label = new JLabel() {
-			public Dimension getPreferredSize() {
-				return new Dimension(getWidth(), 40);
-			}
-			public void paintComponent(Graphics g) {
-				Graphics2D g2d = (Graphics2D)g.create();
-				g2d.setColor(new Color(100, 100, 100));
-				g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-				FontMetrics fm = g2d.getFontMetrics();
-				g2d.drawString(String.valueOf(value), 5, (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
-				g2d.dispose();
-			}
-		};
-		label.setFont(new Font("Arial", Font.PLAIN, 16));
-		label.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-		label.setForeground(new Color(100, 100, 100));
-		return label;
-	}
+	public String getSelectedItem() {return name.getName();}
+	
 }
