@@ -27,6 +27,7 @@ public class SLabel extends JLabel {
 	public static final int RIGHT		=	1;	
 	public static final int CENTER		=	2;
 	public static final int TOPCENTER	= 	3;
+	public static final int PADDINGLEFT	=	4;
 	
 	public SLabel(String name, int alignment) {
 		this.name 		= name;
@@ -100,6 +101,9 @@ public class SLabel extends JLabel {
 			case 3:
 				xalign = (getWidth() / 2) - (fm.stringWidth(name) / 2);
 				yalign = ((fm.getAscent() + fm.getDescent()) / 2);
+				break;
+			case 4:
+				xalign = 5;
 				break;
 		}
 		g2d.drawString(name, xalign, yalign);
