@@ -35,7 +35,7 @@ public class SComboBox extends JPanel implements ActionListener {
 		
 		for(int i = 0; i < items.length; i++) {
 			if(i == 0) {
-				this.name	= new SLabel(items[i], SLabel.LEFT, 180, 40);
+				this.name	= new SLabel(items[i], SLabel.PADDINGLEFT, 180, 40);
 				name.setName(items[i]);
 			}
 			addItem(items[i]);
