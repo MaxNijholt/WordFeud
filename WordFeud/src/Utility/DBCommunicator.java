@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DBCommunicator {
 
@@ -34,6 +35,37 @@ public class DBCommunicator {
 			
 			while(res.next()) {
 				result = res.getString(1);
+			}	
+			res.close();
+			stm.close();
+			con.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * This method allows you to request a ArrayList of data from the Database.</br>
+	 * It uses a query and a column, so you can get all the records from a certain column.</br>
+	 * MUST fill in both variables!</br>
+	 * Example: "select name from account;"</br>
+	 * This will return all records in the Database.
+	 */
+	public static ArrayList<String> requestMoreData(String query) {
+		Connection 	con;
+		Statement	stm;
+		ResultSet 	res;
+		ArrayList<String>		result = new ArrayList<String>();
+		try {
+			Class.forName(CLASS_NAME);
+			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+			stm = con.createStatement();
+			res = stm.executeQuery(query);
+			
+			while(res.next()) {
+				result.add(res.getString(1));
 			}	
 			res.close();
 			stm.close();

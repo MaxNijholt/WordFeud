@@ -27,10 +27,16 @@ public class AdminPanel extends Panel implements ItemListener {
 	private JLabel selectPlayer;
 	private Dimension dim = new Dimension(200, 20);
 	private GUI gui;
-	private SButton grantMod = new SButton("Grant Mod", Color.GRAY),
-			grantAdmin = new SButton("Grant Admin", Color.GRAY),
-			revokeMod = new SButton("Revoke Mod", Color.GRAY),
-			revokeAdmin = new SButton("Revoke Admin", Color.GRAY);
+	private SButton 
+			newPlayer = new SButton("New account",SButton.GREY),
+			editPlayer = new SButton("Edit",SButton.GREY),
+			blacklist = new SButton("Blacklist", SButton.GREY),
+			grantMod = new SButton("Grant Mod", SButton.GREY),
+			grantAdmin = new SButton("Grant Admin", SButton.GREY),
+			grantPlayer = new SButton("Grant Player", SButton.GREY),
+			revokeMod = new SButton("Revoke Mod", SButton.GREY),
+			revokeAdmin = new SButton("Revoke Admin", SButton.GREY),
+			revokePlayer = new SButton("Revoke Player", SButton.GREY);
 	private ActionAdapter aa = new ActionAdapter();
 
 	public AdminPanel() {
