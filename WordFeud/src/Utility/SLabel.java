@@ -89,7 +89,7 @@ public class SLabel extends JLabel {
 		int yalign = (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent();
 		switch(alignment) {
 			case 0:
-				xalign = 5;
+				xalign = 0;
 				break;
 			case 1:
 				xalign = getWidth() - fm.stringWidth(name);
