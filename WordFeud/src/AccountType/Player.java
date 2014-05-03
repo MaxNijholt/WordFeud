@@ -3,20 +3,14 @@ package AccountType;
 import Utility.DBCommunicator;
 
 public class Player extends Account {
-	private String username = "jager684";
+	private String username;
 
 	private double winLoss;
 	private int highScore;
 
-	public Player() {
-
-	}
-
-	public void createCompetition() {
-
-	}
-
-	public void createGame() {
+	public Player(String username) {
+		super(username);
+		this.username = username;
 
 	}
 
@@ -33,9 +27,6 @@ public class Player extends Account {
 								+ username
 								+ "'"
 								+ "group by account_naam"));
-		
-		
-		
 
 	}
 }

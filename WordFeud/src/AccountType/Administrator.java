@@ -3,7 +3,8 @@ package AccountType;
 
 public class Administrator extends Account {
 
-	public Administrator(){
+	public Administrator(String username) {
+		super(username);
 		
 	}
 	

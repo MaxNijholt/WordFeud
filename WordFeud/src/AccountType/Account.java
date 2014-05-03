@@ -1,39 +1,31 @@
 package AccountType;
 
 public abstract class Account {
+	private  String username;
 
-	public Account(){
-		
-	}
-	
-	public String getEmail(){
-		return "";
-	
+	public Account(String username) {
+
 	}
 
-	public String getPassword(){
-		return "";
-		
+
+	public String getUsername() {
+		return username;
+
 	}
-	
-	public String getUsername(){
-		return ""; 
-	
-	}
-	
-	public void setUsername(String username){
-		
-	}
-	
-	public boolean getIsModerator(){
+
+	public boolean getIsModerator() {
 		return false;
 	}
-	
-	public boolean getIsAdministrator(){
+
+	public boolean getIsAdministrator() {
 		return false;
 	}
-	
-	public Account[] SearchPlayer(String partialname){
+
+	public boolean getIsPlayer() {
+		return false;
+	}
+
+	public Account[] SearchPlayer(String partialname) {
 		return null;
 	}
 }
