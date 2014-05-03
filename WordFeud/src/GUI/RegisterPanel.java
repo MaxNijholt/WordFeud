@@ -85,5 +85,4 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		if(e.getSource().equals(register)) 	{register();}
 		if(e.getSource().equals(back)) 		{gui.switchPanel(new LoginPanel(gui));}
 	}
-	
 }
