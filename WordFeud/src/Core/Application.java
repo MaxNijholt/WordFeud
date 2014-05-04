@@ -1,5 +1,7 @@
 package Core;
 
+import java.util.ArrayList;
+
 import Utility.DBCommunicator;
 import WordFeud.Competition;
 import WordFeud.Game;
@@ -25,7 +27,7 @@ public class Application {
 	 */
 	public Application(){
 		myGui = new GUI(this);
-		//currentAccount = new Player("jager684");
+		currentAccount = new Player("henk1");
 		
 		//addCompetition("test", "20140430", "test_competition");
 		//newPlayer("henk1", "wachtwoord");
@@ -182,6 +184,103 @@ public class Application {
 			currentAccount = new Administrator();
 			myGui.switchPanel(null);
 		}
+	}
+
+	/**
+	 * get all the games that have finished (finished or resigned) and return their integers
+	 * @param activeType
+	 */
+	public ArrayList<Integer> getFinishedGames() {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Finished'";
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		return gameInts;
+	}
+	
+	/**
+	 * get all games that are still playing (my turn or opponents turn) and return their integers
+	 * @param activeType
+	 * @param myTurn
+	 * @return
+	 */
+	public ArrayList<Integer> getPlayingGames(Boolean myTurn) {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		ArrayList<Integer> turnInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing'";
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		
+		for(int e : gameInts){
+			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
+			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
+				turnInts.add(e);
+			}
+			else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
+				turnInts.add(e);
+			}
+		}
+		
+		return turnInts;
+	}
+	
+	/**
+	 * get all requested games (currentAccount or opponents request) (denied or unknown) and return their integers
+	 * @param myRequest
+	 * @param denied
+	 * @return
+	 */
+	public ArrayList<Integer> getRequestedGames(boolean myRequest, boolean denied) {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String query = "";
+		if(denied){
+			query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Request' AND reaktie_type = 'Rejected'";
+		}
+		else{
+			if(myRequest){
+				query = "SELECT id FROM spel WHERE account_naam_uitdager = '"+ player + "' AND toestand_type = 'Request' AND reaktie_type = 'Unknown'";
+			}
+			else{
+				query = "SELECT id FROM spel WHERE account_naam_tegenstander = '"+ player + "' AND toestand_type = 'Request' AND reaktie_type = 'unknown'";
+			}
+		}
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		return gameInts;
 	}
 	
 	/**
