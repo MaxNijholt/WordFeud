@@ -17,9 +17,9 @@ import Utility.STextField;
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel {
 
-	STextField searchText;
-	SButton searchButton;
-	JPanel searchPanel;
+	private STextField searchText;
+	private SButton searchButton;
+	private JPanel searchPanel;
 	
 	
 	public PlayerPanel(GUI gui){
@@ -40,6 +40,16 @@ public class PlayerPanel extends JPanel {
 		this.add(searchPanel);
 		
 		ArrayList<Integer> gameInts;
+		
+		//currentAccounts new requested games
+		gameInts = gui.getRequestedGames(false, false);
+		if(gameInts.size() != 0){
+			this.add(addLabel("new request", 1));
+			for(int e : gameInts){
+				this.add(paintGame(e, "NewRequest"));
+			}
+		}
+		
 		this.add(addLabel("Playing",0));
 				
 		//games that are still playing
@@ -47,7 +57,7 @@ public class PlayerPanel extends JPanel {
 		if(gameInts.size() != 0){
 			this.add(addLabel("your Turn",1));
 			for(int e : gameInts){
-				this.add(paintGame(e));
+				this.add(paintGame(e, "Playing"));
 			}
 		}
 			
@@ -55,26 +65,26 @@ public class PlayerPanel extends JPanel {
 		if(gameInts.size() != 0){
 			this.add(addLabel("opponents turn",1));
 			for(int e : gameInts){
-				this.add(paintGame(e));
+				this.add(paintGame(e, "Playing"));
 			}
 		}
 		
 		this.add(addLabel("Finished games",0));
 		//games that are finished
 		
-		gameInts = gui.getFinishedGames();
+		gameInts = gui.getFinishedGames(false);
 		if(gameInts.size() != 0){
 			this.add(addLabel("finished",1));
 			for(int e : gameInts){
-				this.add(paintGame(e));
+				this.add(paintGame(e, "Finished"));
 			}
 		}
 			
-		gameInts = gui.getFinishedGames();
+		gameInts = gui.getFinishedGames(true);
 		if(gameInts.size() != 0){
 			this.add(addLabel("Resigned",1));
 			for(int e : gameInts){
-				this.add(paintGame(e));
+				this.add(paintGame(e, "Finished"));
 			}
 		}
 	
@@ -85,7 +95,7 @@ public class PlayerPanel extends JPanel {
 		if(gameInts.size() != 0){
 			this.add(addLabel("waiting", 1));
 			for(int e : gameInts){
-				this.add(paintGame(e));
+				this.add(paintGame(e, "Request"));
 			}
 		}
 			
@@ -93,13 +103,19 @@ public class PlayerPanel extends JPanel {
 		if(gameInts.size() != 0){
 			this.add(addLabel("denied", 1));
 			for(int e : gameInts){
-				this.add(paintGame(e));
+				this.add(paintGame(e, "Request"));
 			}
 		}
 		gui.setLoadingCursor(false);
 	}
 	
 
+	/**
+	 * creates a label and returns it in a JPanel to be added
+	 * @param labelText
+	 * @param type
+	 * @return
+	 */
 	private JPanel addLabel(String labelText, int type){
 		JPanel panel = new JPanel();
 		
@@ -121,7 +137,12 @@ public class PlayerPanel extends JPanel {
 		return panel;
 	}
 	
-	private JPanel paintGame(int gameID){
+	/**
+	 * create a view for a game and return it in a JPanel to be added
+	 * @param gameID
+	 * @return
+	 */
+	private JPanel paintGame(int gameID, String gameType){
 		System.out.println("paint game: " + gameID);
 		JPanel panel = new JPanel();
 		panel.setMaximumSize(new Dimension(600,50));

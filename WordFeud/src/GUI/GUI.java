@@ -64,8 +64,8 @@ public class GUI extends JFrame{
 		
 	}
 	
-	public ArrayList<Integer> getFinishedGames(){
-		ArrayList<Integer> gameInts = app.getFinishedGames();
+	public ArrayList<Integer> getFinishedGames(boolean resigned){
+		ArrayList<Integer> gameInts = app.getFinishedGames(resigned);
 		return gameInts;
 	}
 	

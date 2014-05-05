@@ -190,10 +190,14 @@ public class Application {
 	 * get all the games that have finished (finished or resigned) and return their integers
 	 * @param activeType
 	 */
-	public ArrayList<Integer> getFinishedGames() {
+	public ArrayList<Integer> getFinishedGames(boolean resigned) {
 		ArrayList<Integer> gameInts = new ArrayList<Integer>();
 		String player = currentAccount.getUsername();
-		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Finished'";
+		String resign = "Finished";
+		if(resigned){
+			resign = "Resigned";
+		}
+		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = '" + resign + "'";
 		Boolean searching = true;
 		
 		while(searching){
