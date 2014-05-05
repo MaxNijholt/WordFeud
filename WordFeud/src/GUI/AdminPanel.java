@@ -42,14 +42,13 @@ public class AdminPanel extends JPanel implements ItemListener {
 			revokePlayer = new SButton("Revoke Player", SButton.GREY);
 	private ActionAdapter aa = new ActionAdapter();
 
-	
 	public AdminPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
-		
+
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		
+
 		this.gui = gui;
 
 		this.playerList.setEditable(true);
@@ -58,37 +57,36 @@ public class AdminPanel extends JPanel implements ItemListener {
 		this.selectPlayer = new SLabel("Select player: ", 0);
 		this.players = new Vector<String>();
 
-		//Adding components on the right locations
+		// Adding components on the right locations
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 1;
 		c.insets = new Insets(0, 0, 5, 50);
 		this.add(this.selectPlayer, c);
 		this.add(this.playerList, c);
-		c.gridy ++;
+		c.gridy++;
 		this.add(this.blacklist, c);
-		c.gridy ++;
+		c.gridy++;
 		c.gridx = c.gridx + 3;
 		this.add(this.newPlayer, c);
-		c.gridx ++;
+		c.gridx++;
 		this.add(this.editPlayer, c);
-		c.gridx --;
-		c.gridy ++;
+		c.gridx--;
+		c.gridy++;
 		this.add(this.grantPlayer, c);
-		c.gridx ++;
+		c.gridx++;
 		this.add(this.revokePlayer, c);
-		c.gridx --;
-		c.gridy ++;
+		c.gridx--;
+		c.gridy++;
 		this.add(this.grantMod, c);
-		c.gridx ++;
+		c.gridx++;
 		this.add(this.revokeMod, c);
-		c.gridx --;
-		c.gridy ++;
+		c.gridx--;
+		c.gridy++;
 		this.add(this.grantAdmin, c);
-		c.gridx ++;
+		c.gridx++;
 		this.add(this.revokeAdmin, c);
 
-		
-		//Adding actionadapter to the components.
+		// Adding actionadapter to the components.
 		this.blacklist.addActionListener(aa);
 		this.editPlayer.addActionListener(aa);
 		this.newPlayer.addActionListener(aa);
@@ -168,6 +166,27 @@ public class AdminPanel extends JPanel implements ItemListener {
 			if (e.getSource().equals(revokeAdmin)) {
 				removePrivilege(playerList.getSelectedItem().toString(),
 						"Administrator");
+			}
+			if (e.getSource().equals(revokePlayer)) {
+				removePrivilege(playerList.getSelectedItem().toString(),
+						"Player");
+			}
+			if (e.getSource().equals(grantPlayer)) {
+				addPrivilege(playerList.getSelectedItem().toString(), "Player");
+			}
+			if (e.getSource().equals(blacklist)) {
+				removePrivilege(playerList.getSelectedItem().toString(),
+						"Administrator");
+				removePrivilege(playerList.getSelectedItem().toString(),
+						"Moderator");
+				removePrivilege(playerList.getSelectedItem().toString(),
+						"Player");
+			}
+			if (e.getSource().equals(editPlayer)) {
+				//TODO
+			}
+			if (e.getSource().equals(newPlayer)) {
+				//TODO
 			}
 		}
 	}
