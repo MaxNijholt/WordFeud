@@ -31,6 +31,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private SButton 		login, register, spectate, exit;
 	private GUI 			gui;
 	private Login 			l;
+	
 	/**
 	 * The panel that is used to log in to our program.
 	 */
@@ -62,6 +63,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		c.gridy = 0;
 		c.insets = new Insets(5, 0, 50, 0);
 		this.add(title, c);
+		c.gridx = 0;
 		c.gridy++;
 		c.insets = new Insets(5, 0, 0, 0);
 		this.add(username, c);

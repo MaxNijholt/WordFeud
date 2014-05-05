@@ -24,6 +24,7 @@ public class Application {
 	 * create the Gui
 	 */
 	public Application(){
+		DBCommunicator.getConnection();
 		myGui = new GUI(this);
 		//currentAccount = new Player("jager684");
 		
