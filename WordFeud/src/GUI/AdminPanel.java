@@ -27,23 +27,6 @@ import Utility.SLabel;
  * @author Max Nijholt
  * 
  */
-
-/**
- * @author Max
- *
- */
-/**
- * @author Max
- *
- */
-/**
- * @author Max
- *
- */
-/**
- * @author Max
- *
- */
 @SuppressWarnings({ "serial", "unused" })
 public class AdminPanel extends JPanel {
 	private MComboBox Mcombo = new MComboBox(150, 25, null);
