@@ -78,4 +78,9 @@ public class GUI extends JFrame{
 		ArrayList<Integer> gameInts = app.getRequestedGames(myRequest, denied);
 		return gameInts;
 	}
+	
+	public String getOpponentName(int gameID){
+		
+		return app.getOpponentName(gameID);
+	}
 }

@@ -289,6 +289,19 @@ public class Application {
 	}
 	
 	/**
+	 * get a the opponents name from the db
+	 */
+	public String getOpponentName(int gameID){
+		
+		String name = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
+		if(name.equals(currentAccount.getUsername())){
+			name = DBCommunicator.requestData("SELECT account_naam_tegenstander FROM spel WHERE id = " + gameID);
+		}
+		
+		return name;
+	}
+	
+	/**
 	 * get all account names form the db
 	 * return all accounts the have a name LIKE the given string
 	 * -------------------------------------------------
