@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -15,6 +16,21 @@ public class DBCommunicator {
 	private static final String DB_USERNAME	=	"mnijholt";
 	private static final String DB_PASSWORD	=	"42IN04SOi";
 	
+	private static Connection con;
+	
+	public static void getConnection() {
+		try {
+			Class.forName(CLASS_NAME);
+			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * This method allows you to request data from the Database.</br>
 	 * It uses a query and a column, so you can get all the records from a certain column.</br>
@@ -23,13 +39,10 @@ public class DBCommunicator {
 	 * This will return the first record in the Database.
 	 */
 	public static String requestData(String query) {
-		Connection 	con;
 		Statement	stm;
 		ResultSet 	res;
 		String		result = null;
 		try {
-			Class.forName(CLASS_NAME);
-			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 			stm = con.createStatement();
 			res = stm.executeQuery(query + " limit 1;");
 			
@@ -38,7 +51,6 @@ public class DBCommunicator {
 			}	
 			res.close();
 			stm.close();
-			con.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -54,13 +66,10 @@ public class DBCommunicator {
 	 * This will return all records in the Database.
 	 */
 	public static ArrayList<String> requestMoreData(String query) {
-		Connection 	con;
 		Statement	stm;
 		ResultSet 	res;
 		ArrayList<String>		result = new ArrayList<String>();
 		try {
-			Class.forName(CLASS_NAME);
-			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 			stm = con.createStatement();
 			res = stm.executeQuery(query);
 			
@@ -69,7 +78,6 @@ public class DBCommunicator {
 			}	
 			res.close();
 			stm.close();
-			con.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -84,16 +92,12 @@ public class DBCommunicator {
 	 * This method adds the query to the Database.
 	 */
 	public static void writeData(String query) {
-		Connection 			con;
 		PreparedStatement	stm;
 		
 		try {
-			Class.forName(CLASS_NAME);
-			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 			stm = con.prepareStatement(query);
 			stm.executeUpdate();
 			stm.close();
-			con.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -101,16 +105,12 @@ public class DBCommunicator {
 	}
 	
 	public static void writeNamePassword(String name, String password) {
-		Connection 			con;
 		PreparedStatement	stm;
 		
 		try {
-			Class.forName(CLASS_NAME);
-			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 			stm = con.prepareStatement("INSERT INTO account(naam, wachtwoord) VALUES(" + "'" + name + "', '" + password + "')");
 			stm.executeUpdate();
 			stm.close();
-			con.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -118,13 +118,10 @@ public class DBCommunicator {
 	}
 	
 	public static int requestInt(String query) {
-		Connection 	con;
 		Statement	stm;
 		ResultSet 	res;
 		int		result = 0;
 		try {
-			Class.forName(CLASS_NAME);
-			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 			stm = con.createStatement();
 			res = stm.executeQuery(query + " limit 1;");
 			

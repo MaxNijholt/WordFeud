@@ -35,7 +35,8 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		this.gui = gui;
 		
 		addedPlayers	= new STextArea(300, 300, false);
-
+		addedPlayers.setHighlighter(null);
+		
 		title 			= new SLabel("Create a competition", SLabel.LEFT, new Font("Arial", Font.BOLD, 30));
 		nameLabel		= new SLabel("Competition name", SLabel.RIGHT, 130, 40);
 		playerLabel		= new SLabel("Maximum players", SLabel.RIGHT, 130, 40);
