@@ -130,7 +130,6 @@ public class DBCommunicator {
 			}	
 			res.close();
 			stm.close();
-			con.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
