@@ -11,6 +11,7 @@ import AccountType.Administrator;
 import AccountType.Moderator;
 import AccountType.Player;
 import GUI.GUI;
+import GUI.PlayerPanel;
 
 
 public class Application {
@@ -28,7 +29,7 @@ public class Application {
 	public Application(){
 		DBCommunicator.getConnection();
 		myGui = new GUI(this);
-		currentAccount = new Player("henk1");
+		//currentAccount = new Player("henk1");
 		
 		//addCompetition("test", "20140430", "test_competition");
 		//newPlayer("henk1", "wachtwoord");
@@ -66,7 +67,7 @@ public class Application {
 		String getName = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
 		if(getName == null){
 			DBCommunicator.writeData("INSERT INTO account (naam, wachtwoord) VALUES('" + username + "', '" + password + "')");
-			this.login(username, password);
+			this.login(username);
 			return true;
 		}
 		else{
@@ -110,26 +111,8 @@ public class Application {
 	 * check if it exists and the password is correct
 	 * create the new player and switch to the Playerpanel
 	 */
-	public boolean login(String username, String password){
-		String user = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
-		if(user != null){
-			String passwordCheck = DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE naam = '"+ username + "'");
-			if(password.equals(passwordCheck)){
-				currentAccount = new Player(username);
-				myGui.switchPanel(null);
-				System.out.println("logged in as " + currentAccount.getUsername());
-				return true;
-			}
-			else{
-				System.err.println("password is not correct");
-				return false;
-			}
-		}
-		else{
-			System.err.println("username does not exist");
-			return false;
-		}
-		
+	public void login(String username){
+		currentAccount = new Player(username);
 	}
 	
 	/**
@@ -299,6 +282,23 @@ public class Application {
 		}
 		
 		return name;
+	}
+	
+	/**
+	 * accept or deny a game in the db
+	 * @param gameID
+	 */
+	public void acceptGame(int gameID){
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', toestand_type = 'Playing' WHERE id = " + gameID);
+		String opponent = this.getOpponentName(gameID);
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
+				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
+		myGui.switchPanel(new PlayerPanel(myGui));
+	}
+	
+	public void denyGame(int gameID){
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected' WHERE id = " + gameID);
+		myGui.switchPanel(new PlayerPanel(myGui));
 	}
 	
 	/**

@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.Box;
@@ -19,7 +21,7 @@ import Utility.SLabel;
 import Utility.STextField;
 
 @SuppressWarnings("serial")
-public class PlayerPanel extends JPanel {
+public class PlayerPanel extends JPanel implements ActionListener{
 
 	private STextField searchText;
 	private SButton searchButton;
@@ -186,7 +188,7 @@ public class PlayerPanel extends JPanel {
 	 * @param gameID
 	 * @return
 	 */
-	private JPanel paintGame(int gameID, String gameType){
+	private JPanel paintGame(final int gameID, String gameType){
 		System.out.println("paint game: " + gameID);
 		
 		JPanel panel = new JPanel();
@@ -217,6 +219,7 @@ public class PlayerPanel extends JPanel {
 			
 			c.gridx = 0;
 			c.gridy = 0;
+			c.insets = new Insets(5,15,0,0);
 			panel.add(opponent, c);
 			c.gridy++;
 			panel.add(play,c);
@@ -224,8 +227,22 @@ public class PlayerPanel extends JPanel {
 			c.gridy--;
 			panel.add(accept, c);
 			c.gridy++;
-			c.insets = new Insets(5,0,0,0);
 			panel.add(deny, c);
+			
+			accept.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					gui.acceptGame(gameID);
+				}
+			});
+			
+			deny.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					gui.denyGame(gameID);
+				}
+			});
 		}
 		
 		//for a game that is playing. option to select
@@ -244,5 +261,12 @@ public class PlayerPanel extends JPanel {
 		}
 		
 		return panel;
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
