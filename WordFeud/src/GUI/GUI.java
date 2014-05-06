@@ -16,7 +16,7 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new LoginPanel());	//aanpassen naar panel wat je gaat testen
+		this.setContentPane(new StatisticsPanel());	//aanpassen naar panel wat je gaat testen
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
