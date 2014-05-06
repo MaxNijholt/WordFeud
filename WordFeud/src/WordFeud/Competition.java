@@ -25,7 +25,7 @@ public class Competition {
 	/*
 	 * Alternative method to add a competition. 
 	 */
-	public Competition(String compName, String endDate, String description, int mini, int maxi, String competitionOwner){
+	public Competition(String endDate, String description, int mini, int maxi, String competitionOwner){
 		int lastID = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
 		int id = lastID + 1;
 		this.description = description;
