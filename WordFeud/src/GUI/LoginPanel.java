@@ -2,160 +2,121 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
-import Utility.DBCommunicator;
+import Utility.SButton;
+import Utility.SLabel;
+import Utility.SPasswordField;
+import Utility.STextField;
+import WordFeud.Login;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel implements ActionListener {
 
-	/*
-	 * Instance Variables
-	 */
-	private JTextField 		username;
-	private JPasswordField 	password;
-	private JLabel 			name, pass;
-	private JButton			login, register, spectate, exit;
-	
+	// Instance Variables
+	private SLabel			title;
+	private STextField 		username;
+	private SPasswordField 	password;
+	private SButton 		login, register, spectate, exit;
+	private GUI 			gui;
+	private Login 			l;
 	
 	/**
 	 * The panel that is used to log in to our program.
 	 */
-	public LoginPanel() {
+	public LoginPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.setLayout(null);
+		this.gui 	= gui;
+		this.l		= new Login(gui);
+		this.setBackground(new Color(94, 94, 94));
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		
-		username 	= new JTextField();
-		password 	= new JPasswordField();
-		name 		= new JLabel("Username");
-		pass 		= new JLabel("Password");
-		
-		login 		= new JButton("Login");
-		register 	= new JButton("Register");
-		spectate 	= new JButton("Spectate");
-		exit		= new JButton("Exit");
+		title 		= new SLabel("Wordfeud", SLabel.CENTER, new Font("Arial", Font.BOLD, 100));
+		username 	= new STextField("Username");
+		password 	= new SPasswordField("Password");
 
-		
-		username.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
-		username.setFont(new Font("Arial", Font.PLAIN, 18));
-		password.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
-		password.setFont(new Font("Arial", Font.PLAIN, 30));
-		name.setForeground(Color.BLACK);
-		pass.setForeground(Color.BLACK);
-
-		login.setBorderPainted(false);
-		login.setFocusPainted(false);
-		register.setBorderPainted(false);
-		register.setFocusPainted(false);
-		spectate.setBorderPainted(false);
-		spectate.setFocusPainted(false);
-		exit.setBorderPainted(false);
-		exit.setFocusPainted(false);
+		login		= new SButton("Connect", SButton.GREY, 220, 40);
+		register 	= new SButton("Register", SButton.GREY, 220, 40);
+		spectate 	= new SButton("Spectate", SButton.GREY, 155, 40);
+		exit 		= new SButton("Exit", SButton.GREY, 60, 40);
 		
 		login.addActionListener(this);
 		register.addActionListener(this);
 		spectate.addActionListener(this);
 		exit.addActionListener(this);
 		
-		this.add(username);
-		this.add(password);
-		this.add(name);
-		this.add(pass);
-		this.add(login);
-		this.add(register);
-		this.add(spectate);
-		this.add(exit);
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		panel1.setBackground(getBackground());
+		c.gridy = 0;
+		c.insets = new Insets(5, 0, 50, 0);
+		this.add(title, c);
+		c.gridx = 0;
+		c.gridy++;
+		c.insets = new Insets(5, 0, 0, 0);
+		this.add(username, c);
+		c.gridy++;
+		this.add(password, c);
+		c.gridy++;
+		this.add(login, c);
+		c.gridy++;
+		this.add(register, c);
+		c.gridy++;
 		
-		name.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 200, 30);
-		username.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 120, 200, 30);
-		pass.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 - 95 + 100, 200, 30);
-		password.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 - 70 + 100, 200, 30);
-		login.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 - 35 + 100, 200, 30);
-		register.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100, 200, 30);
-		spectate.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 135, 95, 30);
-		exit.setBounds(GUI.WIDTH / 2, GUI.HEIGHT / 2 + 135, 100, 30);
-	}
-	
-	/**
-	 * Overridden paintComponent where this panel draws its title
-	 */
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D)g;
-		GradientPaint gradient = new GradientPaint(0, 0, new Color(180, 180, 180), getWidth(), getHeight(), new Color(255, 255, 255));
-		g2d.setPaint(gradient);
-		g2d.fillRect(0, 0, getWidth(), getHeight());
-		
-		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.setColor(Color.BLACK);
-		g2d.setFont(new Font("Arial", Font.BOLD, 100));
-		g2d.drawString(GUI.TITLE, (int) ((GUI.WIDTH / 2) - (g.getFontMetrics().getStringBounds(GUI.TITLE, g).getWidth() / 2)), 150);
-	}
-	
-	/**
-	 * This is a method that is testing with the DBCommunicator if the username and password are correct 
-	 */
-	private void login() {
-		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username.getText() + "'") == null) {
-			JOptionPane.showMessageDialog(this, "That username doesn't exist!");	
-			return;
-		}
-		if(DBCommunicator.requestData("SELECT * FROM account WHERE wachtwoord = '" + String.copyValueOf(password.getPassword()) + "'") == null) {
-			JOptionPane.showMessageDialog(this, "Password does not match the username!");
-			return;
-		}
-		
-		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username.getText() + "'").equals(username.getText())) {
-			if(DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE wachtwoord = '" + String.copyValueOf(password.getPassword()) + "'").equals(String.copyValueOf(password.getPassword()))) {
-				JOptionPane.showMessageDialog(this, "You are logged in!");
-			}
-		}
-	}
-	
-	/**
-	 * This method sends you to the register panel
-	 */
-	private void register() {
-		System.out.println("Switch to register panel");
-	}
-	
-	/**
-	 * This methods sends you to the spectate panel
-	 */
-	private void spectate() {
-		System.out.println("switch to spectate panel");
+		panel1.add(spectate);
+		panel1.add(exit);
+		this.add(panel1, c);
 	}
 
 	/**
-	 * This method is the actionListener for the buttons in the LoginPanel 
+	 * This is a method that is testing with the DBCommunicator if the user name and password are correct
 	 */
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(login)) {
-			login();
-		}
-		if(e.getSource().equals(register)) {
-			register();
-		}
-		if(e.getSource().equals(spectate)) {
-			spectate();
-		}
-		if(e.getSource().equals(exit)) {
-			System.exit(0);
+	private void login() {
+		String text	= l.login(username.getText(), String.valueOf(password.getPassword()));
+		if(text == "0") {return;}
+		if(text != null) {
+			Graphics2D g2d = (Graphics2D)this.getGraphics();
+			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
+			g2d.setFont(new Font("Arial", Font.BOLD, 16));
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g2d.setColor(Color.RED);
+			g2d.fillRoundRect(10, 10, 335, 30, 10, 10);
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(text, (350 / 2) - (fm.stringWidth(text) / 2), (0 + (50+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
 		}
 	}
-	
+
+	/**
+	 * This method sends you to the register panel
+	 */
+	private void register() {gui.switchPanel(new RegisterPanel(gui));}
+
+	/**
+	 * This methods sends you to the spectator panel
+	 */
+	private void spectate() {gui.switchPanel(new SpectatorPanel());}
+
+	/**
+	 * This method is the actionListener for the buttons in the LoginPanel
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(login)) 	{login();}
+		if(e.getSource().equals(register)) 	{register();}
+		if(e.getSource().equals(spectate)) 	{spectate();}
+		if(e.getSource().equals(exit)) 		{System.exit(0);}
+	}
+
 }
