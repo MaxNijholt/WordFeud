@@ -94,4 +94,14 @@ public class GUI extends JFrame{
 	public void denyGame(int gameID) {
 		app.denyGame(gameID);
 	}
+
+	public String getLastTurntype(int gameID) {
+		String turnType = app.getLastTurnType(gameID);
+		return turnType;
+	}
+
+	public int getLastTurnScore(int gameID) {
+		int turnScore = app.getLastTurnScore(gameID);
+		return turnScore;
+	}
 }
