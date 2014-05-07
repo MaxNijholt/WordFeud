@@ -65,6 +65,7 @@ public class SLabel extends JLabel {
 		bottomRightRounded	= true;	
 		bottomLeftRounded	= true;
 		arc 				= 10;
+		drawBackground		= false;
 		FontMetrics fm 	= getFontMetrics(font);
 		setPreferredSize(new Dimension(fm.stringWidth(text) + 10, fm.getHeight() + 10));
 	}
@@ -74,8 +75,8 @@ public class SLabel extends JLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setFont(font);
-		g2d.setColor(background);
 		if(drawBackground) {
+			g2d.setColor(background);
 			g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
 			
 			if(!topLeftRounded) 	{g2d.fillRect(0, 0, arc, arc);}

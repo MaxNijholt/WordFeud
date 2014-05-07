@@ -8,6 +8,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -16,16 +17,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 import Utility.SButton;
-import Utility.SLabel;
 import Utility.SPasswordField;
 import Utility.STextField;
+import WordFeud.GameStone;
 import WordFeud.Login;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel implements ActionListener {
 
 	// Instance Variables
-	private SLabel			title;
+	private JPanel			title;
 	private STextField 		username;
 	private SPasswordField 	password;
 	private SButton 		login, register, spectate, exit;
@@ -43,7 +44,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
-		title 		= new SLabel("Wordfeud", SLabel.CENTER, new Font("Arial", Font.BOLD, 100));
+		title 		= new JPanel();
 		username 	= new STextField("Username", 220, 40);
 		password 	= new SPasswordField("Password", 220, 40);
 
@@ -56,6 +57,17 @@ public class LoginPanel extends JPanel implements ActionListener {
 		register.addActionListener(this);
 		spectate.addActionListener(this);
 		exit.addActionListener(this);
+		
+		title.setLayout(new GridLayout(1, 8, 2, 2));
+		title.setBackground(new Color(255, 255, 255, 0));
+		String letters 	= "WORDFEUD";
+		String values	= "51224122";
+		for(int i = 0; i < letters.length(); i++) {
+			GameStone s = new GameStone(Integer.valueOf(Character.getNumericValue(values.charAt(i))), letters.charAt(i));
+			s.setDimension(70, 70);
+			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
+			title.add(s);
+		}
 		
 		JPanel panel1 = new JPanel();
 		panel1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
