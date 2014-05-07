@@ -1,103 +1,119 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import Utility.SButton;
-import Utility.SComboBox;
 import Utility.SLabel;
+import Utility.STextArea;
 import Utility.STextField;
 
 @SuppressWarnings("serial")
 public class CompetitionCreatePanel extends JPanel implements ActionListener {
 
-	private STextField name;
-	private SLabel nameLabel, compLabel, layoutLabel, signupLabel, typeLabel, inviteLabel;
-	private SButton create, back;
-	private SComboBox comp, layout, type, invite;
-	private GUI gui;
+	private STextField 	name, player, addPlayers;
+	private SLabel 		title, nameLabel, playerLabel, addLabel, addedLabel;
+	private STextArea	addedPlayers;
+	private SButton 	create, back, add;
+	private GUI 		gui;
 	
 	public CompetitionCreatePanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.setLayout(null);
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.setBackground(new Color(94, 94, 94));
 		this.gui = gui;
 		
-		name = new STextField("Competition name");
+		addedPlayers	= new STextArea(300, 300, false);
+		addedPlayers.setHighlighter(null);
 		
-		nameLabel	= new SLabel("Competition name");
-		compLabel 	= new SLabel("Private Competition");
-		layoutLabel = new SLabel("Board layout");
-		signupLabel = new SLabel("Sign up period");
-		typeLabel 	= new SLabel("Competition type");
-		inviteLabel	= new SLabel("Invite Players");
+		title 			= new SLabel("Create a competition", SLabel.LEFT, new Font("Arial", Font.BOLD, 30));
+		nameLabel		= new SLabel("Competition name", SLabel.RIGHT, 130, 40);
+		playerLabel		= new SLabel("Maximum players", SLabel.RIGHT, 130, 40);
+		addLabel		= new SLabel("Add player", SLabel.RIGHT, 130, 40);
+		addedLabel		= new SLabel("Added players", SLabel.LEFT, 130, 40);
 		
-		create 		= new SButton("Create", SButton.GREY);
-		back 		= new SButton("Back", SButton.GREY);
-		comp 		= new SComboBox(new String[] {"ON", "OFF"});
-		layout 		= new SComboBox(new String[] {"Random", "Static"});
-		type 		= new SComboBox(new String[] {"Single", "Double", "Triple"});
-		invite		= new SComboBox();
-		for(int i = 0; i < 100; i++) {
-			invite.addItem("Test " + (i + 1));
-		}
+		create 			= new SButton("Create", SButton.GREY, 220, 40);
+		back 			= new SButton("Back", SButton.GREY, 220, 40);
+		add				= new SButton("Add", SButton.GREY, 100, 40);
+		
+		name 			= new STextField("Competition name");
+		player 			= new STextField("Maximum players (2 up to 24)");
+		addPlayers		= new STextField("Name");
 		
 		back.addActionListener(this);
+		add.addActionListener(this);
 		
-		this.add(name);
-		this.add(create);
-		this.add(back);
-		this.add(comp);
-		this.add(layout);
-		this.add(type);
-		this.add(invite);
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridBagLayout());
+		buttonPanel.setBackground(getBackground());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		buttonPanel.add(nameLabel, c);
+		c.gridx++;
+		c.insets = new Insets(0, 15, 5, 0);
+		buttonPanel.add(name, c);
+		c.gridx = 0;
+		c.gridy++;
+		buttonPanel.add(playerLabel, c);
+		c.gridx++;
+		buttonPanel.add(player, c);
+		c.gridx = 0;
+		c.gridy++;
+		buttonPanel.add(addLabel, c);
+		c.gridx++;
+		buttonPanel.add(addPlayers, c);
+		c.gridx++;
+		buttonPanel.add(add, c);
+		c.gridx = 0;
+		c.gridy++;
+		buttonPanel.add(create, c);
+		c.gridx++;
+		buttonPanel.add(back, c);
 		
-		this.add(nameLabel);
-		this.add(compLabel);
-		this.add(layoutLabel);
-		this.add(signupLabel);
-		this.add(typeLabel);
-		this.add(inviteLabel);
+		JPanel titlePanel = new JPanel();
+		titlePanel.setBackground(getBackground());
+		titlePanel.setLayout(new BorderLayout());
+		titlePanel.add(title, BorderLayout.WEST);
+		titlePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
 		
-		nameLabel.setBounds(100, 100, 220, 40);
-		compLabel.setBounds(100, 150, 220, 40);
-		layoutLabel.setBounds(100, 200, 220, 40);
-		signupLabel.setBounds(100, 250, 220, 40);
-		typeLabel.setBounds(100, 300, 220, 40);
-		inviteLabel.setBounds(660, 100, 220, 40);
+		JPanel addedPanel = new JPanel();
+		addedPanel.setBackground(getBackground());
+		addedPanel.setLayout(new BorderLayout());
+		addedPanel.add(addedLabel, BorderLayout.NORTH);
+		addedPanel.add(addedPlayers, BorderLayout.CENTER);
+		addedPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 		
-		name.setBounds(330, 100, 220, 40);
-		comp.setBounds(330, 150, 220, 40);
-		layout.setBounds(330, 200, 220, 40);
-		type.setBounds(330, 300, 220, 40);
-		invite.setBounds(660, 150, 220, 40);
+		JPanel mainPanel = new JPanel();
+		mainPanel.setBackground(getBackground());
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.add(titlePanel, BorderLayout.NORTH);
+		mainPanel.add(buttonPanel, BorderLayout.CENTER);
+		mainPanel.add(addedPanel, BorderLayout.EAST);
 		
-		create.setBounds(100, 350, 220, 40);
-		back.setBounds(330, 350, 220, 40);
-	}
-	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.setColor(new Color(94, 94, 94));
-		g2d.fillRect(0, 0, getWidth(), getHeight());
-		
-		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font("Arial", Font.PLAIN, 40));
-		g2d.drawString("Create a competition", 100, 75);
+		this.add(mainPanel);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(back)) {
 			gui.switchPanel(new LoginPanel(gui));
+		}
+		if(e.getSource().equals(add)) {
+			if(!(addPlayers.getText().length() < 1)) {
+				addedPlayers.addText(addPlayers.getText());
+				addPlayers.setText("");
+			}
 		}
 	}
 	
