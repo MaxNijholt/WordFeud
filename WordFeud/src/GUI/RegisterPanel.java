@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,6 +16,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
+import Utility.ImageLoader;
 import Utility.SButton;
 import Utility.SPasswordField;
 import Utility.STextField;
@@ -35,9 +37,9 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.gui 	= gui;
 		this.l		= new Login(gui);
-		this.setBackground(new Color(94, 94, 94));
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		GridBagConstraints gbc = new GridBagConstraints();
 		
 		title 				= new JPanel();
 		username 			= new STextField("Username", 220, 40);
@@ -61,20 +63,33 @@ public class RegisterPanel extends JPanel implements ActionListener {
 			title.add(s);
 		}
 		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new GridBagLayout());
+		mainPanel.setBackground(new Color(255, 255, 255, 0));
+		mainPanel.setOpaque(false);
+		
 		c.gridy = 0;
-		c.insets = new Insets(5, 0, 50, 0);
-		this.add(title, c);
-		c.gridy++;
 		c.insets = new Insets(5, 0, 0, 0);
-		this.add(username, c);
+		mainPanel.add(username, c);
 		c.gridy++;
-		this.add(password, c);
+		mainPanel.add(password, c);
 		c.gridy++;
-		this.add(passwordValidate, c);
+		mainPanel.add(passwordValidate, c);
 		c.gridy++;
-		this.add(register, c);
+		mainPanel.add(register, c);
 		c.gridy++;
-		this.add(back, c);
+		mainPanel.add(back, c);
+		
+		gbc.gridy = 0;
+		gbc.insets = new Insets(0, 0, 50, 0);
+		this.add(title, gbc);
+		gbc.gridy++;
+		this.add(mainPanel, gbc);
+	}
+	
+	public void paintComponent(Graphics g) {
+		if(ImageLoader.BACKGROUND == null) {return;}
+		g.drawImage(ImageLoader.BACKGROUND, 0, 0, ImageLoader.BACKGROUND.getWidth() * 2, ImageLoader.BACKGROUND.getHeight() * 2, null);
 	}
 	
 	private void register() {
