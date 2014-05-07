@@ -9,14 +9,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Utility.DBCommunicator;
+import Utility.MComboBox;
 import Utility.SButton;
 import Utility.SLabel;
 
@@ -24,13 +27,13 @@ import Utility.SLabel;
  * @author Max Nijholt
  * 
  */
-
-@SuppressWarnings({ "serial", "rawtypes", "unused" })
-public class AdminPanel extends JPanel implements ItemListener {
-	private JComboBox playerList = new JComboBox();
+@SuppressWarnings({ "serial", "unused" })
+public class AdminPanel extends JPanel {
+	private MComboBox Mcombo = new MComboBox(150, 25, null);
 	private Vector<String> players;
 	private SLabel selectPlayer;
 	private GUI gui;
+	private ArrayList<SButton> buttonCollection = new ArrayList<SButton>();
 	private SButton newPlayer = new SButton("New account", SButton.GREY),
 			editPlayer = new SButton("Edit", SButton.GREY),
 			blacklist = new SButton("Blacklist", SButton.GREY),
@@ -42,85 +45,62 @@ public class AdminPanel extends JPanel implements ItemListener {
 			revokePlayer = new SButton("Revoke Player", SButton.GREY);
 	private ActionAdapter aa = new ActionAdapter();
 
-	
 	public AdminPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
-		
+
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		
-		this.gui = gui;
 
-		this.playerList.setEditable(true);
-		this.playerList.addItemListener(this);
+		this.gui = gui;
 
 		this.selectPlayer = new SLabel("Select player: ", 0);
 		this.players = new Vector<String>();
 
-		//Adding components on the right locations
+		// Adding components on the right locations
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 1;
 		c.insets = new Insets(0, 0, 5, 50);
 		this.add(this.selectPlayer, c);
-		this.add(this.playerList, c);
-		c.gridy ++;
+		this.add(this.Mcombo, c);
+		c.gridy++;
 		this.add(this.blacklist, c);
-		c.gridy ++;
+		c.gridy++;
 		c.gridx = c.gridx + 3;
 		this.add(this.newPlayer, c);
-		c.gridx ++;
+		c.gridx++;
 		this.add(this.editPlayer, c);
-		c.gridx --;
-		c.gridy ++;
+		c.gridx--;
+		c.gridy++;
 		this.add(this.grantPlayer, c);
-		c.gridx ++;
+		c.gridx++;
 		this.add(this.revokePlayer, c);
-		c.gridx --;
-		c.gridy ++;
+		c.gridx--;
+		c.gridy++;
 		this.add(this.grantMod, c);
-		c.gridx ++;
+		c.gridx++;
 		this.add(this.revokeMod, c);
-		c.gridx --;
-		c.gridy ++;
+		c.gridx--;
+		c.gridy++;
 		this.add(this.grantAdmin, c);
-		c.gridx ++;
+		c.gridx++;
 		this.add(this.revokeAdmin, c);
 
+		// Adding buttons to the ButtonCollection.
+		this.buttonCollection.add(this.blacklist);
 		
-		//Adding actionadapter to the components.
-		this.blacklist.addActionListener(aa);
-		this.editPlayer.addActionListener(aa);
-		this.newPlayer.addActionListener(aa);
-		this.grantPlayer.addActionListener(aa);
-		this.revokePlayer.addActionListener(aa);
-		this.grantAdmin.addActionListener(aa);
-		this.grantMod.addActionListener(aa);
-		this.revokeAdmin.addActionListener(aa);
-		this.revokeMod.addActionListener(aa);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (e.getStateChange() == ItemEvent.SELECTED) {
-			System.out.println(playerList.getSelectedItem());
-			ArrayList<String> data = null;
-			data = DBCommunicator
-					.requestMoreData("SELECT naam FROM account WHERE naam LIKE '"
-							+ playerList.getSelectedItem() + "%'");
-
-			players.clear();
-			playerList.removeAll();
-
-			for (String s : data) {
-				System.out.println(s);
-				players.add(s);
-			}
-
-			for (String pl : players) {
-				playerList.addItem(pl);
-			}
+		this.buttonCollection.add(blacklist);
+		this.buttonCollection.add(editPlayer);
+		this.buttonCollection.add(newPlayer);
+		this.buttonCollection.add(grantPlayer);
+		this.buttonCollection.add(revokePlayer);
+		this.buttonCollection.add(grantAdmin);
+		this.buttonCollection.add(grantMod);
+		this.buttonCollection.add(revokeAdmin);
+		this.buttonCollection.add(revokeMod);
+		
+		for(SButton sb : buttonCollection){
+			sb.addActionListener(aa);
 		}
 	}
 
@@ -143,6 +123,7 @@ public class AdminPanel extends JPanel implements ItemListener {
 
 	/**
 	 * Method for a more easy lookup player rights
+	 * @return ArrayList with data 0 up to 3 Strings
 	 */
 	private ArrayList<String> getUserRights(String player) {
 		ArrayList<String> data = DBCommunicator
@@ -150,26 +131,63 @@ public class AdminPanel extends JPanel implements ItemListener {
 						+ player + "'");
 		return data;
 	}
+	
+	
 
 	class ActionAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(grantAdmin)) {
-				addPrivilege(playerList.getSelectedItem().toString(),
-						"Administrator");
+				addPrivilege(Mcombo.getSelectedItem(), "Administrator");
 			}
 			if (e.getSource().equals(grantMod)) {
-				addPrivilege(playerList.getSelectedItem().toString(),
-						"Moderator");
+				addPrivilege(Mcombo.getSelectedItem(), "Moderator");
 			}
 			if (e.getSource().equals(revokeMod)) {
-				removePrivilege(playerList.getSelectedItem().toString(),
-						"Moderator");
+				removePrivilege(Mcombo.getSelectedItem(), "Moderator");
 			}
 			if (e.getSource().equals(revokeAdmin)) {
-				removePrivilege(playerList.getSelectedItem().toString(),
-						"Administrator");
+				removePrivilege(Mcombo.getSelectedItem(), "Administrator");
+			}
+			if (e.getSource().equals(revokePlayer)) {
+				removePrivilege(Mcombo.getSelectedItem(), "Player");
+			}
+			if (e.getSource().equals(grantPlayer)) {
+				addPrivilege(Mcombo.getSelectedItem(), "Player");
+			}
+			if (e.getSource().equals(blacklist)) {
+				// TODO Might need some editing?
+				removePrivilege(Mcombo.getSelectedItem(), "Administrator");
+				removePrivilege(Mcombo.getSelectedItem(), "Moderator");
+				removePrivilege(Mcombo.getSelectedItem(), "Player");
+			}
+			if (e.getSource().equals(editPlayer)) {
+				// TODO
+			}
+			if (e.getSource().equals(newPlayer)) {
+				// TODO
 			}
 		}
 	}
 
+	/**
+	 * method to update the buttons to have the right color.
+	 */
+	public void update() {
+		ArrayList<String> rights = this.getUserRights(this.Mcombo
+				.getSelectedItem());
+		if (rights.size() != 0) {
+			for (String s : rights) {
+				for(SButton sb : buttonCollection){
+					sb.setColor(SButton.CYAN);
+				}
+				if (s.equals("Player")) {
+					this.grantPlayer.setColor(SButton.GREY);
+				} else if (s.equals("Moderator")) {
+					this.grantMod.setColor(SButton.GREY);
+				} else if (s.equals("Administrator")) {
+					this.grantAdmin.setColor(SButton.GREY);
+				}
+			}
+		}
+	}
 }

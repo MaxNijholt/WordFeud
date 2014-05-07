@@ -19,6 +19,7 @@ public class Login {
 		}
 		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username + "'").equals(username)) {
 			if(DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE wachtwoord = '" + password + "' AND naam = '" + username + "'" ) != null) {
+				gui.login(username);
 				gui.switchPanel(new PlayerPanel(gui));
 				return "0";
 			}
@@ -34,6 +35,7 @@ public class Login {
 			if(password.equals(validatePassword)) {
 				if(!password.isEmpty() && !(password.length() < 1)) {
 					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username + "', '" + password +"')");
+					gui.login(username);
 					gui.switchPanel(new PlayerPanel(gui));
 					return "0";
 				}
