@@ -302,6 +302,19 @@ public class Application {
 	}
 	
 	/**
+	 * get the last turns information
+	 */
+	public String getLastTurnType(int gameID){
+		String turnType = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
+		return turnType;
+	}
+	
+	public int getLastTurnScore(int gameID){
+		int turnScore = DBCommunicator.requestInt("SELECT score FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
+		return turnScore;
+	}
+	
+	/**
 	 * get all account names form the db
 	 * return all accounts the have a name LIKE the given string
 	 * -------------------------------------------------

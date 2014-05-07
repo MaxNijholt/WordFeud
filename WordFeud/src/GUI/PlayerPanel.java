@@ -247,6 +247,27 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		
 		//for a game that is playing. option to select
 		else if(gameType.equals("Playing")){
+			JPanel opponent 	= new JPanel();
+			JPanel lastTurn 	= new JPanel();
+			SButton select 		= new SButton("Select", SButton.GREY, 220, 40);
+			
+			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
+			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
+			
+			opponent.setMinimumSize(new Dimension(200,30));
+			lastTurn.setMinimumSize(new Dimension(200,30));
+			select.setMinimumSize(select.getPreferredSize());
+			
+			opponent.setBackground(panel.getBackground());
+			lastTurn.setBackground(panel.getBackground());
+			
+			c.gridx = 0;
+			c.gridy = 0;
+			panel.add(opponent, c);
+			c.gridy++;
+			panel.add(lastTurn, c);
+			c.gridx++;
+			panel.add(select, c);
 			
 		}
 		
