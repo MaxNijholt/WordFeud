@@ -25,7 +25,4 @@ public abstract class Account {
 		return false;
 	}
 
-	public Account[] SearchPlayer(String partialname) {
-		return null;
-	}
 }

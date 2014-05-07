@@ -2,6 +2,11 @@ package AccountType;
 
 import Utility.DBCommunicator;
 
+/**
+ * Moderator Class
+ * 
+ */
+
 public class Moderator extends Account {
 	private String username;
 
@@ -21,7 +26,7 @@ public class Moderator extends Account {
 	public String getNotAprovedWords() {
 
 		pending = DBCommunicator
-				.requestData("SELECT * FROM mnijholt_db2.woordenboek where status = 'Pending'");
+				.requestData("SELECT * FROM woordenboek where status = 'Pending'");
 
 		return pending;
 
