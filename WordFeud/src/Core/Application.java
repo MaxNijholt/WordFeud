@@ -104,7 +104,7 @@ public class Application {
 		/*
 		 * WRITE TO DB
 		 */
-		Game newGame = new Game();
+		Game newGame = new Game(0);
 		selectedGame = newGame;
 		
 		myGui.switchPanel(null);
@@ -129,7 +129,7 @@ public class Application {
 		/*
 		 * GET GAME FROM DB
 		 */
-		Game newGame = new Game();
+		Game newGame = new Game(0);
 		selectedGame = newGame;
 		myGui.switchPanel(null);
 	}
@@ -165,11 +165,11 @@ public class Application {
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("moderator")){
-			currentAccount = new Moderator();
+			currentAccount = new Moderator("");
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("administrator")){
-			currentAccount = new Administrator();
+			currentAccount = new Administrator("");
 			myGui.switchPanel(null);
 		}
 	}
@@ -297,12 +297,12 @@ public class Application {
 		String opponent = this.getOpponentName(gameID);
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
 				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
-		myGui.switchPanel(new PlayerPanel(myGui));
+		myGui.switchPanel(new PlayerPanel());
 	}
 	
 	public void denyGame(int gameID){
 		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected' WHERE id = " + gameID);
-		myGui.switchPanel(new PlayerPanel(myGui));
+		myGui.switchPanel(new PlayerPanel());
 	}
 	
 	/**
