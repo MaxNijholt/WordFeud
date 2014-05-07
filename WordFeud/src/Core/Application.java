@@ -31,7 +31,9 @@ public class Application {
 		//selectedCompetition = new Competition(4);
 		//newGame("henk1", true);
 		//newPlayer("test3", "wachtwoord");
-		searchPlayer("test");
+		//searchPlayer("test");
+		
+		selectedGame = new Game(523);
 		
 	}
 	
@@ -41,17 +43,9 @@ public class Application {
 	 * input endDate format yyyymmddHHMMSS
 	 * 
 	 */
-	public void addCompetition(String compName, String endDate, String description, int mini, int maxi){
-		
-		int lastID = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
-		int newID = lastID + 1;
-		
-		
-		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving, minimum_aantal_deelnemers, maximum_aantal_deelnemers) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "' , " + mini + "," + maxi + ");");
-
-		Competition newComp = new Competition(newID);
-		selectedCompetition = newComp;
-		
+	public void addCompetition(String endDate, String description, int mini, int maxi){
+		selectedCompetition = new Competition(endDate, description, mini, maxi, currentAccount.getUsername());
+		myGui.switchPanel(null); //-------------------
 	}
 	
 	
