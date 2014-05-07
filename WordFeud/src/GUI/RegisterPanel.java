@@ -89,7 +89,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	
 	public void paintComponent(Graphics g) {
 		if(ImageLoader.BACKGROUND == null) {return;}
-		g.drawImage(ImageLoader.BACKGROUND, 0, 0, ImageLoader.BACKGROUND.getWidth() * 2, ImageLoader.BACKGROUND.getHeight() * 2, null);
+		g.drawImage(ImageLoader.BACKGROUND, 0, 0, getWidth(), getHeight(), null);
 	}
 	
 	private void register() {
