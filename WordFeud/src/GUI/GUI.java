@@ -64,6 +64,10 @@ public class GUI extends JFrame{
 		
 	}
 	
+	public void login(String username){
+		app.login(username);
+	}
+	
 	public ArrayList<Integer> getFinishedGames(boolean resigned){
 		ArrayList<Integer> gameInts = app.getFinishedGames(resigned);
 		return gameInts;
@@ -80,7 +84,24 @@ public class GUI extends JFrame{
 	}
 	
 	public String getOpponentName(int gameID){
-		
 		return app.getOpponentName(gameID);
+	}
+	
+	public void acceptGame(int gameID){
+		app.acceptGame(gameID);
+	}
+
+	public void denyGame(int gameID) {
+		app.denyGame(gameID);
+	}
+
+	public String getLastTurntype(int gameID) {
+		String turnType = app.getLastTurnType(gameID);
+		return turnType;
+	}
+
+	public int getLastTurnScore(int gameID) {
+		int turnScore = app.getLastTurnScore(gameID);
+		return turnScore;
 	}
 }
