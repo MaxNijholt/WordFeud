@@ -10,17 +10,20 @@ import java.awt.RenderingHints;
 
 import javax.swing.JLabel;
 
+/**
+ * @author Stan van Heumen
+ */
 @SuppressWarnings("serial")
 public class SLabel extends JLabel {
 	
 	// Instance variables
-	private String 	name;
+	private String 	text;
+	private int 	arc;
+	private boolean topLeftRounded, topRightRounded, bottomLeftRounded, bottomRightRounded;
 	private Font	font;
 	private int		alignment;
-	private Color	text, background;
-	private boolean drawBackground		= false;
-	private boolean rounded				= true;
-	private boolean roundedLeft			= true;
+	private Color	foreground, background;
+	private boolean drawBackground;
 	
 	// Constants
 	public static final int LEFT		=	0;
@@ -29,42 +32,41 @@ public class SLabel extends JLabel {
 	public static final int TOPCENTER	= 	3;
 	public static final int PADDINGLEFT	=	4;
 	
-	public SLabel(String name, int alignment) {
-		this.name 		= name;
-		this.font 		= new Font("Arial", Font.PLAIN, 16);
-		this.alignment 	= alignment;
-		this.text		= Color.WHITE;
-		this.background	= Color.WHITE;
-		FontMetrics fm 	= this.getFontMetrics(font);
-		this.setPreferredSize(new Dimension(fm.stringWidth(name), fm.getHeight()));
+	public SLabel(String name, int align) {
+		init(name, align);
 	}
 	
-	public SLabel(String name, int alignment, int width, int height) {
-		this.name 		= name;
-		this.font 		= new Font("Arial", Font.PLAIN, 16);
-		this.alignment 	= alignment;
-		this.text		= Color.WHITE;
-		this.background	= Color.WHITE;
-		this.setPreferredSize(new Dimension(width, height));
+	public SLabel(String name, int align, int width, int height) {
+		init(name, align);
+		setPreferredSize(new Dimension(width, height));
 	}
 	
-	public SLabel(String name, int alignment, Font font) {
-		this.name 		= name;
-		this.font 		= font;
-		this.alignment 	= alignment;
-		this.text		= Color.WHITE;
-		this.background	= Color.WHITE;
-		FontMetrics fm 	= this.getFontMetrics(font);
-		this.setPreferredSize(new Dimension(fm.stringWidth(name), fm.getHeight()));
+	public SLabel(String name, int align, Font f) {
+		init(name, align);
+		font = f;
+		FontMetrics fm 	= getFontMetrics(font);
+		setPreferredSize(new Dimension(fm.stringWidth(name), fm.getHeight()));
 	}
 	
-	public SLabel(String name, int alignment, Font font, int width, int height) {
-		this.name 		= name;
-		this.font 		= font;
-		this.alignment 	= alignment;
-		this.text		= Color.WHITE;
-		this.background	= Color.WHITE;
-		this.setPreferredSize(new Dimension(width, height));
+	public SLabel(String name, int align, Font f, int width, int height) {
+		init(name, align);
+		font = f;
+		setPreferredSize(new Dimension(width, height));
+	}
+	
+	private void init(String name, int align) {
+		text 				= name;
+		font 				= new Font("Arial", Font.PLAIN, 16);
+		alignment 			= align;
+		foreground			= new Color(255, 255, 255);
+		background			= new Color(0, 0, 0);
+		topLeftRounded 		= true;
+		topRightRounded 	= true;
+		bottomRightRounded	= true;	
+		bottomLeftRounded	= true;
+		arc 				= 10;
+		FontMetrics fm 	= getFontMetrics(font);
+		setPreferredSize(new Dimension(fm.stringWidth(text) + 10, fm.getHeight() + 10));
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -72,20 +74,20 @@ public class SLabel extends JLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setFont(font);
+		g2d.setColor(background);
 		if(drawBackground) {
-			g2d.setColor(this.background);
-			if(rounded) {
-				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-				if(roundedLeft) {
-					g2d.fillRect(getWidth() - 10, 0, 10, getHeight());
-				}
-			}
-			else {
-				g2d.fillRect(0, 0, getWidth(), getHeight());
-			}
+			g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+			
+			if(!topLeftRounded) 	{g2d.fillRect(0, 0, arc, arc);}
+			if(!topRightRounded) 	{g2d.fillRect(getWidth() - arc, 0, arc, arc);}
+			if(!bottomLeftRounded)	{g2d.fillRect(0, getHeight() - arc, arc, arc);}
+			if(!bottomRightRounded)	{g2d.fillRect(getWidth() - arc, getHeight() - arc, arc, arc);}
+			
 		}
-		g2d.setColor(text);
-		FontMetrics fm = this.getFontMetrics(font);
+		
+		g2d.setColor(foreground);
+		FontMetrics fm = g2d.getFontMetrics(font);
+		g2d.setFont(font);
 		int xalign = 0;
 		int yalign = (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent();
 		switch(alignment) {
@@ -93,27 +95,45 @@ public class SLabel extends JLabel {
 				xalign = 0;
 				break;
 			case 1:
-				xalign = getWidth() - fm.stringWidth(name);
+				xalign = getWidth() - fm.stringWidth(text);
 				break;
 			case 2:
-				xalign = (getWidth() / 2) - (fm.stringWidth(name) / 2);
+				xalign = (getWidth() / 2) - (fm.stringWidth(text) / 2);
 				break;
 			case 3:
-				xalign = (getWidth() / 2) - (fm.stringWidth(name) / 2);
+				xalign = (getWidth() / 2) - (fm.stringWidth(text) / 2);
 				yalign = ((fm.getAscent() + fm.getDescent()) / 2);
 				break;
 			case 4:
 				xalign = 5;
 				break;
 		}
-		g2d.drawString(name, xalign, yalign);
+		g2d.drawString(text, xalign, yalign);
 		g2d.dispose();
 	}
 	
-	public void changeTextColor(Color text, Color background) {this.text = text; this.background = background;}
-	public void setName(String name) {this.name = name;}
+	public void setTopLeftRounded(boolean rounded) 		{this.topLeftRounded = rounded;}
+	public void setTopRightRounded(boolean rounded) 	{this.topRightRounded = rounded;}
+	public void setBottomLeftRounded(boolean rounded) 	{this.bottomLeftRounded = rounded;}
+	public void setBottomRightRounded(boolean rounded) 	{this.bottomRightRounded = rounded;}
+	public void setArc(int arc)							{this.arc = arc;}
+	
+	public void setTextFont(Font font) {
+		this.font = font;
+		this.setFont(font);
+	}
+	
+	public void setCustomRounded(boolean topLeft, boolean topRight, boolean bottomLeft, boolean bottomRight) {
+		this.topLeftRounded 	= topLeft;
+		this.topRightRounded 	= topRight;
+		this.bottomLeftRounded 	= bottomLeft;
+		this.bottomRightRounded = bottomRight;
+	}
+	
+	public void changeTextColor(Color foreground, Color background) {this.foreground = foreground; this.background = background;}
+	public void setName(String text) {this.text = text;}
 	public void drawBackground(boolean a) {this.drawBackground = a;}
 	
-	public String getName() {return name;}
+	public String getName() {return text;}
 	
 }

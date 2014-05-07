@@ -16,7 +16,7 @@ import javax.swing.UIManager;
 @SuppressWarnings("serial")
 public class SComboBox extends JPanel implements ActionListener {
 
-	private SLabel 				name;
+	private STextField			name;
 	private SButton 			arrow;
 	private JPopupMenu 			pop;
 	private ArrayList<SButton> 	items;
@@ -27,7 +27,7 @@ public class SComboBox extends JPanel implements ActionListener {
 		this.setBackground(new Color(255, 255, 255, 0));
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
-
+		
 		this.pop = new JPopupMenu();
 		pop.setLayout(new GridLayout(0, 1));
 		pop.setOpaque(false);
@@ -43,13 +43,13 @@ public class SComboBox extends JPanel implements ActionListener {
 		// and setting the first String in the String[] to the currentSelected item
 		for(int i = 0; i < items.length; i++) {
 			if(i == 0) {
-				this.name = new SLabel(items[i], SLabel.PADDINGLEFT, 180, 40);
+				this.name = new STextField(items[i], 180, 40);
 				name.setName(items[i]);
+				name.setEditable(false);
+				name.setCustomRounded(true, false, true, false);
 			}
 			addItem(items[i]);
 		}
-		name.changeTextColor(new Color(100, 100, 100), Color.WHITE);
-		name.drawBackground(true);
 		name.setOpaque(false);
 		
 		this.arrow = new SButton("\u25BC", SButton.WHITE, 40, 40);
@@ -95,6 +95,7 @@ public class SComboBox extends JPanel implements ActionListener {
 		}
 	}
 
-	public String getSelectedItem() {return name.getName();}
-
+	public String getSelectedItem() 	{return name.getName();}
+	public void setEditable(boolean a) 	{name.setEditable(a);}
+	
 }
