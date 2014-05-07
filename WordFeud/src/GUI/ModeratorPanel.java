@@ -55,6 +55,7 @@ public class ModeratorPanel extends JPanel {
 					else
 					{
 						// insert qeury vragen en overzien!
+						//
 						// DBCommunicator
 						// .writeData("INSERT INTO woordenboek  (woord,letterset_code,status) VALUES('"
 						// + wordTooAdd + "','EN','Accepted')");
