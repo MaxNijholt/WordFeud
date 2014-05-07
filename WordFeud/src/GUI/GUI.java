@@ -10,92 +10,99 @@ import Core.Application;
 import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
-public class GUI extends JFrame {
+public class GUI extends JFrame{
 
 	public static final int WIDTH = 1000;
 	public static final int HEIGHT = 600;
 	public static final String TITLE = "Wordfeud";
 	private Application app;
-	private JPanel currpanel = new LoginPanel(this);
-
-	public GUI(Application app) {
+	
+	public GUI(Application app){
 		this.app = app;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new CompetitionCreatePanel(this));
+		this.setContentPane(new LoginPanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
-
-	public void playWord() {
-
+	
+	public void playWord(){
+		
 	}
-
-	public boolean layGameStone(GameStone gamestone, String location) {
+	
+	public boolean layGameStone(GameStone gamestone, String location){
 		return false;
-
+		
 	}
-
-	public void switchPanel(JPanel panel) {
-		if (currpanel != null) {
-			this.remove(currpanel);
-		}
-		this.currpanel = panel;
-		this.add(panel);
+	
+	public void switchPanel(JPanel panel){
+		this.getContentPane().removeAll();
+		this.setContentPane(panel);
 		this.revalidate();
 	}
-
-	public void switchPanel(JPanel panel, boolean menu) {
-		if (currpanel != null) {
-			this.remove(currpanel);
-		}
-		if (menu)
-			this.add(new MenuPanel(this, app.getCurrentAccount().toString()));
-		this.currpanel = panel;
-		this.add(panel);
-		this.revalidate();
-	}
-
-	public void setLoadingCursor(boolean loading) {
-		if (loading) {
+	
+	public void setLoadingCursor(boolean loading){
+		if(loading){
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		} else {
+		}
+		else{
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 	}
-
-	public void pass() {
-
+	
+	public void pass(){
+		
 	}
-
-	public void shuffle() {
-
+	
+	public void shuffle(){
+		
 	}
-
-	public void swapGameStones() {
-
+	
+	public void swapGameStones(){
+		
 	}
-
-	public ArrayList<Integer> getFinishedGames(boolean resigned) {
+	
+	public void login(String username) {
+		app.login(username);
+	}
+	
+	public ArrayList<Integer> getFinishedGames(boolean resigned){
 		ArrayList<Integer> gameInts = app.getFinishedGames(resigned);
 		return gameInts;
 	}
-
-	public ArrayList<Integer> getPlayingGames(boolean myTurn) {
+	
+	public ArrayList<Integer> getPlayingGames(boolean myTurn){
 		ArrayList<Integer> gameInts = app.getPlayingGames(myTurn);
 		return gameInts;
 	}
-
-	public ArrayList<Integer> getRequestedGames(boolean myRequest,
-			boolean denied) {
+	
+	public ArrayList<Integer> getRequestedGames(boolean myRequest, boolean denied){
 		ArrayList<Integer> gameInts = app.getRequestedGames(myRequest, denied);
 		return gameInts;
 	}
-
-	public String getOpponentName(int gameID) {
-
+	
+	public String getOpponentName(int gameID){
+		
 		return app.getOpponentName(gameID);
+	}
+	
+	public void acceptGame(int gameID) {
+		app.acceptGame(gameID);
+	}
+	
+	public void denyGame(int gameID) {
+		app.denyGame(gameID);
+	}
+
+	public String getLastTurntype(int gameID) {
+		String turnType = app.getLastTurnType(gameID);
+		return turnType;
+	}
+
+	public int getLastTurnScore(int gameID) {
+		int turnScore = app.getLastTurnScore(gameID);
+		return turnScore;
 	}
 }
