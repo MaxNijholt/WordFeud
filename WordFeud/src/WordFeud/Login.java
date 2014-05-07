@@ -19,7 +19,7 @@ public class Login {
 		}
 		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username + "'").equals(username)) {
 			if(DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE wachtwoord = '" + password + "' AND naam = '" + username + "'" ) != null) {
-				gui.switchPanel(new PlayerPanel(gui));
+				this.gui.switchPanel(new PlayerPanel(gui), true);
 				return "0";
 			}
 			else {

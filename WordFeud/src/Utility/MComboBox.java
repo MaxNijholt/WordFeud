@@ -129,5 +129,9 @@ public class MComboBox extends JPanel implements ActionListener  {
 	public String getSelectedItem() {
 		return placeholder.getText();
 	}
+	
+	public STextField getField(){
+		return placeholder;
+	}
 
 }

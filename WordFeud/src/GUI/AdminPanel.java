@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import Utility.DBCommunicator;
 import Utility.MComboBox;
@@ -87,8 +91,6 @@ public class AdminPanel extends JPanel {
 		this.add(this.revokeAdmin, c);
 
 		// Adding buttons to the ButtonCollection.
-		this.buttonCollection.add(this.blacklist);
-		
 		this.buttonCollection.add(blacklist);
 		this.buttonCollection.add(editPlayer);
 		this.buttonCollection.add(newPlayer);
@@ -102,6 +104,17 @@ public class AdminPanel extends JPanel {
 		for(SButton sb : buttonCollection){
 			sb.addActionListener(aa);
 		}
+		
+		this.Mcombo.getField().addKeyListener(new KeyListener(){
+			@Override
+			public void keyTyped(KeyEvent e) {
+				update();
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {}	
+		});
 	}
 
 	/**
@@ -126,9 +139,10 @@ public class AdminPanel extends JPanel {
 	 * @return ArrayList with data 0 up to 3 Strings
 	 */
 	private ArrayList<String> getUserRights(String player) {
-		ArrayList<String> data = DBCommunicator
+		ArrayList<String> data = new ArrayList<String>();
+		data.addAll(DBCommunicator
 				.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='"
-						+ player + "'");
+						+ player + "'"));
 		return data;
 	}
 	
@@ -175,19 +189,25 @@ public class AdminPanel extends JPanel {
 	public void update() {
 		ArrayList<String> rights = this.getUserRights(this.Mcombo
 				.getSelectedItem());
+		for(SButton sb : buttonCollection){
+			sb.setColor(SButton.CYAN);
+			sb.enable(true);
+		}
 		if (rights.size() != 0) {
 			for (String s : rights) {
-				for(SButton sb : buttonCollection){
-					sb.setColor(SButton.CYAN);
-				}
+				System.out.println(s);
 				if (s.equals("Player")) {
 					this.grantPlayer.setColor(SButton.GREY);
+					this.grantPlayer.disable();
 				} else if (s.equals("Moderator")) {
 					this.grantMod.setColor(SButton.GREY);
+					this.grantMod.disable();
 				} else if (s.equals("Administrator")) {
 					this.grantAdmin.setColor(SButton.GREY);
+					this.grantAdmin.disable();
 				}
 			}
 		}
+		revalidate();
 	}
 }
