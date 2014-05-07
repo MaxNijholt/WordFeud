@@ -14,11 +14,6 @@ public class PointCounter {
 		
 	}
 	
-	public boolean jokerCheck(){
-		return false;
-	
-	}
-	
 	public int counterPointsTurn(HashMap<String, GameStone> createdWords){
 		int points = 0;
 		int wordBonus = 0;
@@ -41,7 +36,6 @@ public class PointCounter {
 				points += createdWords.get(locations[i]).getValue();
 			}
 		}
-		
 		
 		return points;
 		
