@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Core.Application;
+import Utility.ImageLoader;
 import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
@@ -26,6 +27,7 @@ public class GUI extends JFrame{
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+		this.setIconImage(ImageLoader.ICON);
 	}
 	
 	public void playWord(){
