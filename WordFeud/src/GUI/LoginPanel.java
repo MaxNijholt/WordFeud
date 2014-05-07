@@ -44,8 +44,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		title 		= new SLabel("Wordfeud", SLabel.CENTER, new Font("Arial", Font.BOLD, 100));
-		username 	= new STextField("Username");
-		password 	= new SPasswordField("Password");
+		username 	= new STextField("Username", 220, 40);
+		password 	= new SPasswordField("Password", 220, 40);
 
 		login		= new SButton("Connect", SButton.GREY, 220, 40);
 		register 	= new SButton("Register", SButton.GREY, 220, 40);

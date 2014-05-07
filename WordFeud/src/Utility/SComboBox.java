@@ -56,10 +56,8 @@ public class SComboBox extends JPanel implements ActionListener {
 		arrow.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
 		arrow.setTextColor(Color.BLACK);
 		arrow.addActionListener(this);
-		arrow.setBottomRounded(false);
-		arrow.setRounded(true);
-		arrow.setRightRounded(true);
-
+		arrow.setCustomRounded(false, true, false, true);
+		
 		this.add(name, BorderLayout.CENTER);
 		this.add(arrow, BorderLayout.EAST);
 	}
@@ -68,13 +66,13 @@ public class SComboBox extends JPanel implements ActionListener {
 		SButton s = new SButton(item, Color.WHITE, this.getWidth(), this.getHeight());
 		s.setTextColor(new Color(100, 100, 100));
 		s.setRounded(true);
-		s.setTextX(1);
+		s.setAlignment(SButton.LEFT);
 		
 		if(items.isEmpty()) {
-			s.setTopRounded(true);
+			s.setCustomRounded(true, true, false, false);
 		} 
 		else {
-			s.setBottomRounded(true);
+			s.setCustomRounded(false, false, true, true);
 		}
 		
 		s.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
