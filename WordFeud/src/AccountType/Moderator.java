@@ -38,7 +38,9 @@ public class Moderator extends Account {
 	 * @param word
 	 */
 	public void addWord(String word) {
-		DBCommunicator.writeData(word);
+		DBCommunicator
+				.writeData("INSERT  INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES("
+						+ "'" + word + "'" + ",'EN','Accepted')");
 	}
 
 	/**
