@@ -34,22 +34,23 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		this.setBackground(new Color(94, 94, 94));
 		this.gui = gui;
 		
-		addedPlayers	= new STextArea(300, 300, false);
+		addedPlayers	= new STextArea(null, 300, 300, false);
 		addedPlayers.setHighlighter(null);
+		addedPlayers.setTextFont(new Font("Arial", Font.BOLD, 20));
 		
 		title 			= new SLabel("Create a competition", SLabel.LEFT, new Font("Arial", Font.BOLD, 30));
-		nameLabel		= new SLabel("Competition name", SLabel.RIGHT, 130, 40);
-		playerLabel		= new SLabel("Maximum players", SLabel.RIGHT, 130, 40);
-		addLabel		= new SLabel("Add player", SLabel.RIGHT, 130, 40);
-		addedLabel		= new SLabel("Added players", SLabel.LEFT, 130, 40);
+		nameLabel		= new SLabel("Competition name", SLabel.RIGHT, 220, 40);
+		playerLabel		= new SLabel("Maximum players", SLabel.RIGHT, 220, 40);
+		addLabel		= new SLabel("Add player", SLabel.RIGHT, 220, 40);
+		addedLabel		= new SLabel("Added players", SLabel.LEFT, 220, 40);
 		
 		create 			= new SButton("Create", SButton.GREY, 220, 40);
 		back 			= new SButton("Back", SButton.GREY, 220, 40);
 		add				= new SButton("Add", SButton.GREY, 100, 40);
 		
-		name 			= new STextField("Competition name");
-		player 			= new STextField("Maximum players (2 up to 24)");
-		addPlayers		= new STextField("Name");
+		name 			= new STextField("Competition name", 220, 40);
+		player 			= new STextField("Maximum players (2 up to 24)", 220, 40);
+		addPlayers		= new STextField("Name", 220, 40);
 		
 		back.addActionListener(this);
 		add.addActionListener(this);
@@ -60,9 +61,9 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
+		c.insets = new Insets(0, 15, 5, 0);
 		buttonPanel.add(nameLabel, c);
 		c.gridx++;
-		c.insets = new Insets(0, 15, 5, 0);
 		buttonPanel.add(name, c);
 		c.gridx = 0;
 		c.gridy++;

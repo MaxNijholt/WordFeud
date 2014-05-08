@@ -17,21 +17,32 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class STextField extends JTextField {
 	
+	// Instance variables
 	private int 	arc;
 	private String 	placeholder;
 	private boolean topLeftRounded, topRightRounded, bottomLeftRounded, bottomRightRounded;
 	private Font	font;
 	private Color	background, foreground;
 	
+	
+	/**
+	 * STextfield constructor parameters: String text
+	 */
 	public STextField(String text) {
 		init(text);
 	}
 	
+	/**
+	 * STextfield constructor parameters: String text, int width, int height
+	 */
 	public STextField(String text, int width, int height) {
 		init(text);
 		setPreferredSize(new Dimension(width, height));
 	}
 	
+	/**
+	 * Private init method for the default stuff
+	 */
 	private void init(String text) {
 		placeholder			= text;
 		topLeftRounded 		= true;
@@ -49,6 +60,9 @@ public class STextField extends JTextField {
 		setFont(new Font("Arial", Font.PLAIN, 16));
 	}
 	
+	/**
+	 * Overridden paintComponent(Graphics g) method from JComponent used to draw better graphics for textfield
+	 */
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

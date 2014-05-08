@@ -30,6 +30,7 @@ public class SButton extends JButton implements MouseListener {
 	public static final	Color 	GREEN 	= new Color(5, 142, 5);
 	public static final	Color 	PINK 	= new Color(161, 27, 60);
 	public static final	Color 	CYAN	= new Color(5, 142, 158);
+	public static final	Color 	RED		= new Color(237, 67, 33);
 	public static final	Color 	YELLOW 	= new Color(230, 156, 27);
 	public static final	Color 	BLUE	= new Color(45, 126, 219);
 	public static final	Color 	PURPLE 	= new Color(86, 56, 168);
@@ -42,14 +43,18 @@ public class SButton extends JButton implements MouseListener {
 	public static final int		CENTER	= 1;
 	public static final int		RIGHT	= 2;
 	
-	//Constructor @param name, color
+	/**
+	 * Constructor parameters: name, color
+	 */
 	public SButton(String name, Color color) {
 		// Default stuff
 		init(name);
 		calculateColors(color);
 	}
 	
-	// Constructor @param name, color, width, height
+	/**
+	 * Constructor parameters: name, color, width, height
+	 */
 	public SButton(String name, Color color, int width, int height) {
 		// Default stuff
 		init(name);
@@ -57,7 +62,9 @@ public class SButton extends JButton implements MouseListener {
 		this.setPreferredSize(new Dimension(width, height));
 	}
 	
-	// Private initialize method
+	/**
+	 * Private initialize method for default stuff
+	 */
 	private void init(String name) {
 		font 				= new Font("Arial", Font.PLAIN, 16);
 		state 				= 0;
@@ -77,7 +84,9 @@ public class SButton extends JButton implements MouseListener {
 		this.addMouseListener(this);
 	}
 	
-	// Private method to calculate the colors
+	/**
+	 * Private method to calculate the colors
+	 */
 	private void calculateColors(Color color) {
 		// Get the RGB value of Color color
 		int r	= color.getRed();
@@ -103,7 +112,9 @@ public class SButton extends JButton implements MouseListener {
 		this.clickColor = new Color(r, g, b);
 	}
 	
-	// The overridden paintComponent, used to draw the button
+	/**
+	 * The overridden paintComponent(Graphics g) from JComponent, used to draw the button
+	 */
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		// Switch the different states

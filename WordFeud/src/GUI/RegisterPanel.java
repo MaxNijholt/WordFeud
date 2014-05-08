@@ -23,9 +23,13 @@ import Utility.STextField;
 import WordFeud.GameStone;
 import WordFeud.Login;
 
+/**
+ * @author Stan van Heumen
+ */
 @SuppressWarnings("serial")
 public class RegisterPanel extends JPanel implements ActionListener {
 
+	// Instance variables
 	private JPanel			title;
 	private STextField		username;
 	private SPasswordField	password, passwordValidate;
@@ -33,6 +37,9 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	private GUI				gui;
 	private Login			l;
 	
+	/**
+	 * The panel that is used to register to our program.
+	 */
 	public RegisterPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.gui 	= gui;
@@ -45,15 +52,18 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		username 			= new STextField("Username", 220, 40);
 		password 			= new SPasswordField("Password", 220, 40);
 		passwordValidate 	= new SPasswordField("Confirm Password", 220, 40);
-		
 		register			= new SButton("Register", SButton.GREY, 220, 40);
 		back				= new SButton("Back", SButton.GREY, 220, 40);
 		
+		username.addActionListener(this);
+		password.addActionListener(this);
+		passwordValidate.addActionListener(this);
 		register.addActionListener(this);
 		back.addActionListener(this);
 		
 		title.setLayout(new GridLayout(1, 8, 2, 2));
 		title.setBackground(new Color(255, 255, 255, 0));
+		
 		String letters 	= "WORDFEUD";
 		String values	= "51224122";
 		for(int i = 0; i < letters.length(); i++) {
@@ -87,11 +97,17 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		this.add(mainPanel, gbc);
 	}
 	
+	/**
+	 * Overridden paintComponent(Graphics g) method from JComponent used to draw the background
+	 */
 	public void paintComponent(Graphics g) {
 		if(ImageLoader.BACKGROUND == null) {return;}
 		g.drawImage(ImageLoader.BACKGROUND, 0, 0, getWidth(), getHeight(), null);
 	}
 	
+	/**
+	 * This is a method that is testing with the DBCommunicator if the user name and password are correct to register
+	 */
 	private void register() {
 		String text = l.register(username.getText(), String.valueOf(password.getPassword()), String.valueOf(passwordValidate.getPassword()));
 		if(text == "0") {return;}
@@ -108,8 +124,14 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * This method is the actionListener for the buttons in the RegisterPanel
+	 */
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(register)) 	{register();}
-		if(e.getSource().equals(back)) 		{gui.switchPanel(new LoginPanel(gui));}
+		if(e.getSource().equals(username)) 			{password.requestFocusInWindow();}
+		if(e.getSource().equals(password)) 			{passwordValidate.requestFocusInWindow();}
+		if(e.getSource().equals(passwordValidate)) 	{register();}
+		if(e.getSource().equals(register)) 			{register();}
+		if(e.getSource().equals(back)) 				{gui.switchPanel(new LoginPanel(gui));}
 	}
 }

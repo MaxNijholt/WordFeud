@@ -17,21 +17,31 @@ import javax.swing.JPasswordField;
 @SuppressWarnings("serial")
 public class SPasswordField extends JPasswordField {
 
+	// Instance variables
 	private int		arc;
 	private String 	placeholder;
 	private boolean topLeftRounded, topRightRounded, bottomLeftRounded, bottomRightRounded;
 	private Font	font;
 	private Color	background, foreground;
 	
+	/**
+	 * SPasswordField constructor parameters: String text
+	 */
 	public SPasswordField(String text) {
 		init(text);
 	}
-	
+
+	/**
+	 * SPasswordField constructor parameters: String text, int width, int height
+	 */
 	public SPasswordField(String text, int width, int height) {
 		init(text);
 		setPreferredSize(new Dimension(width, height));
 	}
 	
+	/**
+	 * Private init method for the default stuff
+	 */
 	private void init(String text) {
 		placeholder 		= text;
 		topLeftRounded 		= true;
@@ -49,6 +59,9 @@ public class SPasswordField extends JPasswordField {
 		setFont(new Font("Arial", Font.PLAIN, 16));
 	}
 	
+	/**
+	 * Overridden paintComponent(Graphics g) method from JComponent used to draw better graphics for passwordfield
+	 */
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

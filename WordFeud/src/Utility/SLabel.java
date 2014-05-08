@@ -32,15 +32,24 @@ public class SLabel extends JLabel {
 	public static final int TOPCENTER	= 	3;
 	public static final int PADDINGLEFT	=	4;
 	
+	/**
+	 * SLabel constructor parameters: int name, int align
+	 */
 	public SLabel(String name, int align) {
 		init(name, align);
 	}
 	
+	/**
+	 * SLabel constructor parameters: int name, int align, int width, int height
+	 */
 	public SLabel(String name, int align, int width, int height) {
 		init(name, align);
 		setPreferredSize(new Dimension(width, height));
 	}
 	
+	/**
+	 * SLabel constructor parameters: int name, int align, Font f
+	 */
 	public SLabel(String name, int align, Font f) {
 		init(name, align);
 		font = f;
@@ -48,12 +57,18 @@ public class SLabel extends JLabel {
 		setPreferredSize(new Dimension(fm.stringWidth(name), fm.getHeight()));
 	}
 	
+	/**
+	 * SLabel constructor parameters: int name, int align, Font f, int width, int height
+	 */
 	public SLabel(String name, int align, Font f, int width, int height) {
 		init(name, align);
 		font = f;
 		setPreferredSize(new Dimension(width, height));
 	}
 	
+	/**
+	 * Private init method for default stuff
+	 */
 	private void init(String name, int align) {
 		text 				= name;
 		font 				= new Font("Arial", Font.PLAIN, 16);
@@ -70,6 +85,9 @@ public class SLabel extends JLabel {
 		setPreferredSize(new Dimension(fm.stringWidth(text) + 10, fm.getHeight() + 10));
 	}
 	
+	/**
+	 * Overridden paintComponent(Graphics g) method from JComponent used to draw better graphics for SLabel
+	 */
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -113,6 +131,7 @@ public class SLabel extends JLabel {
 		g2d.dispose();
 	}
 	
+	// Setters
 	public void setTopLeftRounded(boolean rounded) 		{this.topLeftRounded = rounded;}
 	public void setTopRightRounded(boolean rounded) 	{this.topRightRounded = rounded;}
 	public void setBottomLeftRounded(boolean rounded) 	{this.bottomLeftRounded = rounded;}
@@ -135,6 +154,7 @@ public class SLabel extends JLabel {
 	public void setName(String text) {this.text = text;}
 	public void drawBackground(boolean a) {this.drawBackground = a;}
 	
+	// Getters
 	public String getName() {return text;}
 	
 }
