@@ -107,14 +107,30 @@ public class AdminPanel extends JPanel {
 		
 		this.Mcombo.getField().addKeyListener(new KeyListener(){
 			@Override
-			public void keyTyped(KeyEvent e) {
-				update();
-			}
+			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyPressed(KeyEvent e) {}
 			@Override
-			public void keyReleased(KeyEvent e) {}	
+			public void keyReleased(KeyEvent e) {update();}	
 		});
+		for(SButton sb : Mcombo.getButtons()){
+			sb.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					update();
+				}
+				
+			});
+		}
+		for(SButton sb : this.buttonCollection){
+			sb.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					update();
+				}
+				
+			});
+		}
 	}
 
 	/**
@@ -180,6 +196,7 @@ public class AdminPanel extends JPanel {
 			if (e.getSource().equals(newPlayer)) {
 				// TODO
 			}
+			update();
 		}
 	}
 
