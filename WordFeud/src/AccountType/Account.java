@@ -21,20 +21,27 @@ public abstract class Account {
 				.equals("Moderator")) {
 
 			return true;
-		} else if (DBCommunicator.requestData("SELECT rol_type FROM accountrol where account_naam = " + "'"
-				+ username + "'" + " and rol_type = 'Moderator'") == null) {
+		} else if (DBCommunicator
+				.requestData("SELECT rol_type FROM accountrol where account_naam = "
+						+ "'" + username + "'" + " and rol_type = 'Moderator'") == null) {
 			return false;
 		}
 		return false;
 	}
 
 	public boolean getIsAdministrator() {
-		if (DBCommunicator.requestData("SELECT rol_type FROM accountrol where account_naam = " + "'"
-				+ username + "'" + " and rol_type = 'Aministrator'").equals("Administrator")) {
+		if (DBCommunicator.requestData(
+				"SELECT rol_type FROM accountrol where account_naam = " + "'"
+						+ username + "'" + " and rol_type = 'Aministrator'")
+				.equals("Administrator")) {
 
 			return true;
-		} else if (DBCommunicator.requestData("SELECT rol_type FROM accountrol where account_naam = " + "'"
-				+ username + "'" + " and rol_type = 'Aministrator'") == null) {
+		} else if (DBCommunicator
+				.requestData("SELECT rol_type FROM accountrol where account_naam = "
+						+ "'"
+						+ username
+						+ "'"
+						+ " and rol_type = 'Aministrator'") == null) {
 			return false;
 		}
 		return false;
@@ -42,12 +49,15 @@ public abstract class Account {
 
 	public boolean getIsPlayer() {
 
-		if (DBCommunicator.requestData("SELECT rol_type FROM accountrol where account_naam = " + "'"
-				+ username + "'" + " and rol_type = 'Player'").equals("Player")) {
+		if (DBCommunicator.requestData(
+				"SELECT rol_type FROM accountrol where account_naam = " + "'"
+						+ username + "'" + " and rol_type = 'Player'").equals(
+				"Player")) {
 
 			return true;
-		} else if (DBCommunicator.requestData("SELECT rol_type FROM accountrol where account_naam = " + "'"
-				+ username + "'" + " and rol_type = 'Player'") == null) {
+		} else if (DBCommunicator
+				.requestData("SELECT rol_type FROM accountrol where account_naam = "
+						+ "'" + username + "'" + " and rol_type = 'Player'") == null) {
 			return false;
 		}
 		return false;
