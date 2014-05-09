@@ -3,12 +3,13 @@ package GUI;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Core.Application;
 import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame{
 
-	public GUI(){
+	public GUI(Application app){
 		
 	}
 	

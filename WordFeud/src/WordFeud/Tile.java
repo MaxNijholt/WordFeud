@@ -11,6 +11,8 @@ public class Tile {
 	public Tile(int x, int y){
 		this.xPos = x;
 		this.yPos = y;
+		bonus = "";
+		bonusUsed = false;
 	}
 	
 	public String getBonus(){
@@ -35,6 +37,10 @@ public class Tile {
 	
 	public void setBonusUsed(boolean used){
 		this.bonusUsed = used;
+	}
+	
+	public void setGameStone(GameStone gamestone){
+		this.gameStone = gamestone;
 	}
 	
 	public void setCoordinates(int posX, int posY){
