@@ -6,12 +6,10 @@ import java.util.HashMap;
 import WordFeud.GameStone;
 
 public class WordChecker {
-	private HashMap<String, GameStone> field;
-	private HashMap<String, GameStone> play;
+	HashMap<String, GameStone> field;
+	HashMap<String, GameStone> play;
 	private ArrayList<String> createdWords = new ArrayList<>();
 	private boolean check = false;
-	private String xx = "";
-	private String yy = "";
 	private ArrayList<String> coordinate = new ArrayList<>();
 	private ArrayList<String> theWords = new ArrayList<>();
 
@@ -29,6 +27,9 @@ public class WordChecker {
 	public void checkWords(HashMap<String, GameStone> playBoard,
 			HashMap<String, GameStone> movePlayed)
 	{
+		createdWords.clear();
+		coordinate.clear();
+		theWords.clear();
 		this.field = playBoard;
 		this.play = movePlayed; // mergen van gespeelde letters met het bord
 		for (String merge : play.keySet())
@@ -36,28 +37,35 @@ public class WordChecker {
 			field.put(merge, play.get(merge));
 		}
 
-		if (coordinateChecker(play)) // de x,y coordinaat controle
+		if (coordinateChecker(play) && connectionChecker(play)) // de x,y
+																// coordinaat
+																// controle
 		{
-			letterChecker(); // controleerd per letter gelegde woorden en voegt
+
+			letterChecker(); // controleerd per letter gelegde woorden en
+								// voegt
 								// die toe aan een collectie
 			wordChecker(createdWords);
+			System.out.print("the created words are: ");
+			for (String words : theWords)
+			{
+				System.out.print("<" + words + ">");
+			}
+
 		}
 
 		else
 		{
-			System.out.println(" de gelegde letters zijn niet geldig");
+			System.out.println("De gelegde letters zijn niet geldig");
 			for (String merge : play.keySet())
 			{
 				field.remove(merge);
 			}
 		}
-		System.out.print("the created words are: ");
-		for (String words : theWords)
-		{
-			System.out.print("<" + words + ">");
-		}
+
 	}
 
+	// joost!
 	/**
 	 * creates words out of coordinates and checks them in through the database
 	 */
@@ -66,7 +74,6 @@ public class WordChecker {
 		String word = "";
 		int x = 0;
 		int y = 0;
-		String[] words = null;
 		String[] cords = null;
 		String[] cordsSplit = null;
 		String[] cordsSplit2 = null;
@@ -91,8 +98,6 @@ public class WordChecker {
 
 				}
 				t = 0;
-				System.out.print("vertical word: ");
-				System.out.println(word);
 				this.theWords.add(word);
 				// hier moet de controle met de database komen!(ook een stukje
 				// lager)
@@ -113,8 +118,6 @@ public class WordChecker {
 
 				}
 				t = 0;
-				System.out.print("horizontal word: ");
-				System.out.println(word);
 				this.theWords.add(word);
 				// hier moet de controle met de database komen!(ook een stukje
 				// hoger)
@@ -134,6 +137,8 @@ public class WordChecker {
 		boolean checker = true;
 		boolean x = false;
 		boolean y = false;
+		String xx = "";
+		String yy = "";
 
 		String xCheck = "";
 		String yCheck = "";
@@ -145,12 +150,21 @@ public class WordChecker {
 				String[] parts = myValue.split(",");
 				coordinate.add(myValue);
 				xx = xx + parts[0];
-				xCheck = parts[0];
 				yy = yy + parts[1];
-				yCheck = parts[1];
 			}
-			xCheck = xCheck + xCheck + xCheck + xCheck + xCheck;
-			yCheck = yCheck + yCheck + yCheck + yCheck + yCheck;
+			int t = 0;
+			while (t < playd.size())
+			{
+				xCheck = xCheck + xx.substring(0, 1);
+				t++;
+			}
+			t = 0;
+			while (t < playd.size())
+			{
+				yCheck = yCheck + yy.substring(0, 1);
+				t++;
+			}
+
 			if (xx.equals(xCheck))
 			{
 				x = true;
@@ -177,8 +191,7 @@ public class WordChecker {
 	 * checkes the letters and creates words of them, puts them in a list and
 	 * removes duplicates and unnecessary entry's
 	 */
-	private void letterChecker()// controleerd per letter gemaakte woorden en
-								// voegt die toe aan een collectie
+	private void letterChecker()
 	{
 		int x = 0;
 		int y = 0;
@@ -314,6 +327,61 @@ public class WordChecker {
 			}
 		}
 
+	}
+
+	/**
+	 * Checks if the letters do have a connections at all
+	 */
+	private boolean connectionChecker(HashMap<String, GameStone> playd)
+	{
+		boolean connections = false;
+		int x;
+		int y;
+
+		for (String myValue : playd.keySet())
+		{
+			boolean one = false;
+			boolean two = false;
+			boolean three = false;
+			boolean four = false;
+			String[] parts = myValue.split(",");
+			x = Integer.parseInt(parts[0]);
+			y = Integer.parseInt(parts[1]);
+			x++;
+			if (field.keySet().contains(x + "," + y)
+					&& !playd.keySet().contains(x + "," + y))
+			{
+				one = true;
+			}
+			x--;
+			x--;
+			if (field.keySet().contains(x + "," + y)
+					&& !playd.keySet().contains(x + "," + y))
+			{
+				two = true;
+			}
+			x++;
+			y--;
+			if (field.keySet().contains(x + "," + y)
+					&& !playd.keySet().contains(x + "," + y))
+			{
+				three = true;
+			}
+			y++;
+			y++;
+			if (field.keySet().contains(x + "," + y)
+					&& !playd.keySet().contains(x + "," + y))
+			{
+				four = true;
+			}
+			if (one || two || three || four)
+			{
+				connections = true;
+			}
+
+		}
+
+		return connections;
 	}
 
 }
