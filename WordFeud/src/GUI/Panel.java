@@ -6,13 +6,14 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public abstract class Panel extends JPanel{
+public abstract class Panel extends JPanel {
 
 	public Panel(){
-		this.revalidate();
+		//this.revalidate();
 	}
 
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		g.fillRect(this.getWidth()/2-50, this.getHeight()/2-50, 100, 100);
 		g.setColor(Color.WHITE);
