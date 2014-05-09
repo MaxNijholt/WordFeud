@@ -11,6 +11,8 @@ public class Tile {
 	public Tile(int x, int y){
 		this.xPos = x;
 		this.yPos = y;
+		bonus = "";
+		bonusUsed = false;
 	}
 	
 	public String getBonus(){

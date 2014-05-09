@@ -1,14 +1,18 @@
 package Core;
 
-import Utility.DBCommunicator;
-import WordFeud.Competition;
-import WordFeud.Game;
-import WordFeud.GameStone;
+import java.util.ArrayList;
+
 import AccountType.Account;
 import AccountType.Administrator;
 import AccountType.Moderator;
 import AccountType.Player;
 import GUI.GUI;
+import GUI.PlayerPanel;
+import Utility.DBCommunicator;
+import Utility.ImageLoader;
+import WordFeud.Competition;
+import WordFeud.Game;
+import WordFeud.GameStone;
 
 
 public class Application {
@@ -17,6 +21,7 @@ public class Application {
 	private Competition selectedCompetition;
 	private Account currentAccount;
 	private GUI myGui;
+	private ImageLoader loader;
 
 
 	/**
@@ -24,28 +29,36 @@ public class Application {
 	 * create the Gui
 	 */
 	public Application(){
+		DBCommunicator.getConnection();
+		loader = new ImageLoader();
+		loader.loadAllImages();
 		myGui = new GUI(this);
-		//currentAccount = new Player("jager684");
+		//currentAccount = new Player("henk1");
 		
+		//addCompetition("test", "20140430", "test_competition");
+		//newPlayer("henk1", "wachtwoord");
 		//login("henk", "wachtwoord");
-		//selectedCompetition = new Competition(4);
-		//newGame("henk1", true);
-		//newPlayer("test3", "wachtwoord");
-		//searchPlayer("test");
 		
-		selectedGame = new Game(523);
 		
 	}
 	
 	
 	/**
 	 * create a new competition and write it to the db
-	 * input endDate format yyyymmddHHMMSS
+	 * input endDate format yyyymmdd
 	 * 
 	 */
-	public void addCompetition(String endDate, String description, int mini, int maxi){
-		selectedCompetition = new Competition(endDate, description, mini, maxi, currentAccount.getUsername());
-		myGui.switchPanel(null); //-------------------
+	public void addCompetition(String compName, String endDate, String description){
+		
+		int lastID = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
+		int newID = lastID + 1;
+		
+		
+		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "');");
+
+		Competition newComp = new Competition(newID);
+		selectedCompetition = newComp;	
+		
 	}
 	
 	
@@ -58,8 +71,7 @@ public class Application {
 		String getName = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
 		if(getName == null){
 			DBCommunicator.writeData("INSERT INTO account (naam, wachtwoord) VALUES('" + username + "', '" + password + "')");
-			DBCommunicator.writeData("INSERT INTO accountrol (account_naam, rol_type) VALUES('"+ username + " ', 'Player');");
-			login(username, password);
+			this.login(username);
 			return true;
 		}
 		else{
@@ -68,26 +80,34 @@ public class Application {
 		}
 	}
 	
-	
 	/**
 	 * write game to the db
 	 * call the playgame method
+	 * -------------------------------------------------
 	 */
-	public void newGame(String player2, boolean visibility){
-		String visible;
-		if(visibility){
-			visible = "openbaar";
-		}
-		else{
-			visible = "privé";
-		}
+	public void newGame(Player player2, boolean visibility){
+		/*
+		 * WRITE TO DB
+		 */
 		
-		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
-		int newID = lastID + 1;
+		/*
+		 * GET GAMEID FROM DB
+		 */
+		this.playGame("");
+	}
+	
+	/**
+	 * create a new game for a competition and write it to the db
+	 * -------------------------------------------------
+	 */
+	public void newCompetitionGame(Player player1, Player player2, Competition compo){
+		/*
+		 * WRITE TO DB
+		 */
+		Game newGame = new Game();
+		selectedGame = newGame;
 		
-		DBCommunicator.writeData("INSERT INTO spel (id, competitie_id, toestand_type, account_naam_uitdager, account_naam_tegenstander, moment_uitdaging, reaktie_type, zichtbaarheid_type, bord_naam, letterset_naam)"
-								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
-		playGame(newID);
+		myGui.switchPanel(null);
 	}
 	
 	/**
@@ -95,49 +115,28 @@ public class Application {
 	 * check if it exists and the password is correct
 	 * create the new player and switch to the Playerpanel
 	 */
-	public boolean login(String username, String password){
-		String user = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
-		if(user != null){
-			String passwordCheck = DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE naam = '"+ username + "'");
-			if(password.equals(passwordCheck)){
-				currentAccount = new Player(username);
-				myGui.switchPanel(null);//-----------
-				System.out.println("logged in as " + currentAccount.getUsername());
-				return true;
-			}
-			else{
-				System.err.println("password is not correct");
-				return false;
-			}
-		}
-		else{
-			System.err.println("username does not exist");
-			return false;
-		}
-		
+	public void login(String username){
+		currentAccount = new Player(username);
 	}
 	
 	/**
+	 * get game from db
 	 * create the new game
 	 * switch to the gamePanel
+	 * -------------------------------------------------
 	 */
-	public void playGame(int gameID){
-		selectedGame = new Game(gameID);
-		myGui.switchPanel(null);//--------------
-	}
-	
-	/**
-	 * create the new competition
-	 * switch to the competitionpanel
-	 */
-	public void selectCompetition(int compID){
-		selectedCompetition = new Competition(compID);
-		myGui.switchPanel(null);//--------------
+	public void playGame(String gameID){
+		/*
+		 * GET GAME FROM DB
+		 */
+		Game newGame = new Game();
+		selectedGame = newGame;
+		myGui.switchPanel(null);
 	}
 	
 	/**
 	 * tell game to lay a gamestone
-	 * return the int from game
+	 * return the boolean from game
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		int retrievedPoints = selectedGame.layGameStone(gamestone, location);
@@ -174,15 +173,157 @@ public class Application {
 			myGui.switchPanel(null);
 		}
 	}
+
+	/**
+	 * get all the games that have finished (finished or resigned) and return their integers
+	 * @param activeType
+	 */
+	public ArrayList<Integer> getFinishedGames(boolean resigned) {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String resign = "Finished";
+		if(resigned){
+			resign = "Resigned";
+		}
+		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = '" + resign + "'";
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		return gameInts;
+	}
+	
+	/**
+	 * get all games that are still playing (my turn or opponents turn) and return their integers
+	 * @param activeType
+	 * @param myTurn
+	 * @return
+	 */
+	public ArrayList<Integer> getPlayingGames(Boolean myTurn) {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		ArrayList<Integer> turnInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing'";
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		
+		for(int e : gameInts){
+			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
+			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
+				turnInts.add(e);
+			}
+			else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
+				turnInts.add(e);
+			}
+		}
+		
+		return turnInts;
+	}
+	
+	/**
+	 * get all requested games (currentAccount or opponents request) (denied or unknown) and return their integers
+	 * @param myRequest
+	 * @param denied
+	 * @return
+	 */
+	public ArrayList<Integer> getRequestedGames(boolean myRequest, boolean denied) {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String query = "";
+		if(denied){
+			query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Request' AND reaktie_type = 'Rejected'";
+		}
+		else{
+			if(myRequest){
+				query = "SELECT id FROM spel WHERE account_naam_uitdager = '"+ player + "' AND toestand_type = 'Request' AND reaktie_type = 'Unknown'";
+			}
+			else{
+				query = "SELECT id FROM spel WHERE account_naam_tegenstander = '"+ player + "' AND toestand_type = 'Request' AND reaktie_type = 'unknown'";
+			}
+		}
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		return gameInts;
+	}
+	
+	/**
+	 * get a the opponents name from the db
+	 */
+	public String getOpponentName(int gameID){
+		
+		String name = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
+		if(name.equals(currentAccount.getUsername())){
+			name = DBCommunicator.requestData("SELECT account_naam_tegenstander FROM spel WHERE id = " + gameID);
+		}
+		
+		return name;
+	}
+	
+	/**
+	 * accept or deny a game in the db
+	 * @param gameID
+	 */
+	public void acceptGame(int gameID){
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', toestand_type = 'Playing' WHERE id = " + gameID);
+		String opponent = this.getOpponentName(gameID);
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
+				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
+		myGui.switchPanel(new PlayerPanel(myGui));
+	}
+	
+	public void denyGame(int gameID){
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected' WHERE id = " + gameID);
+		myGui.switchPanel(new PlayerPanel(myGui));
+	}
+	
+	/**
+	 * get the last turns information
+	 */
+	public String getLastTurnType(int gameID){
+		String turnType = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
+		return turnType;
+	}
+	
+	public int getLastTurnScore(int gameID){
+		int turnScore = DBCommunicator.requestInt("SELECT score FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
+		return turnScore;
+	}
 	
 	/**
 	 * get all account names form the db
 	 * return all accounts the have a name LIKE the given string
 	 * -------------------------------------------------
 	 */
-	public String[] searchPlayer(String partialname){
-		
-		
+	public Account[] searchPlayer(String partialname){
 		
 		return null;
 	}
