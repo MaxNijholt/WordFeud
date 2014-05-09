@@ -3,9 +3,8 @@ package AccountType;
 
 public class Player extends Account {
 
-	String name;
 	public Player(String name){
-		this.name = name;
+		super(name);
 	}
 	
 	public void createCompetition(){
@@ -20,8 +19,5 @@ public class Player extends Account {
 		
 	}
 	
-	public String getUsername(){
-		return name; 
 	
-	}
 }
