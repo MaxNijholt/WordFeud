@@ -1,68 +1,70 @@
 package GUI;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import Utility.SButton;
+import WordFeud.GameStone;
+import WordFeud.Tile;
+
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel {
 
 	private GUI gui;
-	private JButton passButton, swapButton, resignButton, playButton;
-	private ChatPanel chatPanel;
-	private JPanel northPanel, eastPanel, southPanel, westPanel;
+	private SButton pass, swap, resign, play;
+	private ChatPanel chat;
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.setLayout(new BorderLayout());
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0));
+		this.setBackground(new Color(29, 29, 29));
+		chat = new ChatPanel();
 		
-		//northPanel: The menu
-		northPanel.setPreferredSize(new Dimension(1000, 100));
-		northPanel.setMaximumSize(northPanel.getPreferredSize());
-		northPanel.setMinimumSize(northPanel.getPreferredSize());
+		pass 	= new SButton("Pass", SButton.CYAN, 60, 60);
+		swap 	= new SButton("Swap",  SButton.YELLOW, 60, 60);
+		resign 	= new SButton("Resign",  SButton.RED, 60, 60);
+		play	= new SButton("Play",  SButton.GREEN, 60, 60);
+		pass.setArc(60);
+		swap.setArc(60);
+		resign.setArc(60);
+		play.setArc(60);
 		
-		this.add(northPanel, BorderLayout.NORTH);
+		JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		mainPanel.setOpaque(false);
 		
-		//eastPanel: chat
-		eastPanel.setPreferredSize(new Dimension(250, 400));
-		eastPanel.setMaximumSize(eastPanel.getPreferredSize());
-		eastPanel.setMinimumSize(eastPanel.getPreferredSize());
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(4, 1, 0, 10));
+		buttonPanel.setOpaque(false);
 		
-		chatPanel = new ChatPanel();
-		eastPanel.add(chatPanel);
+		JPanel gamePanel = new JPanel();
+		gamePanel.setLayout(new GridLayout(15, 15, 3, 3));
+		gamePanel.setOpaque(false);
 		
-		this.add(eastPanel, BorderLayout.EAST);
+		for(int y = 0; y < 15; y++) {
+			for(int x = 0; x < 15; x++) {
+				Tile tile = new Tile(x, y);
+				if(y == 0 && x == 0) {tile.setGameStone(new GameStone(1, 'E'));}
+				if(y == 4 && x == 6) {tile.setGameStone(new GameStone(5, 'W'));}
+				gamePanel.add(tile);
+			}
+		}
 		
-		//southPanel: The stones you hold
-		southPanel.setPreferredSize(new Dimension(1000, 100));
-		southPanel.setMaximumSize(southPanel.getPreferredSize());
-		southPanel.setMinimumSize(southPanel.getPreferredSize());
+		buttonPanel.add(pass);
+		buttonPanel.add(swap);
+		buttonPanel.add(resign);
+		buttonPanel.add(play);		
 		
-		this.add(southPanel, BorderLayout.SOUTH);
+		mainPanel.add(buttonPanel);
+		mainPanel.add(gamePanel);
+		mainPanel.add(chat);
 		
-		//westPanel: This turns options
-		westPanel.setPreferredSize(new Dimension(250, 400));
-		westPanel.setMaximumSize(westPanel.getPreferredSize());
-		westPanel.setMinimumSize(westPanel.getPreferredSize());
-		westPanel.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-		passButton = new JButton("Pass");
-		swapButton = new JButton("Swap");
-		resignButton = new JButton("Resign");
-		playButton = new JButton("Play");
-		
-		westPanel.add(passButton);
-		westPanel.add(swapButton);
-		westPanel.add(resignButton);
-		westPanel.add(playButton);
-		
-		this.add(westPanel, BorderLayout.WEST);
-		
+		add(mainPanel);
 		
 	}
-	
 	
 }
