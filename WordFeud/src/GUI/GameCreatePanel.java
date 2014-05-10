@@ -21,6 +21,9 @@ import Utility.SButton;
 import Utility.SComboBox;
 import Utility.SLabel;
 
+/**
+ * @author Stan van Heumen
+ */
 @SuppressWarnings("serial")
 public class GameCreatePanel extends JPanel implements ActionListener {
 
@@ -45,7 +48,7 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 		layoutBox 		= new SComboBox(340, 40, new String[] {"Normal", "Random"});
 		
 		// To fill the challenger box
-		ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account");
+		ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account ORDER BY naam ASC");
 		String[] players = new String[allPlayers.size()];
 		for(int i = 0; i < allPlayers.size(); i++) {players[i] = allPlayers.get(i);}
 		// Creating the challenger box

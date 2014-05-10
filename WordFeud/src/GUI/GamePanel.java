@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 import Utility.SButton;
-import WordFeud.GameStone;
 import WordFeud.Tile;
 
 @SuppressWarnings("serial")
@@ -48,8 +47,6 @@ public class GamePanel extends JPanel {
 		for(int y = 0; y < 15; y++) {
 			for(int x = 0; x < 15; x++) {
 				Tile tile = new Tile(x, y);
-				if(y == 0 && x == 0) {tile.setGameStone(new GameStone(1, 'E'));}
-				if(y == 4 && x == 6) {tile.setGameStone(new GameStone(5, 'W'));}
 				gamePanel.add(tile);
 			}
 		}
