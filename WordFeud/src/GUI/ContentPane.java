@@ -12,9 +12,9 @@ public class ContentPane extends JPanel {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.add(panel);
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 	}
-	
+
 }

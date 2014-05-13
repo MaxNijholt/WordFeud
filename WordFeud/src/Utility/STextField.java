@@ -16,22 +16,22 @@ import javax.swing.JTextField;
  */
 @SuppressWarnings("serial")
 public class STextField extends JTextField {
-	
+
 	// Instance variables
 	private int 	arc;
 	private String 	placeholder;
 	private boolean topLeftRounded, topRightRounded, bottomLeftRounded, bottomRightRounded;
 	private Font	font;
 	private Color	background, foreground;
-	
-	
+
+
 	/**
 	 * STextfield constructor parameters: String text
 	 */
 	public STextField(String text) {
 		init(text);
 	}
-	
+
 	/**
 	 * STextfield constructor parameters: String text, int width, int height
 	 */
@@ -39,7 +39,7 @@ public class STextField extends JTextField {
 		init(text);
 		setPreferredSize(new Dimension(width, height));
 	}
-	
+
 	/**
 	 * Private init method for the default stuff
 	 */
@@ -59,7 +59,7 @@ public class STextField extends JTextField {
 		setOpaque(false);
 		setFont(new Font("Arial", Font.PLAIN, 16));
 	}
-	
+
 	/**
 	 * Overridden paintComponent(Graphics g) method from JComponent used to draw better graphics for textfield
 	 */
@@ -69,12 +69,12 @@ public class STextField extends JTextField {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setColor(background);
 		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
-		
+
 		if(!topLeftRounded) 	{g2d.fillRect(0, 0, arc, arc);}
 		if(!topRightRounded) 	{g2d.fillRect(getWidth() - arc, 0, arc, arc);}
 		if(!bottomLeftRounded)	{g2d.fillRect(0, getHeight() - arc, arc, arc);}
 		if(!bottomRightRounded)	{g2d.fillRect(getWidth() - arc, getHeight() - arc, arc, arc);}
-		
+
 		FontMetrics fm = g2d.getFontMetrics(font);
 		g2d.setFont(font);
 		if(this.getText() == null || (this.getText().length() < 1)) {
@@ -84,27 +84,31 @@ public class STextField extends JTextField {
 		super.paintComponent(g);
 		g2d.dispose();
 	}
-	
+
 	// Setters
 	public void setTopLeftRounded(boolean rounded) 		{this.topLeftRounded = rounded;}
 	public void setTopRightRounded(boolean rounded) 	{this.topRightRounded = rounded;}
 	public void setBottomLeftRounded(boolean rounded) 	{this.bottomLeftRounded = rounded;}
 	public void setBottomRightRounded(boolean rounded) 	{this.bottomRightRounded = rounded;}
-	
-	public void setBackground(Color color) 	{this.background = color;}
-	public void setForeground(Color color)	{this.foreground = color;}
-	public void setArc(int arc)				{this.arc = arc;}
-	
+
+	public void setBackground(Color color) 			{this.background = color;}
+	public void setForeground(Color color)			{this.foreground = color;}
+	public void setArc(int arc)						{this.arc = arc;}
+	public void setPlaceholder(String placeholder) 	{this.placeholder = placeholder;}
+
 	public void setTextFont(Font font) {
 		this.font = font;
 		this.setFont(font);
 	}
-	
+
 	public void setCustomRounded(boolean topLeft, boolean topRight, boolean bottomLeft, boolean bottomRight) {
 		this.topLeftRounded 	= topLeft;
 		this.topRightRounded 	= topRight;
 		this.bottomLeftRounded 	= bottomLeft;
 		this.bottomRightRounded = bottomRight;
 	}
-	
+
+	// Getter
+	public String getPlaceholder() 	{return placeholder;}
+
 }

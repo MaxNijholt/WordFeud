@@ -15,7 +15,7 @@ import javax.swing.JLabel;
  */
 @SuppressWarnings("serial")
 public class SLabel extends JLabel {
-	
+
 	// Instance variables
 	private String 	text;
 	private int 	arc;
@@ -24,21 +24,21 @@ public class SLabel extends JLabel {
 	private int		alignment;
 	private Color	foreground, background;
 	private boolean drawBackground;
-	
+
 	// Constants
 	public static final int LEFT		=	0;
 	public static final int RIGHT		=	1;	
 	public static final int CENTER		=	2;
 	public static final int TOPCENTER	= 	3;
 	public static final int PADDINGLEFT	=	4;
-	
+
 	/**
 	 * SLabel constructor parameters: int name, int align
 	 */
 	public SLabel(String name, int align) {
 		init(name, align);
 	}
-	
+
 	/**
 	 * SLabel constructor parameters: int name, int align, int width, int height
 	 */
@@ -46,7 +46,7 @@ public class SLabel extends JLabel {
 		init(name, align);
 		setPreferredSize(new Dimension(width, height));
 	}
-	
+
 	/**
 	 * SLabel constructor parameters: int name, int align, Font f
 	 */
@@ -56,7 +56,7 @@ public class SLabel extends JLabel {
 		FontMetrics fm 	= getFontMetrics(font);
 		setPreferredSize(new Dimension(fm.stringWidth(name), fm.getHeight()));
 	}
-	
+
 	/**
 	 * SLabel constructor parameters: int name, int align, Font f, int width, int height
 	 */
@@ -65,7 +65,7 @@ public class SLabel extends JLabel {
 		font = f;
 		setPreferredSize(new Dimension(width, height));
 	}
-	
+
 	/**
 	 * Private init method for default stuff
 	 */
@@ -84,7 +84,7 @@ public class SLabel extends JLabel {
 		FontMetrics fm 	= getFontMetrics(font);
 		setPreferredSize(new Dimension(fm.stringWidth(text) + 10, fm.getHeight() + 10));
 	}
-	
+
 	/**
 	 * Overridden paintComponent(Graphics g) method from JComponent used to draw better graphics for SLabel
 	 */
@@ -96,14 +96,14 @@ public class SLabel extends JLabel {
 		if(drawBackground) {
 			g2d.setColor(background);
 			g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
-			
+
 			if(!topLeftRounded) 	{g2d.fillRect(0, 0, arc, arc);}
 			if(!topRightRounded) 	{g2d.fillRect(getWidth() - arc, 0, arc, arc);}
 			if(!bottomLeftRounded)	{g2d.fillRect(0, getHeight() - arc, arc, arc);}
 			if(!bottomRightRounded)	{g2d.fillRect(getWidth() - arc, getHeight() - arc, arc, arc);}
-			
+
 		}
-		
+
 		g2d.setColor(foreground);
 		FontMetrics fm = g2d.getFontMetrics(font);
 		g2d.setFont(font);
@@ -130,31 +130,31 @@ public class SLabel extends JLabel {
 		g2d.drawString(text, xalign, yalign);
 		g2d.dispose();
 	}
-	
+
 	// Setters
 	public void setTopLeftRounded(boolean rounded) 		{this.topLeftRounded = rounded;}
 	public void setTopRightRounded(boolean rounded) 	{this.topRightRounded = rounded;}
 	public void setBottomLeftRounded(boolean rounded) 	{this.bottomLeftRounded = rounded;}
 	public void setBottomRightRounded(boolean rounded) 	{this.bottomRightRounded = rounded;}
 	public void setArc(int arc)							{this.arc = arc;}
-	
+
 	public void setTextFont(Font font) {
 		this.font = font;
 		this.setFont(font);
 	}
-	
+
 	public void setCustomRounded(boolean topLeft, boolean topRight, boolean bottomLeft, boolean bottomRight) {
 		this.topLeftRounded 	= topLeft;
 		this.topRightRounded 	= topRight;
 		this.bottomLeftRounded 	= bottomLeft;
 		this.bottomRightRounded = bottomRight;
 	}
-	
+
 	public void changeTextColor(Color foreground, Color background) {this.foreground = foreground; this.background = background;}
 	public void setName(String text) {this.text = text;}
 	public void drawBackground(boolean a) {this.drawBackground = a;}
-	
+
 	// Getters
 	public String getName() {return text;}
-	
+
 }

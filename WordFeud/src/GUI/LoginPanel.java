@@ -24,6 +24,9 @@ import Utility.STextField;
 import WordFeud.GameStone;
 import WordFeud.Login;
 
+/**
+ * @author Stan van Heumen
+ */
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel implements ActionListener {
 
@@ -50,11 +53,13 @@ public class LoginPanel extends JPanel implements ActionListener {
 		username 	= new STextField("Username", 220, 40);
 		password 	= new SPasswordField("Password", 220, 40);
 
-		login		= new SButton("Connect", SButton.GREY, 220, 40);
+		login		= new SButton("Play", SButton.GREY, 220, 40);
 		register 	= new SButton("Register", SButton.GREY, 220, 40);
 		spectate 	= new SButton("Spectate", SButton.GREY, 155, 40);
 		exit 		= new SButton("Exit", SButton.GREY, 60, 40);
 		
+		username.addActionListener(this);
+		password.addActionListener(this);
 		login.addActionListener(this);
 		register.addActionListener(this);
 		spectate.addActionListener(this);
@@ -62,6 +67,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		
 		title.setLayout(new GridLayout(1, 8, 2, 2));
 		title.setBackground(new Color(255, 255, 255, 0));
+		
 		String letters 	= "WORDFEUD";
 		String values	= "51224122";
 		for(int i = 0; i < letters.length(); i++) {
@@ -76,10 +82,13 @@ public class LoginPanel extends JPanel implements ActionListener {
 		mainPanel.setBackground(new Color(255, 255, 255, 0));
 		mainPanel.setOpaque(false);
 		
-		JPanel panel1 = new JPanel();
-		panel1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
-		panel1.setBackground(new Color(255, 255, 255, 0));
-		panel1.setOpaque(false);
+		JPanel sideBySidePanel = new JPanel();
+		sideBySidePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		sideBySidePanel.setBackground(new Color(255, 255, 255, 0));
+		sideBySidePanel.setOpaque(false);
+		sideBySidePanel.add(spectate);
+		sideBySidePanel.add(exit);
+		
 		c.gridy = 0;
 		c.gridx = 0;
 		c.insets = new Insets(5, 0, 0, 0);
@@ -91,10 +100,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 		c.gridy++;
 		mainPanel.add(register, c);
 		c.gridy++;
+		mainPanel.add(sideBySidePanel, c);
 		
-		panel1.add(spectate);
-		panel1.add(exit);
-		mainPanel.add(panel1, c);
 		gbc.gridy = 0;
 		gbc.insets = new Insets(0, 0, 50, 0);
 		this.add(title, gbc);
@@ -102,9 +109,12 @@ public class LoginPanel extends JPanel implements ActionListener {
 		this.add(mainPanel, gbc);
 	}
 
+	/**
+	 * Overridden paintComponent(Graphics g) method from JComponent used to draw the background
+	 */
 	public void paintComponent(Graphics g) {
 		if(ImageLoader.BACKGROUND == null) {return;}
-		g.drawImage(ImageLoader.BACKGROUND, 0, 0, ImageLoader.BACKGROUND.getWidth() * 2, ImageLoader.BACKGROUND.getHeight() * 2, null);
+		g.drawImage(ImageLoader.BACKGROUND, 0, 0, getWidth(), getHeight(), null);
 	}
 	
 	/**
@@ -140,6 +150,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * This method is the actionListener for the buttons in the LoginPanel
 	 */
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(username)) 	{password.requestFocusInWindow();}
+		if(e.getSource().equals(password)) 	{login();}
 		if(e.getSource().equals(login)) 	{login();}
 		if(e.getSource().equals(register)) 	{register();}
 		if(e.getSource().equals(spectate)) 	{spectate();}

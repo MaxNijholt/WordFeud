@@ -1,28 +1,25 @@
 package WordFeud;
 
-import Utility.DBCommunicator;
 import Utility.PointCounter;
+
 import Utility.WordChecker;
 
 public class Game {
 
 	private Field myField;
-	private int myID;
 	private PointCounter myPC;
 	private WordChecker myWC;
-	
+
 	/**
 	 * cronstruct the game
 	 * -------------------------------------------------
 	 */
 	public Game(int id){
-		myID = id;
 		myField = new Field();
-		myPC = new PointCounter();
+		myPC = new PointCounter(this.myField);
 		myWC = new WordChecker();
-		
 	}
-	
+
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
@@ -33,20 +30,20 @@ public class Game {
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-		int points = myPC.counterPointsTurn(myField.getNewWords());
-		
+		int points = 0;//= myPC.counterPointsTurn(myField.getNewWords());
+
 		return points;
 	}
-	
+
 	/**
 	 * get the new words from the field
 	 * let the wordchecker check if it is correct
 	 * -------------------------------------------------
 	 */
 	public void playWord(){
-		
+
 	}
-	
+
 	/**
 	 * check if the game has ended
 	 * -------------------------------------------------
@@ -55,7 +52,7 @@ public class Game {
 	public boolean checkEndGame(){
 		return false;
 	}
-	
+
 	/**
 	 * pass a turn
 	 * tell the DB
@@ -67,7 +64,7 @@ public class Game {
 		 * tell the DB the turn is passed
 		 */
 	}
-	
+
 	/**
 	 * tell the DB to swap
 	 * get new gamestones
@@ -81,7 +78,7 @@ public class Game {
 		 * tell the db the new gamestones
 		 */
 	}
-	
+
 	/**
 	 * shuffle your gamestones around
 	 * does not end turn
@@ -92,24 +89,19 @@ public class Game {
 		 * show the gamestones in a different order
 		 */
 	}
-	
+
 	/**
 	 * set the visibility of a game
 	 * tell the db
+	 * -------------------------------------------------
 	 * @param bool
 	 */
-	public void setVisibility(Boolean visibility){
-		String visible;
-		if(visibility){
-			visible = "openbaar";
-		}
-		else{
-			visible = "privé";
-		}
-		
-		DBCommunicator.writeData("UPDATE spel SET zichtbaarheid_type='" + visible + "' WHERE id="+ myID + ";");
+	public void setVisibility(Boolean bool){
+		/*
+		 * tell the DB the new visibility
+		 */
 	}
-	
+
 	/**
 	 * get the visibility from the db and return boolean
 	 * -------------------------------------------------
@@ -128,5 +120,9 @@ public class Game {
 	 */
 	public Field getMyField() {
 		return myField;
+	}
+
+	public void setMyField(Field myField) {
+		this.myField = myField;
 	}
 }

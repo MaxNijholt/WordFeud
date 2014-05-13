@@ -16,7 +16,7 @@ import WordFeud.GameStone;
 
 
 public class Application {
-	
+
 	private Game selectedGame;
 	private Competition selectedCompetition;
 	private Account currentAccount;
@@ -34,40 +34,40 @@ public class Application {
 		loader.loadAllImages();
 		myGui = new GUI(this);
 		//currentAccount = new Player("henk1");
-		
+
 		//addCompetition("test", "20140430", "test_competition");
 		//newPlayer("henk1", "wachtwoord");
 		//login("henk", "wachtwoord");
-		
-		
+
+
 	}
-	
-	
+
+
 	/**
 	 * create a new competition and write it to the db
 	 * input endDate format yyyymmdd
 	 * 
 	 */
 	public void addCompetition(String compName, String endDate, String description){
-		
+
 		int lastID = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
 		int newID = lastID + 1;
-		
-		
+
+
 		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "');");
 
 		Competition newComp = new Competition(newID);
 		selectedCompetition = newComp;	
-		
+
 	}
-	
-	
+
+
 	/**
 	 * write player to the db
 	 * call the login method
 	 */
 	public boolean newPlayer(String username, String password){
-		
+
 		String getName = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
 		if(getName == null){
 			DBCommunicator.writeData("INSERT INTO account (naam, wachtwoord) VALUES('" + username + "', '" + password + "')");
@@ -79,7 +79,7 @@ public class Application {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * write game to the db
 	 * call the playgame method
@@ -89,13 +89,13 @@ public class Application {
 		/*
 		 * WRITE TO DB
 		 */
-		
+
 		/*
 		 * GET GAMEID FROM DB
 		 */
 		this.playGame("");
 	}
-	
+
 	/**
 	 * create a new game for a competition and write it to the db
 	 * -------------------------------------------------
@@ -106,10 +106,10 @@ public class Application {
 		 */
 		Game newGame = new Game();
 		selectedGame = newGame;
-		
+
 		myGui.switchPanel(null);
 	}
-	
+
 	/**
 	 * get a account from the db
 	 * check if it exists and the password is correct
@@ -118,7 +118,7 @@ public class Application {
 	public void login(String username){
 		currentAccount = new Player(username);
 	}
-	
+
 	/**
 	 * get game from db
 	 * create the new game
@@ -133,7 +133,7 @@ public class Application {
 		selectedGame = newGame;
 		myGui.switchPanel(null);
 	}
-	
+
 	/**
 	 * tell game to lay a gamestone
 	 * return the boolean from game
@@ -142,7 +142,7 @@ public class Application {
 		int retrievedPoints = selectedGame.layGameStone(gamestone, location);
 		return retrievedPoints;
 	}
-	
+
 	/**
 	 * get word approval
 	 * -------------------------------------------------
@@ -153,7 +153,7 @@ public class Application {
 		 */
 		return false;
 	}
-	
+
 	/**
 	 * create a new account of that type
 	 * switch to his panel
@@ -165,11 +165,11 @@ public class Application {
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("moderator")){
-			currentAccount = new Moderator(null);
+			currentAccount = new Moderator();
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("administrator")){
-			currentAccount = new Administrator(null);
+			currentAccount = new Administrator();
 			myGui.switchPanel(null);
 		}
 	}
@@ -187,7 +187,7 @@ public class Application {
 		}
 		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = '" + resign + "'";
 		Boolean searching = true;
-		
+
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
 			if(gameID == 0){
@@ -200,7 +200,7 @@ public class Application {
 		}
 		return gameInts;
 	}
-	
+
 	/**
 	 * get all games that are still playing (my turn or opponents turn) and return their integers
 	 * @param activeType
@@ -213,7 +213,7 @@ public class Application {
 		String player = currentAccount.getUsername();
 		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing'";
 		Boolean searching = true;
-		
+
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
 
@@ -225,7 +225,7 @@ public class Application {
 				gameInts.add(gameID);
 			}
 		}
-		
+
 		for(int e : gameInts){
 			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
 			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
@@ -235,10 +235,10 @@ public class Application {
 				turnInts.add(e);
 			}
 		}
-		
+
 		return turnInts;
 	}
-	
+
 	/**
 	 * get all requested games (currentAccount or opponents request) (denied or unknown) and return their integers
 	 * @param myRequest
@@ -261,7 +261,7 @@ public class Application {
 			}
 		}
 		Boolean searching = true;
-		
+
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
 			if(gameID == 0){
@@ -274,20 +274,20 @@ public class Application {
 		}
 		return gameInts;
 	}
-	
+
 	/**
 	 * get a the opponents name from the db
 	 */
 	public String getOpponentName(int gameID){
-		
+
 		String name = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
 		if(name.equals(currentAccount.getUsername())){
 			name = DBCommunicator.requestData("SELECT account_naam_tegenstander FROM spel WHERE id = " + gameID);
 		}
-		
+
 		return name;
 	}
-	
+
 	/**
 	 * accept or deny a game in the db
 	 * @param gameID
@@ -299,12 +299,12 @@ public class Application {
 				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
-	
+
 	public void denyGame(int gameID){
 		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected' WHERE id = " + gameID);
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
-	
+
 	/**
 	 * get the last turns information
 	 */
@@ -312,51 +312,51 @@ public class Application {
 		String turnType = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
 		return turnType;
 	}
-	
+
 	public int getLastTurnScore(int gameID){
 		int turnScore = DBCommunicator.requestInt("SELECT score FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
 		return turnScore;
 	}
-	
+
 	/**
 	 * get all account names form the db
 	 * return all accounts the have a name LIKE the given string
 	 * -------------------------------------------------
 	 */
 	public Account[] searchPlayer(String partialname){
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * call the game to play a word
 	 */
 	public void playWord(){
 		selectedGame.playWord();
 	}
-	
+
 	/**
 	 * tell game to pass a turn
 	 */
 	public void pass(){
 		selectedGame.pass();
 	}
-	
+
 	/**
 	 *tell game to swapGameStones
 	 */
 	public void swapGameStones(){
 		selectedGame.swapGameStones();
 	}
-	
+
 	/**
 	 * tell the game to shuffle
 	 */
 	public void shuffle(){
 		selectedGame.shuffle();
 	}
-	
-	
+
+
 	/**
 	 * getters and setters
 	 * @return
@@ -389,5 +389,5 @@ public class Application {
 	public void setCurrentAccount(Account currentAccount) {
 		this.currentAccount = currentAccount;
 	}
-	
+
 }

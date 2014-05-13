@@ -15,9 +15,9 @@ public class DBCommunicator {
 	private static final String DB_URL		=	"jdbc:mysql://databases.aii.avans.nl:3306/mnijholt_db2";
 	private static final String DB_USERNAME	=	"mnijholt";
 	private static final String DB_PASSWORD	=	"42IN04SOi";
-	
+
 	private static Connection con;
-	
+
 	public static void getConnection() {
 		try {
 			Class.forName(CLASS_NAME);
@@ -30,7 +30,7 @@ public class DBCommunicator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * This method allows you to request data from the Database.</br>
 	 * It uses a query and a column, so you can get all the records from a certain column.</br>
@@ -45,7 +45,7 @@ public class DBCommunicator {
 		try {
 			stm = con.createStatement();
 			res = stm.executeQuery(query + " limit 1;");
-			
+
 			while(res.next()) {
 				result = res.getString(1);
 			}	
@@ -57,7 +57,7 @@ public class DBCommunicator {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * This method allows you to request a ArrayList of data from the Database.</br>
 	 * It uses a query and a column, so you can get all the records from a certain column.</br>
@@ -72,7 +72,7 @@ public class DBCommunicator {
 		try {
 			stm = con.createStatement();
 			res = stm.executeQuery(query);
-			
+
 			while(res.next()) {
 				result.add(res.getString(1));
 			}	
@@ -84,7 +84,7 @@ public class DBCommunicator {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * This method allows you to write data to the Database.</br>
 	 * It uses a query as variable.</br>
@@ -93,7 +93,7 @@ public class DBCommunicator {
 	 */
 	public static void writeData(String query) {
 		PreparedStatement	stm;
-		
+
 		try {
 			stm = con.prepareStatement(query);
 			stm.executeUpdate();
@@ -103,10 +103,10 @@ public class DBCommunicator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void writeNamePassword(String name, String password) {
 		PreparedStatement	stm;
-		
+
 		try {
 			stm = con.prepareStatement("INSERT INTO account(naam, wachtwoord) VALUES(" + "'" + name + "', '" + password + "')");
 			stm.executeUpdate();
@@ -116,7 +116,7 @@ public class DBCommunicator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static int requestInt(String query) {
 		Statement	stm;
 		ResultSet 	res;
@@ -124,7 +124,7 @@ public class DBCommunicator {
 		try {
 			stm = con.createStatement();
 			res = stm.executeQuery(query + " limit 1;");
-			
+
 			while(res.next()) {
 				result = res.getInt(1);
 			}	
@@ -136,7 +136,5 @@ public class DBCommunicator {
 		}
 		return result;
 	}
-	
+
 }
-
-
