@@ -1,9 +1,10 @@
 package AccountType;
 
 public abstract class Account {
+	private String username;
 	
 	public Account(String account){
-		
+		username = account;
 	}
 	
 	public String getEmail(){
@@ -17,7 +18,7 @@ public abstract class Account {
 	}
 	
 	public String getUsername(){
-		return null;
+		return username;
 		
 	}
 	
