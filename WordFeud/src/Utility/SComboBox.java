@@ -34,18 +34,18 @@ public class SComboBox extends JPanel implements ActionListener {
 		setBackground(new Color(255, 255, 255, 0));
 		setOpaque(false);
 		setLayout(new BorderLayout());
-
+		
 		pop = new JPopupMenu();
 		pop.setLayout(new GridLayout(0, 1));
 		pop.setOpaque(false);
-
+		
 		///////////	UIManager ///////////
 		UIManager.put("PopupMenu.background", new Color(255, 255, 255, 0));
 		UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
 		///////////	UIManager ///////////
-
+		
 		this.items 	= new ArrayList<SButton>();
-
+		
 		// Adding the items that are given in the String[] parameter 
 		// and setting the first String in the String[] to the currentSelected item
 		if(items != null) {
@@ -61,13 +61,13 @@ public class SComboBox extends JPanel implements ActionListener {
 				addItem(items[i]);
 			}
 		}
-
+		
 		arrow = new SButton("\u25BC", SButton.WHITE, 40, 40);
 		arrow.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
 		arrow.setTextColor(Color.BLACK);
 		arrow.addActionListener(this);
 		arrow.setCustomRounded(false, true, false, true);
-
+		
 		add(name, BorderLayout.CENTER);
 		add(arrow, BorderLayout.EAST);
 	}
@@ -80,19 +80,19 @@ public class SComboBox extends JPanel implements ActionListener {
 		s.setTextColor(new Color(100, 100, 100));
 		s.setRounded(true);
 		s.setAlignment(SButton.LEFT);
-
+		
 		if(items.isEmpty()) {
 			s.setCustomRounded(true, true, false, false);
 		} 
 		else {
 			s.setCustomRounded(false, false, true, true);
 		}
-
+		
 		s.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
 		s.setPreferredSize(this.getPreferredSize());
 		s.addActionListener(this);
 		for(int i = 1; i < items.size(); i++) {items.get(i).setRounded(false);}
-
+		
 		items.add(s);
 		pop.add(s);
 	}
@@ -114,8 +114,8 @@ public class SComboBox extends JPanel implements ActionListener {
 	// Getters
 	public String getSelectedItem() 	{return name.getPlaceholder();}
 	public void setEditable(boolean a) 	{name.setEditable(a);}
-
+	
 	// Setters
 	public void setPlaceholder(String placeholder) {name.setPlaceholder(placeholder);}
-
+	
 }
