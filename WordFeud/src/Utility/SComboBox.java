@@ -115,4 +115,7 @@ public class SComboBox extends JPanel implements ActionListener {
 	public String getSelectedItem() 	{return name.getPlaceholder();}
 	public void setEditable(boolean a) 	{name.setEditable(a);}
 	
+	// Setters
+	public void setPlaceholder(String placeholder) {name.setPlaceholder(placeholder);}
+	
 }
