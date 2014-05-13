@@ -1,13 +1,19 @@
 package Core;
 
-import AccountType.Player;
-
 public class Main {
 
+	@SuppressWarnings("unused")
+	private Application application;
+
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		// Some Comments
-		Application wordFeud = new Application();
+		Main program = new Main();
+		program.initialize();
+	}
+
+	private void initialize() {
+		this.application = new Application();
+		this.application.login("jager684");
+		
 	}
 
 }

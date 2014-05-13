@@ -1,5 +1,7 @@
 package AccountType;
 
+import java.util.ArrayList;
+
 import Utility.DBCommunicator;
 
 /**
@@ -7,28 +9,22 @@ import Utility.DBCommunicator;
  * 
  */
 
-public class Moderator extends Account {
-	private String username;
+public class Moderator{
+	private ArrayList<String> pendingWords;
 
-	private String pending;
 
-	public Moderator(String username) {
-		super(username);
-		this.username = username;
-
-	}
 
 	/**
 	 * Gets unapproved words out of a list from the Database
 	 * 
 	 * @return a list of pending words
 	 */
-	public String getNotAprovedWords() {
+	public ArrayList<String> getNotAprovedWords() {
 
-		pending = DBCommunicator
-				.requestData("SELECT * FROM woordenboek where status = 'Pending'");
+		pendingWords = DBCommunicator
+				.requestMoreData("SELECT * FROM woordenboek where status = 'Pending'");
 
-		return pending;
+		return pendingWords;
 
 	}
 

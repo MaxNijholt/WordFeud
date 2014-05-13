@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import AccountType.Account;
 import Core.Application;
 import Utility.ImageLoader;
 import WordFeud.GameStone;
@@ -23,7 +24,7 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new GameCreatePanel(this));
+		this.setContentPane(new LoginPanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -106,5 +107,9 @@ public class GUI extends JFrame{
 	public int getLastTurnScore(int gameID) {
 		int turnScore = app.getLastTurnScore(gameID);
 		return turnScore;
+	}
+	
+	public Application getApplication(){
+		return app;
 	}
 }

@@ -1,6 +1,6 @@
 package WordFeud;
 
-import AccountType.Player;
+import AccountType.Account;
 import Utility.DBCommunicator;
 
 
@@ -45,14 +45,21 @@ public class Competition {
 		return DBCommunicator.requestData("SELECT einde FROM competitie WHERE id='" + this.id + "'");
 	}
 	
-	/*
-	 * Method to add a player to the competition
+	/**
+	 * Method to add a player (String) to the competition
 	 */
-	public void addPlayer(Player player){
+	public void addPlayer(String player){
+		DBCommunicator.writeData("UPDATE deelnemer SET account_naam='" + player + "', competition_id='"+ this.id + "'");
+	}
+	
+	/**
+	 * Method to add a player (String) to the competition
+	 */
+	public void addPlayer(Account player){
 		DBCommunicator.writeData("UPDATE deelnemer SET account_naam='" + player.getUsername() + "', competition_id='"+ this.id + "'");
 	}
 
-	/*
+	/**
 	 * Method to get the owner of the competition
 	 */
 	public String getCompetitionOwner() {

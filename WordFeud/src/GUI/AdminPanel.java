@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import AccountType.Administrator;
 import Utility.DBCommunicator;
 import Utility.MComboBox;
 import Utility.SButton;
@@ -33,7 +34,7 @@ import Utility.SLabel;
  */
 @SuppressWarnings({ "serial", "unused" })
 public class AdminPanel extends JPanel {
-	private MComboBox Mcombo = new MComboBox(150, 25, null);
+	private MComboBox playerLookupBox = new MComboBox(150, 25, null);
 	private Vector<String> players;
 	private SLabel selectPlayer;
 	private GUI gui;
@@ -47,6 +48,7 @@ public class AdminPanel extends JPanel {
 			revokeAdmin = new SButton("Revoke Admin", SButton.GREY),
 			revokePlayer = new SButton("Revoke Player", SButton.GREY);
 	private ActionAdapter aa = new ActionAdapter();
+	private Administrator admin = null;
 
 	public AdminPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -56,6 +58,7 @@ public class AdminPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 
 		this.gui = gui;
+		this.admin = gui.getApplication().getCurrentAccount().getAdmin();
 
 		this.selectPlayer = new SLabel("Select player: ", 0);
 		this.players = new Vector<String>();
@@ -65,13 +68,13 @@ public class AdminPanel extends JPanel {
 		c.gridwidth = 1;
 		c.insets = new Insets(0, 0, 5, 50);
 		this.add(this.selectPlayer, c);
-		this.add(this.Mcombo, c);
+		this.add(this.playerLookupBox, c);
 		c.gridy++;
+		c.gridx = c.gridx + 3;
 		this.add(this.newPlayer, c);
 		c.gridx++;
 		this.add(this.editPlayer, c);
 		c.gridx--;
-		c.gridx = c.gridx + 3;
 		c.gridy++;
 		this.add(this.grantPlayer, c);
 		c.gridx++;
@@ -96,97 +99,72 @@ public class AdminPanel extends JPanel {
 		this.buttonCollection.add(grantMod);
 		this.buttonCollection.add(revokeAdmin);
 		this.buttonCollection.add(revokeMod);
-		
-		for(SButton sb : buttonCollection){
+
+		for (SButton sb : buttonCollection) {
 			sb.addActionListener(aa);
 		}
-		
-		this.Mcombo.getField().addKeyListener(new KeyListener(){
+
+		this.playerLookupBox.getField().addKeyListener(new KeyListener() {
 			@Override
-			public void keyTyped(KeyEvent e) {}
+			public void keyTyped(KeyEvent e) {
+			}
+
 			@Override
-			public void keyPressed(KeyEvent e) {}
+			public void keyPressed(KeyEvent e) {
+			}
+
 			@Override
-			public void keyReleased(KeyEvent e) {update();}	
+			public void keyReleased(KeyEvent e) {
+				update();
+			}
 		});
-		for(SButton sb : Mcombo.getButtons()){
-			sb.addActionListener(new ActionListener(){
+		for (SButton sb : playerLookupBox.getButtons()) {
+			sb.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					update();
 				}
-				
-			});
-		}
-		for(SButton sb : this.buttonCollection){
-			sb.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					update();
-				}
-				
+
 			});
 		}
 	}
-
-	/**
-	 * Method to remove rights from selected player
-	 */
-	private void removePrivilege(String player, String right) {
-		DBCommunicator.writeData("DELETE FROM accountrol WHERE account_naam='"
-				+ player + "' AND rol_type='" + right + "'");
-	}
-
-	/**
-	 * Method to add rights to selected player
-	 */
-	private void addPrivilege(String player, String right) {
-		DBCommunicator
-				.writeData("INSERT INTO accountrol (account_naam, rol_type) VALUES('"
-						+ player + "','" + right + "')");
-	}
-
-	/**
-	 * Method for a more easy lookup player rights
-	 * @return ArrayList with data 0 up to 3 Strings
-	 */
-	private ArrayList<String> getUserRights(String player) {
-		ArrayList<String> data = new ArrayList<String>();
-		data.addAll(DBCommunicator
-				.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='"
-						+ player + "'"));
-		return data;
-	}
-	
-	
 
 	class ActionAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(grantAdmin)) {
-				addPrivilege(Mcombo.getSelectedItem(), "Administrator");
+			if (!(playerLookupBox.getSelectedItem().equals("") || playerLookupBox
+					.getSelectedItem().equals(null))) {
+				if (e.getSource().equals(grantAdmin)) {
+					admin.addPrivilege(playerLookupBox.getSelectedItem(),
+									"Administrator");
+				}
+				if (e.getSource().equals(grantMod)) {
+					admin.addPrivilege(playerLookupBox.getSelectedItem(),
+									"Moderator");
+				}
+				if (e.getSource().equals(revokeMod)) {
+					admin.removePrivilege(playerLookupBox.getSelectedItem(),
+									"Moderator");
+				}
+				if (e.getSource().equals(revokeAdmin)) {
+					admin.removePrivilege(playerLookupBox.getSelectedItem(),
+									"Administrator");
+				}
+				if (e.getSource().equals(revokePlayer)) {
+					admin.removePrivilege(playerLookupBox.getSelectedItem(),
+									"Player");
+				}
+				if (e.getSource().equals(grantPlayer)) {
+					admin.addPrivilege(playerLookupBox.getSelectedItem(),
+									"Player");
+				}
+				if (e.getSource().equals(editPlayer)) {
+					// TODO
+				}
+				if (e.getSource().equals(newPlayer)) {
+					// TODO
+				}
+				update();
 			}
-			if (e.getSource().equals(grantMod)) {
-				addPrivilege(Mcombo.getSelectedItem(), "Moderator");
-			}
-			if (e.getSource().equals(revokeMod)) {
-				removePrivilege(Mcombo.getSelectedItem(), "Moderator");
-			}
-			if (e.getSource().equals(revokeAdmin)) {
-				removePrivilege(Mcombo.getSelectedItem(), "Administrator");
-			}
-			if (e.getSource().equals(revokePlayer)) {
-				removePrivilege(Mcombo.getSelectedItem(), "Player");
-			}
-			if (e.getSource().equals(grantPlayer)) {
-				addPrivilege(Mcombo.getSelectedItem(), "Player");
-			}
-			if (e.getSource().equals(editPlayer)) {
-				// TODO
-			}
-			if (e.getSource().equals(newPlayer)) {
-				// TODO
-			}
-			update();
 		}
 	}
 
@@ -194,9 +172,8 @@ public class AdminPanel extends JPanel {
 	 * method to update the buttons to have the right color.
 	 */
 	public void update() {
-		ArrayList<String> rights = this.getUserRights(this.Mcombo
-				.getSelectedItem());
-		for(SButton sb : buttonCollection){
+		ArrayList<String> rights = admin.getUserRights(this.playerLookupBox.getSelectedItem());
+		for (SButton sb : buttonCollection) {
 			sb.setColor(SButton.CYAN);
 			sb.enable(true);
 		}

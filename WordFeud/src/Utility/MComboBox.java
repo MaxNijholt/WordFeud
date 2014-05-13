@@ -54,6 +54,7 @@ public class MComboBox extends JPanel implements ActionListener  {
 		} else {
 			this.placeholder = new STextField("Name");
 			this.placeholder.setEditable(true);
+			this.placeholder.setCustomRounded(false, false, false, false);
 		}
 
 		this.arrow = new SButton("\u25BC", SButton.WHITE, 40, 40);
@@ -61,7 +62,7 @@ public class MComboBox extends JPanel implements ActionListener  {
 				new Color(220, 220, 220));
 		arrow.setTextColor(Color.BLACK);
 		arrow.addActionListener(this);
-		arrow.setCustomRounded(false, true, false, true);
+		arrow.setCustomRounded(false, false, false, false);
 
 		this.add(placeholder, BorderLayout.CENTER);
 		this.add(arrow, BorderLayout.EAST);
@@ -94,10 +95,10 @@ public class MComboBox extends JPanel implements ActionListener  {
 		s.setAlignment(SButton.LEFT);
 
 		if(buttonList.isEmpty()) {
-			s.setCustomRounded(true, true, false, false);
+			s.setCustomRounded(false, false, false, false);
 		} 
 		else {
-			s.setCustomRounded(false, false, true, true);
+			s.setCustomRounded(false, false, false, false);
 		}
 
 		s.setColors(new Color(255, 255, 255), new Color(235, 235, 235),
