@@ -3,8 +3,8 @@ package AccountType;
 
 public class Moderator extends Account {
 
-	public Moderator(){
-		
+	public Moderator(String name){
+		super(name);
 	}
 	
 	public String[] getNotAprovedWords(){

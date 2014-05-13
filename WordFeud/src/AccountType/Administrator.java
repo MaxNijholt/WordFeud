@@ -7,8 +7,8 @@ import Utility.DBCommunicator;
 
 public class Administrator extends Account {
 
-	public Administrator(){
-		
+	public Administrator(String username){
+		super(username);
 	}
 	
 	public void addPermissions(String player, String right){

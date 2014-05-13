@@ -13,22 +13,29 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 
+/**
+ * @author Stan van Heumen
+ */
 @SuppressWarnings("serial")
 public class SComboBox extends JPanel implements ActionListener {
 
-	private SLabel 				name;
+	// Instance variables
+	private STextField			name;
 	private SButton 			arrow;
 	private JPopupMenu 			pop;
 	private ArrayList<SButton> 	items;
 
+	/**
+	 * SComboBox constructor parameters: int width, int height, String[] items
+	 */
 	public SComboBox(int width, int height, String[] items) {
 		// Default Component stuff
-		this.setPreferredSize(new Dimension(width, height));
-		this.setBackground(new Color(255, 255, 255, 0));
-		this.setOpaque(false);
-		this.setLayout(new BorderLayout());
-
-		this.pop = new JPopupMenu();
+		setPreferredSize(new Dimension(width, height));
+		setBackground(new Color(255, 255, 255, 0));
+		setOpaque(false);
+		setLayout(new BorderLayout());
+		
+		pop = new JPopupMenu();
 		pop.setLayout(new GridLayout(0, 1));
 		pop.setOpaque(false);
 		
@@ -41,40 +48,44 @@ public class SComboBox extends JPanel implements ActionListener {
 		
 		// Adding the items that are given in the String[] parameter 
 		// and setting the first String in the String[] to the currentSelected item
-		for(int i = 0; i < items.length; i++) {
-			if(i == 0) {
-				this.name = new SLabel(items[i], SLabel.PADDINGLEFT, 180, 40);
-				name.setName(items[i]);
+		if(items != null) {
+			for(int i = 0; i < items.length; i++) {
+				if(i == 0) {
+					name = new STextField(items[i], 180, 40);
+					name.setName(items[i]);
+					name.setEditable(false);
+					name.setCustomRounded(true, false, true, false);
+					name.setForeground(new Color(100, 100, 100));
+					name.setOpaque(false);
+				}
+				addItem(items[i]);
 			}
-			addItem(items[i]);
 		}
-		name.changeTextColor(new Color(100, 100, 100), Color.WHITE);
-		name.drawBackground(true);
-		name.setOpaque(false);
 		
-		this.arrow = new SButton("\u25BC", SButton.WHITE, 40, 40);
+		arrow = new SButton("\u25BC", SButton.WHITE, 40, 40);
 		arrow.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
 		arrow.setTextColor(Color.BLACK);
 		arrow.addActionListener(this);
-		arrow.setBottomRounded(false);
-		arrow.setRounded(true);
-		arrow.setRightRounded(true);
-
-		this.add(name, BorderLayout.CENTER);
-		this.add(arrow, BorderLayout.EAST);
+		arrow.setCustomRounded(false, true, false, true);
+		
+		add(name, BorderLayout.CENTER);
+		add(arrow, BorderLayout.EAST);
 	}
 
+	/**
+	 * Method to add a item to the SComboBox
+	 */
 	public void addItem(String item) {
 		SButton s = new SButton(item, Color.WHITE, this.getWidth(), this.getHeight());
 		s.setTextColor(new Color(100, 100, 100));
 		s.setRounded(true);
-		s.setTextX(1);
+		s.setAlignment(SButton.LEFT);
 		
 		if(items.isEmpty()) {
-			s.setTopRounded(true);
+			s.setCustomRounded(true, true, false, false);
 		} 
 		else {
-			s.setBottomRounded(true);
+			s.setCustomRounded(false, false, true, true);
 		}
 		
 		s.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
@@ -86,17 +97,25 @@ public class SComboBox extends JPanel implements ActionListener {
 		pop.add(s);
 	}
 
+	/**
+	 * ActionListener method for SComboBox
+	 */
 	public void actionPerformed(ActionEvent e) {
-		pop.show(this, 0, this.getHeight());
+		pop.show(this, 0, getHeight());
 		for(SButton s : items) {
 			if(e.getSource().equals(s)) {
-				name.setName(s.getName());
+				name.setPlaceholder(s.getName());
 				pop.setVisible(false);
 				repaint();
 			}
 		}
 	}
 
-	public String getSelectedItem() {return name.getName();}
-
+	// Getters
+	public String getSelectedItem() 	{return name.getPlaceholder();}
+	public void setEditable(boolean a) 	{name.setEditable(a);}
+	
+	// Setters
+	public void setPlaceholder(String placeholder) {name.setPlaceholder(placeholder);}
+	
 }

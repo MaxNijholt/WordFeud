@@ -1,9 +1,8 @@
 package AccountType;
 
 public abstract class Account {
-
 	
-	public Account(){
+	public Account(String account){
 		
 	}
 	

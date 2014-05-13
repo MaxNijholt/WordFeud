@@ -2,16 +2,17 @@ package Core;
 
 import java.util.ArrayList;
 
-import Utility.DBCommunicator;
-import WordFeud.Competition;
-import WordFeud.Game;
-import WordFeud.GameStone;
 import AccountType.Account;
 import AccountType.Administrator;
 import AccountType.Moderator;
 import AccountType.Player;
 import GUI.GUI;
 import GUI.PlayerPanel;
+import Utility.DBCommunicator;
+import Utility.ImageLoader;
+import WordFeud.Competition;
+import WordFeud.Game;
+import WordFeud.GameStone;
 
 
 public class Application {
@@ -20,6 +21,7 @@ public class Application {
 	private Competition selectedCompetition;
 	private Account currentAccount;
 	private GUI myGui;
+	private ImageLoader loader;
 
 
 	/**
@@ -28,6 +30,8 @@ public class Application {
 	 */
 	public Application(){
 		DBCommunicator.getConnection();
+		loader = new ImageLoader();
+		loader.loadAllImages();
 		myGui = new GUI(this);
 		//currentAccount = new Player("henk1");
 		
@@ -161,11 +165,11 @@ public class Application {
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("moderator")){
-			currentAccount = new Moderator();
+			currentAccount = new Moderator(null);
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("administrator")){
-			currentAccount = new Administrator();
+			currentAccount = new Administrator(null);
 			myGui.switchPanel(null);
 		}
 	}

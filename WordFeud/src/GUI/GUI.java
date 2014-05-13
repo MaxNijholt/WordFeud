@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Core.Application;
+import Utility.ImageLoader;
 import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
@@ -22,10 +23,11 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new CompetitionCreatePanel(this));
+		this.setContentPane(new GameCreatePanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+		this.setIconImage(ImageLoader.ICON);
 	}
 	
 	public void playWord(){
@@ -64,7 +66,7 @@ public class GUI extends JFrame{
 		
 	}
 	
-	public void login(String username){
+	public void login(String username) {
 		app.login(username);
 	}
 	
@@ -84,13 +86,14 @@ public class GUI extends JFrame{
 	}
 	
 	public String getOpponentName(int gameID){
+		
 		return app.getOpponentName(gameID);
 	}
 	
-	public void acceptGame(int gameID){
+	public void acceptGame(int gameID) {
 		app.acceptGame(gameID);
 	}
-
+	
 	public void denyGame(int gameID) {
 		app.denyGame(gameID);
 	}

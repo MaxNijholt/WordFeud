@@ -15,8 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 
-import GUI.AdminPanel;
-
 @SuppressWarnings("serial")
 public class MComboBox extends JPanel implements ActionListener  {
 
@@ -63,9 +61,7 @@ public class MComboBox extends JPanel implements ActionListener  {
 				new Color(220, 220, 220));
 		arrow.setTextColor(Color.BLACK);
 		arrow.addActionListener(this);
-		arrow.setBottomRounded(false);
-		arrow.setRounded(true);
-		arrow.setRightRounded(true);
+		arrow.setCustomRounded(false, true, false, true);
 
 		this.add(placeholder, BorderLayout.CENTER);
 		this.add(arrow, BorderLayout.EAST);
@@ -95,12 +91,13 @@ public class MComboBox extends JPanel implements ActionListener  {
 				this.getHeight());
 		s.setTextColor(new Color(100, 100, 100));
 		s.setRounded(true);
-		s.setTextX(1);
+		s.setAlignment(SButton.LEFT);
 
-		if (buttonList.isEmpty()) {
-			s.setTopRounded(true);
-		} else {
-			s.setBottomRounded(true);
+		if(buttonList.isEmpty()) {
+			s.setCustomRounded(true, true, false, false);
+		} 
+		else {
+			s.setCustomRounded(false, false, true, true);
 		}
 
 		s.setColors(new Color(255, 255, 255), new Color(235, 235, 235),
@@ -128,6 +125,14 @@ public class MComboBox extends JPanel implements ActionListener  {
 
 	public String getSelectedItem() {
 		return placeholder.getText();
+	}
+	
+	public STextField getField(){
+		return placeholder;
+	}
+	
+	public ArrayList<SButton> getButtons(){
+		return buttonList;
 	}
 
 }

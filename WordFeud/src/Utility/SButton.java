@@ -1,6 +1,7 @@
 package Utility;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -12,19 +13,24 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 
+/**
+ * @author Stan van Heumen
+ */
 @SuppressWarnings("serial")
 public class SButton extends JButton implements MouseListener {
 
 	// Instance Variables
-	private 			int 	state, textX;
-	private 			boolean rounded, bottomRounded, rightRounded, topRounded;
-	private 			Color 	standardColor, hoverColor, clickColor, text;
+	private 			int 	state, alignment, arc;
+	private 			boolean topLeftRounded, topRightRounded, bottomLeftRounded, bottomRightRounded;
+	private				Font	font;
+	private 			Color 	standardColor, hoverColor, clickColor, textColor;
 	
-	// Constants
+	// Color constants
 	public static final	Color 	ORANGE 	= new Color(201, 80, 46);
 	public static final	Color 	GREEN 	= new Color(5, 142, 5);
 	public static final	Color 	PINK 	= new Color(161, 27, 60);
 	public static final	Color 	CYAN	= new Color(5, 142, 158);
+	public static final	Color 	RED		= new Color(237, 67, 33);
 	public static final	Color 	YELLOW 	= new Color(230, 156, 27);
 	public static final	Color 	BLUE	= new Color(45, 126, 219);
 	public static final	Color 	PURPLE 	= new Color(86, 56, 168);
@@ -32,14 +38,23 @@ public class SButton extends JButton implements MouseListener {
 	public static final Color 	BLACK	= new Color(0, 0, 0);
 	public static final Color	WHITE	= new Color(255, 255, 255);
 	
-	//Constructor @param name, color
+	// Alignment constants
+	public static final int 	LEFT	= 0;
+	public static final int		CENTER	= 1;
+	public static final int		RIGHT	= 2;
+	
+	/**
+	 * Constructor parameters: name, color
+	 */
 	public SButton(String name, Color color) {
 		// Default stuff
 		init(name);
 		calculateColors(color);
 	}
 	
-	// Constructor @param name, color, width, height
+	/**
+	 * Constructor parameters: name, color, width, height
+	 */
 	public SButton(String name, Color color, int width, int height) {
 		// Default stuff
 		init(name);
@@ -47,23 +62,31 @@ public class SButton extends JButton implements MouseListener {
 		this.setPreferredSize(new Dimension(width, height));
 	}
 	
-	// Private initialize method
+	/**
+	 * Private initialize method for default stuff
+	 */
 	private void init(String name) {
+		font 				= new Font("Arial", Font.PLAIN, 16);
+		state 				= 0;
+		alignment			= SButton.CENTER;
+		arc					= 10;
+		topLeftRounded 		= true;
+		topRightRounded 	= true;
+		bottomRightRounded	= true;	
+		bottomLeftRounded	= true;
+		textColor			= Color.WHITE;
+		FontMetrics fm = getFontMetrics(font);
 		this.setName(name);
-		this.setPreferredSize(new Dimension(100, 30));
+		this.setFont(font);
+		this.setPreferredSize(new Dimension(fm.stringWidth(name) + 10, fm.getHeight() + 10));
 		this.setOpaque(false);
 		this.setBorderPainted(false);
 		this.addMouseListener(this);
-		this.state = 0;
-		this.textX = 0;
-		this.rounded = true;
-		this.bottomRounded = false;
-		this.rightRounded = false;	
-		this.topRounded = false;
-		this.text = Color.WHITE;
 	}
 	
-	// Private method to calculate the colors
+	/**
+	 * Private method to calculate the colors
+	 */
 	private void calculateColors(Color color) {
 		// Get the RGB value of Color color
 		int r	= color.getRed();
@@ -89,7 +112,9 @@ public class SButton extends JButton implements MouseListener {
 		this.clickColor = new Color(r, g, b);
 	}
 	
-	// The overridden paintComponent, used to draw the button
+	/**
+	 * The overridden paintComponent(Graphics g) from JComponent, used to draw the button
+	 */
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		// Switch the different states
@@ -107,28 +132,30 @@ public class SButton extends JButton implements MouseListener {
 		// Important for smooth letters and corners
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		if(!rounded) {
-			g2d.fillRect(0, 0, getWidth(), getHeight());
-		}
-		else {
-			g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-			if(bottomRounded) {
-				g2d.fillRect(0, 0, getWidth(), 10);
-			}
-			if(rightRounded) {
-				g2d.fillRect(0, 0, 10, getHeight());
-			}
-			if(topRounded) {
-				g2d.fillRect(0, getHeight() - 10, getWidth(), 10);
-			}
-		}
+		
+		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+		
+		if(!topLeftRounded) 	{g2d.fillRect(0, 0, arc, arc);}
+		if(!topRightRounded) 	{g2d.fillRect(getWidth() - arc, 0, arc, arc);}
+		if(!bottomLeftRounded)	{g2d.fillRect(0, getHeight() - arc, arc, arc);}
+		if(!bottomRightRounded)	{g2d.fillRect(getWidth() - arc, getHeight() - arc, arc, arc);}
+		
 		g2d.setFont(new Font("Arial", Font.PLAIN, 16));
 		FontMetrics fm = g2d.getFontMetrics(g2d.getFont());
-		g2d.setColor(text);
+		g2d.setColor(textColor);
 		int x = 0;
-		if(textX == 0) {x = (this.getWidth() / 2) - (fm.stringWidth(this.getName()) / 2);}
-		if(textX == 1) {x = 5;}
-		g2d.drawString(this.getName(), x, (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
+		switch(alignment) {
+			case SButton.LEFT:
+				x = 5;
+				break;
+			case SButton.CENTER:
+				x = (this.getWidth() / 2) - (fm.stringWidth(getName()) / 2);
+				break;
+			case SButton.RIGHT:
+				x = (this.getWidth() - fm.stringWidth(getName()) - 5);
+				break;
+		}
+		g2d.drawString(getName(), x, (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
 		g2d.dispose();
 	}
 
@@ -146,11 +173,25 @@ public class SButton extends JButton implements MouseListener {
 		this.hoverColor 	= hoverColor;
 		this.clickColor 	= clickColor;
 	}
-	public void setTextX(int x) {this.textX = x;}
-	public void setRounded(boolean rounded) {this.rounded = rounded;}
-	public void setBottomRounded(boolean rounded) {this.bottomRounded = rounded;}
-	public void setRightRounded(boolean rounded) {this.rightRounded = rounded;}
-	public void setTopRounded(boolean rounded) {this.topRounded = rounded;}
-	public void setTextColor(Color color) {this.text = color;}
+	public void setRounded(boolean rounded) {
+		this.topLeftRounded 	= rounded;
+		this.topRightRounded 	= rounded;
+		this.bottomLeftRounded 	= rounded;
+		this.bottomRightRounded = rounded;
+	}
+	public void setTopLeftRounded(boolean rounded) 		{this.topLeftRounded = rounded;}
+	public void setTopRightRounded(boolean rounded) 	{this.topRightRounded = rounded;}
+	public void setBottomLeftRounded(boolean rounded) 	{this.bottomLeftRounded = rounded;}
+	public void setBottomRightRounded(boolean rounded) 	{this.bottomRightRounded = rounded;}
+	public void setCustomRounded(boolean topLeft, boolean topRight, boolean bottomLeft, boolean bottomRight) {
+		this.topLeftRounded 	= topLeft;
+		this.topRightRounded 	= topRight;
+		this.bottomLeftRounded 	= bottomLeft;
+		this.bottomRightRounded = bottomRight;
+	}
+	public void setTextColor(Color color) 				{this.textColor = color;}
+	public void setAlignment(int alignment)				{this.alignment = alignment;}
+	public void setFont(Font font)						{this.font = font;}	
+	public void setArc(int arc) 						{this.arc = arc;}
 	
 }

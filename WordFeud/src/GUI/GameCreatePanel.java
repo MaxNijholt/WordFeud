@@ -10,18 +10,24 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.SComboBox;
 import Utility.SLabel;
 
+/**
+ * @author Stan van Heumen
+ */
 @SuppressWarnings("serial")
 public class GameCreatePanel extends JPanel implements ActionListener {
 
-	private SLabel 		title, game, layout, challenge;
+	private SLabel 		title, game, layout, challenge, newGame;
 	private SComboBox 	gameBox, layoutBox, challengeBox;
 	private SButton		create, cancel, random;
 	private GUI 		gui;
@@ -29,25 +35,38 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 	public GameCreatePanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.gui = gui;
 		
-		title			= new SLabel("Create a new game", SLabel.LEFT, new Font("Arial", Font.BOLD, 30));
-		game 			= new SLabel("Private game", SLabel.RIGHT, 220, 40);
-		layout 			= new SLabel("Board Layout", SLabel.RIGHT, 220, 40);
-		challenge 		= new SLabel("Challenge player", SLabel.RIGHT, 220, 40);
+		title			= new SLabel("New game", SLabel.LEFT, new Font("Arial", Font.PLAIN, 50));
+		game 			= new SLabel("Private game", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 340, 20);
+		layout 			= new SLabel("Board", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 340, 20);
+		challenge 		= new SLabel("Challenge player", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 340, 20);
+		newGame			= new SLabel("New game with", SLabel.LEFT, new Font("Arial", Font.PLAIN, 30), 340, 40);
 		
-		gameBox 		= new SComboBox(220, 40, new String[] {"ON", "OFF"});
-		layoutBox 		= new SComboBox(220, 40, new String[] {"Random", "Static"});
-		challengeBox 	= new SComboBox(220, 40, new String[] {"/Test/Player/1", "/Test/Player/2", "/Test/Player/3", "/Test/Player/4"});
+		gameBox 		= new SComboBox(340, 40, new String[] {"On", "Off"});
+		layoutBox 		= new SComboBox(340, 40, new String[] {"Normal", "Random"});
+		
+		// To fill the challenger box
+		ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account ORDER BY naam ASC");
+		String[] players = new String[allPlayers.size()];
+		for(int i = 0; i < allPlayers.size(); i++) {players[i] = allPlayers.get(i);}
+		// Creating the challenger box
+		challengeBox 	= new SComboBox(340, 40, players);
 	
-		create			= new SButton("Create", SButton.GREY, 220, 40);
-		cancel			= new SButton("Cancel", SButton.GREY, 220, 40);
-		random			= new SButton("Random", SButton.ORANGE, 80, 40);
+		create			= new SButton("Create", SButton.GREY, 168, 40);
+		cancel			= new SButton("Cancel", SButton.GREY, 168, 40);
+		random			= new SButton("Random", SButton.ORANGE, 340, 40);
 		
 		create.addActionListener(this);
 		cancel.addActionListener(this);
 		random.addActionListener(this);
+		
+		JPanel sideBySidePanel = new JPanel();
+		sideBySidePanel.setBackground(getBackground());
+		sideBySidePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 0));
+		sideBySidePanel.add(create);
+		sideBySidePanel.add(cancel);
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
@@ -57,31 +76,28 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 		c.gridx = 0;
 		c.gridy = 0;
 		buttonPanel.add(game, c);
-		c.gridx++;
+		c.gridy++;
 		buttonPanel.add(gameBox, c);
 		c.gridy++;
-		c.gridx = 0;
 		buttonPanel.add(layout, c);
-		c.gridx++;
+		c.gridy++;
 		buttonPanel.add(layoutBox, c);
 		c.gridy++;
-		c.gridx = 0;
+		buttonPanel.add(newGame, c);
+		c.gridy++;
 		buttonPanel.add(challenge, c);
-		c.gridx++;
+		c.gridy++;
 		buttonPanel.add(challengeBox, c);
-		c.gridx++;
+		c.gridy++;
 		buttonPanel.add(random, c);
 		c.gridy++;
-		c.gridx = 0;
-		buttonPanel.add(create, c);
-		c.gridx++;
-		buttonPanel.add(cancel, c);
+		buttonPanel.add(sideBySidePanel, c);
 		
 		JPanel titlePanel = new JPanel();
-		titlePanel.setBackground(getBackground());
+		titlePanel.setBackground(new Color(0, 0, 0, 100));
 		titlePanel.setLayout(new BorderLayout());
 		titlePanel.add(title, BorderLayout.WEST);
-		titlePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 20, 0));
+		titlePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBackground(getBackground());
