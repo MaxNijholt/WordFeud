@@ -165,11 +165,11 @@ public class Application {
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("moderator")){
-			currentAccount = new Moderator();
+			currentAccount = new Moderator("");
 			myGui.switchPanel(null);
 		}
 		else if(accountType.equals("administrator")){
-			currentAccount = new Administrator();
+			currentAccount = new Administrator("");
 			myGui.switchPanel(null);
 		}
 	}

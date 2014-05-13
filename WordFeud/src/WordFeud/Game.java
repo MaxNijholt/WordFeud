@@ -14,7 +14,7 @@ public class Game {
 	 * cronstruct the game
 	 * -------------------------------------------------
 	 */
-	public Game(int id){
+	public Game(){
 		myField = new Field();
 		myPC = new PointCounter(this.myField);
 		myWC = new WordChecker();
