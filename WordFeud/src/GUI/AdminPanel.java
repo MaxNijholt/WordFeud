@@ -40,7 +40,6 @@ public class AdminPanel extends JPanel {
 	private ArrayList<SButton> buttonCollection = new ArrayList<SButton>();
 	private SButton newPlayer = new SButton("New account", SButton.GREY),
 			editPlayer = new SButton("Edit Player", SButton.GREY),
-			blacklist = new SButton("Blacklist", SButton.GREY),
 			grantMod = new SButton("Grant Mod", SButton.GREY),
 			grantAdmin = new SButton("Grant Admin", SButton.GREY),
 			grantPlayer = new SButton("Grant Player", SButton.GREY),
@@ -68,13 +67,11 @@ public class AdminPanel extends JPanel {
 		this.add(this.selectPlayer, c);
 		this.add(this.Mcombo, c);
 		c.gridy++;
-		this.add(this.blacklist, c);
-		c.gridy++;
-		c.gridx = c.gridx + 3;
 		this.add(this.newPlayer, c);
 		c.gridx++;
 		this.add(this.editPlayer, c);
 		c.gridx--;
+		c.gridx = c.gridx + 3;
 		c.gridy++;
 		this.add(this.grantPlayer, c);
 		c.gridx++;
@@ -91,7 +88,6 @@ public class AdminPanel extends JPanel {
 		this.add(this.revokeAdmin, c);
 
 		// Adding buttons to the ButtonCollection.
-		this.buttonCollection.add(blacklist);
 		this.buttonCollection.add(editPlayer);
 		this.buttonCollection.add(newPlayer);
 		this.buttonCollection.add(grantPlayer);
@@ -183,12 +179,6 @@ public class AdminPanel extends JPanel {
 			}
 			if (e.getSource().equals(grantPlayer)) {
 				addPrivilege(Mcombo.getSelectedItem(), "Player");
-			}
-			if (e.getSource().equals(blacklist)) {
-				// TODO Might need some editing?
-				removePrivilege(Mcombo.getSelectedItem(), "Administrator");
-				removePrivilege(Mcombo.getSelectedItem(), "Moderator");
-				removePrivilege(Mcombo.getSelectedItem(), "Player");
 			}
 			if (e.getSource().equals(editPlayer)) {
 				// TODO
