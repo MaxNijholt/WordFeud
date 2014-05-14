@@ -12,8 +12,6 @@ import Utility.DBCommunicator;
 public class Moderator{
 	private ArrayList<String> pendingWords;
 
-
-
 	/**
 	 * Gets unapproved words out of a list from the Database
 	 * 

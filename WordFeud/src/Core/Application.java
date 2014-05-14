@@ -394,5 +394,18 @@ public class Application {
 		this.setCurrentAccount(null);
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
+
+
+	public void spectateGame() {
+		// TODO
+		// Stijn?
+	}
+
+
+	public void selectGame(int gameID) {
+		// TODO 
+		// Stijn?
+		
+	}
 	
 }

@@ -23,7 +23,7 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new GamePanel(this));
+		this.setContentPane(new LoginPanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
