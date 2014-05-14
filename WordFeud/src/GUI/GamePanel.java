@@ -1,11 +1,15 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import Utility.SButton;
@@ -22,10 +26,11 @@ public class GamePanel extends JPanel {
 	public GamePanel(GUI gui){
 		this.gui = gui;
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.setLayout(new BorderLayout());
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.setBackground(new Color(94, 94, 94));
 		mp		= new MenuPanel(gui);
 		chat 	= new ChatPanel();
+		chat.setBackground(new Color(255, 255, 255, 0));
 		
 		pass 	= new SButton("Pass", SButton.CYAN, 120, 40);
 		swap 	= new SButton("Swap",  SButton.YELLOW, 120, 40);
@@ -38,14 +43,16 @@ public class GamePanel extends JPanel {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(4, 1, 0, 10));
 		buttonPanel.setOpaque(false);
-		/*		
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 30));
+			
 		JPanel handPanel = new JPanel();
 		handPanel.setLayout(new GridLayout(1, 7, 3, 3));
+		handPanel.setBackground(mainPanel.getBackground());
+		handPanel.setPreferredSize(new Dimension(7*40 + (7 * 6), 40));
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i, 0);
 			handPanel.add(tile);
 		}
-		*/
 		
 		JPanel gamePanel = new JPanel();
 		gamePanel.setLayout(new GridLayout(15, 15, 3, 3));
@@ -66,9 +73,24 @@ public class GamePanel extends JPanel {
 		mainPanel.add(buttonPanel);
 		mainPanel.add(gamePanel);
 		
-		add(mp, BorderLayout.NORTH);
-		add(mainPanel, BorderLayout.CENTER);
-		add(chat, BorderLayout.EAST);
+		GridBagConstraints c = new GridBagConstraints();
+		
+		JPanel totalPanel = new JPanel();
+		totalPanel.setLayout(new GridBagLayout());
+		totalPanel.setBackground(mainPanel.getBackground());
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		c.insets = new Insets(0, 10, 0, 10);
+		totalPanel.add(mainPanel, c);
+		c.gridy++;
+		totalPanel.add(handPanel, c);
+		c.gridx++;
+		c.gridy--;
+		totalPanel.add(chat, c);
+		
+		add(mp);
+		add(totalPanel);
 		
 	}
 	

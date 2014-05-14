@@ -113,8 +113,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * Overridden paintComponent(Graphics g) method from JComponent used to draw the background
 	 */
 	public void paintComponent(Graphics g) {
-		if(ImageLoader.BACKGROUND == null) {return;}
-		g.drawImage(ImageLoader.BACKGROUND, 0, 0, getWidth(), getHeight(), null);
+		if(ImageLoader.BACKGROUNDHD == null) {return;}
+		g.drawImage(ImageLoader.BACKGROUNDHD, 0, 0, ImageLoader.BACKGROUNDHD.getWidth() * 2, ImageLoader.BACKGROUNDHD.getHeight() * 2, null);
 	}
 	
 	/**
