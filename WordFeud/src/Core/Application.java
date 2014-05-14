@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import AccountType.Account;
 import GUI.GUI;
 import GUI.LoginPanel;
-import GUI.GamePanel;
 import GUI.PlayerPanel;
-import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
 import Utility.ImageLoader;
 import WordFeud.Competition;
@@ -32,7 +30,14 @@ public class Application {
 		DBCommunicator.getConnection();
 		loader = new ImageLoader();
 		loader.loadAllImages();
-		myGui = new GUI(this);		
+		myGui = new GUI(this);
+		//currentAccount = new Player("henk1");
+		
+		//addCompetition("test", "20140430", "test_competition");
+		//newPlayer("henk1", "wachtwoord");
+		//login("henk", "wachtwoord");
+		
+		
 	}
 	
 	
@@ -86,7 +91,7 @@ public class Application {
 		/*
 		 * GET GAMEID FROM DB
 		 */
-		this.selectGame(0);
+		this.playGame("");
 	}
 	
 	/**
@@ -118,16 +123,14 @@ public class Application {
 	 * switch to the gamePanel
 	 * -------------------------------------------------
 	 */
-	public void selectGame(int gameID){
-		Game newGame = new Game(gameID);
+	public void playGame(String gameID){
+		/*
+		 * GET GAME FROM DB
+		 */
+		Game newGame = new Game();
 		selectedGame = newGame;
-		myGui.switchPanel(new GamePanel(myGui));
+		myGui.switchPanel(null);
 	}
-	
-	public void spectateGame() {
-		myGui.switchPanel(new SpectatorPanel());
-	}
-	
 	
 	/**
 	 * tell game to lay a gamestone
@@ -181,7 +184,6 @@ public class Application {
 		if(resigned){
 			resign = "Resigned";
 		}
-
 		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = '" + resign + "'";
 		Boolean searching = true;
 		
@@ -210,7 +212,7 @@ public class Application {
 		String player = currentAccount.getUsername();
 		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing'";
 		Boolean searching = true;
-
+		
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
 
@@ -392,4 +394,5 @@ public class Application {
 		this.setCurrentAccount(null);
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
+	
 }
