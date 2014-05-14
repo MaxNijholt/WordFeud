@@ -3,14 +3,14 @@ package Core;
 import java.util.ArrayList;
 
 import AccountType.Account;
-import AccountType.Administrator;
-import AccountType.Moderator;
 import AccountType.Player;
 import GUI.GUI;
+import GUI.GamePanel;
 import GUI.LoginPanel;
 import GUI.PlayerPanel;
+import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
-import Utility.ImageLoader;
+import Utility.Loader;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
@@ -22,7 +22,7 @@ public class Application {
 	private Competition selectedCompetition;
 	private Account currentAccount;
 	private GUI myGui;
-	private ImageLoader loader;
+	private Loader loader;
 
 
 	/**
@@ -31,7 +31,7 @@ public class Application {
 	 */
 	public Application(){
 		DBCommunicator.getConnection();
-		loader = new ImageLoader();
+		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
 		//currentAccount = new Player("henk1");
@@ -117,7 +117,7 @@ public class Application {
 	 * create the new player and switch to the Playerpanel
 	 */
 	public void login(String username){
-		currentAccount = new Player(username);
+		currentAccount = new Account(username);
 	}
 	
 	/**
@@ -133,6 +133,16 @@ public class Application {
 		Game newGame = new Game();
 		selectedGame = newGame;
 		myGui.switchPanel(null);
+	}
+	
+	public void selectGame(int gameID) {
+		Game newGame = new Game(gameID);
+		selectedGame = newGame;
+		myGui.switchPanel(new GamePanel(myGui));
+	}
+	
+	public void spectateGame() {
+		myGui.switchPanel(new SpectatorPanel());
 	}
 	
 	/**
@@ -159,7 +169,7 @@ public class Application {
 	 * create a new account of that type
 	 * switch to his panel
 	 * -------------------------------------------------
-	 */
+	 *
 	public void switchRoll(String accountType){
 		if(accountType.equals("player")){
 			currentAccount = new Player("henk"); //henk is for testing

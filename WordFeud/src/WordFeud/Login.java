@@ -31,10 +31,20 @@ public class Login {
 	}
 	
 	public String register(String username, String password, String validatePassword) {
+		for(int i = 0; i < username.length(); i++) {
+			if(Character.isWhitespace(username.charAt(i))) {return "No whitespaces allowed!";}
+		}
+		String[] safe = new String[] {"\"", "\'"};
+		for(int i = 0; i < safe.length; i++) {
+			if(username.contains(safe[i]) || password.contains(safe[i])) {
+				return "You can't use quotes!";
+			}
+		}
+		
 		if(DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '" + username + "'") == null) {
 			if(password.equals(validatePassword)) {
 				if(!password.isEmpty() && !(password.length() < 1)) {
-					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username + "', '" + password +"')");
+					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username + "', '" + password + "')");
 					gui.login(username);
 					gui.switchPanel(new PlayerPanel(gui));
 					return "0";

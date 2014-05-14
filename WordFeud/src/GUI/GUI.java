@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Core.Application;
-import Utility.ImageLoader;
+import Utility.Loader;
 import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
@@ -27,7 +27,7 @@ public class GUI extends JFrame{
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-		this.setIconImage(ImageLoader.ICON);
+		this.setIconImage(Loader.ICON);
 	}
 	
 	public void playWord(){
@@ -111,6 +111,18 @@ public class GUI extends JFrame{
 	public void logout() {
 		app.logout();
 		
+	}
+	
+	public void spectateGame() {
+		app.spectateGame();
+	}
+
+	public Application getApplication() {
+		return app;
+	}
+
+	public void selectGame(int gameID) {
+		app.selectGame(gameID);
 	}
 
 }

@@ -16,7 +16,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
-import Utility.ImageLoader;
+import Utility.DBCommunicator;
+import Utility.Loader;
 import Utility.SButton;
 import Utility.SPasswordField;
 import Utility.STextField;
@@ -65,9 +66,8 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		title.setBackground(new Color(255, 255, 255, 0));
 
 		String letters 	= "WORDFEUD";
-		String values	= "51224122";
 		for(int i = 0; i < letters.length(); i++) {
-			GameStone s = new GameStone(Integer.valueOf(Character.getNumericValue(values.charAt(i))), letters.charAt(i));
+			GameStone s = new GameStone(DBCommunicator.requestInt("SELECT waarde FROM lettertype WHERE karakter = '" + letters.charAt(i) + "'"), letters.charAt(i));
 			s.setDimension(70, 70);
 			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
 			title.add(s);
@@ -101,8 +101,8 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	 * Overridden paintComponent(Graphics g) method from JComponent used to draw the background
 	 */
 	public void paintComponent(Graphics g) {
-		if(ImageLoader.BACKGROUNDHD == null) {return;}
-		g.drawImage(ImageLoader.BACKGROUNDHD, 0, 0, ImageLoader.BACKGROUNDHD.getWidth() * 2, ImageLoader.BACKGROUNDHD.getHeight() * 2, null);
+		if(Loader.BACKGROUNDHD == null) {return;}
+		g.drawImage(Loader.BACKGROUNDHD, 0, 0, Loader.BACKGROUNDHD.getWidth() * 2, Loader.BACKGROUNDHD.getHeight() * 2, null);
 	}
 
 	/**
