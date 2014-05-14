@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import WordFeud.GameStone;
+import WordFeud.Tile;
 
 public class WordChecker {
+	
 	private ArrayList<String> checkwords = new ArrayList<>();
 
 	/**
@@ -25,15 +27,12 @@ public class WordChecker {
 	 */
 	public ArrayList<String> checkWords(ArrayList<String> wordsForCheck,
 			HashMap<String, GameStone> playedMove,
-			HashMap<String, GameStone> playBoard)
+			HashMap<String, Tile> playBoard)
 	{
 		ArrayList<String> deniedWords = new ArrayList<String>();
 		if (coordinateChecker(playedMove)
 				&& connectionChecker(playedMove, playBoard))
 		{
-
-			// wordchecker veranderen in string array en dan the boolean soort
-			// van checken als lege string array
 			if (wordChecker(wordsForCheck, playBoard).size() != 0)
 			{
 				deniedWords = wordChecker(wordsForCheck, playBoard);
@@ -48,11 +47,11 @@ public class WordChecker {
 	 * creates words out of coordinates and checks them in through the database
 	 */
 	private ArrayList<String> wordChecker(ArrayList<String> wordsTooCheck,
-			HashMap<String, GameStone> playboard)
+			HashMap<String, Tile> playBoard)
 	{
 		ArrayList<String> deniedWords = new ArrayList<>();
 		ArrayList<String> theWords = new ArrayList<>();
-		HashMap<String, GameStone> field = playboard;
+		HashMap<String, Tile> field = playBoard;
 		ArrayList<String> wordsForCheck = wordsTooCheck;
 		String word = "";
 		int x = 0;
@@ -70,12 +69,13 @@ public class WordChecker {
 			{
 				x = Integer.parseInt(cordsSplit[0]);
 				y = Integer.parseInt(cordsSplit[1]);
-				word = word + field.get(x + "," + y).getLetter();
+				word = word + field.get(x + "," + y).getGameStone().getLetter();
 				while (t < (Integer.parseInt(cordsSplit2[1]) - Integer
 						.parseInt(cordsSplit[1])))
 				{
 					y++;
-					word = word + field.get(x + "," + y).getLetter();
+					word = word
+							+ field.get(x + "," + y).getGameStone().getLetter();
 
 					t++;
 
@@ -89,12 +89,13 @@ public class WordChecker {
 			{
 				x = Integer.parseInt(cordsSplit[0]);
 				y = Integer.parseInt(cordsSplit[1]);
-				word = word + field.get(x + "," + y).getLetter();
+				word = word + field.get(x + "," + y).getGameStone().getLetter();
 				while (t < (Integer.parseInt(cordsSplit2[0]) - Integer
 						.parseInt(cordsSplit[0])))
 				{
 					x++;
-					word = word + field.get(x + "," + y).getLetter();
+					word = word
+							+ field.get(x + "," + y).getGameStone().getLetter();
 
 					t++;
 
@@ -196,9 +197,9 @@ public class WordChecker {
 	 * Checks if the letters do have a connections at all
 	 */
 	private boolean connectionChecker(HashMap<String, GameStone> playd,
-			HashMap<String, GameStone> playBoard)
+			HashMap<String, Tile> playBoard)
 	{
-		HashMap<String, GameStone> field = playBoard;
+		HashMap<String, Tile> field = playBoard;
 		boolean connections = false;
 		int x;
 		int y;
@@ -213,28 +214,28 @@ public class WordChecker {
 			x = Integer.parseInt(parts[0]);
 			y = Integer.parseInt(parts[1]);
 			x++;
-			if (field.keySet().contains(x + "," + y)
+			if (field.get(x + "," + y).getGameStone() == null
 					&& !playd.keySet().contains(x + "," + y))
 			{
 				one = false;
 			}
 			x--;
 			x--;
-			if (field.keySet().contains(x + "," + y)
+			if (field.get(x + "," + y).getGameStone() == null
 					&& !playd.keySet().contains(x + "," + y))
 			{
 				two = false;
 			}
 			x++;
 			y--;
-			if (field.keySet().contains(x + "," + y)
+			if (field.get(x + "," + y).getGameStone() == null
 					&& !playd.keySet().contains(x + "," + y))
 			{
 				three = false;
 			}
 			y++;
 			y++;
-			if (field.keySet().contains(x + "," + y)
+			if (field.get(x + "," + y).getGameStone() == null
 					&& !playd.keySet().contains(x + "," + y))
 			{
 				four = false;
