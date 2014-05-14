@@ -23,9 +23,15 @@ import Utility.STextField;
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel implements ActionListener{
 
+<<<<<<< .merge_file_a04408
 	private STextField searchText;
 	private SButton searchButton;
 	private JPanel searchPanel;
+=======
+	/*private STextField searchText;
+	private SButton searchButton;
+	private JPanel searchPanel;*/
+>>>>>>> .merge_file_a03860
 	private JScrollPane scrollPane;
 	private JPanel gameContent;
 	private GUI gui;
@@ -40,6 +46,10 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		//create the search textfield and button might be erased
+<<<<<<< .merge_file_a04408
+=======
+		/*
+>>>>>>> .merge_file_a03860
 		searchText 		= 	new STextField("search");
 		searchButton 	= 	new SButton("search", SButton.GREY, 220, 40);
 		searchPanel 	= 	new JPanel();
@@ -49,11 +59,19 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		searchPanel.add(searchText);
 		searchPanel.add(searchButton);
 		this.add(searchPanel);
+<<<<<<< .merge_file_a04408
+=======
+		*/
+>>>>>>> .merge_file_a03860
 		
 		//create the gameContent panel here go all the games
 		gameContent 	= 	new JPanel();
 		gameContent.setLayout(new BoxLayout(gameContent, BoxLayout.PAGE_AXIS));
 		gameContent.setBackground(new Color(94,94,94));
+<<<<<<< .merge_file_a04408
+=======
+		gameContent.add(Box.createRigidArea(new Dimension(500,15)));
+>>>>>>> .merge_file_a03860
 		
 		//create the scrollpane as container for the gameContent
 		scrollPane 		= 	new JScrollPane(gameContent);
@@ -69,7 +87,11 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		//currentAccounts new requested games
 		gameInts = gui.getRequestedGames(false, false);
 		if(gameInts.size() != 0){
+<<<<<<< .merge_file_a04408
 			gameContent.add(addLabel("new request", 1));
+=======
+			gameContent.add(addLabel("New request", 1));
+>>>>>>> .merge_file_a03860
 			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : gameInts){
 				gameContent.add(paintGame(e, "NewRequest"));
@@ -83,7 +105,11 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		//games that are still playing
 		gameInts = gui.getPlayingGames(true);
 		if(gameInts.size() != 0){
+<<<<<<< .merge_file_a04408
 			gameContent.add(addLabel("your Turn",1));
+=======
+			gameContent.add(addLabel("Your Turn",1));
+>>>>>>> .merge_file_a03860
 			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : gameInts){
 				gameContent.add(paintGame(e, "Playing"));
@@ -93,7 +119,11 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			
 		gameInts = gui.getPlayingGames(false);
 		if(gameInts.size() != 0){
+<<<<<<< .merge_file_a04408
 			gameContent.add(addLabel("opponents turn",1));
+=======
+			gameContent.add(addLabel("Opponents turn",1));
+>>>>>>> .merge_file_a03860
 			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : gameInts){
 				gameContent.add(paintGame(e, "Playing"));
@@ -107,7 +137,11 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		
 		gameInts = gui.getFinishedGames(false);
 		if(gameInts.size() != 0){
+<<<<<<< .merge_file_a04408
 			gameContent.add(addLabel("finished",1));
+=======
+			gameContent.add(addLabel("Finished",1));
+>>>>>>> .merge_file_a03860
 			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : gameInts){
 				gameContent.add(paintGame(e, "Finished"));
@@ -131,20 +165,34 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		
 		gameInts = gui.getRequestedGames(true, false);
 		if(gameInts.size() != 0){
+<<<<<<< .merge_file_a04408
 			gameContent.add(addLabel("waiting", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : gameInts){
 				gameContent.add(paintGame(e, "Request"));
+=======
+			gameContent.add(addLabel("Waiting", 1));
+			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			for(int e : gameInts){
+				gameContent.add(paintGame(e, "Waiting"));
+>>>>>>> .merge_file_a03860
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
 			
 		gameInts = gui.getRequestedGames(true, true);
 		if(gameInts.size() != 0){
+<<<<<<< .merge_file_a04408
 			gameContent.add(addLabel("denied", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : gameInts){
 				gameContent.add(paintGame(e, "Request"));
+=======
+			gameContent.add(addLabel("Denied", 1));
+			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			for(int e : gameInts){
+				gameContent.add(paintGame(e, "Denied"));
+>>>>>>> .merge_file_a03860
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
@@ -263,22 +311,97 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			
 			c.gridx = 0;
 			c.gridy = 0;
+<<<<<<< .merge_file_a04408
 			panel.add(opponent, c);
 			c.gridy++;
 			panel.add(lastTurn, c);
 			c.gridx++;
 			panel.add(select, c);
 			
+=======
+			c.insets = new Insets(0,50,0,0);
+			panel.add(opponent, c);
+			c.gridx++;
+			c.gridheight = 2;
+			panel.add(select, c);
+			c.gridheight = 1;
+			c.gridx = 0;
+			c.gridy++;
+			panel.add(lastTurn, c);
+			
+			select.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					gui.selectGame(gameID);
+				}
+			});
+>>>>>>> .merge_file_a03860
 		}
 		
 		//for a game that has finished. option to watch/spectate
 		else if(gameType.equals("Finished")){
+<<<<<<< .merge_file_a04408
 			
 		}
 		
 		//for a game that has been requested. no options
 		else if(gameType.equals("Request")){
 			
+=======
+			JPanel opponent		= new JPanel();
+			JPanel lastTurn 	= new JPanel();
+			SButton spectate 	= new SButton("Spectate", SButton.GREY, 220, 40);
+			
+			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
+			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
+			
+			opponent.setMinimumSize(new Dimension(200,30));
+			lastTurn.setMinimumSize(new Dimension(200,30));
+			spectate.setMinimumSize(spectate.getPreferredSize());
+			
+			opponent.setBackground(panel.getBackground());
+			lastTurn.setBackground(panel.getBackground());
+			
+			c.gridx = 0;
+			c.gridy = 0;
+			c.insets = new Insets(0,50,0,0);
+			panel.add(opponent, c);
+			c.gridx++;
+			c.gridheight = 2;
+			panel.add(spectate, c);
+			c.gridheight = 1;
+			c.gridx = 0;
+			c.gridy++;
+			panel.add(lastTurn, c);
+			
+			spectate.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					gui.spectateGame();
+				}
+			});
+		}
+		
+		//for a game that has been requested. no options
+		else if(gameType.equals("Denied") || gameType.equals("Waiting")){
+			JPanel opponent 	= new JPanel();
+			JPanel type 		= new JPanel();
+			
+			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
+			type.add(new SLabel(gameType, SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
+			
+			opponent.setMinimumSize(new Dimension(200,30));
+			type.setMinimumSize(new Dimension(200,30));
+			
+			opponent.setBackground(panel.getBackground());
+			type.setBackground(panel.getBackground());
+			
+			c.gridx = 0;
+			c.gridy = 0;
+			panel.add(opponent, c);
+			c.gridy++;
+			panel.add(type, c);
+>>>>>>> .merge_file_a03860
 		}
 		
 		return panel;

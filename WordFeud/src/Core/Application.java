@@ -7,8 +7,13 @@ import AccountType.Administrator;
 import AccountType.Moderator;
 import AccountType.Player;
 import GUI.GUI;
+<<<<<<< .merge_file_a05064
 import GUI.LoginPanel;
+=======
+import GUI.GamePanel;
+>>>>>>> .merge_file_a03256
 import GUI.PlayerPanel;
+import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
 import Utility.ImageLoader;
 import WordFeud.Competition;
@@ -33,14 +38,7 @@ public class Application {
 		DBCommunicator.getConnection();
 		loader = new ImageLoader();
 		loader.loadAllImages();
-		myGui = new GUI(this);
-		//currentAccount = new Player("henk1");
-		
-		//addCompetition("test", "20140430", "test_competition");
-		//newPlayer("henk1", "wachtwoord");
-		//login("henk", "wachtwoord");
-		
-		
+		myGui = new GUI(this);		
 	}
 	
 	
@@ -94,7 +92,7 @@ public class Application {
 		/*
 		 * GET GAMEID FROM DB
 		 */
-		this.playGame("");
+		this.selectGame(0);
 	}
 	
 	/**
@@ -126,14 +124,16 @@ public class Application {
 	 * switch to the gamePanel
 	 * -------------------------------------------------
 	 */
-	public void playGame(String gameID){
-		/*
-		 * GET GAME FROM DB
-		 */
-		Game newGame = new Game();
+	public void selectGame(int gameID){
+		Game newGame = new Game(gameID);
 		selectedGame = newGame;
-		myGui.switchPanel(null);
+		myGui.switchPanel(new GamePanel(myGui));
 	}
+	
+	public void spectateGame() {
+		myGui.switchPanel(new SpectatorPanel());
+	}
+	
 	
 	/**
 	 * tell game to lay a gamestone
@@ -186,6 +186,7 @@ public class Application {
 		if(resigned){
 			resign = "Resigned";
 		}
+
 		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = '" + resign + "'";
 		Boolean searching = true;
 		
@@ -214,7 +215,7 @@ public class Application {
 		String player = currentAccount.getUsername();
 		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing'";
 		Boolean searching = true;
-		
+
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
 
@@ -390,6 +391,7 @@ public class Application {
 	public void setCurrentAccount(Account currentAccount) {
 		this.currentAccount = currentAccount;
 	}
+<<<<<<< .merge_file_a05064
 
 
 	public void logout() {
@@ -397,4 +399,6 @@ public class Application {
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
 	
+=======
+>>>>>>> .merge_file_a03256
 }
