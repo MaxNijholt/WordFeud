@@ -120,4 +120,9 @@ public class GUI extends JFrame{
 	public void spectateGame() {
 		app.spectateGame();
 	}
+
+	public Application getApplication() {
+		// TODO Auto-generated method stub
+		return app;
+	}
 }
