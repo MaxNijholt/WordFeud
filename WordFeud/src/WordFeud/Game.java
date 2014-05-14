@@ -9,17 +9,23 @@ public class Game {
 	private Field myField;
 	private PointCounter myPC;
 	private WordChecker myWC;
-
+	
 	/**
 	 * cronstruct the game
 	 * -------------------------------------------------
 	 */
-	public Game(){
+	public Game(int gameID){
 		myField = new Field();
-		myPC = new PointCounter(this.myField);
+		myPC = new PointCounter();
 		myWC = new WordChecker();
 	}
-
+	
+	public Game(){
+		myField = new Field();
+		myPC = new PointCounter();
+		myWC = new WordChecker();
+	}
+	
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
@@ -31,19 +37,19 @@ public class Game {
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
 		int points = 0;//= myPC.counterPointsTurn(myField.getNewWords());
-
+		
 		return points;
 	}
-
+	
 	/**
 	 * get the new words from the field
 	 * let the wordchecker check if it is correct
 	 * -------------------------------------------------
 	 */
 	public void playWord(){
-
+		
 	}
-
+	
 	/**
 	 * check if the game has ended
 	 * -------------------------------------------------
@@ -52,7 +58,7 @@ public class Game {
 	public boolean checkEndGame(){
 		return false;
 	}
-
+	
 	/**
 	 * pass a turn
 	 * tell the DB
@@ -64,7 +70,7 @@ public class Game {
 		 * tell the DB the turn is passed
 		 */
 	}
-
+	
 	/**
 	 * tell the DB to swap
 	 * get new gamestones
@@ -78,7 +84,7 @@ public class Game {
 		 * tell the db the new gamestones
 		 */
 	}
-
+	
 	/**
 	 * shuffle your gamestones around
 	 * does not end turn
@@ -89,7 +95,7 @@ public class Game {
 		 * show the gamestones in a different order
 		 */
 	}
-
+	
 	/**
 	 * set the visibility of a game
 	 * tell the db
@@ -101,7 +107,7 @@ public class Game {
 		 * tell the DB the new visibility
 		 */
 	}
-
+	
 	/**
 	 * get the visibility from the db and return boolean
 	 * -------------------------------------------------

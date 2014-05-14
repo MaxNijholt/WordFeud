@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import AccountType.Account;
 import Core.Application;
 import Utility.ImageLoader;
 import WordFeud.GameStone;
@@ -24,7 +23,7 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new LoginPanel(this));
+		this.setContentPane(new GamePanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -71,6 +70,10 @@ public class GUI extends JFrame{
 		app.login(username);
 	}
 	
+	public void selectGame(int gameID){
+		app.selectGame(gameID);
+	}
+	
 	public ArrayList<Integer> getFinishedGames(boolean resigned){
 		ArrayList<Integer> gameInts = app.getFinishedGames(resigned);
 		return gameInts;
@@ -108,8 +111,13 @@ public class GUI extends JFrame{
 		int turnScore = app.getLastTurnScore(gameID);
 		return turnScore;
 	}
-	
-	public Application getApplication(){
-		return app;
+
+	public void logout() {
+		app.logout();
+		
+	}
+
+	public void spectateGame() {
+		app.spectateGame();
 	}
 }
