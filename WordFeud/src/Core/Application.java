@@ -7,11 +7,8 @@ import AccountType.Administrator;
 import AccountType.Moderator;
 import AccountType.Player;
 import GUI.GUI;
-<<<<<<< .merge_file_a05064
 import GUI.LoginPanel;
-=======
 import GUI.GamePanel;
->>>>>>> .merge_file_a03256
 import GUI.PlayerPanel;
 import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
@@ -391,14 +388,10 @@ public class Application {
 	public void setCurrentAccount(Account currentAccount) {
 		this.currentAccount = currentAccount;
 	}
-<<<<<<< .merge_file_a05064
 
 
 	public void logout() {
 		this.setCurrentAccount(null);
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
-	
-=======
->>>>>>> .merge_file_a03256
 }

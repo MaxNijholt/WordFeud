@@ -14,15 +14,12 @@ public class Game {
 	 * cronstruct the game
 	 * -------------------------------------------------
 	 */
-<<<<<<< .merge_file_a05168
-=======
 	public Game(int gameID){
 		myField = new Field();
 		myPC = new PointCounter();
 		myWC = new WordChecker();
 	}
 	
->>>>>>> .merge_file_a06148
 	public Game(){
 		myField = new Field();
 		myPC = new PointCounter();

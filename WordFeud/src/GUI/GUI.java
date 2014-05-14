@@ -112,15 +112,12 @@ public class GUI extends JFrame{
 		return turnScore;
 	}
 
-<<<<<<< .merge_file_a06356
 	public void logout() {
 		app.logout();
 		
 	}
 
-=======
 	public void spectateGame() {
 		app.spectateGame();
 	}
->>>>>>> .merge_file_a03852
 }

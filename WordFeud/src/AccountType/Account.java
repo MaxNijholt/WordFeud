@@ -1,16 +1,9 @@
 package AccountType;
 
 public abstract class Account {
-<<<<<<< .merge_file_a05768
 	
 	public Account(String account){
 		
-=======
-	private String username;
-	
-	public Account(String account){
-		username = account;
->>>>>>> .merge_file_a04484
 	}
 	
 	public String getEmail(){
@@ -24,11 +17,7 @@ public abstract class Account {
 	}
 	
 	public String getUsername(){
-<<<<<<< .merge_file_a05768
 		return null;
-=======
-		return username;
->>>>>>> .merge_file_a04484
 		
 	}
 	
