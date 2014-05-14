@@ -16,13 +16,13 @@ public class Game {
 	 */
 	public Game(int gameID){
 		myField = new Field();
-		myPC = new PointCounter(myField);
+		myPC = new PointCounter();
 		myWC = new WordChecker();
 	}
 	
 	public Game(){
 		myField = new Field();
-		myPC = new PointCounter(myField);
+		myPC = new PointCounter();
 		myWC = new WordChecker();
 	}
 	
