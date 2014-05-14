@@ -91,9 +91,10 @@ public class STextField extends JTextField {
 	public void setBottomLeftRounded(boolean rounded) 	{this.bottomLeftRounded = rounded;}
 	public void setBottomRightRounded(boolean rounded) 	{this.bottomRightRounded = rounded;}
 	
-	public void setBackground(Color color) 	{this.background = color;}
-	public void setForeground(Color color)	{this.foreground = color;}
-	public void setArc(int arc)				{this.arc = arc;}
+	public void setBackground(Color color) 			{this.background = color;}
+	public void setForeground(Color color)			{this.foreground = color;}
+	public void setArc(int arc)						{this.arc = arc;}
+	public void setPlaceholder(String placeholder) 	{this.placeholder = placeholder;}
 	
 	public void setTextFont(Font font) {
 		this.font = font;
@@ -106,5 +107,8 @@ public class STextField extends JTextField {
 		this.bottomLeftRounded 	= bottomLeft;
 		this.bottomRightRounded = bottomRight;
 	}
+	
+	// Getter
+	public String getPlaceholder() 	{return placeholder;}
 	
 }

@@ -53,7 +53,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		username 	= new STextField("Username", 220, 40);
 		password 	= new SPasswordField("Password", 220, 40);
 
-		login		= new SButton("Connect", SButton.GREY, 220, 40);
+		login		= new SButton("Play", SButton.GREY, 220, 40);
 		register 	= new SButton("Register", SButton.GREY, 220, 40);
 		spectate 	= new SButton("Spectate", SButton.GREY, 155, 40);
 		exit 		= new SButton("Exit", SButton.GREY, 60, 40);
@@ -113,8 +113,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * Overridden paintComponent(Graphics g) method from JComponent used to draw the background
 	 */
 	public void paintComponent(Graphics g) {
-		if(ImageLoader.BACKGROUND == null) {return;}
-		g.drawImage(ImageLoader.BACKGROUND, 0, 0, getWidth(), getHeight(), null);
+		if(ImageLoader.BACKGROUNDHD == null) {return;}
+		g.drawImage(ImageLoader.BACKGROUNDHD, 0, 0, ImageLoader.BACKGROUNDHD.getWidth() * 2, ImageLoader.BACKGROUNDHD.getHeight() * 2, null);
 	}
 	
 	/**

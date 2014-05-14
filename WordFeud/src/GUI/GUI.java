@@ -23,7 +23,7 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new CompetitionCreatePanel(this));
+		this.setContentPane(new GamePanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -70,6 +70,10 @@ public class GUI extends JFrame{
 		app.login(username);
 	}
 	
+	public void selectGame(int gameID){
+		app.selectGame(gameID);
+	}
+	
 	public ArrayList<Integer> getFinishedGames(boolean resigned){
 		ArrayList<Integer> gameInts = app.getFinishedGames(resigned);
 		return gameInts;
@@ -106,5 +110,14 @@ public class GUI extends JFrame{
 	public int getLastTurnScore(int gameID) {
 		int turnScore = app.getLastTurnScore(gameID);
 		return turnScore;
+	}
+
+	public void logout() {
+		app.logout();
+		
+	}
+
+	public void spectateGame() {
+		app.spectateGame();
 	}
 }

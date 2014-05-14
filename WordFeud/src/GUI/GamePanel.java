@@ -1,68 +1,97 @@
 package GUI;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import Utility.SButton;
+import WordFeud.Tile;
+
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel {
 
 	private GUI gui;
-	private JButton passButton, swapButton, resignButton, playButton;
-	private ChatPanel chatPanel;
-	private JPanel northPanel, eastPanel, southPanel, westPanel;
+	private SButton pass, swap, resign, play;
+	private ChatPanel chat;
+	private MenuPanel mp;
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.setLayout(new BorderLayout());
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setBackground(new Color(94, 94, 94));
+		mp		= new MenuPanel(gui);
+		chat 	= new ChatPanel();
+		chat.setBackground(new Color(255, 255, 255, 0));
 		
-		//northPanel: The menu
-		northPanel.setPreferredSize(new Dimension(1000, 100));
-		northPanel.setMaximumSize(northPanel.getPreferredSize());
-		northPanel.setMinimumSize(northPanel.getPreferredSize());
+		pass 	= new SButton("Pass", SButton.CYAN, 120, 40);
+		swap 	= new SButton("Swap",  SButton.YELLOW, 120, 40);
+		resign 	= new SButton("Resign",  SButton.RED, 120, 40);
+		play	= new SButton("Play",  SButton.GREEN, 120, 40);
 		
-		this.add(northPanel, BorderLayout.NORTH);
+		JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		mainPanel.setBackground(new Color(50, 50, 50));
 		
-		//eastPanel: chat
-		eastPanel.setPreferredSize(new Dimension(250, 400));
-		eastPanel.setMaximumSize(eastPanel.getPreferredSize());
-		eastPanel.setMinimumSize(eastPanel.getPreferredSize());
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(4, 1, 0, 10));
+		buttonPanel.setOpaque(false);
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 30));
+			
+		JPanel handPanel = new JPanel();
+		handPanel.setLayout(new GridLayout(1, 7, 3, 3));
+		handPanel.setBackground(mainPanel.getBackground());
+		handPanel.setPreferredSize(new Dimension(7*40 + (7 * 6), 40));
+		for(int i = 0; i < 7; i++) {
+			Tile tile = new Tile(i, 0);
+			handPanel.add(tile);
+		}
 		
-		chatPanel = new ChatPanel();
-		eastPanel.add(chatPanel);
+		JPanel gamePanel = new JPanel();
+		gamePanel.setLayout(new GridLayout(15, 15, 3, 3));
+		gamePanel.setOpaque(false);
 		
-		this.add(eastPanel, BorderLayout.EAST);
+		for(int y = 0; y < 15; y++) {
+			for(int x = 0; x < 15; x++) {
+				Tile tile = new Tile(x, y);
+				gamePanel.add(tile);
+			}
+		}
 		
-		//southPanel: The stones you hold
-		southPanel.setPreferredSize(new Dimension(1000, 100));
-		southPanel.setMaximumSize(southPanel.getPreferredSize());
-		southPanel.setMinimumSize(southPanel.getPreferredSize());
+		buttonPanel.add(pass);
+		buttonPanel.add(swap);
+		buttonPanel.add(resign);
+		buttonPanel.add(play);		
 		
-		this.add(southPanel, BorderLayout.SOUTH);
+		mainPanel.add(buttonPanel);
+		mainPanel.add(gamePanel);
 		
-		//westPanel: This turns options
-		westPanel.setPreferredSize(new Dimension(250, 400));
-		westPanel.setMaximumSize(westPanel.getPreferredSize());
-		westPanel.setMinimumSize(westPanel.getPreferredSize());
-		westPanel.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		GridBagConstraints c = new GridBagConstraints();
 		
-		passButton = new JButton("Pass");
-		swapButton = new JButton("Swap");
-		resignButton = new JButton("Resign");
-		playButton = new JButton("Play");
+		JPanel totalPanel = new JPanel();
+		totalPanel.setLayout(new GridBagLayout());
+		totalPanel.setBackground(mainPanel.getBackground());
 		
-		westPanel.add(passButton);
-		westPanel.add(swapButton);
-		westPanel.add(resignButton);
-		westPanel.add(playButton);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.insets = new Insets(0, 10, 0, 10);
+		totalPanel.add(mainPanel, c);
+		c.gridy++;
+		totalPanel.add(handPanel, c);
+		c.gridx++;
+		c.gridy--;
+		totalPanel.add(chat, c);
 		
-		this.add(westPanel, BorderLayout.WEST);
-		
+		add(mp);
+		add(totalPanel);
 		
 	}
-	
 	
 }

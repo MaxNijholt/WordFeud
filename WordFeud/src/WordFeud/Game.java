@@ -14,6 +14,12 @@ public class Game {
 	 * cronstruct the game
 	 * -------------------------------------------------
 	 */
+	public Game(int gameID){
+		myField = new Field();
+		myPC = new PointCounter();
+		myWC = new WordChecker();
+	}
+	
 	public Game(){
 		myField = new Field();
 		myPC = new PointCounter();

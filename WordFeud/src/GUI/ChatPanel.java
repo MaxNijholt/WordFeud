@@ -1,43 +1,66 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JTextArea;
+import javax.swing.JPanel;
 
-public class ChatPanel extends Panel {
+import Utility.SButton;
+import Utility.STextArea;
 
-	private final int width = 200;
-	private final int height = 400;
-	
-	private final int pHeight = (height-(height/4)-40);
-	private final int tHeight = ((height/4));
-	
-	private final int areaWidth = (width-20);
-	
-	private JTextArea printArea;
-	private JTextArea typeArea;
+@SuppressWarnings("serial")
+public class ChatPanel extends JPanel implements ActionListener {
+
+	private STextArea 	printArea;
+	private STextArea 	typeArea;
+	private SButton		send;
 	
 	public ChatPanel(){
-	
-		printArea = new JTextArea();	
+		this.setLayout(new GridBagLayout());
+		this.setOpaque(false);
+		GridBagConstraints c = new GridBagConstraints();
+		
+		printArea = new STextArea(220, 350);	
 		printArea.setEditable(false);
-		printArea.setBounds(((width/2)-90), ((height/2)-190), areaWidth,pHeight);
-		printArea.setText("test132");
 		
-		typeArea= new JTextArea();
-		typeArea.setBounds(((width/2)-90), (pHeight + 30), areaWidth, tHeight);
+		typeArea= new STextArea(160, 30);
+		typeArea.setCustomRounded(true, false, true, false);
+		typeArea.addKeyListener(new KeyListener() {
+			public void keyPressed(KeyEvent e) {
+				 if(e.getKeyCode() == KeyEvent.VK_ENTER){
+					e.consume();
+					printArea.setText(printArea.getText() + "\n" + typeArea.getText());
+					typeArea.setText("");
+				 }
+			}
+			public void keyReleased(KeyEvent e) {}
+			public void keyTyped(KeyEvent e) {}
+		});
 		
+		send = new SButton("Send", SButton.GREEN, 60, 30);
+		send.setCustomRounded(false, true, false, true);
+		send.addActionListener(this);
 		
-		
-	this.setPreferredSize(new Dimension(width,height));
-	this.setBackground(Color.GRAY);	
-	this.setLayout(null);	
-	
-	this.add(printArea);
-	this.add(typeArea);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 2;
+		c.insets = new Insets(5, 0, 5, 0);
+		this.add(printArea, c);
+		c.gridy++;
+		c.gridwidth = 1;
+		this.add(typeArea, c);
+		c.gridx++;
+		this.add(send, c);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		printArea.setText(printArea.getText() + "\n" + typeArea.getText());
+		typeArea.setText("");
 	}
 	
 	

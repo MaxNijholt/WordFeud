@@ -8,12 +8,14 @@ import javax.imageio.ImageIO;
 public class ImageLoader {
 
 	public static BufferedImage BACKGROUND;
+	public static BufferedImage BACKGROUNDHD;
 	public static BufferedImage ICON;
 	
 	public void loadAllImages() {
 		try {
-			BACKGROUND 	= ImageIO.read(getClass().getResourceAsStream("/images/background.jpg"));
-			ICON 		= ImageIO.read(getClass().getResourceAsStream("/images/icon.png"));
+			BACKGROUND 			= ImageIO.read(getClass().getResourceAsStream("/images/background.jpg"));
+			BACKGROUNDHD		= ImageIO.read(getClass().getResourceAsStream("/images/background_hd.png"));
+			ICON 				= ImageIO.read(getClass().getResourceAsStream("/images/icon.png"));
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
