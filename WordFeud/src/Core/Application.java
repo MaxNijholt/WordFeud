@@ -3,14 +3,9 @@ package Core;
 import java.util.ArrayList;
 
 import AccountType.Account;
-import AccountType.Administrator;
-import AccountType.Moderator;
-import AccountType.Player;
 import GUI.GUI;
 import GUI.LoginPanel;
-import GUI.GamePanel;
 import GUI.PlayerPanel;
-import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
 import Utility.ImageLoader;
 import WordFeud.Competition;
@@ -35,7 +30,14 @@ public class Application {
 		DBCommunicator.getConnection();
 		loader = new ImageLoader();
 		loader.loadAllImages();
-		myGui = new GUI(this);		
+		myGui = new GUI(this);
+		//currentAccount = new Player("henk1");
+		
+		//addCompetition("test", "20140430", "test_competition");
+		//newPlayer("henk1", "wachtwoord");
+		//login("henk", "wachtwoord");
+		
+		
 	}
 	
 	
@@ -81,7 +83,7 @@ public class Application {
 	 * call the playgame method
 	 * -------------------------------------------------
 	 */
-	public void newGame(Player player2, boolean visibility){
+	public void newGame(Account player2, boolean visibility){
 		/*
 		 * WRITE TO DB
 		 */
@@ -89,14 +91,14 @@ public class Application {
 		/*
 		 * GET GAMEID FROM DB
 		 */
-		this.selectGame(0);
+		this.playGame("");
 	}
 	
 	/**
 	 * create a new game for a competition and write it to the db
 	 * -------------------------------------------------
 	 */
-	public void newCompetitionGame(Player player1, Player player2, Competition compo){
+	public void newCompetitionGame(Account player1, Account player2, Competition compo){
 		/*
 		 * WRITE TO DB
 		 */
@@ -121,16 +123,14 @@ public class Application {
 	 * switch to the gamePanel
 	 * -------------------------------------------------
 	 */
-	public void selectGame(int gameID){
-		Game newGame = new Game(gameID);
+	public void playGame(String gameID){
+		/*
+		 * GET GAME FROM DB
+		 */
+		Game newGame = new Game();
 		selectedGame = newGame;
-		myGui.switchPanel(new GamePanel(myGui));
+		myGui.switchPanel(null);
 	}
-	
-	public void spectateGame() {
-		myGui.switchPanel(new SpectatorPanel());
-	}
-	
 	
 	/**
 	 * tell game to lay a gamestone
@@ -171,7 +171,8 @@ public class Application {
 			myGui.switchPanel(null);
 		}
 	}
-
+	*/
+	
 	/**
 	 * get all the games that have finished (finished or resigned) and return their integers
 	 * @param activeType
@@ -183,7 +184,6 @@ public class Application {
 		if(resigned){
 			resign = "Resigned";
 		}
-
 		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = '" + resign + "'";
 		Boolean searching = true;
 		
@@ -212,7 +212,7 @@ public class Application {
 		String player = currentAccount.getUsername();
 		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing'";
 		Boolean searching = true;
-
+		
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
 
@@ -394,4 +394,5 @@ public class Application {
 		this.setCurrentAccount(null);
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
+	
 }

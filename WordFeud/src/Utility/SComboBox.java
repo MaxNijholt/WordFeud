@@ -24,11 +24,34 @@ public class SComboBox extends JPanel implements ActionListener {
 	private SButton 			arrow;
 	private JPopupMenu 			pop;
 	private ArrayList<SButton> 	items;
+	private boolean 			topLeftRounded, topRightRounded, bottomLeftRounded, bottomRightRounded;
 
 	/**
 	 * SComboBox constructor parameters: int width, int height, String[] items
 	 */
 	public SComboBox(int width, int height, String[] items) {
+		topLeftRounded		= true;
+		topRightRounded		= true;
+		bottomLeftRounded 	= true;
+		bottomRightRounded	= true;
+		init(width, height, items);
+	}
+	
+	/**
+	 * SComboBox constructor parameters: int width, int height, String[] items, boolean rounded
+	 */
+	public SComboBox(int width, int height, String[] items, boolean rounded) {
+		topLeftRounded		= rounded;
+		topRightRounded		= rounded;
+		bottomLeftRounded 	= rounded;
+		bottomRightRounded	= rounded;
+		init(width, height, items);
+	}
+	
+	/**
+	 * Private init method for the constructor
+	 */
+	private void init(int width, int height, String[] items) {
 		// Default Component stuff
 		setPreferredSize(new Dimension(width, height));
 		setBackground(new Color(255, 255, 255, 0));
@@ -38,7 +61,7 @@ public class SComboBox extends JPanel implements ActionListener {
 		pop = new JPopupMenu();
 		pop.setLayout(new GridLayout(0, 1));
 		pop.setOpaque(false);
-		
+	
 		///////////	UIManager ///////////
 		UIManager.put("PopupMenu.background", new Color(255, 255, 255, 0));
 		UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
@@ -54,7 +77,7 @@ public class SComboBox extends JPanel implements ActionListener {
 					name = new STextField(items[i], 180, 40);
 					name.setName(items[i]);
 					name.setEditable(false);
-					name.setCustomRounded(true, false, true, false);
+					name.setCustomRounded(topLeftRounded, false, bottomLeftRounded, false);
 					name.setForeground(new Color(100, 100, 100));
 					name.setOpaque(false);
 				}
@@ -66,7 +89,9 @@ public class SComboBox extends JPanel implements ActionListener {
 		arrow.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
 		arrow.setTextColor(Color.BLACK);
 		arrow.addActionListener(this);
-		arrow.setCustomRounded(false, true, false, true);
+		arrow.setCustomRounded(false, topRightRounded, false, bottomRightRounded);
+		
+		
 		
 		add(name, BorderLayout.CENTER);
 		add(arrow, BorderLayout.EAST);
@@ -117,5 +142,16 @@ public class SComboBox extends JPanel implements ActionListener {
 	
 	// Setters
 	public void setPlaceholder(String placeholder) {name.setPlaceholder(placeholder);}
+	
+	public void setTopLeftRounded(boolean rounded) 		{this.topLeftRounded = rounded;}
+	public void setTopRightRounded(boolean rounded) 	{this.topRightRounded = rounded;}
+	public void setBottomLeftRounded(boolean rounded) 	{this.bottomLeftRounded = rounded;}
+	public void setBottomRightRounded(boolean rounded) 	{this.bottomRightRounded = rounded;}
+	public void setCustomRounded(boolean topLeft, boolean topRight, boolean bottomLeft, boolean bottomRight) {
+		this.topLeftRounded 	= topLeft;
+		this.topRightRounded 	= topRight;
+		this.bottomLeftRounded 	= bottomLeft;
+		this.bottomRightRounded = bottomRight;
+	}
 	
 }
