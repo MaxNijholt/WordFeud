@@ -70,10 +70,6 @@ public class GUI extends JFrame{
 		app.login(username);
 	}
 	
-	public void selectGame(int gameID){
-		app.selectGame(gameID);
-	}
-	
 	public ArrayList<Integer> getFinishedGames(boolean resigned){
 		ArrayList<Integer> gameInts = app.getFinishedGames(resigned);
 		return gameInts;
@@ -117,7 +113,4 @@ public class GUI extends JFrame{
 		
 	}
 
-	public void spectateGame() {
-		app.spectateGame();
-	}
 }

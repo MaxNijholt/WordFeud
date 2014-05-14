@@ -29,7 +29,7 @@ public class Tile extends SLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
-		g2d.setColor(new Color(44, 47, 54));
+		g2d.setColor(new Color(90, 90, 90));
 		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 5, 5);
 	}
 	
