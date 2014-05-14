@@ -1,7 +1,6 @@
 package WordFeud;
 
-import GUI.GUI;
-import GUI.PlayerPanel;
+import GUI.*;
 import Utility.DBCommunicator;
 
 public class Login {
