@@ -3,7 +3,6 @@ package Core;
 import java.util.ArrayList;
 
 import AccountType.Account;
-import AccountType.Player;
 import GUI.CompetitionPanel;
 import GUI.GUI;
 import GUI.GamePanel;
@@ -38,18 +37,14 @@ public class Application {
 	}
 	
 	
-	/**
-	 * create a new competition and write it to the db
-	 * input endDate format yyyymmddHHMMSS
-	 * 
-	 */
+	/**create a new competition*/
 	public void addCompetition(String endDate, String description, int mini, int maxi){
 		selectedCompetition = new Competition(endDate, description, mini, maxi, currentAccount.getUsername());
 		myGui.switchPanel(new CompetitionPanel());
 	}	
 	
 	/**
-	 * write game to the db
+	 * let Game create a new game
 	 * call the playgame method
 	 */
 	public void newGame(String player2, boolean visibility){
@@ -60,22 +55,20 @@ public class Application {
 		else{
 			visible = "privé";
 		}
-		
+			
 		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
 		int newID = lastID + 1;
-		
+			
 		DBCommunicator.writeData("INSERT INTO spel (id, competitie_id, toestand_type, account_naam_uitdager, account_naam_tegenstander, moment_uitdaging, reaktie_type, zichtbaarheid_type, bord_naam, letterset_naam)"
 								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
-		selectGame(newID);
 	}
 	
 	/**
 	 * create the new game
 	 * switch to the gamePanel
-	 * -------------------------------------------------
 	 */
 	public void selectGame(int gameID){
-		Game newGame = new Game(gameID);
+		Game newGame = new Game(gameID,this);
 		selectedGame = newGame;
 		myGui.switchPanel(new GamePanel(myGui));
 	}
@@ -94,9 +87,7 @@ public class Application {
 	}
 	
 	/**
-	 * get a account from the db
-	 * check if it exists and the password is correct
-	 * create the new player and switch to the Playerpanel
+	 * create the new account
 	 */
 	public void login(String username){
 		currentAccount = new Account(username);
@@ -104,7 +95,7 @@ public class Application {
 	
 	/**
 	 * tell game to lay a gamestone
-	 * return the boolean from game
+	 * return the int from game
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		int retrievedPoints = selectedGame.layGameStone(gamestone, location);
@@ -241,15 +232,59 @@ public class Application {
 	 * @param gameID
 	 */
 	public void acceptGame(int gameID){
-		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', toestand_type = 'Playing' WHERE id = " + gameID);
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', moment_reaktie = CURRENT_TIMESTAMP(), toestand_type = 'Playing' WHERE id = " + gameID);
 		String opponent = this.getOpponentName(gameID);
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
 				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
+		
+		this.createGameLetters(gameID);
+		this.createGameHands(gameID);
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
 	
+	/**
+	 * add all the letters for the beginning of a game to the DB
+	 * @param gameID
+	 */
+	private void createGameLetters(int gameID){
+		int letterID = 1;
+		for(char letter = 'A'; letter <= 'Z'; letter++){
+			int amount = DBCommunicator.requestInt("SELECT aantal FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + letter + "'");
+			
+			for(int i = 0; i < amount; i++){
+				DBCommunicator.writeData("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES (" + letterID + ", " + gameID + ", 'EN', '" + letter + "')" );
+				letterID++;
+			}
+		}
+
+		DBCommunicator.writeData("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES (" + letterID + ", " + gameID + ", 'EN', '?')");
+		letterID++;
+		DBCommunicator.writeData("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES (" + letterID + ", " + gameID + ", 'EN', '?')");
+		
+		
+	}
+	
+	/**
+	 * add 7 random letters to the hands of each player
+	 * @param gameID
+	 */
+	private void createGameHands(int gameID){
+		for(int beurt = 1; beurt <= 2; beurt++){
+			int e = 0;
+			while(e < 7){
+				int letterID = (int) (Math.random() * 105);
+				System.out.println(letterID);
+				String character = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + gameID + " AND letter_id = " + letterID);
+				if(character != null){
+					DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES(" + gameID + ", " + letterID + ", " + beurt + ")");
+					e++;
+				}
+			}
+		}
+	}
+	
 	public void denyGame(int gameID){
-		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected' WHERE id = " + gameID);
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected', moment_reaktie = CURRENT_TIMESTAMP() WHERE id = " + gameID);
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
 	
