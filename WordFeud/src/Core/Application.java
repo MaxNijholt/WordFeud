@@ -3,9 +3,6 @@ package Core;
 import java.util.ArrayList;
 
 import AccountType.Account;
-import AccountType.Administrator;
-import AccountType.Moderator;
-import AccountType.Player;
 import GUI.GUI;
 import GUI.LoginPanel;
 import GUI.GamePanel;
@@ -81,7 +78,7 @@ public class Application {
 	 * call the playgame method
 	 * -------------------------------------------------
 	 */
-	public void newGame(Player player2, boolean visibility){
+	public void newGame(Account player2, boolean visibility){
 		/*
 		 * WRITE TO DB
 		 */
@@ -96,7 +93,7 @@ public class Application {
 	 * create a new game for a competition and write it to the db
 	 * -------------------------------------------------
 	 */
-	public void newCompetitionGame(Player player1, Player player2, Competition compo){
+	public void newCompetitionGame(Account player1, Account player2, Competition compo){
 		/*
 		 * WRITE TO DB
 		 */
@@ -112,7 +109,7 @@ public class Application {
 	 * create the new player and switch to the Playerpanel
 	 */
 	public void login(String username){
-		currentAccount = new Player(username);
+		currentAccount = new Account(username);
 	}
 	
 	/**
@@ -156,7 +153,7 @@ public class Application {
 	 * create a new account of that type
 	 * switch to his panel
 	 * -------------------------------------------------
-	 */
+	 *
 	public void switchRoll(String accountType){
 		if(accountType.equals("player")){
 			currentAccount = new Player("henk"); //henk is for testing
@@ -171,7 +168,8 @@ public class Application {
 			myGui.switchPanel(null);
 		}
 	}
-
+	*/
+	
 	/**
 	 * get all the games that have finished (finished or resigned) and return their integers
 	 * @param activeType
