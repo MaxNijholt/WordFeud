@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import WordFeud.GameStone;
+<<<<<<< .merge_file_a06160
 
 public class WordChecker {
 	HashMap<String, GameStone> field;
@@ -12,11 +13,19 @@ public class WordChecker {
 	private boolean check = false;
 	private ArrayList<String> coordinate = new ArrayList<>();
 	private ArrayList<String> theWords = new ArrayList<>();
+=======
+import WordFeud.Tile;
+
+public class WordChecker {
+	
+	private ArrayList<String> checkwords = new ArrayList<>();
+>>>>>>> .merge_file_a05028
 
 	/**
 	 * constructor no functions
 	 */
 	public WordChecker() {
+<<<<<<< .merge_file_a06160
 
 	}
 
@@ -71,6 +80,47 @@ public class WordChecker {
 	 */
 	private void wordChecker(ArrayList<String> wordsForCheck)
 	{
+=======
+		checkwords.add("ra");
+		checkwords.add("dasse");
+		checkwords.add("dassen");
+		checkwords.add("as");
+		checkwords.add("re");
+	}
+
+	/**
+	 * check with 3 checkers if a turn is valid(stone locations, connection,
+	 * created words)
+	 */
+	public ArrayList<String> checkWords(ArrayList<String> wordsForCheck,
+			HashMap<String, GameStone> playedMove,
+			HashMap<String, Tile> playBoard)
+	{
+		ArrayList<String> deniedWords = new ArrayList<String>();
+		if (coordinateChecker(playedMove)
+				&& connectionChecker(playedMove, playBoard))
+		{
+			if (wordChecker(wordsForCheck, playBoard).size() != 0)
+			{
+				deniedWords = wordChecker(wordsForCheck, playBoard);
+			}
+
+		}
+
+		return deniedWords;
+	}
+
+	/**
+	 * creates words out of coordinates and checks them in through the database
+	 */
+	private ArrayList<String> wordChecker(ArrayList<String> wordsTooCheck,
+			HashMap<String, Tile> playBoard)
+	{
+		ArrayList<String> deniedWords = new ArrayList<>();
+		ArrayList<String> theWords = new ArrayList<>();
+		HashMap<String, Tile> field = playBoard;
+		ArrayList<String> wordsForCheck = wordsTooCheck;
+>>>>>>> .merge_file_a05028
 		String word = "";
 		int x = 0;
 		int y = 0;
@@ -87,44 +137,98 @@ public class WordChecker {
 			{
 				x = Integer.parseInt(cordsSplit[0]);
 				y = Integer.parseInt(cordsSplit[1]);
+<<<<<<< .merge_file_a06160
 				word = word + field.get(x + "," + y).getLetter();
+=======
+				word = word + field.get(x + "," + y).getGameStone().getLetter();
+>>>>>>> .merge_file_a05028
 				while (t < (Integer.parseInt(cordsSplit2[1]) - Integer
 						.parseInt(cordsSplit[1])))
 				{
 					y++;
+<<<<<<< .merge_file_a06160
 					word = word + field.get(x + "," + y).getLetter();
+=======
+					word = word
+							+ field.get(x + "," + y).getGameStone().getLetter();
+>>>>>>> .merge_file_a05028
 
 					t++;
 
 				}
 				t = 0;
+<<<<<<< .merge_file_a06160
 				this.theWords.add(word);
 				// hier moet de controle met de database komen!(ook een stukje
 				// lager)
+=======
+				theWords.add(word);
+
+>>>>>>> .merge_file_a05028
 				word = "";
 			}
 			else
 			{
 				x = Integer.parseInt(cordsSplit[0]);
 				y = Integer.parseInt(cordsSplit[1]);
+<<<<<<< .merge_file_a06160
 				word = word + field.get(x + "," + y).getLetter();
+=======
+				word = word + field.get(x + "," + y).getGameStone().getLetter();
+>>>>>>> .merge_file_a05028
 				while (t < (Integer.parseInt(cordsSplit2[0]) - Integer
 						.parseInt(cordsSplit[0])))
 				{
 					x++;
+<<<<<<< .merge_file_a06160
 					word = word + field.get(x + "," + y).getLetter();
+=======
+					word = word
+							+ field.get(x + "," + y).getGameStone().getLetter();
+>>>>>>> .merge_file_a05028
 
 					t++;
 
 				}
 				t = 0;
+<<<<<<< .merge_file_a06160
 				this.theWords.add(word);
 				// hier moet de controle met de database komen!(ook een stukje
 				// hoger)
+=======
+				theWords.add(word);
+>>>>>>> .merge_file_a05028
 				word = "";
 			}
 
 		}
+<<<<<<< .merge_file_a06160
+=======
+		// hier moet de controle met de database komen
+		// in test fase
+		String wordsCheck = "";
+		String wordsCheckCheck = "";
+		for (String wordForCheck : theWords)
+		{
+			if (checkwords.contains(wordForCheck))
+			{
+				wordsCheck = wordsCheck + "1";
+			}
+			else
+			{
+				wordsCheck = wordsCheck + "0";
+				deniedWords.add(wordForCheck);
+			}
+
+		}
+		for (int i = 0; i < theWords.size(); i++)
+		{
+			wordsCheckCheck = wordsCheckCheck + 1;
+		}
+
+		// test loopt tot hier
+		return deniedWords;
+>>>>>>> .merge_file_a05028
 
 	}
 
@@ -133,7 +237,12 @@ public class WordChecker {
 	 */
 	private boolean coordinateChecker(HashMap<String, GameStone> playd)
 	{
+<<<<<<< .merge_file_a06160
 
+=======
+		ArrayList<String> coordinate = new ArrayList<>();
+		boolean check = false;
+>>>>>>> .merge_file_a05028
 		boolean checker = true;
 		boolean x = false;
 		boolean y = false;
@@ -188,6 +297,7 @@ public class WordChecker {
 	}
 
 	/**
+<<<<<<< .merge_file_a06160
 	 * checkes the letters and creates words of them, puts them in a list and
 	 * removes duplicates and unnecessary entry's
 	 */
@@ -334,20 +444,36 @@ public class WordChecker {
 	 */
 	private boolean connectionChecker(HashMap<String, GameStone> playd)
 	{
+=======
+	 * Checks if the letters do have a connections at all
+	 */
+	private boolean connectionChecker(HashMap<String, GameStone> playd,
+			HashMap<String, Tile> playBoard)
+	{
+		HashMap<String, Tile> field = playBoard;
+>>>>>>> .merge_file_a05028
 		boolean connections = false;
 		int x;
 		int y;
 
 		for (String myValue : playd.keySet())
 		{
+<<<<<<< .merge_file_a06160
 			boolean one = false;
 			boolean two = false;
 			boolean three = false;
 			boolean four = false;
+=======
+			boolean one = true;
+			boolean two = true;
+			boolean three = true;
+			boolean four = true;
+>>>>>>> .merge_file_a05028
 			String[] parts = myValue.split(",");
 			x = Integer.parseInt(parts[0]);
 			y = Integer.parseInt(parts[1]);
 			x++;
+<<<<<<< .merge_file_a06160
 			if (field.keySet().contains(x + "," + y)
 					&& !playd.keySet().contains(x + "," + y))
 			{
@@ -375,6 +501,35 @@ public class WordChecker {
 				four = true;
 			}
 			if (one || two || three || four)
+=======
+			if (field.get(x + "," + y).getGameStone() == null
+					&& !playd.keySet().contains(x + "," + y))
+			{
+				one = false;
+			}
+			x--;
+			x--;
+			if (field.get(x + "," + y).getGameStone() == null
+					&& !playd.keySet().contains(x + "," + y))
+			{
+				two = false;
+			}
+			x++;
+			y--;
+			if (field.get(x + "," + y).getGameStone() == null
+					&& !playd.keySet().contains(x + "," + y))
+			{
+				three = false;
+			}
+			y++;
+			y++;
+			if (field.get(x + "," + y).getGameStone() == null
+					&& !playd.keySet().contains(x + "," + y))
+			{
+				four = false;
+			}
+			if (!one || !two || !three || !four)
+>>>>>>> .merge_file_a05028
 			{
 				connections = true;
 			}

@@ -12,8 +12,11 @@ import Utility.DBCommunicator;
 public class Moderator{
 	private ArrayList<String> pendingWords;
 
+<<<<<<< .merge_file_a04628
 
 
+=======
+>>>>>>> .merge_file_a02608
 	/**
 	 * Gets unapproved words out of a list from the Database
 	 * 

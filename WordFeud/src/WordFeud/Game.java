@@ -1,7 +1,8 @@
 package WordFeud;
 
+import Core.Application;
+import Utility.DBCommunicator;
 import Utility.PointCounter;
-
 import Utility.WordChecker;
 
 public class Game {
@@ -9,16 +10,21 @@ public class Game {
 	private Field myField;
 	private PointCounter myPC;
 	private WordChecker myWC;
+	private Application app;
+	private int id;
+	private String opponent;
 	
 	/**
 	 * cronstruct the game
 	 * -------------------------------------------------
 	 */
-	public Game(int gameID){
+	public Game(int gameID, Application app){
+		this.app = app;
 		myField = new Field();
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
 	}
+<<<<<<< .merge_file_a02092
 	
 	public Game(){
 		myField = new Field();
@@ -26,17 +32,20 @@ public class Game {
 		myWC = new WordChecker();
 	}
 	
+=======
+		
+>>>>>>> .merge_file_a04512
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
-	 * -------------------------------------------------
+	 * -------------------------------------------------tj vragen
 	 * @param gamestone
 	 * @param location
 	 * @return
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-		int points = 0;//= myPC.counterPointsTurn(myField.getNewWords());
+		int points = myPC.counterPointsTurn(myField.getNewWords());
 		
 		return points;
 	}
@@ -44,15 +53,17 @@ public class Game {
 	/**
 	 * get the new words from the field
 	 * let the wordchecker check if it is correct
-	 * -------------------------------------------------
+	 * -------------------------------------------------tj vragen
 	 */
-	public void playWord(){
+	public String[] playWord(){
+		myField.getNewWords();
 		
+		return null;
 	}
 	
 	/**
 	 * check if the game has ended
-	 * -------------------------------------------------
+	 * -------------------------------------------------rest vragen
 	 * @return
 	 */
 	public boolean checkEndGame(){
@@ -97,27 +108,17 @@ public class Game {
 	}
 	
 	/**
-	 * set the visibility of a game
-	 * tell the db
-	 * -------------------------------------------------
-	 * @param bool
-	 */
-	public void setVisibility(Boolean bool){
-		/*
-		 * tell the DB the new visibility
-		 */
-	}
-	
-	/**
 	 * get the visibility from the db and return boolean
-	 * -------------------------------------------------
 	 * @return
 	 */
 	public boolean getVisibility(){
-		/*
-		 * get the visibility from the DB
-		 */
-		return false;
+		String visibility = DBCommunicator.requestData( "SELECT zichtbaarheid_type FROM spel WHERE id = " + id );
+		if(visibility.equals("openbar")){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**
@@ -130,5 +131,13 @@ public class Game {
 
 	public void setMyField(Field myField) {
 		this.myField = myField;
+	}
+
+	public int getID() {
+		return id;
+	}
+	
+	public String getOpponent(){
+		return opponent;
 	}
 }

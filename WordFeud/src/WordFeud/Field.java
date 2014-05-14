@@ -6,6 +6,7 @@ public class Field {
 
 	private HashMap<String, GameStone> newWords;
 	private HashMap<String, Tile> field;
+<<<<<<< .merge_file_a06472
 	
 	public Field(){
 		newWords = new HashMap<String, GameStone>();
@@ -14,10 +15,20 @@ public class Field {
 		//initialiseer field
 		for(int i = 1; i < 16; i++){
 			for(int j = 1; j < 16; j++){
+=======
+
+	public Field() {
+		newWords = new HashMap<String, GameStone>();
+		field = new HashMap<String, Tile>();
+
+		for (int i = 1; i < 16; i++) {
+			for (int j = 1; j < 16; j++) {
+>>>>>>> .merge_file_a06888
 				field.put(i + "," + j, new Tile(i, j));
 			}
 		}
 	}
+<<<<<<< .merge_file_a06472
 	
 	public void layGameStone(GameStone gamestone, String location){
 		for(int i = 1; i < 16; i++){
@@ -72,4 +83,51 @@ public class Field {
 	}
 	
 	
+=======
+
+	public void layGameStone(GameStone gamestone, String location) {
+		for (int i = 1; i < 16; i++) {
+			for (int j = 1; j < 16; j++) {
+				if (location.equals(i + "," + j)) {
+					if (field.get(location).getGameStone() == null) {
+						field.get(location).setGameStone(gamestone);
+						newWords.put(location, gamestone);
+						break;
+					}
+				}
+			}
+		}
+
+	}
+
+	public void removeGameStone(String location) {
+		for (int i = 1; i < 16; i++) {
+			for (int j = 1; j < 16; j++) {
+				if (field.get(location).getGameStone() != null) {
+					field.get(location).setGameStone(null);
+					newWords.remove(location);
+
+					break;
+				}
+			}
+		}
+	}
+
+	public HashMap<String, GameStone> getNewWords() {
+
+		return newWords;
+
+	}
+
+	public HashMap<String, Tile> getTiles() {
+
+		return field;
+
+	}
+
+	public void clearNewWords() {
+		newWords.clear();
+	}
+
+>>>>>>> .merge_file_a06888
 }

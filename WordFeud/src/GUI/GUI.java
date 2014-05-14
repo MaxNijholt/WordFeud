@@ -23,7 +23,7 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new GamePanel(this));
+		this.setContentPane(new LoginPanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -68,6 +68,10 @@ public class GUI extends JFrame{
 	
 	public void login(String username) {
 		app.login(username);
+	}
+	
+	public void selectGame(int gameID){
+		app.selectGame(gameID);
 	}
 	
 	public ArrayList<Integer> getFinishedGames(boolean resigned){
@@ -125,4 +129,13 @@ public class GUI extends JFrame{
 		app.selectGame(gameID);
 	}
 
+	public void spectateGame() {
+		app.spectateGame();
+	}
+
+	public Application getApplication()
+	{
+		// TODO Auto-generated method stub
+		return app;
+	}
 }

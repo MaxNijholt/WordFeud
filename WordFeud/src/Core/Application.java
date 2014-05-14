@@ -3,7 +3,11 @@ package Core;
 import java.util.ArrayList;
 
 import AccountType.Account;
+<<<<<<< .merge_file_a05080
 import AccountType.Player;
+=======
+import GUI.CompetitionPanel;
+>>>>>>> .merge_file_a00936
 import GUI.GUI;
 import GUI.GamePanel;
 import GUI.LoginPanel;
@@ -34,83 +38,55 @@ public class Application {
 		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
-		//currentAccount = new Player("henk1");
-		
-		//addCompetition("test", "20140430", "test_competition");
-		//newPlayer("henk1", "wachtwoord");
-		//login("henk", "wachtwoord");
-		
-		
 	}
 	
 	
-	/**
-	 * create a new competition and write it to the db
-	 * input endDate format yyyymmdd
-	 * 
-	 */
-	public void addCompetition(String compName, String endDate, String description){
-		
-		int lastID = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
-		int newID = lastID + 1;
-		
-		
-		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "');");
-
-		Competition newComp = new Competition(newID);
-		selectedCompetition = newComp;	
-		
-	}
-	
+	/**create a new competition*/
+	public void addCompetition(String endDate, String description, int mini, int maxi){
+		selectedCompetition = new Competition(endDate, description, mini, maxi, currentAccount.getUsername());
+		myGui.switchPanel(new CompetitionPanel());
+	}	
 	
 	/**
-	 * write player to the db
-	 * call the login method
+	 * let Game create a new game
+	 * call the playgame method
 	 */
-	public boolean newPlayer(String username, String password){
-		
-		String getName = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
-		if(getName == null){
-			DBCommunicator.writeData("INSERT INTO account (naam, wachtwoord) VALUES('" + username + "', '" + password + "')");
-			this.login(username);
-			return true;
+	public void newGame(String player2, boolean visibility){
+		String visible;
+		if(visibility){
+			visible = "openbaar";
 		}
 		else{
-			System.err.println("username already exists");
-			return false;
+			visible = "privé";
 		}
+			
+		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
+		int newID = lastID + 1;
+			
+		DBCommunicator.writeData("INSERT INTO spel (id, competitie_id, toestand_type, account_naam_uitdager, account_naam_tegenstander, moment_uitdaging, reaktie_type, zichtbaarheid_type, bord_naam, letterset_naam)"
+								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
 	}
 	
 	/**
-	 * write game to the db
-	 * call the playgame method
-	 * -------------------------------------------------
+	 * create the new game
+	 * switch to the gamePanel
 	 */
-	public void newGame(Player player2, boolean visibility){
-		/*
-		 * WRITE TO DB
-		 */
-		
-		/*
-		 * GET GAMEID FROM DB
-		 */
-		this.playGame("");
-	}
-	
-	/**
-	 * create a new game for a competition and write it to the db
-	 * -------------------------------------------------
-	 */
-	public void newCompetitionGame(Player player1, Player player2, Competition compo){
-		/*
-		 * WRITE TO DB
-		 */
-		Game newGame = new Game();
+	public void selectGame(int gameID){
+		Game newGame = new Game(gameID,this);
 		selectedGame = newGame;
-		
-		myGui.switchPanel(null);
+		myGui.switchPanel(new GamePanel(myGui));
 	}
 	
+	/**
+	 * create the new competition
+	 * switch to the competitionpanel
+	 */
+	public void selectCompetition(int compID){
+		selectedCompetition = new Competition(compID);
+		myGui.switchPanel(new CompetitionPanel());
+	}
+	
+<<<<<<< .merge_file_a05080
 	/**
 	 * get a account from the db
 	 * check if it exists and the password is correct
@@ -118,21 +94,17 @@ public class Application {
 	 */
 	public void login(String username){
 		currentAccount = new Account(username);
+=======
+	public void spectateGame() {
+		myGui.switchPanel(new SpectatorPanel());
+>>>>>>> .merge_file_a00936
 	}
 	
 	/**
-	 * get game from db
-	 * create the new game
-	 * switch to the gamePanel
-	 * -------------------------------------------------
+	 * create the new account
 	 */
-	public void playGame(String gameID){
-		/*
-		 * GET GAME FROM DB
-		 */
-		Game newGame = new Game();
-		selectedGame = newGame;
-		myGui.switchPanel(null);
+	public void login(String username){
+		currentAccount = new Account(username);
 	}
 	
 	public void selectGame(int gameID) {
@@ -147,7 +119,7 @@ public class Application {
 	
 	/**
 	 * tell game to lay a gamestone
-	 * return the boolean from game
+	 * return the int from game
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		int retrievedPoints = selectedGame.layGameStone(gamestone, location);
@@ -166,6 +138,7 @@ public class Application {
 	}
 	
 	/**
+<<<<<<< .merge_file_a05080
 	 * create a new account of that type
 	 * switch to his panel
 	 * -------------------------------------------------
@@ -186,6 +159,8 @@ public class Application {
 	}
 
 	/**
+=======
+>>>>>>> .merge_file_a00936
 	 * get all the games that have finished (finished or resigned) and return their integers
 	 * @param activeType
 	 */
@@ -304,15 +279,59 @@ public class Application {
 	 * @param gameID
 	 */
 	public void acceptGame(int gameID){
-		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', toestand_type = 'Playing' WHERE id = " + gameID);
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', moment_reaktie = CURRENT_TIMESTAMP(), toestand_type = 'Playing' WHERE id = " + gameID);
 		String opponent = this.getOpponentName(gameID);
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
 				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
+		
+		this.createGameLetters(gameID);
+		this.createGameHands(gameID);
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
 	
+	/**
+	 * add all the letters for the beginning of a game to the DB
+	 * @param gameID
+	 */
+	private void createGameLetters(int gameID){
+		int letterID = 1;
+		for(char letter = 'A'; letter <= 'Z'; letter++){
+			int amount = DBCommunicator.requestInt("SELECT aantal FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + letter + "'");
+			
+			for(int i = 0; i < amount; i++){
+				DBCommunicator.writeData("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES (" + letterID + ", " + gameID + ", 'EN', '" + letter + "')" );
+				letterID++;
+			}
+		}
+
+		DBCommunicator.writeData("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES (" + letterID + ", " + gameID + ", 'EN', '?')");
+		letterID++;
+		DBCommunicator.writeData("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES (" + letterID + ", " + gameID + ", 'EN', '?')");
+		
+		
+	}
+	
+	/**
+	 * add 7 random letters to the hands of each player
+	 * @param gameID
+	 */
+	private void createGameHands(int gameID){
+		for(int beurt = 1; beurt <= 2; beurt++){
+			int e = 0;
+			while(e < 7){
+				int letterID = (int) (Math.random() * 105);
+				System.out.println(letterID);
+				String character = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + gameID + " AND letter_id = " + letterID);
+				if(character != null){
+					DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES(" + gameID + ", " + letterID + ", " + beurt + ")");
+					e++;
+				}
+			}
+		}
+	}
+	
 	public void denyGame(int gameID){
-		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected' WHERE id = " + gameID);
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected', moment_reaktie = CURRENT_TIMESTAMP() WHERE id = " + gameID);
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
 	
@@ -406,5 +425,4 @@ public class Application {
 		this.setCurrentAccount(null);
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
-	
 }
