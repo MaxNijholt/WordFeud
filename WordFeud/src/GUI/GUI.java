@@ -23,7 +23,7 @@ public class GUI extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle(TITLE);
-		this.setContentPane(new GameCreatePanel(this));
+		this.setContentPane(new GamePanel(this));
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -107,4 +107,10 @@ public class GUI extends JFrame{
 		int turnScore = app.getLastTurnScore(gameID);
 		return turnScore;
 	}
+
+	public void logout() {
+		app.logout();
+		
+	}
+
 }

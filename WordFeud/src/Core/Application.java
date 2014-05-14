@@ -7,6 +7,7 @@ import AccountType.Administrator;
 import AccountType.Moderator;
 import AccountType.Player;
 import GUI.GUI;
+import GUI.LoginPanel;
 import GUI.PlayerPanel;
 import Utility.DBCommunicator;
 import Utility.ImageLoader;
@@ -388,6 +389,12 @@ public class Application {
 
 	public void setCurrentAccount(Account currentAccount) {
 		this.currentAccount = currentAccount;
+	}
+
+
+	public void logout() {
+		this.setCurrentAccount(null);
+		myGui.switchPanel(new LoginPanel(myGui));
 	}
 	
 }

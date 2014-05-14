@@ -31,12 +31,14 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 	private SComboBox 	gameBox, layoutBox, challengeBox;
 	private SButton		create, cancel, random;
 	private GUI 		gui;
+	private MenuPanel	mp;
 	
 	public GameCreatePanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.gui = gui;
+		this.mp = new MenuPanel(gui);
 		
 		title			= new SLabel("New game", SLabel.LEFT, new Font("Arial", Font.PLAIN, 50));
 		game 			= new SLabel("Private game", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 340, 20);
@@ -94,7 +96,7 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 		buttonPanel.add(sideBySidePanel, c);
 		
 		JPanel titlePanel = new JPanel();
-		titlePanel.setBackground(new Color(0, 0, 0, 100));
+		titlePanel.setBackground(getBackground());
 		titlePanel.setLayout(new BorderLayout());
 		titlePanel.add(title, BorderLayout.WEST);
 		titlePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -105,6 +107,7 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 		mainPanel.add(titlePanel, BorderLayout.NORTH);
 		mainPanel.add(buttonPanel, BorderLayout.CENTER);
 		
+		this.add(mp);
 		this.add(mainPanel);
 	}
 
