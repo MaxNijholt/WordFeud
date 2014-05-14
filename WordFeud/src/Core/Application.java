@@ -3,9 +3,13 @@ package Core;
 import java.util.ArrayList;
 
 import AccountType.Account;
+import AccountType.Player;
+import GUI.CompetitionPanel;
 import GUI.GUI;
+import GUI.GamePanel;
 import GUI.LoginPanel;
 import GUI.PlayerPanel;
+import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
 import Utility.ImageLoader;
 import WordFeud.Competition;
@@ -31,81 +35,62 @@ public class Application {
 		loader = new ImageLoader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
-		//currentAccount = new Player("henk1");
-		
-		//addCompetition("test", "20140430", "test_competition");
-		//newPlayer("henk1", "wachtwoord");
-		//login("henk", "wachtwoord");
-		
-		
 	}
 	
 	
 	/**
 	 * create a new competition and write it to the db
-	 * input endDate format yyyymmdd
+	 * input endDate format yyyymmddHHMMSS
 	 * 
 	 */
-	public void addCompetition(String compName, String endDate, String description){
-		
-		int lastID = DBCommunicator.requestInt("SELECT id FROM competitie ORDER BY id DESC");
-		int newID = lastID + 1;
-		
-		
-		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving) VALUES(" + newID + ", '" + currentAccount.getUsername() +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "');");
-
-		Competition newComp = new Competition(newID);
-		selectedCompetition = newComp;	
-		
-	}
-	
-	
-	/**
-	 * write player to the db
-	 * call the login method
-	 */
-	public boolean newPlayer(String username, String password){
-		
-		String getName = DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '"+ username + "'");
-		if(getName == null){
-			DBCommunicator.writeData("INSERT INTO account (naam, wachtwoord) VALUES('" + username + "', '" + password + "')");
-			this.login(username);
-			return true;
-		}
-		else{
-			System.err.println("username already exists");
-			return false;
-		}
-	}
+	public void addCompetition(String endDate, String description, int mini, int maxi){
+		selectedCompetition = new Competition(endDate, description, mini, maxi, currentAccount.getUsername());
+		myGui.switchPanel(new CompetitionPanel());
+	}	
 	
 	/**
 	 * write game to the db
 	 * call the playgame method
-	 * -------------------------------------------------
 	 */
-	public void newGame(Account player2, boolean visibility){
-		/*
-		 * WRITE TO DB
-		 */
+	public void newGame(String player2, boolean visibility){
+		String visible;
+		if(visibility){
+			visible = "openbaar";
+		}
+		else{
+			visible = "privé";
+		}
 		
-		/*
-		 * GET GAMEID FROM DB
-		 */
-		this.playGame("");
+		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
+		int newID = lastID + 1;
+		
+		DBCommunicator.writeData("INSERT INTO spel (id, competitie_id, toestand_type, account_naam_uitdager, account_naam_tegenstander, moment_uitdaging, reaktie_type, zichtbaarheid_type, bord_naam, letterset_naam)"
+								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
+		selectGame(newID);
 	}
 	
 	/**
-	 * create a new game for a competition and write it to the db
+	 * create the new game
+	 * switch to the gamePanel
 	 * -------------------------------------------------
 	 */
-	public void newCompetitionGame(Account player1, Account player2, Competition compo){
-		/*
-		 * WRITE TO DB
-		 */
-		Game newGame = new Game();
+	public void selectGame(int gameID){
+		Game newGame = new Game(gameID);
 		selectedGame = newGame;
-		
-		myGui.switchPanel(null);
+		myGui.switchPanel(new GamePanel(myGui));
+	}
+	
+	/**
+	 * create the new competition
+	 * switch to the competitionpanel
+	 */
+	public void selectCompetition(int compID){
+		selectedCompetition = new Competition(compID);
+		myGui.switchPanel(new CompetitionPanel());
+	}
+	
+	public void spectateGame() {
+		myGui.switchPanel(new SpectatorPanel());
 	}
 	
 	/**
@@ -115,21 +100,6 @@ public class Application {
 	 */
 	public void login(String username){
 		currentAccount = new Account(username);
-	}
-	
-	/**
-	 * get game from db
-	 * create the new game
-	 * switch to the gamePanel
-	 * -------------------------------------------------
-	 */
-	public void playGame(String gameID){
-		/*
-		 * GET GAME FROM DB
-		 */
-		Game newGame = new Game();
-		selectedGame = newGame;
-		myGui.switchPanel(null);
 	}
 	
 	/**
@@ -151,27 +121,6 @@ public class Application {
 		 */
 		return false;
 	}
-	
-	/**
-	 * create a new account of that type
-	 * switch to his panel
-	 * -------------------------------------------------
-	 *
-	public void switchRoll(String accountType){
-		if(accountType.equals("player")){
-			currentAccount = new Player("henk"); //henk is for testing
-			myGui.switchPanel(null);
-		}
-		else if(accountType.equals("moderator")){
-			currentAccount = new Moderator(null);
-			myGui.switchPanel(null);
-		}
-		else if(accountType.equals("administrator")){
-			currentAccount = new Administrator(null);
-			myGui.switchPanel(null);
-		}
-	}
-	*/
 	
 	/**
 	 * get all the games that have finished (finished or resigned) and return their integers
@@ -394,18 +343,4 @@ public class Application {
 		this.setCurrentAccount(null);
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
-
-
-	public void spectateGame() {
-		// TODO
-		// Stijn?
-	}
-
-
-	public void selectGame(int gameID) {
-		// TODO 
-		// Stijn?
-		
-	}
-	
 }
