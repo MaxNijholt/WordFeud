@@ -112,7 +112,7 @@ public class Application {
 	 * create the new player and switch to the Playerpanel
 	 */
 	public void login(String username){
-		currentAccount = new Player(username);
+		currentAccount = new Account(username);
 	}
 	
 	/**
@@ -156,7 +156,7 @@ public class Application {
 	 * create a new account of that type
 	 * switch to his panel
 	 * -------------------------------------------------
-	 */
+	 *
 	public void switchRoll(String accountType){
 		if(accountType.equals("player")){
 			currentAccount = new Player("henk"); //henk is for testing
