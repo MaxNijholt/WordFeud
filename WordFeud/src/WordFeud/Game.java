@@ -21,10 +21,9 @@ public class Game {
 	public Game(int gameID, Application app){
 		this.app = app;
 		myField = new Field();
-		myPC = new PointCounter(myField);
+		myPC = new PointCounter();
 		myWC = new WordChecker();
 	}
-		
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points

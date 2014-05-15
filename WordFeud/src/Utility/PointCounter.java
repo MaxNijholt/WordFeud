@@ -308,4 +308,9 @@ public class PointCounter {
 
 	}
 
+	public int counterPointsTurn(HashMap<String, GameStone> newWords) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

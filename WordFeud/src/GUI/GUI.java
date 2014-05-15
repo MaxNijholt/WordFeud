@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import AccountType.Account;
 import Core.Application;
-import Utility.ImageLoader;
+import Utility.Loader;
 import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
@@ -27,7 +28,7 @@ public class GUI extends JFrame{
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-		this.setIconImage(ImageLoader.ICON);
+		this.setIconImage(Loader.ICON);
 	}
 	
 	public void playWord(){
@@ -64,14 +65,6 @@ public class GUI extends JFrame{
 	
 	public void swapGameStones(){
 		
-	}
-	
-	public void login(String username) {
-		app.login(username);
-	}
-	
-	public void selectGame(int gameID){
-		app.selectGame(gameID);
 	}
 	
 	public ArrayList<Integer> getFinishedGames(boolean resigned){
@@ -116,6 +109,10 @@ public class GUI extends JFrame{
 		app.logout();
 		
 	}
+	
+	public void selectGame(int gameID) {
+		app.selectGame(gameID);
+	}
 
 	public void spectateGame() {
 		app.spectateGame();
@@ -125,5 +122,10 @@ public class GUI extends JFrame{
 	{
 		// TODO Auto-generated method stub
 		return app;
+	}
+
+	public void login(Account username) {
+		app.login(username);
+		
 	}
 }

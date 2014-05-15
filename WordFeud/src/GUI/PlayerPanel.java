@@ -23,13 +23,15 @@ import Utility.STextField;
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel implements ActionListener{
 
+	private STextField searchText;
+	private SButton searchButton;
+	private JPanel searchPanel;
 	/*private STextField searchText;
 	private SButton searchButton;
 	private JPanel searchPanel;*/
 	private JScrollPane scrollPane;
 	private JPanel gameContent;
 	private GUI gui;
-
 
 	public PlayerPanel(GUI gui){
 		this.gui = gui;
@@ -67,8 +69,8 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		this.add(scrollPane);
 
+		
 		ArrayList<Integer> gameInts;
-
 		//currentAccounts new requested games
 		gameInts = gui.getRequestedGames(false, false);
 		if(gameInts.size() != 0){
@@ -79,24 +81,14 @@ public class PlayerPanel extends JPanel implements ActionListener{
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
-
+		
 		gameContent.add(addLabel("Playing",0));
 		gameContent.add(Box.createRigidArea(new Dimension(500,10)));
-
+				
 		//games that are still playing
 		gameInts = gui.getPlayingGames(true);
 		if(gameInts.size() != 0){
 			gameContent.add(addLabel("Your Turn",1));
-			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
-			for(int e : gameInts){
-				gameContent.add(paintGame(e, "Playing"));
-				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
-			}
-		}
-
-		gameInts = gui.getPlayingGames(false);
-		if(gameInts.size() != 0){
-			gameContent.add(addLabel("Opponents turn",1));
 			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : gameInts){
 				gameContent.add(paintGame(e, "Playing"));
@@ -127,10 +119,11 @@ public class PlayerPanel extends JPanel implements ActionListener{
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
-
+	
 		gameContent.add(addLabel("Requested",0));
 		gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 		//games that currentPlayer requested	
+		
 
 		gameInts = gui.getRequestedGames(true, false);
 		if(gameInts.size() != 0){
@@ -142,19 +135,9 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			}
 		}
 
-		gameInts = gui.getRequestedGames(true, true);
-		if(gameInts.size() != 0){
-			gameContent.add(addLabel("Denied", 1));
-			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
-			for(int e : gameInts){
-				gameContent.add(paintGame(e, "Denied"));
-				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
-			}
-		}
+		
 		gui.setLoadingCursor(false);
 	}
-
-
 	/**
 	 * creates a label and returns it in a JPanel to be added
 	 * @param labelText
@@ -163,7 +146,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 	 */
 	private JPanel addLabel(String labelText, int type){
 		JPanel panel = new JPanel();
-
 		if (type == 0){
 			panel.setMinimumSize(new Dimension(500,35));
 			panel.setPreferredSize(new Dimension(500,35));
@@ -171,7 +153,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			panel.setBackground(new Color(124,124,124));
 			SLabel label = new SLabel(labelText, SLabel.CENTER, new Font("Arial", Font.BOLD, 25));
 			panel.add(label);
-
 		}
 		if (type == 1){
 			panel.setMinimumSize(new Dimension(400,30));
@@ -179,13 +160,10 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			panel.setMaximumSize(new Dimension(400,30));
 			panel.setBackground(new Color(124,124,124));
 			SLabel label = new SLabel(labelText, SLabel.CENTER, new Font("Arial", Font.BOLD, 20));
-			panel.add(label);
-
+			panel.add(label);	
 		}
-
 		return panel;
 	}
-
 	/**
 	 * create a view for a game and return it in a JPanel to be added
 	 * @param gameID
@@ -208,18 +186,18 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			SButton deny 	= new SButton("deny", SButton.GREY, 220, 40);
 			JPanel opponent = new JPanel();
 			JPanel play 	= new JPanel();
-
+			
 			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			play.add(new SLabel("wants to play a game with you", SLabel.CENTER, new Font("Arial", Font.PLAIN, 20)));
-
+			
 			opponent.setMinimumSize(new Dimension(200,30));
 			play.setMinimumSize(new Dimension(300, 30));
 			accept.setMinimumSize(accept.getPreferredSize());
 			deny.setMinimumSize(deny.getPreferredSize());
-
+			
 			opponent.setBackground(panel.getBackground());
 			play.setBackground(panel.getBackground());
-
+			
 			c.gridx = 0;
 			c.gridy = 0;
 			c.insets = new Insets(5,15,0,0);
@@ -231,7 +209,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			panel.add(accept, c);
 			c.gridy++;
 			panel.add(deny, c);
-
 			accept.addActionListener(new ActionListener(){
 
 				@Override
@@ -239,7 +216,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 					gui.acceptGame(gameID);
 				}
 			});
-
 			deny.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -247,12 +223,21 @@ public class PlayerPanel extends JPanel implements ActionListener{
 				}
 			});
 		}
-
 		//for a game that is playing. option to select
 		else if(gameType.equals("Playing")){
 			JPanel opponent 	= new JPanel();
 			JPanel lastTurn 	= new JPanel();
 			SButton select 		= new SButton("Select", SButton.GREY, 220, 40);
+			
+			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
+			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
+			
+			opponent.setMinimumSize(new Dimension(200,30));
+			lastTurn.setMinimumSize(new Dimension(200,30));
+			select.setMinimumSize(select.getPreferredSize());
+			
+			opponent.setBackground(panel.getBackground());
+			lastTurn.setBackground(panel.getBackground());
 
 			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
@@ -283,7 +268,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 				}
 			});
 		}
-
 		//for a game that has finished. option to watch/spectate
 		else if(gameType.equals("Finished")){
 			JPanel opponent		= new JPanel();
@@ -319,7 +303,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 				}
 			});
 		}
-
 		//for a game that has been requested. no options
 		else if(gameType.equals("Denied") || gameType.equals("Waiting")){
 			JPanel opponent 	= new JPanel();
@@ -340,7 +323,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			c.gridy++;
 			panel.add(type, c);
 		}
-
 		return panel;
 	}
 
@@ -350,7 +332,4 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
-
-
-
 }
