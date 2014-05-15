@@ -14,7 +14,6 @@ import WordFeud.Tile;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {
 
-	@SuppressWarnings("unused")
 	private GUI gui;
 	private SButton pass, swap, resign, play;
 	private ChatPanel chat;

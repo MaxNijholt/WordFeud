@@ -44,6 +44,7 @@ public class SettingsPanel extends JPanel{
 		this.passwordControle 	= new SPasswordField("passwordc");
 		this.password			= new SLabel("New password:", 0);
 		this.username			= new SLabel("New username:", 0);
+
 		this.userfield			= new STextField(user.getUsername());
 		this.save				= new SButton("Save", SButton.GREY);
 

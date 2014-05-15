@@ -39,11 +39,11 @@ public class DBCommunicator {
 	 * This will return the first record in the Database.
 	 */
 	public static String requestData(String query) {
-		Statement	stm;
-		ResultSet 	res;
-		String		result = null;
+		PreparedStatement	stm;
+		ResultSet 			res;
+		String				result = null;
 		try {
-			stm = con.createStatement();
+			stm = con.prepareStatement(query);
 			res = stm.executeQuery(query + " limit 1;");
 
 			while(res.next()) {

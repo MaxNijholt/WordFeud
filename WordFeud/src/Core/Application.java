@@ -10,7 +10,7 @@ import GUI.LoginPanel;
 import GUI.PlayerPanel;
 import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
-import Utility.ImageLoader;
+import Utility.Loader;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
@@ -22,7 +22,7 @@ public class Application {
 	private Competition selectedCompetition;
 	private Account currentAccount;
 	private GUI myGui;
-	private ImageLoader loader;
+	private Loader loader;
 
 
 	/**
@@ -31,7 +31,7 @@ public class Application {
 	 */
 	public Application(){
 		DBCommunicator.getConnection();
-		loader = new ImageLoader();
+		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
 	}
@@ -53,7 +53,7 @@ public class Application {
 			visible = "openbaar";
 		}
 		else{
-			visible = "privé";
+			visible = "privï¿½";
 		}
 			
 		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
@@ -63,16 +63,7 @@ public class Application {
 								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
 	}
 	
-	/**
-	 * create the new game
-	 * switch to the gamePanel
-	 */
-	public void selectGame(int gameID){
-		Game newGame = new Game(gameID,this);
-		selectedGame = newGame;
-		myGui.switchPanel(new GamePanel(myGui));
-	}
-	
+
 	/**
 	 * create the new competition
 	 * switch to the competitionpanel
@@ -81,16 +72,22 @@ public class Application {
 		selectedCompetition = new Competition(compID);
 		myGui.switchPanel(new CompetitionPanel());
 	}
-	
-	public void spectateGame() {
-		myGui.switchPanel(new SpectatorPanel());
-	}
-	
+
 	/**
 	 * create the new account
 	 */
-	public void login(String username){
-		currentAccount = new Account(username);
+	public void login(Account username){
+		currentAccount = username;
+	}
+	
+	public void selectGame(int gameID) {
+		Game newGame = new Game(gameID, this);
+		selectedGame = newGame;
+		myGui.switchPanel(new GamePanel(myGui));
+	}
+	
+	public void spectateGame() {
+		myGui.switchPanel(new SpectatorPanel());
 	}
 	
 	/**
@@ -113,6 +110,26 @@ public class Application {
 		return false;
 	}
 	
+	/**
+	 * create a new account of that type
+	 * switch to his panel
+	 * -------------------------------------------------
+	 *
+	public void switchRoll(String accountType){
+		if(accountType.equals("player")){
+			currentAccount = new Player("henk"); //henk is for testing
+			myGui.switchPanel(null);
+		}
+		else if(accountType.equals("moderator")){
+			currentAccount = new Moderator(null);
+			myGui.switchPanel(null);
+		}
+		else if(accountType.equals("administrator")){
+			currentAccount = new Administrator(null);
+			myGui.switchPanel(null);
+		}
+	}
+
 	/**
 	 * get all the games that have finished (finished or resigned) and return their integers
 	 * @param activeType

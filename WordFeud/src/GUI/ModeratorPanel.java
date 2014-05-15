@@ -62,38 +62,41 @@ public class ModeratorPanel extends JPanel {
 						DBCommunicator
 								.writeData("INSERT INTO woordenboek  (woord,letterset_code,status) VALUES('"
 										+ wordTooAdd + "','EN','Accepted')");
-						JOptionPane.showMessageDialog(null, wordTooAdd
-								+ " added", "Succes",
-								JOptionPane.INFORMATION_MESSAGE);
+ 						JOptionPane.showMessageDialog(null, wordTooAdd
+ 								+ " added", "Succes",
+ 								JOptionPane.INFORMATION_MESSAGE);
 						posibleWords = DBCommunicator
 								.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
-					}
-				}
-			}
-		});
+ 					}
+ 				}
+ 			}
+ 		});
 
-		acceptWord.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+ 		acceptWord.addActionListener(new ActionListener() {
+ 
+ 			@Override
+ 			public void actionPerformed(ActionEvent e)
+ 			{
+				// database to add word to wordlist and delete from sugestions
+				// communicator*******************************************
 				String accept = (String) wordList.getSelectedItem();
 				DBCommunicator
 						.writeData("UPDATE woordenboek SET status='Accepted' WHERE woord='"
 								+ accept + "'");
-				JOptionPane.showMessageDialog(null, "Word aproved and added",
-						"succes", JOptionPane.INFORMATION_MESSAGE);
+ 				JOptionPane.showMessageDialog(null, "Word aproved and added",
+ 						"succes", JOptionPane.INFORMATION_MESSAGE);
+
 				posibleWords = DBCommunicator
 						.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
-			}
-		});
-
-		rejectWord.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				String remove = (String) wordList.getSelectedItem();
+ 			}
+ 		});
+ 
+ 		rejectWord.addActionListener(new ActionListener() {
+ 
+ 			@Override
+ 			public void actionPerformed(ActionEvent e)
+ 			{
+ 				String remove = (String) wordList.getSelectedItem();
 				DBCommunicator
 						.writeData("UPDATE woordenboek SET status='Denied' WHERE woord='"
 								+ remove + "'");

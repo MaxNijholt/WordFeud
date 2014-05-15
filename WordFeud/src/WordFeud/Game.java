@@ -25,7 +25,6 @@ public class Game {
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
 	}
-		
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
