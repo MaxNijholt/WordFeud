@@ -20,6 +20,7 @@ public class Game {
 	 */
 	public Game(int gameID, Application app){
 		this.app = app;
+		this.id = gameID;
 		myField = new Field();
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
@@ -56,20 +57,33 @@ public class Game {
 	 * -------------------------------------------------rest vragen
 	 * @return
 	 */
-	public boolean checkEndGame(){
-		return false;
+	public void endGame(){
+		
 	}
 	
 	/**
 	 * pass a turn
 	 * tell the DB
-	 * -------------------------------------------------
 	 */
 	public void pass(){
-		/*
-		 * tell the DB it's the opponents turn
-		 * tell the DB the turn is passed
-		 */
+		boolean thirdPass = false;
+		int lastTurnID = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
+		String lastTurn = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + id + " AND id = " + lastTurnID);
+		if(lastTurn != null){
+			if(lastTurn.equals("Pass")){
+				int secondLastTurnID = lastTurnID - 2;
+				String secondLastTurn = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + id + " AND id = "+ secondLastTurnID);
+				if(secondLastTurn.equals("Pass")){
+					endGame();
+					thirdPass = true;
+				}
+			}
+		}
+		
+		if(!thirdPass){
+			int newTurn = lastTurnID + 2;
+			DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES (" + newTurn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', 0, 'Pass')");
+		}
 	}
 	
 	/**
@@ -103,7 +117,7 @@ public class Game {
 	 */
 	public boolean getVisibility(){
 		String visibility = DBCommunicator.requestData( "SELECT zichtbaarheid_type FROM spel WHERE id = " + id );
-		if(visibility.equals("openbar")){
+		if(visibility.equals("openbaar")){
 			return true;
 		}
 		else{
