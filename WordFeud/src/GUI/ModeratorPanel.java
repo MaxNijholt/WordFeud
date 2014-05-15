@@ -7,9 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.ArrayList;
-
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -22,10 +20,8 @@ import Utility.SLabel;
 public class ModeratorPanel extends JPanel {
 	private GUI gui;
 	private SLabel selectWord;
-	// has to become an array of the words from database
-	String[] posibleWords = { "dushi", "selfie", "derp" };
-	private JComboBox<String> wordList = new JComboBox(posibleWords);
-	ArrayList<String> posibleWords = DBCommunicator.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
+	ArrayList<String> posibleWords = DBCommunicator
+			.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
 	private JComboBox<String> wordList = new JComboBox();
 	private SButton acceptWord = new SButton("Accept word", SButton.GREY),
 			rejectWord = new SButton("Reject word", SButton.GREY),
@@ -63,71 +59,48 @@ public class ModeratorPanel extends JPanel {
 					}
 					else
 					{
-						// insert qeury vragen en overzien!
-						//
-						// DBCommunicator
-						// .writeData("INSERT INTO woordenboek  (woord,letterset_code,status) VALUES('"
-						// + wordTooAdd + "','EN','Accepted')");
-						JOptionPane.showMessageDialog(null, wordTooAdd
-								+ " added", "Succes",
-								JOptionPane.INFORMATION_MESSAGE);
-					}
-				}
-			}
-		});
 						DBCommunicator
 								.writeData("INSERT INTO woordenboek  (woord,letterset_code,status) VALUES('"
 										+ wordTooAdd + "','EN','Accepted')");
-						JOptionPane.showMessageDialog(null, wordTooAdd
-								+ " added", "Succes",
-								JOptionPane.INFORMATION_MESSAGE);
+ 						JOptionPane.showMessageDialog(null, wordTooAdd
+ 								+ " added", "Succes",
+ 								JOptionPane.INFORMATION_MESSAGE);
 						posibleWords = DBCommunicator
 								.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
-					}
-				}
-			}
-		});
+ 					}
+ 				}
+ 			}
+ 		});
 
-		acceptWord.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+ 		acceptWord.addActionListener(new ActionListener() {
+ 
+ 			@Override
+ 			public void actionPerformed(ActionEvent e)
+ 			{
 				// database to add word to wordlist and delete from sugestions
 				// communicator*******************************************
-				JOptionPane.showMessageDialog(null, "Word aproved and added",
-						"succes", JOptionPane.INFORMATION_MESSAGE);
 				String accept = (String) wordList.getSelectedItem();
 				DBCommunicator
 						.writeData("UPDATE woordenboek SET status='Accepted' WHERE woord='"
 								+ accept + "'");
-				JOptionPane.showMessageDialog(null, "Word aproved and added",
-						"succes", JOptionPane.INFORMATION_MESSAGE);
+ 				JOptionPane.showMessageDialog(null, "Word aproved and added",
+ 						"succes", JOptionPane.INFORMATION_MESSAGE);
+
 				posibleWords = DBCommunicator
 						.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
-			}
-		});
-
-		rejectWord.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				String remove = (String) wordList.getSelectedItem();
-
-				for (int t = 0; t < posibleWords.length; t++)
-				{
-					if (posibleWords[t].equals(remove))
-					{
-						posibleWords[t] = "";
-						break;
-					}
-				}
-
-				wordList = new JComboBox(posibleWords);
+ 			}
+ 		});
+ 
+ 		rejectWord.addActionListener(new ActionListener() {
+ 
+ 			@Override
+ 			public void actionPerformed(ActionEvent e)
+ 			{
+ 				String remove = (String) wordList.getSelectedItem();
 				DBCommunicator
 						.writeData("UPDATE woordenboek SET status='Denied' WHERE woord='"
 								+ remove + "'");
+
 				JOptionPane.showMessageDialog(null, "Word rejected", "succes",
 						JOptionPane.ERROR_MESSAGE);
 
