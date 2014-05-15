@@ -11,14 +11,14 @@ public class Login {
 	public Login(GUI gui) {this.gui = gui;}
 	
 	public String login(Account username, String password) {
-		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username + "'") == null) {
+		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username.getUsername() + "'") == null) {
 			return "That username doesn't exist!";
 		}
 		if(DBCommunicator.requestData("SELECT * FROM account WHERE wachtwoord = '" + password + "'") == null) {
 			return "Incorrect password!";
 		}
-		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username + "'").equals(username)) {
-			if(DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE wachtwoord = '" + password + "' AND naam = '" + username + "'" ) != null) {
+		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username.getUsername() + "'").equals(username.getUsername())) {
+			if(DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE wachtwoord = '" + password + "' AND naam = '" + username.getUsername() + "'" ) != null) {
 				gui.login(username);
 				gui.switchPanel(new PlayerPanel(gui));
 				return "0";
