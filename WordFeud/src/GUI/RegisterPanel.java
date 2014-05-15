@@ -17,7 +17,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 import AccountType.Account;
-import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
 import Utility.SPasswordField;
@@ -68,7 +67,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 
 		String letters 	= "WORDFEUD";
 		for(int i = 0; i < letters.length(); i++) {
-			GameStone s = new GameStone(DBCommunicator.requestInt("SELECT waarde FROM lettertype WHERE karakter = '" + letters.charAt(i) + "'"), letters.charAt(i));
+			GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
 			s.setDimension(70, 70);
 			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
 			title.add(s);
