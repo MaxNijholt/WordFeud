@@ -22,12 +22,13 @@ public class DBCommunicator {
 		try {
 			Class.forName(CLASS_NAME);
 			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+			System.out.println("A connection has been established with " + DB_URL);
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("SQLException: It was not possible to create a connection with " + DB_URL);
 		} 
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
 		}
 	}
 
