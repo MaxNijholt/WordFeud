@@ -1,10 +1,11 @@
 package Utility;
 
-<<<<<<< .merge_file_a05976
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import WordFeud.Field;
 import WordFeud.GameStone;
+import WordFeud.Tile;
 
 public class PointCounter {
 
@@ -49,19 +50,6 @@ public class PointCounter {
 		}else{
 			return "";
 		}
-	}
-}
-=======
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import WordFeud.GameStone;
-import WordFeud.Tile;
-
-public class PointCounter {
-
-	public PointCounter() {
-
 	}
 
 	/**
@@ -359,11 +347,4 @@ public class PointCounter {
 		return createdWords;
 
 	}
-
-	public int counterPointsTurn(HashMap<String, GameStone> newWords) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }
->>>>>>> .merge_file_a01724

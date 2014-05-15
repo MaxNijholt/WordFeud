@@ -10,10 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
-<<<<<<< .merge_file_a03336
-=======
 import AccountType.Account;
->>>>>>> .merge_file_a06724
 import Utility.SButton;
 import Utility.SLabel;
 import Utility.SPasswordField;
@@ -26,22 +23,14 @@ import Utility.STextField;
 
 public class SettingsPanel extends JPanel{
 	private GUI gui;
-<<<<<<< .merge_file_a03336
-	private String user;
-=======
 	private Account user;
->>>>>>> .merge_file_a06724
 	private SPasswordField passwordfield, passwordControle;
 	private SLabel password, username;
 	private STextField userfield;
 	private SButton save;
 	private ActionAdapter aa = new ActionAdapter();
 
-<<<<<<< .merge_file_a03336
-	public SettingsPanel(GUI gui ,String user){
-=======
 	public SettingsPanel(GUI gui , Account user){
->>>>>>> .merge_file_a06724
 		this.gui = gui;
 		this.user = user;
 
@@ -55,11 +44,8 @@ public class SettingsPanel extends JPanel{
 		this.passwordControle 	= new SPasswordField("passwordc");
 		this.password			= new SLabel("New password:", 0);
 		this.username			= new SLabel("New username:", 0);
-<<<<<<< .merge_file_a03336
-		this.userfield			= new STextField(user);
-=======
+
 		this.userfield			= new STextField(user.getUsername());
->>>>>>> .merge_file_a06724
 		this.save				= new SButton("Save", SButton.GREY);
 
 

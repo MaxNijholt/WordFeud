@@ -14,10 +14,6 @@ import WordFeud.Tile;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {
 
-<<<<<<< .merge_file_a06764
-=======
-	@SuppressWarnings("unused")
->>>>>>> .merge_file_a02424
 	private GUI gui;
 	private SButton pass, swap, resign, play;
 	private ChatPanel chat;

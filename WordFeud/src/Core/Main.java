@@ -12,11 +12,6 @@ public class Main {
 
 	private void initialize() {
 		this.application = new Application();
-<<<<<<< .merge_file_a05932
-		this.application.login("jager684");
-		
-=======
->>>>>>> .merge_file_a04648
 	}
 
 }
