@@ -7,7 +7,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< .merge_file_a06916
+=======
 import java.util.ArrayList;
+>>>>>>> .merge_file_a00184
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -20,18 +23,27 @@ import Utility.SLabel;
 public class ModeratorPanel extends JPanel {
 	private GUI gui;
 	private SLabel selectWord;
+<<<<<<< .merge_file_a06916
+	// has to become an array of the words from database
+	String[] posibleWords = { "dushi", "selfie", "derp" };
+	private JComboBox<String> wordList = new JComboBox(posibleWords);
+=======
 	ArrayList<String> posibleWords = DBCommunicator
 			.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
 	private JComboBox<String> wordList = new JComboBox();
+>>>>>>> .merge_file_a00184
 	private SButton acceptWord = new SButton("Accept word", SButton.GREY),
 			rejectWord = new SButton("Reject word", SButton.GREY),
 			addNewWord = new SButton("Add new word", SButton.GREY);
 
 	public ModeratorPanel(GUI gui) {
+<<<<<<< .merge_file_a06916
+=======
 		for (String merge : posibleWords)
 		{
 			wordList.addItem(merge);
 		}
+>>>>>>> .merge_file_a00184
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
 
@@ -59,6 +71,20 @@ public class ModeratorPanel extends JPanel {
 					}
 					else
 					{
+<<<<<<< .merge_file_a06916
+						// insert qeury vragen en overzien!
+						//
+						// DBCommunicator
+						// .writeData("INSERT INTO woordenboek  (woord,letterset_code,status) VALUES('"
+						// + wordTooAdd + "','EN','Accepted')");
+						JOptionPane.showMessageDialog(null, wordTooAdd
+								+ " added", "Succes",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			}
+		});
+=======
 						DBCommunicator
 								.writeData("INSERT INTO woordenboek  (woord,letterset_code,status) VALUES('"
 										+ wordTooAdd + "','EN','Accepted')");
@@ -72,11 +98,19 @@ public class ModeratorPanel extends JPanel {
 			}
 		});
 
+>>>>>>> .merge_file_a00184
 		acceptWord.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+<<<<<<< .merge_file_a06916
+				// database to add word to wordlist and delete from sugestions
+				// communicator*******************************************
+				JOptionPane.showMessageDialog(null, "Word aproved and added",
+						"succes", JOptionPane.INFORMATION_MESSAGE);
+
+=======
 				String accept = (String) wordList.getSelectedItem();
 				DBCommunicator
 						.writeData("UPDATE woordenboek SET status='Accepted' WHERE woord='"
@@ -85,6 +119,7 @@ public class ModeratorPanel extends JPanel {
 						"succes", JOptionPane.INFORMATION_MESSAGE);
 				posibleWords = DBCommunicator
 						.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
+>>>>>>> .merge_file_a00184
 			}
 		});
 
@@ -94,9 +129,23 @@ public class ModeratorPanel extends JPanel {
 			public void actionPerformed(ActionEvent e)
 			{
 				String remove = (String) wordList.getSelectedItem();
+<<<<<<< .merge_file_a06916
+
+				for (int t = 0; t < posibleWords.length; t++)
+				{
+					if (posibleWords[t].equals(remove))
+					{
+						posibleWords[t] = "";
+						break;
+					}
+				}
+
+				wordList = new JComboBox(posibleWords);
+=======
 				DBCommunicator
 						.writeData("UPDATE woordenboek SET status='Denied' WHERE woord='"
 								+ remove + "'");
+>>>>>>> .merge_file_a00184
 
 				JOptionPane.showMessageDialog(null, "Word rejected", "succes",
 						JOptionPane.ERROR_MESSAGE);
@@ -121,4 +170,8 @@ public class ModeratorPanel extends JPanel {
 		this.add(this.addNewWord, c);
 
 	}
+<<<<<<< .merge_file_a06916
 }
+=======
+}
+>>>>>>> .merge_file_a00184
