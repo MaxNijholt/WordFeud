@@ -44,8 +44,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * The panel that is used to log in to our program.
 	 */
 	public LoginPanel(GUI gui) {
+		this.gui = gui;
+		gui.setLoadingCursor(true);
+		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.gui 	= gui;
 		this.l		= new Login(gui);
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -107,6 +109,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		this.add(title, gbc);
 		gbc.gridy++;
 		this.add(mainPanel, gbc);
+		gui.setLoadingCursor(false);
 	}
 
 	/**

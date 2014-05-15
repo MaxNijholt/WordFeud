@@ -34,10 +34,12 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 	private MenuPanel	mp;
 	
 	public GameCreatePanel(GUI gui) {
+		this.gui = gui;
+		gui.setLoadingCursor(true);
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		this.gui = gui;
+		
 		this.mp = new MenuPanel(gui);
 		
 		title			= new SLabel("New game", SLabel.LEFT, new Font("Arial", Font.PLAIN, 50));
@@ -109,6 +111,7 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 		
 		this.add(mp);
 		this.add(mainPanel);
+		gui.setLoadingCursor(false);
 	}
 
 	public void actionPerformed(ActionEvent e) {

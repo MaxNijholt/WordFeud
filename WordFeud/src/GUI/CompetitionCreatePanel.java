@@ -33,10 +33,12 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	private GUI 				gui;
 	
 	public CompetitionCreatePanel(GUI gui) {
+		this.gui = gui;
+		gui.setLoadingCursor(true);
+		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.setBackground(new Color(94, 94, 94));
-		this.gui = gui;
 		
 		addedPlayers	= new ArrayList<SLabel>();
 		
@@ -118,6 +120,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		mainPanel.add(addedPanel, BorderLayout.EAST);
 		
 		this.add(mainPanel);
+		gui.setLoadingCursor(false);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

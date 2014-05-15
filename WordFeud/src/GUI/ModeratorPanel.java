@@ -28,6 +28,9 @@ public class ModeratorPanel extends JPanel {
 			addNewWord = new SButton("Add new word", SButton.GREY);
 
 	public ModeratorPanel(GUI gui) {
+		this.gui = gui;
+		gui.setLoadingCursor(true);
+		
 		for (String merge : posibleWords)
 		{
 			wordList.addItem(merge);
@@ -37,8 +40,6 @@ public class ModeratorPanel extends JPanel {
 
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-
-		this.gui = gui;
 
 		// actionlisteners==================================================
 		addNewWord.addActionListener(new ActionListener() {
@@ -123,5 +124,6 @@ public class ModeratorPanel extends JPanel {
 		c.gridx = c.gridx + 3;
 		this.add(this.addNewWord, c);
 
+		gui.setLoadingCursor(false);
 	}
 }

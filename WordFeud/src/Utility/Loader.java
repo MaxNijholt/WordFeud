@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Loader {
-
+	
 	public static BufferedImage BACKGROUND;
 	public static BufferedImage BACKGROUNDHD;
 	public static BufferedImage ICON;

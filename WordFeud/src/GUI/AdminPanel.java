@@ -51,13 +51,15 @@ public class AdminPanel extends JPanel {
 	private Administrator admin = null;
 
 	public AdminPanel(GUI gui) {
+		this.gui = gui;
+		gui.setLoadingCursor(true);
+		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
 
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		this.gui = gui;
 		this.admin = gui.getApplication().getCurrentAccount().getAdmin();
 
 		this.selectPlayer = new SLabel("Select player: ", 0);
@@ -127,6 +129,8 @@ public class AdminPanel extends JPanel {
 
 			});
 		}
+
+		gui.setLoadingCursor(false);
 	}
 
 	class ActionAdapter implements ActionListener {
