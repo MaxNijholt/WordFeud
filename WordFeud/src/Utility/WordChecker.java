@@ -7,18 +7,12 @@ import WordFeud.GameStone;
 import WordFeud.Tile;
 
 public class WordChecker {
-	
-	private ArrayList<String> checkwords = new ArrayList<>();
 
 	/**
 	 * constructor no functions
 	 */
 	public WordChecker() {
-		checkwords.add("ra");
-		checkwords.add("dasse");
-		checkwords.add("dassen");
-		checkwords.add("as");
-		checkwords.add("re");
+
 	}
 
 	/**
@@ -106,19 +100,20 @@ public class WordChecker {
 			}
 
 		}
-		// hier moet de controle met de database komen
-		// in test fase
+
 		String wordsCheck = "";
 		String wordsCheckCheck = "";
 		for (String wordForCheck : theWords)
 		{
-			if (checkwords.contains(wordForCheck))
+			if (DBCommunicator
+					.requestData("SELECT woord FROM woordenboek where woord='"
+							+ wordForCheck + "'") == null)
 			{
-				wordsCheck = wordsCheck + "1";
+				wordsCheck = wordsCheck + "0";
 			}
 			else
 			{
-				wordsCheck = wordsCheck + "0";
+				wordsCheck = wordsCheck + "1";
 				deniedWords.add(wordForCheck);
 			}
 
@@ -128,7 +123,6 @@ public class WordChecker {
 			wordsCheckCheck = wordsCheckCheck + 1;
 		}
 
-		// test loopt tot hier
 		return deniedWords;
 
 	}
@@ -203,7 +197,6 @@ public class WordChecker {
 		boolean connections = false;
 		int x;
 		int y;
-
 		for (String myValue : playd.keySet())
 		{
 			boolean one = true;
@@ -214,28 +207,32 @@ public class WordChecker {
 			x = Integer.parseInt(parts[0]);
 			y = Integer.parseInt(parts[1]);
 			x++;
-			if (field.get(x + "," + y).getGameStone() == null
+			if ((field.get(x + "," + y) == null || field.get(x + "," + y)
+					.getGameStone() == null)
 					&& !playd.keySet().contains(x + "," + y))
 			{
 				one = false;
 			}
 			x--;
 			x--;
-			if (field.get(x + "," + y).getGameStone() == null
+			if ((field.get(x + "," + y) == null || field.get(x + "," + y)
+					.getGameStone() == null)
 					&& !playd.keySet().contains(x + "," + y))
 			{
 				two = false;
 			}
 			x++;
 			y--;
-			if (field.get(x + "," + y).getGameStone() == null
+			if ((field.get(x + "," + y) == null || field.get(x + "," + y)
+					.getGameStone() == null)
 					&& !playd.keySet().contains(x + "," + y))
 			{
 				three = false;
 			}
 			y++;
 			y++;
-			if (field.get(x + "," + y).getGameStone() == null
+			if ((field.get(x + "," + y) == null || field.get(x + "," + y)
+					.getGameStone() == null)
 					&& !playd.keySet().contains(x + "," + y))
 			{
 				four = false;

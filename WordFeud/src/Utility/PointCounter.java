@@ -3,12 +3,13 @@ package Utility;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import WordFeud.Field;
 import WordFeud.GameStone;
 import WordFeud.Tile;
 
 public class PointCounter {
 
-	public PointCounter() {
+	public PointCounter(Field myField) {
 
 	}
 
@@ -194,7 +195,8 @@ public class PointCounter {
 			{
 				y--;
 				horCorStart = Integer.toString(x) + "," + Integer.toString(y);
-				if (field.get(horCorStart).getGameStone() == null)
+				if (field.get(horCorStart) == null
+						|| field.get(horCorStart).getGameStone() == null)
 				{
 					y++;
 					horCorStart = Integer.toString(x) + ","
@@ -208,7 +210,8 @@ public class PointCounter {
 			{
 				y++;
 				horCorEnd = Integer.toString(x) + "," + Integer.toString(y);
-				if (field.get(horCorEnd).getGameStone() == null)
+				if (field.get(horCorEnd) == null
+						|| field.get(horCorEnd).getGameStone() == null)
 				{
 					y--;
 					horCorEnd = Integer.toString(x) + "," + Integer.toString(y);
@@ -229,7 +232,9 @@ public class PointCounter {
 
 				x--;
 				verCorStart = Integer.toString(x) + "," + Integer.toString(y);
-				if (field.get(verCorStart).getGameStone() == null)
+
+				if (field.get(verCorStart) == null
+						|| field.get(verCorStart).getGameStone() == null)
 				{
 					x++;
 					verCorStart = Integer.toString(x) + ","
@@ -243,7 +248,8 @@ public class PointCounter {
 			{
 				x++;
 				verCorEnd = Integer.toString(x) + "," + Integer.toString(y);
-				if (field.get(verCorEnd).getGameStone() == null)
+				if (field.get(verCorEnd) == null
+						|| field.get(verCorEnd).getGameStone() == null)
 				{
 					x--;
 					verCorEnd = Integer.toString(x) + "," + Integer.toString(y);

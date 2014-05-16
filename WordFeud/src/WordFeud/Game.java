@@ -35,7 +35,7 @@ public class Game {
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-		int points = myPC.counterPointsTurn(myField.getNewWords());
+		int points = 0;//myPC.counterPointsTurn(myField.getNewWords());
 		
 		return points;
 	}
