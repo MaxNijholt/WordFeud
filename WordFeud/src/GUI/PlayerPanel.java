@@ -219,8 +219,8 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			panel.add(accept, c);
 			c.gridy++;
 			panel.add(deny, c);
+			
 			accept.addActionListener(new ActionListener(){
-
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					gui.acceptGame(gameID);
