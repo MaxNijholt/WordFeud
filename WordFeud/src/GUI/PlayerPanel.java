@@ -1,8 +1,8 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,42 +18,28 @@ import javax.swing.JScrollPane;
 
 import Utility.SButton;
 import Utility.SLabel;
-import Utility.STextField;
 
 @SuppressWarnings("serial")
-public class PlayerPanel extends JPanel implements ActionListener{
+public class PlayerPanel extends JPanel implements ActionListener {
 
-	private STextField searchText;
-	private SButton searchButton;
-	private JPanel searchPanel;
-	/*private STextField searchText;
-	private SButton searchButton;
-	private JPanel searchPanel;*/
 	private JScrollPane scrollPane;
 	private JPanel gameContent;
 	private GUI gui;
+	private MenuPanel mp;
 
 	public PlayerPanel(GUI gui){
 		this.gui = gui;
+		this.mp = new MenuPanel(gui);
 		gui.setLoadingCursor(true);
-
+		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setLayout(new BorderLayout());
 
-		//create the search textfield and button might be erased
-		/*
-		searchText 		= 	new STextField("search");
-		searchButton 	= 	new SButton("search", SButton.GREY, 220, 40);
-		searchPanel 	= 	new JPanel();
-		searchPanel.setMaximumSize(new Dimension(500,65));
-		searchPanel.setBackground(new Color(94, 94, 94));
-		searchPanel.setLayout(new FlowLayout());
-		searchPanel.add(searchText);
-		searchPanel.add(searchButton);
-		this.add(searchPanel);
-		*/
-
+		JPanel allPanel = new JPanel();
+		allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.PAGE_AXIS));
+		allPanel.setBackground(new Color(94,94,94));
+				
 		//create the gameContent panel here go all the games
 		gameContent 	= 	new JPanel();
 		gameContent.setLayout(new BoxLayout(gameContent, BoxLayout.PAGE_AXIS));
@@ -67,7 +53,7 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		this.add(scrollPane);
+		allPanel.add(scrollPane);
 
 		
 		ArrayList<Integer> gameInts;
@@ -95,6 +81,17 @@ public class PlayerPanel extends JPanel implements ActionListener{
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
+        
+		gameInts = gui.getPlayingGames(false);
+		if(gameInts.size() != 0){
+			gameContent.add(addLabel("Opponents turn",1));
+			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			for(int e : gameInts){
+				gameContent.add(paintGame(e, "Playing"));
+				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			}
+		}
+
 
 		gameContent.add(addLabel("Finished games",0));
 		gameContent.add(Box.createRigidArea(new Dimension(500,10)));
@@ -134,7 +131,20 @@ public class PlayerPanel extends JPanel implements ActionListener{
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
+		
+		gameInts = gui.getRequestedGames(true, true);
+		if(gameInts.size() != 0){
+			gameContent.add(addLabel("Denied", 1));
+			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			for(int e : gameInts){
+				gameContent.add(paintGame(e, "Denied"));
+				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			}
+		}
 
+		
+		this.add(mp, BorderLayout.NORTH);
+		this.add(allPanel, BorderLayout.CENTER);
 		
 		gui.setLoadingCursor(false);
 	}
@@ -236,16 +246,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			lastTurn.setMinimumSize(new Dimension(200,30));
 			select.setMinimumSize(select.getPreferredSize());
 			
-			opponent.setBackground(panel.getBackground());
-			lastTurn.setBackground(panel.getBackground());
-
-			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
-			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
-
-			opponent.setMinimumSize(new Dimension(200,30));
-			lastTurn.setMinimumSize(new Dimension(200,30));
-			select.setMinimumSize(select.getPreferredSize());
-
 			opponent.setBackground(panel.getBackground());
 			lastTurn.setBackground(panel.getBackground());
 

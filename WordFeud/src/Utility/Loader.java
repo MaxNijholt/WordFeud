@@ -3,7 +3,6 @@ package Utility;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -47,7 +46,7 @@ public class Loader {
 		 	for(int i = 1; i < Integer.parseInt(letterset.get(ch).values().toString().substring(letterset.get(ch).values().toString().indexOf('[')+1,letterset.get(ch).values().toString().indexOf(']')))+1; i++){
 		 		int value = Integer.parseInt(letterset.get(ch).keySet().toString().substring(letterset.get(ch).keySet().toString().indexOf('[')+1,letterset.get(ch).keySet().toString().indexOf(']')));
 		 		new GameStone(value ,ch);
-//		 		System.out.println(value + " " + ch);
+		 		System.out.println(value + " " + ch);
 		 	}
 		}
 		return gamestones;

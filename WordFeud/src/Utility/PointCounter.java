@@ -9,47 +9,8 @@ import WordFeud.Tile;
 
 public class PointCounter {
 
-	private Field field;
+	public PointCounter(Field myField) {
 
-	public PointCounter(Field field){
-		this.field = field;
-
-	}
-
-	public int counterPointsTurn(HashMap<String, GameStone> createdWords){
-		int points = 0;
-		int wordBonus = 0;
-		String[] locations = (String[]) createdWords.keySet().toArray();
-
-		for(int i = 0; i < locations.length; i++){
-			if(!checkBonus(locations[i]).equals("")){
-				if(checkBonus(locations[i]).equals("dw")){
-					wordBonus += 2;
-				}else if(checkBonus(locations[i]).equals("tw")){
-					wordBonus += 3;
-				}else if(checkBonus(locations[i]).equals("dl")){
-					points += createdWords.get(locations[i]).getValue() * 2;
-				}else if(checkBonus(locations[i]).equals("tl")){
-					points += createdWords.get(locations[i]).getValue() * 3;
-				}else{
-					System.out.println("ERROR!");
-				}
-			}else{
-				points += createdWords.get(locations[i]).getValue();
-			}
-		}
-
-		return points;
-
-	}
-
-	private String checkBonus(String location){
-		if(!field.getTiles().get(location).getBonus().equals("") ||
-			!field.getTiles().get(location).getBonusUsed()){
-				return field.getTiles().get(location).getBonus();
-		}else{
-			return "";
-		}
 	}
 
 	/**
@@ -234,7 +195,8 @@ public class PointCounter {
 			{
 				y--;
 				horCorStart = Integer.toString(x) + "," + Integer.toString(y);
-				if (field.get(horCorStart).getGameStone() == null)
+				if (field.get(horCorStart) == null
+						|| field.get(horCorStart).getGameStone() == null)
 				{
 					y++;
 					horCorStart = Integer.toString(x) + ","
@@ -248,7 +210,8 @@ public class PointCounter {
 			{
 				y++;
 				horCorEnd = Integer.toString(x) + "," + Integer.toString(y);
-				if (field.get(horCorEnd).getGameStone() == null)
+				if (field.get(horCorEnd) == null
+						|| field.get(horCorEnd).getGameStone() == null)
 				{
 					y--;
 					horCorEnd = Integer.toString(x) + "," + Integer.toString(y);
@@ -269,7 +232,9 @@ public class PointCounter {
 
 				x--;
 				verCorStart = Integer.toString(x) + "," + Integer.toString(y);
-				if (field.get(verCorStart).getGameStone() == null)
+
+				if (field.get(verCorStart) == null
+						|| field.get(verCorStart).getGameStone() == null)
 				{
 					x++;
 					verCorStart = Integer.toString(x) + ","
@@ -283,7 +248,8 @@ public class PointCounter {
 			{
 				x++;
 				verCorEnd = Integer.toString(x) + "," + Integer.toString(y);
-				if (field.get(verCorEnd).getGameStone() == null)
+				if (field.get(verCorEnd) == null
+						|| field.get(verCorEnd).getGameStone() == null)
 				{
 					x--;
 					verCorEnd = Integer.toString(x) + "," + Integer.toString(y);
@@ -347,4 +313,5 @@ public class PointCounter {
 		return createdWords;
 
 	}
+
 }
