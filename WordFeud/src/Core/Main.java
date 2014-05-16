@@ -12,8 +12,7 @@ public class Main {
 
 	private void initialize() {
 		this.application = new Application();
-		this.application.login("jager684");
-		
+				
 	}
 
 }

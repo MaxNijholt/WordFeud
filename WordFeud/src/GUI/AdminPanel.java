@@ -18,12 +18,14 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import AccountType.Administrator;
 import Utility.DBCommunicator;
+import Utility.ImageLoader;
 import Utility.MComboBox;
 import Utility.SButton;
 import Utility.SLabel;
@@ -49,6 +51,9 @@ public class AdminPanel extends JPanel {
 			revokePlayer = new SButton("Revoke Player", SButton.GREY);
 	private ActionAdapter aa = new ActionAdapter();
 	private Administrator admin = null;
+	private JFrame newPlayerFrame;
+	private JPanel newPlayerPanel;
+	private String title = "New Player";
 
 	public AdminPanel(GUI gui) {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -161,7 +166,19 @@ public class AdminPanel extends JPanel {
 					// TODO
 				}
 				if (e.getSource().equals(newPlayer)) {
-					// TODO
+					newPlayerFrame = new JFrame();
+					
+					newPlayerFrame.setResizable(false);
+					newPlayerFrame.setTitle(title);
+					newPlayerFrame.setContentPane(newPlayerPanel);
+					newPlayerFrame.pack();
+					newPlayerFrame.setLocationRelativeTo(null);
+					newPlayerFrame.setVisible(true);
+					newPlayerFrame.setIconImage(ImageLoader.ICON);
+					newPlayerFrame.add(newPlayerPanel);
+					
+					newPlayerPanel = new JPanel();
+					
 				}
 				update();
 			}

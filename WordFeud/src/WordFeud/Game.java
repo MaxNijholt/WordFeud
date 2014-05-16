@@ -9,6 +9,7 @@ public class Game {
 	private Field myField;
 	private PointCounter myPC;
 	private WordChecker myWC;
+	private int gameID;
 	
 	/**
 	 * cronstruct the game
@@ -18,6 +19,7 @@ public class Game {
 		myField = new Field();
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
+		this.gameID = gameID;
 	}
 	
 	public Game(){
@@ -130,5 +132,10 @@ public class Game {
 
 	public void setMyField(Field myField) {
 		this.myField = myField;
+	}
+
+	public int getID()
+	{
+		return gameID;
 	}
 }
