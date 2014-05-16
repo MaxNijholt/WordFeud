@@ -72,6 +72,7 @@ public class Login {
 			if(password.equals(validatePassword)) {
 				if(!password.isEmpty() && !(password.length() < 1)) {
 					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username.getUsername() + "', '" + password + "')");
+					DBCommunicator.writeData("INSERT INTO accountrol(account_naam, rol_type) VALUES('" + username.getUsername() + "', 'Player')");
 					gui.login(username);
 					gui.switchPanel(new PlayerPanel(gui));
 					return "0";

@@ -1,8 +1,8 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +21,7 @@ import Utility.SLabel;
 import Utility.STextField;
 
 @SuppressWarnings("serial")
-public class PlayerPanel extends JPanel implements ActionListener{
+public class PlayerPanel extends JPanel implements ActionListener {
 
 	private STextField searchText;
 	private SButton searchButton;
@@ -32,14 +32,16 @@ public class PlayerPanel extends JPanel implements ActionListener{
 	private JScrollPane scrollPane;
 	private JPanel gameContent;
 	private GUI gui;
+	private MenuPanel mp;
 
 	public PlayerPanel(GUI gui){
 		this.gui = gui;
+		this.mp = new MenuPanel(gui);
 		gui.setLoadingCursor(true);
-
+		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setLayout(new BorderLayout());
 
 		//create the search textfield and button might be erased
 		/*
@@ -54,6 +56,10 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		this.add(searchPanel);
 		*/
 
+		JPanel allPanel = new JPanel();
+		allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.PAGE_AXIS));
+		allPanel.setBackground(new Color(94,94,94));
+				
 		//create the gameContent panel here go all the games
 		gameContent 	= 	new JPanel();
 		gameContent.setLayout(new BoxLayout(gameContent, BoxLayout.PAGE_AXIS));
@@ -67,7 +73,7 @@ public class PlayerPanel extends JPanel implements ActionListener{
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		this.add(scrollPane);
+		allPanel.add(scrollPane);
 
 		
 		ArrayList<Integer> gameInts;
@@ -134,7 +140,9 @@ public class PlayerPanel extends JPanel implements ActionListener{
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
-
+		
+		this.add(mp, BorderLayout.NORTH);
+		this.add(allPanel, BorderLayout.CENTER);
 		
 		gui.setLoadingCursor(false);
 	}
