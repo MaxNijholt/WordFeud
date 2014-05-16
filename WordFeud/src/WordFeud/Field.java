@@ -2,74 +2,91 @@ package WordFeud;
 
 import java.util.HashMap;
 
+import Utility.DBCommunicator;
+
 public class Field {
 
 	private HashMap<String, GameStone> newWords;
 	private HashMap<String, Tile> field;
-	
-	public Field(){
+	private String character;
+
+	public Field(int spelID) {
 		newWords = new HashMap<String, GameStone>();
 		field = new HashMap<String, Tile>();
-		
-		//initialiseer field
-		for(int i = 1; i < 16; i++){
-			for(int j = 1; j < 16; j++){
-				field.put(i + "," + j, new Tile(i, j));
-			}
-		}
-	}
-	
-	public void layGameStone(GameStone gamestone, String location){
-		for(int i = 1; i < 16; i++){
-			for(int j = 1; j < 16; j++){
-				if(location.equals(i + "," + j)){
-					//controle of de tile leeg is
-					if(field.get(location).getGameStone() == null ){
-						//leg gamestone op de tile
-						field.get(location).setGameStone(gamestone);
-						//Zet gamestone in lijst met nieuw gelegde gamestones
-						newWords.put(location, gamestone);
-						break;
-					}else{
-						//return GameStone naar de hand van de speler
-						
-					}
-				}
-			}
-		}
-			
-	}
-	
-	public void removeGameStone(String location){
-		for(int i = 1; i < 16; i++){
-			for(int j = 1; j < 16; j++){
-				if(field.get(location).getGameStone() != null ){
-					//leg gamestone op de tile
-					field.get(location).setGameStone(null);
-					//Zet gamestone in lijst met nieuw gelegde gamestones
-					newWords.remove(location);
-					//return GameStone naar de hand van de speler
-					
-					break;
-				}else{
-					//Doe niks of geef melding
-					
+
+		for (int i = 1; i < 16; i++) {
+			for (int j = 1; j < 16; j++) {
+				if (!DBCommunicator
+						.requestData(
+								"SELECT lettertype_karakter FROM gelegdeletter left join letter on gelegdeletter.letter_id = letter.id and gelegdeletter.spel_id = letter.spel_id where gelegdeletter.spel_id = "
+										+ spelID
+										+ " and tegel_x = "
+										+ i
+										+ " and tegel_y = " + j).equals(null)) {
+					character = DBCommunicator
+							.requestData("SELECT lettertype_karakter FROM gelegdeletter left join letter on gelegdeletter.letter_id = letter.id and gelegdeletter.spel_id = letter.spel_id where gelegdeletter.spel_id = "
+									+ spelID
+									+ " and tegel_x = "
+									+ i
+									+ " and tegel_y = " + j);
+
+					field.put(i + "," + j, new Tile(i, j, character));
+
+				} else if (DBCommunicator
+						.requestData(
+								"SELECT lettertype_karakter FROM gelegdeletter left join letter on gelegdeletter.letter_id = letter.id and gelegdeletter.spel_id = letter.spel_id where gelegdeletter.spel_id = "
+										+ spelID
+										+ " and tegel_x = "
+										+ i
+										+ " and tegel_y = " + j).equals("?")) {
+					character = DBCommunicator
+							.requestData("SELECT blancoletterkarakter FROM gelegdeletter left join letter on gelegdeletter.letter_id = letter.id and gelegdeletter.spel_id = letter.spel_id where gelegdeletter.spel_id = "
+									+ spelID
+									+ " and tegel_x = "
+									+ i
+									+ " and tegel_y = " + j);
+
+					field.put(i + "," + j, new Tile(i, j, character));
+
+				} else {
+
+					field.put(i + "," + j, new Tile(i, j));
 				}
 			}
 		}
 	}
-	
-	public HashMap<String, GameStone> getNewWords(){
-		
+
+	public void layGameStone(GameStone gamestone, String location) {
+
+		if (field.get(location).getGameStone() == null) {
+			field.get(location).setGameStone(gamestone);
+			newWords.put(location, gamestone);
+		}
+
+	}
+
+	public void removeGameStone(String location) {
+		if (field.get(location).getGameStone() != null) {
+			field.get(location).setGameStone(null);
+			newWords.remove(location);
+
+		}
+	}
+
+	public HashMap<String, GameStone> getNewWords() {
+
 		return newWords;
-		
+
 	}
-	
-	public HashMap<String, Tile> getTiles(){
-		
+
+	public HashMap<String, Tile> getTiles() {
+
 		return field;
-		
+
 	}
-	
-	
+
+	public void clearNewWords() {
+		newWords.clear();
+	}
+
 }

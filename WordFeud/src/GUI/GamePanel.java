@@ -21,6 +21,8 @@ public class GamePanel extends JPanel {
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
+		gui.setLoadingCursor(true);
+		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(new BorderLayout());
 		this.setBackground(new Color(94, 94, 94));
@@ -69,6 +71,7 @@ public class GamePanel extends JPanel {
 		add(mp, BorderLayout.NORTH);
 		add(mainPanel, BorderLayout.CENTER);
 		add(chat, BorderLayout.EAST);
+		gui.setLoadingCursor(false);
 		
 	}
 	

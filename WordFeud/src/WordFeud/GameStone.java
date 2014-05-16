@@ -40,7 +40,7 @@ public class GameStone extends SLabel {
 		String temp = String.valueOf(value);
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(small);
-		g.drawString(temp, getWidth() - fmSmall.stringWidth(String.valueOf(value)), (fmSmall.getHeight() / 2) + 5);
+		g.drawString(temp, getWidth() - fmSmall.stringWidth(String.valueOf(value)) - 2, (fmSmall.getHeight() / 2) + 5);
 	}
 	
 	public int getValue(){return value;}

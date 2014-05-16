@@ -1,7 +1,8 @@
 package WordFeud;
 
+import Core.Application;
+import Utility.DBCommunicator;
 import Utility.PointCounter;
-
 import Utility.WordChecker;
 
 public class Game {
@@ -9,21 +10,18 @@ public class Game {
 	private Field myField;
 	private PointCounter myPC;
 	private WordChecker myWC;
-	private int gameID;
+	private Application app;
+	private int id;
+	private String opponent;
 	
 	/**
 	 * cronstruct the game
 	 * -------------------------------------------------
 	 */
-	public Game(int gameID){
-		myField = new Field();
-		myPC = new PointCounter(myField);
-		myWC = new WordChecker();
-		this.gameID = gameID;
-	}
-	
-	public Game(){
-		myField = new Field();
+	public Game(int gameID, Application app){
+		this.app = app;
+		this.id = gameID;
+		myField = new Field(id);
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
 	}
@@ -31,14 +29,14 @@ public class Game {
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
-	 * -------------------------------------------------
+	 * -------------------------------------------------tj vragen
 	 * @param gamestone
 	 * @param location
 	 * @return
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-		int points = 0;//= myPC.counterPointsTurn(myField.getNewWords());
+		int points = 0;//myPC.counterPointsTurn(myField.getNewWords());
 		
 		return points;
 	}
@@ -46,31 +44,47 @@ public class Game {
 	/**
 	 * get the new words from the field
 	 * let the wordchecker check if it is correct
-	 * -------------------------------------------------
+	 * -------------------------------------------------tj vragen
 	 */
-	public void playWord(){
+	public String[] playWord(){
+		myField.getNewWords();
+		//myWC.checkWords(myField.getNewWords(), playedMove, playBoard)
 		
+		return null;
 	}
 	
 	/**
 	 * check if the game has ended
-	 * -------------------------------------------------
+	 * -------------------------------------------------rest vragen
 	 * @return
 	 */
-	public boolean checkEndGame(){
-		return false;
+	public void endGame(){
+		
 	}
 	
 	/**
 	 * pass a turn
 	 * tell the DB
-	 * -------------------------------------------------
 	 */
 	public void pass(){
-		/*
-		 * tell the DB it's the opponents turn
-		 * tell the DB the turn is passed
-		 */
+		boolean thirdPass = false;
+		int lastTurnID = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
+		String lastTurn = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + id + " AND id = " + lastTurnID);
+		if(lastTurn != null){
+			if(lastTurn.equals("Pass")){
+				int secondLastTurnID = lastTurnID - 2;
+				String secondLastTurn = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + id + " AND id = "+ secondLastTurnID);
+				if(secondLastTurn.equals("Pass")){
+					endGame();
+					thirdPass = true;
+				}
+			}
+		}
+		
+		if(!thirdPass){
+			int newTurn = lastTurnID + 2;
+			DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES (" + newTurn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', 0, 'Pass')");
+		}
 	}
 	
 	/**
@@ -99,27 +113,17 @@ public class Game {
 	}
 	
 	/**
-	 * set the visibility of a game
-	 * tell the db
-	 * -------------------------------------------------
-	 * @param bool
-	 */
-	public void setVisibility(Boolean bool){
-		/*
-		 * tell the DB the new visibility
-		 */
-	}
-	
-	/**
 	 * get the visibility from the db and return boolean
-	 * -------------------------------------------------
 	 * @return
 	 */
 	public boolean getVisibility(){
-		/*
-		 * get the visibility from the DB
-		 */
-		return false;
+		String visibility = DBCommunicator.requestData( "SELECT zichtbaarheid_type FROM spel WHERE id = " + id );
+		if(visibility.equals("openbaar")){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**
@@ -134,8 +138,11 @@ public class Game {
 		this.myField = myField;
 	}
 
-	public int getID()
-	{
-		return gameID;
+	public int getID() {
+		return id;
+	}
+	
+	public String getOpponent(){
+		return opponent;
 	}
 }

@@ -12,7 +12,6 @@ public class Main {
 
 	private void initialize() {
 		this.application = new Application();
-				
 	}
 
 }
