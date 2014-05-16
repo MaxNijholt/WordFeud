@@ -25,6 +25,7 @@ public class Game {
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
 	}
+	
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
@@ -47,6 +48,7 @@ public class Game {
 	 */
 	public String[] playWord(){
 		myField.getNewWords();
+		//myWC.checkWords(myField.getNewWords(), playedMove, playBoard)
 		
 		return null;
 	}

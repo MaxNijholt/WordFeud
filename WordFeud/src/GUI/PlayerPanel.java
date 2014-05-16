@@ -239,16 +239,6 @@ public class PlayerPanel extends JPanel implements ActionListener{
 			opponent.setBackground(panel.getBackground());
 			lastTurn.setBackground(panel.getBackground());
 
-			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
-			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
-
-			opponent.setMinimumSize(new Dimension(200,30));
-			lastTurn.setMinimumSize(new Dimension(200,30));
-			select.setMinimumSize(select.getPreferredSize());
-
-			opponent.setBackground(panel.getBackground());
-			lastTurn.setBackground(panel.getBackground());
-
 			c.gridx = 0;
 			c.gridy = 0;
 			c.insets = new Insets(0,50,0,0);
