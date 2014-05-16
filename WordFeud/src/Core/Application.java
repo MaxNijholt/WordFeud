@@ -395,20 +395,4 @@ public class Application {
 		this.setCurrentAccount(null);
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
-<<<<<<< HEAD
-
-
-	public void selectGame(int gameID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public void spectateGame() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-=======
->>>>>>> 749691104f0e812f96ab62b12bd49804c25252e2
 }
