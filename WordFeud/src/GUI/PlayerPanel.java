@@ -18,17 +18,10 @@ import javax.swing.JScrollPane;
 
 import Utility.SButton;
 import Utility.SLabel;
-import Utility.STextField;
 
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel implements ActionListener {
 
-	private STextField searchText;
-	private SButton searchButton;
-	private JPanel searchPanel;
-	/*private STextField searchText;
-	private SButton searchButton;
-	private JPanel searchPanel;*/
 	private JScrollPane scrollPane;
 	private JPanel gameContent;
 	private GUI gui;
@@ -42,19 +35,6 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
 		this.setLayout(new BorderLayout());
-
-		//create the search textfield and button might be erased
-		/*
-		searchText 		= 	new STextField("search");
-		searchButton 	= 	new SButton("search", SButton.GREY, 220, 40);
-		searchPanel 	= 	new JPanel();
-		searchPanel.setMaximumSize(new Dimension(500,65));
-		searchPanel.setBackground(new Color(94, 94, 94));
-		searchPanel.setLayout(new FlowLayout());
-		searchPanel.add(searchText);
-		searchPanel.add(searchButton);
-		this.add(searchPanel);
-		*/
 
 		JPanel allPanel = new JPanel();
 		allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.PAGE_AXIS));
@@ -101,6 +81,17 @@ public class PlayerPanel extends JPanel implements ActionListener {
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
+        
+		gameInts = gui.getPlayingGames(false);
+		if(gameInts.size() != 0){
+			gameContent.add(addLabel("Opponents turn",1));
+			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			for(int e : gameInts){
+				gameContent.add(paintGame(e, "Playing"));
+				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			}
+		}
+
 
 		gameContent.add(addLabel("Finished games",0));
 		gameContent.add(Box.createRigidArea(new Dimension(500,10)));
@@ -140,6 +131,17 @@ public class PlayerPanel extends JPanel implements ActionListener {
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
+		
+		gameInts = gui.getRequestedGames(true, true);
+		if(gameInts.size() != 0){
+			gameContent.add(addLabel("Denied", 1));
+			gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			for(int e : gameInts){
+				gameContent.add(paintGame(e, "Denied"));
+				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
+			}
+		}
+
 		
 		this.add(mp, BorderLayout.NORTH);
 		this.add(allPanel, BorderLayout.CENTER);
