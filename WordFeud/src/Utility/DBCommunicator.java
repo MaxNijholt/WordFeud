@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DBCommunicator {
 
@@ -22,12 +23,13 @@ public class DBCommunicator {
 		try {
 			Class.forName(CLASS_NAME);
 			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+			System.out.println("A connection has been established with " + DB_URL);
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("SQLException: It was not possible to create a connection with " + DB_URL);
 		} 
 		catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
 		}
 	}
 
@@ -76,6 +78,32 @@ public class DBCommunicator {
 			while(res.next()) {
 				result.add(res.getString(1));
 			}	
+			res.close();
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/**
+	 * @param letterSetCode is either EN or NL
+	 * @return hashmap within a hashmap
+	 * For an example how this works see Utility/Loader.java
+	 */
+	public static HashMap<Character , HashMap<Integer, Integer>> requestLetters(String letterSetCode){
+		Statement	stm;
+		ResultSet 	res;
+		HashMap<Character , HashMap<Integer, Integer>> result = new HashMap<Character , HashMap<Integer, Integer>>();
+		try {
+			stm = con.createStatement();
+			res = stm.executeQuery("SELECT waarde, karakter, aantal FROM lettertype WHERE letterset_code='"+letterSetCode.toUpperCase()+"'");
+			while(res.next()) {
+				HashMap<Integer, Integer> valueamount = new HashMap<Integer, Integer>();
+				valueamount.put(res.getInt(1), res.getInt(3));
+				result.put(res.getString(2).toString().charAt(0), valueamount);
+//				}	
+			}
 			res.close();
 			stm.close();
 		}
