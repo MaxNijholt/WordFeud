@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 import Utility.SButton;
+import WordFeud.Game;
 import WordFeud.Tile;
 
 @SuppressWarnings("serial")
@@ -18,6 +19,7 @@ public class GamePanel extends JPanel {
 	private SButton pass, swap, resign, play;
 	private ChatPanel chat;
 	private MenuPanel mp;
+	private Game game;
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
@@ -27,7 +29,7 @@ public class GamePanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.setBackground(new Color(94, 94, 94));
 		mp		= new MenuPanel(gui);
-		chat 	= new ChatPanel();
+		chat 	= new ChatPanel(gui, game);
 		
 		pass 	= new SButton("Pass", SButton.CYAN, 120, 40);
 		swap 	= new SButton("Swap",  SButton.YELLOW, 120, 40);

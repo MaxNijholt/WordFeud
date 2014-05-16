@@ -79,8 +79,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 			gui.logout();
 		}
 		if(e.getSource().equals(stats)) {
-			gui.switchPanel(new StatisticsPanel());
-			// TODO: Add gui parameter
+			gui.switchPanel(new StatisticsPanel(gui));
 		}
 		if(e.getSource().equals(extraButton)) {
 			
