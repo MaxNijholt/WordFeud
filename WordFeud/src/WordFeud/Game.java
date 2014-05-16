@@ -21,7 +21,7 @@ public class Game {
 	public Game(int gameID, Application app){
 		this.app = app;
 		this.id = gameID;
-		myField = new Field();
+		myField = new Field(id);
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
 	}
