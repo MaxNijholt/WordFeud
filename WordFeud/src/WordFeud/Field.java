@@ -13,7 +13,7 @@ public class Field {
 	public Field(int spelID) {
 		newWords = new HashMap<String, GameStone>();
 		field = new HashMap<String, Tile>();
-		
+
 		for (int i = 1; i < 16; i++) {
 			for (int j = 1; j < 16; j++) {
 				if (!DBCommunicator
@@ -57,30 +57,19 @@ public class Field {
 	}
 
 	public void layGameStone(GameStone gamestone, String location) {
-		for (int i = 1; i < 16; i++) {
-			for (int j = 1; j < 16; j++) {
-				if (location.equals(i + "," + j)) {
-					if (field.get(location).getGameStone() == null) {
-						field.get(location).setGameStone(gamestone);
-						newWords.put(location, gamestone);
-						break;
-					}
-				}
-			}
+
+		if (field.get(location).getGameStone() == null) {
+			field.get(location).setGameStone(gamestone);
+			newWords.put(location, gamestone);
 		}
 
 	}
 
 	public void removeGameStone(String location) {
-		for (int i = 1; i < 16; i++) {
-			for (int j = 1; j < 16; j++) {
-				if (field.get(location).getGameStone() != null) {
-					field.get(location).setGameStone(null);
-					newWords.remove(location);
+		if (field.get(location).getGameStone() != null) {
+			field.get(location).setGameStone(null);
+			newWords.remove(location);
 
-					break;
-				}
-			}
 		}
 	}
 
