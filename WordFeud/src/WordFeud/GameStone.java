@@ -18,10 +18,10 @@ public class GameStone extends SLabel {
 	private Font 	large, small;
 	
 	public GameStone(int value, char letter){
-		super(String.valueOf(letter), SLabel.CENTER, new Font("Arial", Font.BOLD, 25), 30, 30);
+		super(String.valueOf(letter), SLabel.CENTER, 30, 30);
 		this.value 	= value;
 		this.letter = letter;
-		this.large 	= new Font("Arial", Font.BOLD, 20);
+		this.large 	= new Font("Arial", Font.BOLD, 52);
 		this.small	= new Font("Arial", Font.PLAIN, 8);
 	}
 	
@@ -30,13 +30,13 @@ public class GameStone extends SLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
-		g2d.setColor(Color.WHITE);
+		g2d.setColor(new Color(255, 255, 255, 220));
 		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 5, 5);
 		g2d.setColor(Color.BLACK);
-		FontMetrics fmLarge = g2d.getFontMetrics(large);
+		FontMetrics fmLarge = g2d.getFontMetrics(new Font("Arial", Font.BOLD, 52));
 		FontMetrics fmSmall = g2d.getFontMetrics(small);
-		g2d.setFont(large);
-		g.drawString(String.valueOf(letter), (getWidth() / 2) - (fmLarge.stringWidth(String.valueOf(letter)) / 2) - (fmSmall.stringWidth("0") / 2), (0 + (this.getHeight()+1-0) / 2) - ((fmLarge.getAscent() + fmLarge.getDescent()) / 2) + fmLarge.getAscent());
+		g2d.setFont(new Font("Arial", Font.BOLD, 52));
+		g.drawString(String.valueOf(letter), (getWidth() / 2) - (fmLarge.stringWidth(String.valueOf(letter)) / 2), (0 + (this.getHeight()+1-0) / 2) - ((fmLarge.getAscent() + fmLarge.getDescent()) / 2) + fmLarge.getAscent());
 		String temp = String.valueOf(value);
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(small);

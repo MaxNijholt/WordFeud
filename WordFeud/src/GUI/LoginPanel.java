@@ -4,14 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,6 +18,7 @@ import AccountType.Account;
 import Utility.Loader;
 import Utility.SButton;
 import Utility.SPasswordField;
+import Utility.SPopupMenu;
 import Utility.STextField;
 import WordFeud.GameStone;
 import WordFeud.Login;
@@ -38,6 +36,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private SButton 		login, register, spectate, exit;
 	private GUI 			gui;
 	private Login 			l;
+	private SPopupMenu		popup;
 	
 	/**
 	 * The panel that is used to log in to our program.
@@ -110,6 +109,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 		gbc.gridy++;
 		this.add(mainPanel, gbc);
 		gui.setLoadingCursor(false);
+		
+		this.popup = new SPopupMenu();
 	}
 
 	/**
@@ -127,7 +128,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 		String text	= l.login(new Account(username.getText()), String.valueOf(password.getPassword()));
 		if(text == "0") {return;}
 		if(text != null) {
-			Graphics2D g2d = (Graphics2D)this.getGraphics();
+			popup.show(this, 10, 10, text, SButton.RED);
+/*			Graphics2D g2d = (Graphics2D)this.getGraphics();
 			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
 			g2d.setFont(new Font("Arial", Font.BOLD, 16));
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -135,7 +137,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 			g2d.setColor(Color.RED);
 			g2d.fillRoundRect(10, 10, 335, 30, 10, 10);
 			g2d.setColor(Color.WHITE);
-			g2d.drawString(text, (350 / 2) - (fm.stringWidth(text) / 2), (0 + (50+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
+			g2d.drawString(text, (350 / 2) - (fm.stringWidth(text) / 2), (0 + (50+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());*/
 		}
 	}
 
