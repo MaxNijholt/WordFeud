@@ -17,7 +17,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
-import Utility.ImageLoader;
+import AccountType.Account;
+import Utility.Loader;
 import Utility.SButton;
 import Utility.SPasswordField;
 import Utility.STextField;
@@ -42,8 +43,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * The panel that is used to log in to our program.
 	 */
 	public LoginPanel(GUI gui) {
+		this.gui = gui;
+		gui.setLoadingCursor(true);
+		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.gui 	= gui;
 		this.l		= new Login(gui);
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -52,8 +55,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		title 		= new JPanel();
 		username 	= new STextField("Username", 220, 40);
 		password 	= new SPasswordField("Password", 220, 40);
-
-		login		= new SButton("Play", SButton.GREY, 220, 40);
+		login		= new SButton("Login", SButton.GREY, 220, 40);
 		register 	= new SButton("Register", SButton.GREY, 220, 40);
 		spectate 	= new SButton("Spectate", SButton.GREY, 155, 40);
 		exit 		= new SButton("Exit", SButton.GREY, 60, 40);
@@ -69,9 +71,9 @@ public class LoginPanel extends JPanel implements ActionListener {
 		title.setBackground(new Color(255, 255, 255, 0));
 		
 		String letters 	= "WORDFEUD";
-		String values	= "51224122";
+
 		for(int i = 0; i < letters.length(); i++) {
-			GameStone s = new GameStone(Integer.valueOf(Character.getNumericValue(values.charAt(i))), letters.charAt(i));
+			GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
 			s.setDimension(70, 70);
 			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
 			title.add(s);
@@ -107,21 +109,22 @@ public class LoginPanel extends JPanel implements ActionListener {
 		this.add(title, gbc);
 		gbc.gridy++;
 		this.add(mainPanel, gbc);
+		gui.setLoadingCursor(false);
 	}
 
 	/**
 	 * Overridden paintComponent(Graphics g) method from JComponent used to draw the background
 	 */
 	public void paintComponent(Graphics g) {
-		if(ImageLoader.BACKGROUNDHD == null) {return;}
-		g.drawImage(ImageLoader.BACKGROUNDHD, 0, 0, ImageLoader.BACKGROUNDHD.getWidth() * 2, ImageLoader.BACKGROUNDHD.getHeight() * 2, null);
+		if(Loader.BACKGROUNDHD == null) {return;}
+		g.drawImage(Loader.BACKGROUNDHD, 0, 0, Loader.BACKGROUNDHD.getWidth() * 2, Loader.BACKGROUNDHD.getHeight() * 2, null);
 	}
 	
 	/**
 	 * This is a method that is testing with the DBCommunicator if the user name and password are correct
 	 */
 	private void login() {
-		String text	= l.login(username.getText(), String.valueOf(password.getPassword()));
+		String text	= l.login(new Account(username.getText()), String.valueOf(password.getPassword()));
 		if(text == "0") {return;}
 		if(text != null) {
 			Graphics2D g2d = (Graphics2D)this.getGraphics();

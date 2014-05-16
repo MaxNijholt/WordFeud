@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
+import AccountType.Account;
 import Utility.SButton;
 import Utility.SLabel;
 import Utility.SPasswordField;
@@ -22,15 +23,16 @@ import Utility.STextField;
 
 public class SettingsPanel extends JPanel{
 	private GUI gui;
-	private String user;
+	private Account user;
 	private SPasswordField passwordfield, passwordControle;
 	private SLabel password, username;
 	private STextField userfield;
 	private SButton save;
 	private ActionAdapter aa = new ActionAdapter();
 
-	public SettingsPanel(GUI gui ,String user){
+	public SettingsPanel(GUI gui , Account user){
 		this.gui = gui;
+		gui.setLoadingCursor(true);
 		this.user = user;
 
 		this.setPreferredSize(new Dimension(GUI.WIDTH , GUI.HEIGHT));
@@ -43,7 +45,8 @@ public class SettingsPanel extends JPanel{
 		this.passwordControle 	= new SPasswordField("passwordc");
 		this.password			= new SLabel("New password:", 0);
 		this.username			= new SLabel("New username:", 0);
-		this.userfield			= new STextField(user);
+
+		this.userfield			= new STextField(user.getUsername());
 		this.save				= new SButton("Save", SButton.GREY);
 
 
@@ -63,6 +66,7 @@ public class SettingsPanel extends JPanel{
 		c.gridx++;
 		c.gridy++;
 		this.add(save, c);
+		gui.setLoadingCursor(false);
 	}
 
 	class ActionAdapter implements ActionListener {

@@ -17,6 +17,7 @@ public class Field {
 			}
 		}
 	}
+	
 
 	public void layGameStone(GameStone gamestone, String location) {
 		for (int i = 1; i < 16; i++) {
