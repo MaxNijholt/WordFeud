@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -28,7 +29,21 @@ public class MenuPanel extends JPanel implements ActionListener {
 		stats.setCustomRounded(false, false, false, false);
 		extraButton 	= new SButton("Extra", SButton.GREY, 250, 30);
 		extraButton.setCustomRounded(false, false, false, false);
-		switcher		= new SComboBox(250, 30, new String[] {"Administrator", "Player"}, false);
+		ArrayList<String> accountRolls = new ArrayList<String>();
+		if(gui.getApplication().getCurrentAccount().getPlayer() != null) {
+			accountRolls.add("Player");
+		}
+		if(gui.getApplication().getCurrentAccount().getAdmin() != null) {
+			accountRolls.add("Administrator");
+		}
+		if(gui.getApplication().getCurrentAccount().getMod() != null) {
+			accountRolls.add("Moderator");
+		}
+		String[] rollsArray = new String[accountRolls.size()];
+		for(int i = 0; i < accountRolls.size(); i++) {
+			rollsArray[i] = accountRolls.get(i);
+		}
+		switcher		= new SComboBox(250, 30, rollsArray, false);
 		
 		logout.addActionListener(this);
 		stats.addActionListener(this);

@@ -1,6 +1,12 @@
 package WordFeud;
 
-import GUI.*;
+import java.util.ArrayList;
+
+import AccountType.Account;
+import GUI.AdminPanel;
+import GUI.GUI;
+import GUI.ModeratorPanel;
+import GUI.PlayerPanel;
 import Utility.DBCommunicator;
 
 public class Login {
@@ -9,18 +15,40 @@ public class Login {
 	
 	public Login(GUI gui) {this.gui = gui;}
 	
-	public String login(String username, String password) {
-		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username + "'") == null) {
+	public String login(Account username, String password) {
+		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username.getUsername() + "'") == null) {
 			return "That username doesn't exist!";
 		}
 		if(DBCommunicator.requestData("SELECT * FROM account WHERE wachtwoord = '" + password + "'") == null) {
 			return "Incorrect password!";
 		}
-		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username + "'").equals(username)) {
-			if(DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE wachtwoord = '" + password + "' AND naam = '" + username + "'" ) != null) {
+		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username.getUsername() + "'").equals(username.getUsername())) {
+			if(DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE wachtwoord = '" + password + "' AND naam = '" + username.getUsername() + "'" ) != null) {
 				gui.login(username);
-				gui.switchPanel(new PlayerPanel(gui));
-				return "0";
+				ArrayList<String> accountRolls = DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam = '" + username.getUsername() + "'");
+				for(String s:accountRolls) {
+					if(s.equals("Player")) {
+						gui.switchPanel(new PlayerPanel(gui));
+						System.out.println("You have been logged in as: Player");
+						return "0";
+					}
+				}
+				for(String s:accountRolls) {
+					if(s.equals("Adminstrator")) {
+						gui.switchPanel(new AdminPanel(gui));
+						System.out.println("You have been logged in as: Administrator");
+						return "0";
+					}
+					
+				}
+				for(String s:accountRolls) {
+					if(s.equals("Moderator")) {
+						gui.switchPanel(new ModeratorPanel(gui));
+						System.out.println("You have been logged in as: Moderator");
+						return "0";
+					}
+				}
+				return "You do not have a valid account_rol";
 			}
 			else {
 				return "Wrong password!";
@@ -29,11 +57,22 @@ public class Login {
 		return "ERROR404";
 	}
 	
-	public String register(String username, String password, String validatePassword) {
-		if(DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '" + username + "'") == null) {
+	public String register(Account username, String password, String validatePassword) {
+		for(int i = 0; i < username.getUsername().length(); i++) {
+			if(Character.isWhitespace(username.getUsername().charAt(i))) {return "No whitespaces allowed!";}
+		}
+		String[] safe = new String[] {"\"", "\'"};
+		for(int i = 0; i < safe.length; i++) {
+			if(username.getUsername().contains(safe[i]) || password.contains(safe[i])) {
+				return "You can't use quotes!";
+			}
+		}
+		
+		if(DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '" + username.getUsername() + "'") == null) {
 			if(password.equals(validatePassword)) {
 				if(!password.isEmpty() && !(password.length() < 1)) {
-					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username + "', '" + password +"')");
+					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username.getUsername() + "', '" + password + "')");
+					DBCommunicator.writeData("INSERT INTO accountrol(account_naam, rol_type) VALUES('" + username.getUsername() + "', 'Player')");
 					gui.login(username);
 					gui.switchPanel(new PlayerPanel(gui));
 					return "0";

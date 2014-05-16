@@ -32,6 +32,7 @@ public class SettingsPanel extends JPanel{
 
 	public SettingsPanel(GUI gui , Account user){
 		this.gui = gui;
+		gui.setLoadingCursor(true);
 		this.user = user;
 
 		this.setPreferredSize(new Dimension(GUI.WIDTH , GUI.HEIGHT));
@@ -44,6 +45,7 @@ public class SettingsPanel extends JPanel{
 		this.passwordControle 	= new SPasswordField("passwordc");
 		this.password			= new SLabel("New password:", 0);
 		this.username			= new SLabel("New username:", 0);
+
 		this.userfield			= new STextField(user.getUsername());
 		this.save				= new SButton("Save", SButton.GREY);
 
@@ -64,6 +66,7 @@ public class SettingsPanel extends JPanel{
 		c.gridx++;
 		c.gridy++;
 		this.add(save, c);
+		gui.setLoadingCursor(false);
 	}
 
 	class ActionAdapter implements ActionListener {
