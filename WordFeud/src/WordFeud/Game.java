@@ -21,7 +21,7 @@ public class Game {
 	public Game(int gameID, Application app){
 		this.app = app;
 		this.id = gameID;
-		myField = new Field();
+		myField = new Field(id);
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
 	}
@@ -36,7 +36,7 @@ public class Game {
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-		int points = myPC.counterPointsTurn(myField.getNewWords());
+		int points = 0;//myPC.counterPointsTurn(myField.getNewWords());
 		
 		return points;
 	}

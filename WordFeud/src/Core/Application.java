@@ -217,7 +217,6 @@ public class Application {
 			}
 		}
 		Boolean searching = true;
-		System.out.println("que?");
 		
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
