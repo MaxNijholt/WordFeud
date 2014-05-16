@@ -1,7 +1,12 @@
 package WordFeud;
 
+import java.util.ArrayList;
+
 import AccountType.Account;
-import GUI.*;
+import GUI.AdminPanel;
+import GUI.GUI;
+import GUI.ModeratorPanel;
+import GUI.PlayerPanel;
 import Utility.DBCommunicator;
 
 public class Login {
@@ -20,8 +25,30 @@ public class Login {
 		if(DBCommunicator.requestData("SELECT * FROM account WHERE naam = '" + username.getUsername() + "'").equals(username.getUsername())) {
 			if(DBCommunicator.requestData("SELECT wachtwoord FROM account WHERE wachtwoord = '" + password + "' AND naam = '" + username.getUsername() + "'" ) != null) {
 				gui.login(username);
-				gui.switchPanel(new PlayerPanel(gui));
-				return "0";
+				ArrayList<String> accountRolls = DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam = '" + username.getUsername() + "'");
+				for(String s:accountRolls) {
+					if(s.equals("Player")) {
+						gui.switchPanel(new PlayerPanel(gui));
+						System.out.println("You have been logged in as: Player");
+						return "0";
+					}
+				}
+				for(String s:accountRolls) {
+					if(s.equals("Adminstrator")) {
+						gui.switchPanel(new AdminPanel(gui));
+						System.out.println("You have been logged in as: Administrator");
+						return "0";
+					}
+					
+				}
+				for(String s:accountRolls) {
+					if(s.equals("Moderator")) {
+						gui.switchPanel(new ModeratorPanel(gui));
+						System.out.println("You have been logged in as: Moderator");
+						return "0";
+					}
+				}
+				return "You do not have a valid account_rol";
 			}
 			else {
 				return "Wrong password!";
