@@ -29,7 +29,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 
 	public PlayerPanel(GUI gui){
 		this.gui = gui;
-		this.mp = new MenuPanel(gui);
+		this.mp = new MenuPanel(gui, null);
 		gui.setLoadingCursor(true);
 		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));

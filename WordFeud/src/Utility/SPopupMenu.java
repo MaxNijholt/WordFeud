@@ -19,15 +19,10 @@ public class SPopupMenu extends JPopupMenu {
 
 	private SLabel text;
 	private Color background;
+	private int width, height;
 	
 	public SPopupMenu() {
 		init();
-	}
-	
-	public SPopupMenu(int width, int height) {
-		init();
-		text = new SLabel("", SLabel.CENTER, width, height);
-		text.setBackground(background);
 	}
 	
 	private void init() {
@@ -45,9 +40,11 @@ public class SPopupMenu extends JPopupMenu {
 		add(text);
 	}
 	
-	public void show(Component invoker, int x, int y, String message, Color background) {
+	public void show(Component invoker, int x, int y, int width, int height, String message, Color background) {
 		this.text = new SLabel(message, SLabel.CENTER);
 		this.background = background;
+		this.width = width;
+		this.height = height;
 		super.show(invoker, x, y);
 	}
 	
@@ -58,15 +55,22 @@ public class SPopupMenu extends JPopupMenu {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
 		g2d.setFont(new Font("Arial", Font.PLAIN, 16));
+		this.setFont(new Font("Arial", Font.PLAIN, 16));
 		FontMetrics fm = g2d.getFontMetrics(g2d.getFont());
 		
 		g2d.setColor(background);
-		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+		this.setPreferredSize(new Dimension(width, height));
+		g2d.fillRoundRect(0, 0, width, height, 10, 10);
 		
 		g2d.setColor(Color.WHITE);
 		
-		g2d.drawString(text.getName(), (this.getWidth() / 2) - (fm.stringWidth(text.getName()) / 2), (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
+		g2d.drawString(text.getName(), (this.getWidth() / 2) - (fm.stringWidth(text.getName()) / 2), (0 + (height+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
 		g2d.dispose();
+	}
+	
+	public Dimension getTextDimension(String text) {
+		FontMetrics fm = this.getFontMetrics(getFont());
+		return new Dimension(fm.stringWidth(text) + 30, fm.getHeight());
 	}
 	
 }

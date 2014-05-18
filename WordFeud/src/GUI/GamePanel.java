@@ -15,11 +15,11 @@ import WordFeud.Tile;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {
 
-	private GUI gui;
-	private SButton pass, swap, resign, play;
-	private ChatPanel chat;
-	private MenuPanel mp;
-	private Game game;
+	private SButton 	pass, swap, resign, play;
+	private ChatPanel 	chat;
+	private MenuPanel 	mp;
+	private Game 		game;
+	private GUI 		gui;
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
@@ -28,7 +28,7 @@ public class GamePanel extends JPanel {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(new BorderLayout());
 		this.setBackground(new Color(94, 94, 94));
-		mp		= new MenuPanel(gui);
+		mp		= new MenuPanel(gui, new PlayerPanel(gui));
 		chat 	= new ChatPanel(gui, game);
 		
 		pass 	= new SButton("Pass", SButton.CYAN, 120, 40);

@@ -128,7 +128,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		String text	= l.login(new Account(username.getText()), String.valueOf(password.getPassword()));
 		if(text == "0") {return;}
 		if(text != null) {
-			popup.show(this, 10, 10, text, SButton.RED);
+			popup.show(username, username.getWidth() + 10, 0, popup.getTextDimension(text).width + 10, popup.getTextDimension(text).height, text, SButton.RED);
 /*			Graphics2D g2d = (Graphics2D)this.getGraphics();
 			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
 			g2d.setFont(new Font("Arial", Font.BOLD, 16));
