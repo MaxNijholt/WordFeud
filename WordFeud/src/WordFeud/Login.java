@@ -34,7 +34,7 @@ public class Login {
 					}
 				}
 				for(String s:accountRolls) {
-					if(s.equals("Adminstrator")) {
+					if(s.equals("Administrator")) {
 						gui.switchPanel(new AdminPanel(gui));
 						System.out.println("You have been logged in as: Administrator");
 						return "0";

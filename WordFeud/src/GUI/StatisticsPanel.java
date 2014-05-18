@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.RenderingHints;
 
 import javax.swing.BorderFactory;
@@ -12,50 +13,51 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Utility.SLabel;
+
 @SuppressWarnings("serial")
 public class StatisticsPanel extends JPanel {
 
 	private JPanel centerPanel = new JPanel();
 
-	private JLabel playerName;
-	private JLabel winLoss;
-	private JLabel highestGameScore;
-	private JLabel highestWordScore;
+	private SLabel playerName;
+	private SLabel playerNameView;
+	private SLabel winLoss;
+	private SLabel winLossView;
+	private SLabel highestGameScore;
+	private SLabel highestGameScoreView;
+	private SLabel highestWordScore;
+	private SLabel highestWordScoreView;
 
 	private String title = "Statistics";
 
+	public StatisticsPanel(GUI gui){
 
-
-
-	public StatisticsPanel(){
-
-		playerName = new JLabel("Player name");
-		winLoss = new JLabel("Win/Loss ratio");
-		highestGameScore = new JLabel("Highest score in a game");
-		highestWordScore = new JLabel("Highest score with one word");
+		playerName = new SLabel("Player name:", SLabel.LEFT);
+		playerNameView = new SLabel(gui.getApplication().getCurrentAccount().getUsername(), SLabel.RIGHT);
+		winLoss = new SLabel("Win/Loss ratio", SLabel.LEFT);
+		winLossView = new SLabel("5/7", SLabel.RIGHT); //test
+		highestGameScore = new SLabel("Highest score in a game", SLabel.LEFT);
+		highestGameScoreView = new SLabel("800", SLabel.RIGHT);//test		
+		highestWordScore = new SLabel("Highest score with one word", SLabel.LEFT);
+		highestWordScoreView = new SLabel("60", SLabel.RIGHT);
 
 		this.setPreferredSize(new Dimension(GUI.WIDTH,GUI.HEIGHT));
-		this.setBackground(Color.GRAY);	
+		this.setBackground(new Color(94, 94, 94));	
 		this.setLayout(null);
 
-		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+		centerPanel.setLayout(new GridLayout(4,1));
 		centerPanel.setBackground(Color.GRAY);
 		centerPanel.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 200, 200);
 
-		playerName.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-		winLoss.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-		highestGameScore.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-		highestWordScore.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-
-		playerName.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-		winLoss.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-		highestGameScore.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-		highestWordScore.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-
 		centerPanel.add(playerName);
+		centerPanel.add(playerNameView);
 		centerPanel.add(winLoss);
+		centerPanel.add(winLossView);
 		centerPanel.add(highestGameScore);
+		centerPanel.add(highestGameScoreView);
 		centerPanel.add(highestWordScore);
+		centerPanel.add(highestWordScoreView);
 
 		this.add(centerPanel);
 
