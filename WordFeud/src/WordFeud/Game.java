@@ -36,7 +36,7 @@ public class Game {
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-		int points = 0;//myPC.counterPointsTurn(myField.getNewWords());
+		int points = 0;
 		
 		return points;
 	}
@@ -54,7 +54,7 @@ public class Game {
 	}
 	
 	/**
-	 * check if the game has ended
+	 * tell the db to end the game
 	 * -------------------------------------------------rest vragen
 	 * @return
 	 */
