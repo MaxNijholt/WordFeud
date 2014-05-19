@@ -17,7 +17,7 @@ public class Tile extends SLabel {
 	private GameStone gameStone;
 
 	public Tile(int x, int y) {
-		super("", SLabel.CENTER, 30, 30);
+		super("", SLabel.CENTER, 32, 32);
 		this.xPos = x;
 		this.yPos = y;
 		bonus = "";
@@ -25,7 +25,7 @@ public class Tile extends SLabel {
 	}
 
 	public Tile(int x, int y, String value) {
-		super("", SLabel.CENTER, 30, 30);
+		super("", SLabel.CENTER, 32, 32);
 		this.xPos = x;
 		this.yPos = y;
 		bonus = "";

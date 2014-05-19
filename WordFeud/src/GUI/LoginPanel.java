@@ -20,6 +20,7 @@ import Utility.SButton;
 import Utility.SPasswordField;
 import Utility.SPopupMenu;
 import Utility.STextField;
+import Utility.SplashText;
 import WordFeud.GameStone;
 import WordFeud.Login;
 
@@ -37,6 +38,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private GUI 			gui;
 	private Login 			l;
 	private SPopupMenu		popup;
+	private SplashText		sp = new SplashText("Nice", SButton.RED, 700, 150, this);
 	
 	/**
 	 * The panel that is used to log in to our program.
@@ -119,6 +121,11 @@ public class LoginPanel extends JPanel implements ActionListener {
 	public void paintComponent(Graphics g) {
 		if(Loader.BACKGROUNDHD == null) {return;}
 		g.drawImage(Loader.BACKGROUNDHD, 0, 0, Loader.BACKGROUNDHD.getWidth() * 2, Loader.BACKGROUNDHD.getHeight() * 2, null);
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		sp.drawSplash(g);
 	}
 	
 	/**

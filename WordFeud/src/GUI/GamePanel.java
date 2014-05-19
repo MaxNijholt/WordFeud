@@ -3,8 +3,9 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
 
@@ -23,43 +24,66 @@ public class GamePanel extends JPanel {
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
+		this.game = gui.getApplication().getSelectedGame();
 		gui.setLoadingCursor(true);
 		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(new BorderLayout());
 		this.setBackground(new Color(94, 94, 94));
 		mp		= new MenuPanel(gui, new PlayerPanel(gui));
+		mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
+		mp.setMinimumSize(new Dimension(GUI.WIDTH, 30));
+		mp.setMaximumSize(new Dimension(GUI.WIDTH, 30));
 		chat 	= new ChatPanel(gui, game);
-		
-		pass 	= new SButton("Pass", SButton.CYAN, 120, 40);
-		swap 	= new SButton("Swap",  SButton.YELLOW, 120, 40);
-		resign 	= new SButton("Resign",  SButton.RED, 120, 40);
-		play	= new SButton("Play",  SButton.GREEN, 120, 40);
-		
-		JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		mainPanel.setBackground(new Color(50, 50, 50));
+		chat.setPreferredSize(new Dimension(250, GUI.HEIGHT));
+		chat.setMinimumSize(new Dimension(250, GUI.HEIGHT));
+		chat.setMaximumSize(new Dimension(250, GUI.HEIGHT));
+		pass 	= new SButton("Pass", SButton.CYAN, 150, 40);
+		swap 	= new SButton("Swap",  SButton.YELLOW, 150, 40);
+		resign 	= new SButton("Resign",  SButton.RED, 150, 40);
+		play	= new SButton("Play",  SButton.GREEN, 150, 40);
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(4, 1, 0, 10));
 		buttonPanel.setOpaque(false);
-		/*		
+		
+		JPanel wrapButton = new JPanel();
+		wrapButton.setLayout(new GridBagLayout());
+		wrapButton.setPreferredSize(new Dimension(200, GUI.HEIGHT));
+		wrapButton.setMinimumSize(new Dimension(200, GUI.HEIGHT));
+		wrapButton.setMaximumSize(new Dimension(200, GUI.HEIGHT));
+		wrapButton.setOpaque(false);
+		wrapButton.add(buttonPanel);
+
 		JPanel handPanel = new JPanel();
-		handPanel.setLayout(new GridLayout(1, 7, 3, 3));
+		handPanel.setLayout(null);
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i, 0);
 			handPanel.add(tile);
+			tile.setBounds((i * 32) + (1*i), 0, 32, 32);
 		}
-		*/
+		handPanel.setPreferredSize(new Dimension(550, 50));
+		handPanel.setMinimumSize(new Dimension(550, 50));
+		handPanel.setMaximumSize(new Dimension(550, 50));
+		handPanel.setBackground(getBackground());
 		
 		JPanel gamePanel = new JPanel();
-		gamePanel.setLayout(new GridLayout(15, 15, 3, 3));
+		gamePanel.setLayout(null);
 		gamePanel.setOpaque(false);
+		gamePanel.setPreferredSize(new Dimension(550, 550));
 		
-		for(int y = 0; y < 15; y++) {
-			for(int x = 0; x < 15; x++) {
-				Tile tile = new Tile(x, y);
+		HashMap<String, Tile> tiles = game.getMyField().getTiles();
+		int xPos = 0;
+		int yPos = 0;
+		for(int y = 1; y < 16; y++) {
+			for(int x = 1; x < 16; x++) {
+				Tile tile = tiles.get(x + "," + y);
 				gamePanel.add(tile);
+				tile.setBounds(xPos, yPos, 32, 32);
+				xPos += 33;
 			}
+			xPos = 0;
+			yPos += 33;
 		}
 		
 		buttonPanel.add(pass);
@@ -67,11 +91,10 @@ public class GamePanel extends JPanel {
 		buttonPanel.add(resign);
 		buttonPanel.add(play);		
 		
-		mainPanel.add(buttonPanel);
-		mainPanel.add(gamePanel);
-		
 		add(mp, BorderLayout.NORTH);
-		add(mainPanel, BorderLayout.CENTER);
+		add(wrapButton, BorderLayout.WEST);
+		add(gamePanel, BorderLayout.CENTER);
+		add(handPanel, BorderLayout.SOUTH);
 		add(chat, BorderLayout.EAST);
 		gui.setLoadingCursor(false);
 		
