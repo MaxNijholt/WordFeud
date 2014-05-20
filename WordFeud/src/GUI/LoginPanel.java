@@ -163,7 +163,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * This methods sends you to the spectator panel
 	 */
 	private void spectate() {
-		gui.switchPanel(new SpectatorPanel());
+		gui.switchPanel(new SpectatorCompetitionsPanel(gui));
 		sp.setRunning(false);
 	}
 
