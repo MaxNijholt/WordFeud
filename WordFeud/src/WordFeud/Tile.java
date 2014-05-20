@@ -1,26 +1,22 @@
 package WordFeud;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
-public class Tile extends SLabel implements MouseListener, MouseMotionListener {
+public class Tile extends SLabel implements MouseListener {
 
 	private String bonus;
 	private boolean bonusUsed;
 	private int xPos;
 	private int yPos;
 	private GameStone gameStone;
-	private Point initLoc, initLocOnScreen;
 
 	public Tile(int x, int y) {
 		super("", SLabel.CENTER, 32, 32);
@@ -29,7 +25,6 @@ public class Tile extends SLabel implements MouseListener, MouseMotionListener {
 		bonus = "";
 		bonusUsed = false;
 		this.addMouseListener(this);
-		this.addMouseMotionListener(this);
 	}
 
 	public Tile(int x, int y, String bonus) {
@@ -39,7 +34,6 @@ public class Tile extends SLabel implements MouseListener, MouseMotionListener {
 		this.bonus = bonus;
 		bonusUsed = false;
 		this.addMouseListener(this);
-		this.addMouseMotionListener(this);
 	}
 
 	public Tile(int x, int y, GameStone stone){
@@ -118,15 +112,19 @@ public class Tile extends SLabel implements MouseListener, MouseMotionListener {
 
 	}
 
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+	}
+
+	/*
 	public void mousePressed(MouseEvent e) {
 		Component comp = (Component)e.getSource();
 		initLoc = comp.getLocation();
 		initLocOnScreen = comp.getLocationOnScreen();
 	}
-
-	public void mouseReleased(MouseEvent e) {
-	}
-
+	
 	public void mouseDragged(MouseEvent e) {
 		Component comp = (Component)e.getSource();
 		Point locOnScreen = e.getLocationOnScreen();
@@ -137,4 +135,5 @@ public class Tile extends SLabel implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseMoved(MouseEvent e) {}
+	*/
 }
