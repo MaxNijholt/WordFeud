@@ -36,9 +36,6 @@ public class Application {
 		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
-		
-		currentAccount = new Account("stijnvangaal");
-		myGui.switchPanel(new SpectatorCompetitionsPanel(myGui));
 	}
 	
 	
