@@ -60,7 +60,7 @@ public class Tile extends SLabel implements MouseListener {
 		}
 	}
 
-	// Getters
+	// Getters	
 	public String getBonus() {
 		return bonus;
 	}

@@ -53,10 +53,17 @@ public class Loader {
 		return gamestones;
 	}
 	
-	public static Tile[][] getTiles(){
-		Tile[][] tiles = DBCommunicator.requestTiles("Standard");
-		System.out.println(tiles);
-		return tiles;
+	public static HashMap<String, Tile> getTiles(){
+		HashMap<String, String> tiles = DBCommunicator.requestTilesMap("Standard");
+		HashMap<String, Tile> tilemap = new HashMap<String, Tile>();
+		ArrayList<String> loc = new ArrayList<String>();
+		loc.addAll(tiles.keySet());
+		for(String s : loc){
+			String x = "" + s.substring(0, s.indexOf(","));
+			String y = "" + s.substring(s.indexOf(",")+1);
+			Tile ile = new Tile(Integer.parseInt(x), Integer.parseInt(y) ,tiles.get(s));
+		}
+		return tilemap;
 	}
 
 }

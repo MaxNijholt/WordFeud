@@ -290,7 +290,6 @@ public class Application {
 			int e = 0;
 			while(e < 7){
 				int letterID = (int) (Math.random() * 105);
-				System.out.println(letterID);
 				String character = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + gameID + " AND letter_id = " + letterID);
 				if(character != null){
 					DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES(" + gameID + ", " + letterID + ", " + beurt + ")");
@@ -345,8 +344,8 @@ public class Application {
 	/**
 	 *tell game to swapGameStones
 	 */
-	public void swapGameStones(){
-		selectedGame.swapGameStones();
+	public void swapGameStones(int[] stoneIDs){
+		selectedGame.swapGameStones(stoneIDs);
 	}
 	
 	/**
