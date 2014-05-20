@@ -32,7 +32,10 @@ public class SplashText implements Runnable {
 		texts		= new String[] 
 				{	
 					"This is awesome", "So cool", "Really nice!", "35% bug free!", "Awesome", "LOL!",
-					"It's a game!", "Wordfeud"
+					"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
+					"Déjà vu!", "Déjà vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
+					"Woah!", "Wow!", "Yaay!", "Water proof!", "你好中国！", "Superfragilisticexpialidocious!",
+					"This message will never appear on the splash screen, isn't that weird?", "Try it!"
 				};
 		text		= texts[new Random().nextInt(texts.length)];
 		thread.start();
