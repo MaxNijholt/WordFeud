@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import WordFeud.Tile;
+
 public class DBCommunicator {
 
 	/* CONSTANTS */
@@ -103,6 +105,39 @@ public class DBCommunicator {
 				valueamount.put(res.getInt(1), res.getInt(3));
 				result.put(res.getString(2).toString().charAt(0), valueamount);
 //				}	
+			}
+			res.close();
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * @param "Standard"
+	 * @return Tile[15][15] including the right bonuses.
+	 */
+	public static Tile[][] requestTiles(String boardType){
+		Statement	stm;
+		ResultSet 	res;
+		Tile[][] result = new Tile[15][15];
+//		HashMap<String , HashMap<Integer, Integer>> result = new HashMap<String , HashMap<Integer, Integer>>();
+		try {
+			stm = con.createStatement();
+			res = stm.executeQuery("SELECT tegeltype_soort, x, y FROM tegel WHERE bord_naam='"+ boardType +"'");
+			while(res.next()) {
+				if(		res.getString(1).equals("TW") || 
+						res.getString(1).equals("DW") ||
+						res.getString(1).equals("TL") || 
+						res.getString(1).equals("DL") ||
+						res.getString(1).equals("*") 
+					){
+					result[res.getInt(2)-1][res.getInt(3)-1] = new Tile(res.getInt(2)-1, res.getInt(3)-1, res.getString(1));
+				}	else{
+					result[res.getInt(2)-1][res.getInt(3)-1] = new Tile(res.getInt(2)-1, res.getInt(3)-1);
+				}
 			}
 			res.close();
 			stm.close();

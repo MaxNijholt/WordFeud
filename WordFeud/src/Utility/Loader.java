@@ -8,6 +8,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import WordFeud.GameStone;
+import WordFeud.Tile;
 
 public class Loader {
 
@@ -50,6 +51,12 @@ public class Loader {
 		 	}
 		}
 		return gamestones;
+	}
+	
+	public static Tile[][] getTiles(){
+		Tile[][] tiles = DBCommunicator.requestTiles("Standard");
+		System.out.println(tiles);
+		return tiles;
 	}
 
 }

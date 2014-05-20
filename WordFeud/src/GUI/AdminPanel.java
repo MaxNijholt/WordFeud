@@ -49,7 +49,7 @@ public class AdminPanel extends JPanel {
 	public AdminPanel(GUI gui) {
 		this.gui = gui;
 		gui.setLoadingCursor(true);
-		
+
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
 
@@ -105,10 +105,12 @@ public class AdminPanel extends JPanel {
 		this.playerLookupBox.getField().addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
+				update();
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				update();
 			}
 
 			@Override
@@ -135,47 +137,46 @@ public class AdminPanel extends JPanel {
 					.getSelectedItem().equals(null))) {
 				if (e.getSource().equals(grantAdmin)) {
 					admin.addPrivilege(playerLookupBox.getSelectedItem(),
-									"Administrator");
+							"Administrator");
 				}
 				if (e.getSource().equals(grantMod)) {
 					admin.addPrivilege(playerLookupBox.getSelectedItem(),
-									"Moderator");
+							"Moderator");
 				}
 				if (e.getSource().equals(revokeMod)) {
 					admin.removePrivilege(playerLookupBox.getSelectedItem(),
-									"Moderator");
+							"Moderator");
 				}
 				if (e.getSource().equals(revokeAdmin)) {
 					admin.removePrivilege(playerLookupBox.getSelectedItem(),
-									"Administrator");
+							"Administrator");
 				}
 				if (e.getSource().equals(revokePlayer)) {
 					admin.removePrivilege(playerLookupBox.getSelectedItem(),
-									"Player");
+							"Player");
 				}
 				if (e.getSource().equals(grantPlayer)) {
 					admin.addPrivilege(playerLookupBox.getSelectedItem(),
-									"Player");
+							"Player");
 				}
 				if (e.getSource().equals(editPlayer)) {
 					// TODO
 				}
-				if (e.getSource().equals(newPlayer)) {
-					newPlayerFrame = new JFrame();
-					
-					newPlayerFrame.setResizable(false);
-					newPlayerFrame.setTitle(title);
-					newPlayerFrame.setContentPane(newPlayerPanel);
-					newPlayerFrame.pack();
-					newPlayerFrame.setLocationRelativeTo(null);
-					newPlayerFrame.setVisible(true);
-					newPlayerFrame.setIconImage(Loader.ICON);
-					newPlayerFrame.add(newPlayerPanel);
-					
-					newPlayerPanel = new JPanel();
-					
-				}
+
 				update();
+			}
+			if (e.getSource().equals(newPlayer)) {
+				newPlayerFrame = new JFrame();
+				newPlayerPanel = new JPanel();
+				
+				newPlayerFrame.setResizable(false);
+				newPlayerFrame.setTitle(title);
+				newPlayerFrame.setContentPane(newPlayerPanel);
+				newPlayerFrame.pack();
+				newPlayerFrame.setLocationRelativeTo(null);
+				newPlayerFrame.setVisible(true);
+				newPlayerFrame.setIconImage(Loader.ICON);
+				newPlayerFrame.add(newPlayerPanel);
 			}
 		}
 	}
@@ -184,11 +185,13 @@ public class AdminPanel extends JPanel {
 	 * method to update the buttons to have the right color.
 	 */
 	public void update() {
-		ArrayList<String> rights = admin.getUserRights(this.playerLookupBox.getSelectedItem());
 		for (SButton sb : buttonCollection) {
 			sb.setColor(SButton.CYAN);
 			sb.enable(true);
 		}
+		ArrayList<String> rights = admin.getUserRights(this.playerLookupBox
+				.getSelectedItem());
+		System.out.println(rights);
 		if (rights.size() != 0) {
 			for (String s : rights) {
 				System.out.println(s);

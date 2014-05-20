@@ -61,6 +61,7 @@ public class Account {
 		ArrayList<String> data = DBCommunicator
 				.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='"
 						+ player + "'");
+		System.out.println(data);
 		return data;
 	}
 

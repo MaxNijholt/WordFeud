@@ -32,11 +32,11 @@ public class Tile extends SLabel implements MouseListener, MouseMotionListener {
 		this.addMouseMotionListener(this);
 	}
 
-	public Tile(int x, int y, String value) {
+	public Tile(int x, int y, String bonus) {
 		super("", SLabel.CENTER, 32, 32);
 		this.xPos = x;
 		this.yPos = y;
-		bonus = "";
+		this.bonus = bonus;
 		bonusUsed = false;
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
@@ -49,7 +49,6 @@ public class Tile extends SLabel implements MouseListener, MouseMotionListener {
 		bonus = "";
 		bonusUsed = false;
 		this.gameStone = stone;
-		
 	}
 	
 	public void paintComponent(Graphics g) {

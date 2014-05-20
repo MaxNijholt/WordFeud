@@ -19,9 +19,7 @@ public class Administrator{
 	}
 	
 	public ArrayList<String> getUserRights(String player) {
-		ArrayList<String> data = DBCommunicator
-				.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='"
-						+ player + "'");
+		ArrayList<String> data = DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='" + player + "'");
 		return data;
 	}
 	
