@@ -147,6 +147,37 @@ public class DBCommunicator {
 		}
 		return result;
 	}
+	
+	public static HashMap<String, String> requestTilesMap(String boardType){
+		Statement	stm;
+		ResultSet 	res;
+		HashMap<String, String> result = new HashMap<String, String>();
+//		HashMap<String , HashMap<Integer, Integer>> result = new HashMap<String , HashMap<Integer, Integer>>();
+		try {
+			stm = con.createStatement();
+			res = stm.executeQuery("SELECT tegeltype_soort, x, y FROM tegel WHERE bord_naam='"+ boardType +"'");
+			while(res.next()) {
+				if(		res.getString(1).equals("TW") || 
+						res.getString(1).equals("DW") ||
+						res.getString(1).equals("TL") || 
+						res.getString(1).equals("DL") ||
+						res.getString(1).equals("*") 
+					){
+					String s = "";
+					result.put(s = s + res.getInt(2) +"," + res.getInt(3) , res.getString(1)); //= new Tile(res.getInt(2)-1, res.getInt(3)-1, res.getString(1));
+				}	else{
+					String s = "";
+					result.put(s = s + res.getInt(2) +"," + res.getInt(3), ""); // res.getInt(2)-1][res.getInt(3)-1] = new Tile(res.getInt(2)-1, res.getInt(3)-1);
+				}
+			}
+			res.close();
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	/**
 	 * This method allows you to write data to the Database.</br>
