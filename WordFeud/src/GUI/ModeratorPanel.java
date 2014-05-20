@@ -20,7 +20,9 @@ import Utility.SLabel;
 public class ModeratorPanel extends JPanel {
 	private GUI gui;
 	private SLabel selectWord;
-	ArrayList<String> posibleWords = DBCommunicator
+//	private ArrayList,String> possibleWords = gui.getApplication().getCurrentAccount().getMod().getNotAprovedWords();
+
+	private ArrayList<String> posibleWords = DBCommunicator
 			.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
 	private JComboBox<String> wordList = new JComboBox();
 	private SButton acceptWord = new SButton("Accept word", SButton.GREY),
@@ -30,9 +32,8 @@ public class ModeratorPanel extends JPanel {
 	public ModeratorPanel(GUI gui) {
 		this.gui = gui;
 		gui.setLoadingCursor(true);
-		
-		for (String merge : posibleWords)
-		{
+
+		for (String merge : posibleWords) {
 			wordList.addItem(merge);
 		}
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -45,65 +46,65 @@ public class ModeratorPanel extends JPanel {
 		addNewWord.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
+			public void actionPerformed(ActionEvent arg0) {
 				String wordTooAdd = JOptionPane.showInputDialog(
 						"What word would you like to add?", null);
-				if (wordTooAdd != null)
-				{
+				if (wordTooAdd != null) {
 					wordTooAdd.toLowerCase();
 
-					if (wordTooAdd.equals(""))
-					{
+					if (wordTooAdd.equals("")) {
 						JOptionPane.showMessageDialog(null, "No word added",
 								"error", JOptionPane.ERROR_MESSAGE);
-					}
-					else
-					{
+					} else {
+//						gui.getApplication().getCurrentAccount().getMod().addWord(wordTooAdd);
 						DBCommunicator
 								.writeData("INSERT INTO woordenboek  (woord,letterset_code,status) VALUES('"
 										+ wordTooAdd + "','EN','Accepted')");
- 						JOptionPane.showMessageDialog(null, wordTooAdd
- 								+ " added", "Succes",
- 								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, wordTooAdd
+								+ " added", "Succes",
+								JOptionPane.INFORMATION_MESSAGE);
+//						possibleWords = gui.getApplication().getCurrentAccount().getMod().getNotAprovedWords();
 						posibleWords = DBCommunicator
 								.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
- 					}
- 				}
- 			}
- 		});
+					}
+				}
+			}
+		});
 
- 		acceptWord.addActionListener(new ActionListener() {
- 
- 			@Override
- 			public void actionPerformed(ActionEvent e)
- 			{
-				// database to add word to wordlist and delete from sugestions
-				// communicator*******************************************
+		acceptWord.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+// 				database to add word to wordlist and delete from sugestions
+//				communicator*******************************************
 				String accept = (String) wordList.getSelectedItem();
+				
+//				gui.getApplication().getCurrentAccount().getMod().aproveWord(accept);
 				DBCommunicator
 						.writeData("UPDATE woordenboek SET status='Accepted' WHERE woord='"
 								+ accept + "'");
- 				JOptionPane.showMessageDialog(null, "Word aproved and added",
- 						"succes", JOptionPane.INFORMATION_MESSAGE);
-
+				JOptionPane.showMessageDialog(null, "Word aproved and added",
+						"succes", JOptionPane.INFORMATION_MESSAGE);
+//				possibleWords = gui.getApplication().getCurrentAccount().getMod().getNotAprovedWords();
 				posibleWords = DBCommunicator
 						.requestMoreData("SELECT woord FROM woordenboek where status='Pending'");
- 			}
- 		});
- 
- 		rejectWord.addActionListener(new ActionListener() {
- 
- 			@Override
- 			public void actionPerformed(ActionEvent e)
- 			{
- 				String remove = (String) wordList.getSelectedItem();
+			}
+		});
+
+		rejectWord.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String remove = (String) wordList.getSelectedItem();
+//				gui.getApplication().getCurrentAccount().getMod().denyWord(remove);
 				DBCommunicator
 						.writeData("UPDATE woordenboek SET status='Denied' WHERE woord='"
 								+ remove + "'");
 
 				JOptionPane.showMessageDialog(null, "Word rejected", "succes",
 						JOptionPane.ERROR_MESSAGE);
+//				possibleWords = gui.getApplication().getCurrentAccount().getMod().getNotAprovedWords();
+
 
 			}
 		});
