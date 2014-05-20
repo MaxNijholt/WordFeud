@@ -19,7 +19,7 @@ import WordFeud.GameStone;
 public class Application {
 	
 	private Game selectedGame;
-	private Competition selectedCompetition;
+	private Competition selectedCompetition;	
 	private Account currentAccount;
 	private GUI myGui;
 	private Loader loader;
