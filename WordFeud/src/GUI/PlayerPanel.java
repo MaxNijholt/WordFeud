@@ -30,6 +30,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 	public PlayerPanel(GUI gui){
 		this.gui = gui;
 		this.mp = new MenuPanel(gui, null);
+		
 		gui.setLoadingCursor(true);
 		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -299,7 +300,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			spectate.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.spectateGame();
+					gui.spectateGame(gameID);
 				}
 			});
 		}
