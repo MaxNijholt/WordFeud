@@ -26,11 +26,17 @@ public class SpectatorCompetitionsPanel extends JPanel{
 	private JPanel gameContent;
 	private GUI gui;
 	private MenuPanel mp;
+	private SButton back;
 
 	public SpectatorCompetitionsPanel(GUI myGui) {
 		
 		this.gui = myGui;
-		this.mp = new MenuPanel(gui, null);
+		if(myGui.getApplication().getCurrentAccount() == null){
+			back = new SButton("Back", SButton.GREY, 220, 40);
+		}
+		else{
+			this.mp = new MenuPanel(gui, null);
+		}
 		gui.setLoadingCursor(true);
 		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -68,7 +74,19 @@ public class SpectatorCompetitionsPanel extends JPanel{
 			}
 		}
 			
-		this.add(mp, BorderLayout.NORTH);
+		if(back != null){
+			back.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					gui.switchPanel(new LoginPanel(gui));
+				}
+			});
+			this.add(back, BorderLayout.NORTH);
+		}
+		else{
+			this.add(mp, BorderLayout.NORTH);
+		}
+		
 		this.add(allPanel, BorderLayout.CENTER);
 		gui.setLoadingCursor(false);
 	}
