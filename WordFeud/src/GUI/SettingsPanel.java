@@ -38,7 +38,7 @@ public class SettingsPanel extends JPanel{
 	private ActionAdapter aa = new ActionAdapter();
 	private SPopupMenu pop = new SPopupMenu();
 
-	public SettingsPanel(GUI gui , Account user){
+	public SettingsPanel(GUI gui, Account user){
 		this.gui = gui;
 		gui.setLoadingCursor(true);
 		this.user = user;
@@ -90,15 +90,28 @@ public class SettingsPanel extends JPanel{
 
 	class ActionAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(save)) {
-				gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
-				if(passwordfield.getText().equals(passwordControle.getText())){
-					gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
-				} else {
-					String s =  "Passwords do not match!";
-					pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
+			if(gui.getApplication().getCurrentAccount().getUsername().equals(user.getUsername())){
+				if (e.getSource().equals(save)) {
+					gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
+					if(passwordfield.getText().equals(passwordControle.getText())){
+						gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
+					} else {
+						String s =  "Passwords do not match!";
+						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
+					}
+				}
+			} else{
+				if(e.getSource().equals(save)){
+					gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
+					if(passwordfield.getText().equals(passwordControle.getText())){
+						gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
+					} else {
+						String s =  "Passwords do not match!";
+						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
+					}
 				}
 			}
+			
 		}
 	}
 }

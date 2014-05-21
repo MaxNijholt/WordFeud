@@ -23,8 +23,12 @@ public class Administrator{
 		return data;
 	}
 	
-	public void newPlayer(){
-		
+	public void changeUsername(Account account, String newName) {
+		DBCommunicator.writeData("UPDATE account SET naam = '" + newName +"' WHERE naam='" + account.getUsername() + "'");
+	}
+
+	public void changePassword(Account account, String newPass) {
+		DBCommunicator.writeData("UPDATE account SET wachtwoord = '" + newPass +"' WHERE naam='" + account.getUsername() + "'");
 	}
 	
 }
