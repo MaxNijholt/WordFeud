@@ -16,7 +16,7 @@ import Utility.SComboBox;
 public class MenuPanel extends JPanel implements ActionListener {
 	private GUI gui;
 	private SComboBox	switcher;
-	private SButton		settings, stats, logout, player, admin, mod, back;
+	private SButton		settings, stats, logout, player, admin, mod, spectator, back;
 	private JPanel 		backPanel;
 
 	public MenuPanel(GUI gui, JPanel backPanel) {
@@ -76,6 +76,14 @@ public class MenuPanel extends JPanel implements ActionListener {
 			accountRolls.add(mod);
 		}
 		
+		spectator = new SButton("> Spectator", SButton.WHITE, 250, 40);
+		spectator.setTextColor(new Color(100, 100, 100));
+		spectator.setColors(new Color(255, 255, 255), new Color(245, 245, 245), new Color(235, 235, 235));
+		spectator.setAlignment(SButton.LEFT);
+		spectator.addActionListener(this);
+		spectator.setCustomRounded(false, false, false, false);
+		accountRolls.add(spectator);
+		
 		logout = new SButton("Log Out", SButton.WHITE, 250, 40);
 		logout.setTextColor(new Color(100, 100, 100));
 		logout.setColors(new Color(255, 255, 255), new Color(245, 245, 245), new Color(235, 235, 235));
@@ -113,6 +121,9 @@ public class MenuPanel extends JPanel implements ActionListener {
 		}
 		if(e.getSource().equals(mod)) {
 			gui.switchPanel(new ModeratorPanel(gui));
+		}
+		if(e.getSource().equals(spectator)) {
+			gui.switchPanel(new SpectatorCompetitionsPanel(gui));
 		}
 		if(e.getSource().equals(back)) {
 			gui.switchPanel(backPanel);
