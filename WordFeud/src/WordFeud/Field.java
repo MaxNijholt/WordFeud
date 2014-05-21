@@ -14,38 +14,6 @@ public class Field {
 	public Field(int spelID) {
 		newWords = new HashMap<String, GameStone>();
 		field = Loader.getTiles();
-
-//		for (int i = 1; i < 16; i++) {
-//			for (int j = 1; j < 16; j++) {
-//				tileValue = DBCommunicator
-//						.requestData("SELECT lettertype_karakter FROM gelegdeletter left join letter on gelegdeletter.letter_id = letter.id and gelegdeletter.spel_id = letter.spel_id where gelegdeletter.spel_id = "
-//								+ spelID
-//								+ " and tegel_x = "
-//								+ i
-//								+ " and tegel_y = " + j);
-//				if (tileValue != null) {
-//				
-//					if (tileValue.equals("?")) {
-//						tileValue = DBCommunicator
-//								.requestData("SELECT blancoletterkarakter FROM gelegdeletter left join letter on gelegdeletter.letter_id = letter.id and gelegdeletter.spel_id = letter.spel_id where gelegdeletter.spel_id = "
-//										+ spelID
-//										+ " and tegel_x = "
-//										+ i
-//										+ " and tegel_y = " + j);
-//
-//						field.put(i + "," + j, new Tile(i, j, tileValue));
-//					
-//					}
-//					else{
-//						field.put(i + "," + j, new Tile(i, j, tileValue));
-//					}
-//				}
-//				else {
-//
-//					field.put(i + "," + j, new Tile(i, j));
-//				} 
-//			}
-//		}
 	}
 
 	public void layGameStone(GameStone gamestone, String location) {
