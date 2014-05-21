@@ -27,7 +27,7 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 		this.setPreferredSize(new Dimension(width, height));
 		this.setBorder(null);
 		this.setBackground(bg);
-		this.setVerticalScrollBar(getScrollBarForScrollPane());
+
 		
 //		normal	 = new Color(237, 67, 33);
 		bg		 = new Color(94, 94, 94);
@@ -35,6 +35,9 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 		if (horizontal == true && vertical == true) {
 			this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 			this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			
+			this.setVerticalScrollBar(getScrollBarForScrollPane("hor"));
+			this.setVerticalScrollBar(getScrollBarForScrollPane("vert"));
 			
 			this.getHorizontalScrollBar().setUnitIncrement(16);
 			this.getVerticalScrollBar().setUnitIncrement(16);
@@ -47,6 +50,8 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 			this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 			this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 			
+			this.setVerticalScrollBar(getScrollBarForScrollPane("hor"));
+			
 			this.getHorizontalScrollBar().setUnitIncrement(16);
 			
 			this.getHorizontalScrollBar().setBackground(bg);
@@ -55,6 +60,8 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 		if (horizontal == false && vertical == true) {
 			this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 			this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			
+			this.setVerticalScrollBar(getScrollBarForScrollPane("vert"));
 			
 			this.getVerticalScrollBar().setUnitIncrement(16);
 		
@@ -95,8 +102,16 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 		
 	}
 
-	 public JScrollBar getScrollBarForScrollPane() {
-	        JScrollBar jScrollBar = new JScrollBar(JScrollBar.VERTICAL);
+	 public JScrollBar getScrollBarForScrollPane(String orientation) {
+		 JScrollBar jScrollBar = null;
+		 if(orientation.equals("vert")){
+		        jScrollBar = new JScrollBar(JScrollBar.VERTICAL);
+		 }
+		 
+		 else if(orientation.equals("hor")){
+			 jScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+		 }
+
 	        jScrollBar.setUI(new BasicScrollBarUI()
 	        {   
 	        	@Override
