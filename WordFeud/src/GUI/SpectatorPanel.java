@@ -31,10 +31,17 @@ public class SpectatorPanel extends JPanel {
 	private GUI gui;
 	private MenuPanel mp;
 	private int compID;
+	private SButton back;
 
-	public SpectatorPanel(GUI gui, int compID){
-		this.gui = gui;
-		this.mp = new MenuPanel(gui, new SpectatorCompetitionsPanel(gui));
+	public SpectatorPanel(GUI myGui, int compID){
+		this.gui = myGui;
+		if(gui.getApplication().getCurrentAccount() == null){
+			back = new SButton("Back", SButton.GREY, 220, 40);
+		}
+		else{
+			this.mp = new MenuPanel(gui, new SpectatorCompetitionsPanel(gui));
+		}
+		
 		gui.setLoadingCursor(true);
 		this.compID = compID;
 		
@@ -97,8 +104,19 @@ public class SpectatorPanel extends JPanel {
 				gameContent.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
-
-		this.add(mp, BorderLayout.NORTH);
+		
+		if(back != null){
+			back.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					gui.switchPanel(new SpectatorCompetitionsPanel(gui));
+				}
+			});
+			this.add(back, BorderLayout.NORTH);
+		}
+		else{
+			this.add(mp, BorderLayout.NORTH);
+		}
 		this.add(allPanel, BorderLayout.CENTER);
 		gui.setLoadingCursor(false);
 	}
