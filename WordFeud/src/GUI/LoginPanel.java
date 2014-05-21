@@ -38,7 +38,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private GUI 			gui;
 	private Login 			l;
 	private SPopupMenu		popup;
-	private SplashText		sp = new SplashText(SButton.RED, 700, 150, this);
+	private SplashText		sp = new SplashText(SplashText.PRE1_T, SplashText.PRE1_S, 760, 120, this);
 	
 	/**
 	 * The panel that is used to log in to our program.
