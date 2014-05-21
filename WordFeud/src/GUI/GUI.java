@@ -114,18 +114,55 @@ public class GUI extends JFrame{
 		app.selectGame(gameID);
 	}
 
-	public void spectateGame() {
-		app.spectateGame();
+	public void spectateCompetition(int compID) {
+		app.spectateCompetition(compID);
+	}
+	
+	public void spectateGame(int gameID) {
+		app.spectateGame(gameID);
 	}
 
-	public Application getApplication()
-	{
-		// TODO Auto-generated method stub
+	public Application getApplication(){
 		return app;
 	}
 
 	public void login(Account username) {
 		app.login(username);
 		
+	}
+
+	public ArrayList<Integer> getSpectatableGames(int compID) {
+		ArrayList<Integer> gameInts = app.getSpectatableGames(compID);
+		return gameInts;
+	}
+
+	public ArrayList<Integer> getSpectatableCompetitions() {
+		ArrayList<Integer> compInts = app.getSpectatableCompetitions();
+		return compInts;
+	}
+	
+	public String getCompetitionOwner(int compID){
+		String owner =app.getCompetitionOwner(compID);
+		return owner;
+	}
+	
+	public String getCompetitionDescription(int compID){
+		String description = app.getCompetitionDescription(compID);
+		return description;
+	}
+	
+	public ArrayList<String> getGamePlayers(int gameID){
+		ArrayList<String> players = app.getGamePlayers(gameID);
+		return players;
+	}
+	
+	public ArrayList<String> getCompetitionPlayers(int compID){
+		ArrayList<String> players = app.getCompetitionPlayers(compID);
+		return players;
+	}
+	
+	public String getPlayerRanking(int compID, String player){
+		String ranking = app.getPlayerRanking(compID, player);
+		return ranking;
 	}
 }

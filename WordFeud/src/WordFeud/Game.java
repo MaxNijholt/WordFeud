@@ -98,7 +98,6 @@ public class Game {
 	/**
 	 * tell the DB to swap
 	 * get new gamestones
-	 * -------------------------------------------------
 	 */
 	public void swapGameStones(int[] stoneIDs){
 		int beurt = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " ORDER BY id DESC");
@@ -135,12 +134,25 @@ public class Game {
 	/**
 	 * shuffle your gamestones around
 	 * does not end turn
-	 * -------------------------------------------------
 	 */
 	public void shuffle(){
-		/*
-		 * show the gamestones in a different order
-		 */
+		
+		boolean[] used = {false,false,false,false,false,false,false};
+		int[] copyStones = new int[7];
+		for(int e = 0; e < gameStones.length; e++){
+			copyStones[e] = gameStones[e];
+		}
+		for(int e : copyStones){
+			boolean placed = false;		
+			while(!placed){
+				int randNumber = (int) (Math.random() * 7);
+				if(!used[randNumber]){
+					gameStones[randNumber] = e;
+					used[randNumber] = true;
+					placed = true;
+				}
+			}
+		}
 	}
 	
 	/**

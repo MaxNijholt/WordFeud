@@ -62,6 +62,7 @@ public class Loader {
 			String x = "" + s.substring(0, s.indexOf(","));
 			String y = "" + s.substring(s.indexOf(",")+1);
 			Tile ile = new Tile(Integer.parseInt(x), Integer.parseInt(y) ,tiles.get(s));
+			tilemap.put(s, ile);
 		}
 		return tilemap;
 	}
