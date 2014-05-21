@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import AccountType.Account;
@@ -35,11 +36,22 @@ public class SettingsPanel extends JPanel{
 	private MenuPanel mp;
 	private ActionAdapter aa = new ActionAdapter();
 	private SPopupMenu pop = new SPopupMenu();
+	private JFrame frame;
 
 	public SettingsPanel(GUI gui, Account user){
 		this.gui = gui;
-		gui.setLoadingCursor(true);
 		this.user = user;
+		init();
+	}
+	public SettingsPanel(GUI gui, Account user, JFrame frame){
+		this.gui = gui;
+		this.user = user;
+		this.frame = frame;
+		init();
+	}
+	
+	private void init(){
+		gui.setLoadingCursor(true);
 		
 		mp = new MenuPanel(gui, null);
 		
@@ -91,23 +103,25 @@ public class SettingsPanel extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			if(gui.getApplication().getCurrentAccount().getUsername().equals(user.getUsername())){
 				if (e.getSource().equals(save)) {
-					gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
 					if(passwordfield.getText().equals(passwordControle.getText())){
 						gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
 					} else {
 						String s =  "Passwords do not match!";
 						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
 					}
+					gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
 				}
 			} else{
 				if(e.getSource().equals(save)){
-					gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
+					
 					if(passwordfield.getText().equals(passwordControle.getText())){
 						gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
 					} else {
 						String s =  "Passwords do not match!";
 						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
 					}
+					gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
+					frame.dispose();
 				}
 			}
 			

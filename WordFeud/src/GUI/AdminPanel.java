@@ -32,31 +32,35 @@ import Utility.STextField;
  * 
  */
 @SuppressWarnings({ "serial", "unused" })
-public class AdminPanel extends JPanel{
-	private MComboBox playerLookupBox = new MComboBox(150, 25, null, this);
-	private Vector<String> players;
-	private SLabel selectPlayer;
-	private GUI gui;
-	private ArrayList<SButton> buttonCollection = new ArrayList<SButton>();
-	private SButton newPlayer = new SButton("New account", SButton.GREY),
-			editPlayer = new SButton("Edit Player", SButton.GREY),
-			grantMod = new SButton("Grant Mod", SButton.GREY),
-			grantAdmin = new SButton("Grant Admin", SButton.GREY),
-			grantPlayer = new SButton("Grant Player", SButton.GREY),
-			revokeMod = new SButton("Revoke Mod", SButton.GREY),
-			revokeAdmin = new SButton("Revoke Admin", SButton.GREY),
-			revokePlayer = new SButton("Revoke Player", SButton.GREY);
-	private ActionAdapter aa = new ActionAdapter();
-	private Administrator admin = null;
-	private RegisterPanel rp;
-	private JFrame newPlayerFrame;
-	private JPanel newPlayerPanel;
-	private String title = "New Player";
-	private JPanel wrapper;
-	private MenuPanel mp;
-	private STextField		username;
-	private SPasswordField	password, passwordValidate;
-	private SButton			register, back;
+public class AdminPanel extends JPanel {
+	private MComboBox 			playerLookupBox = new MComboBox(150, 25, null, this);
+	private Vector<String> 		players;
+	private SLabel 				selectPlayer;
+	private GUI 				gui;
+	private ArrayList<SButton> 	buttonCollection = new ArrayList<SButton>();
+	private SButton 			newPlayer = new SButton("New account", SButton.GREY),
+								editPlayer = new SButton("Edit Player", SButton.GREY),
+								grantMod = new SButton("Grant Mod", SButton.GREY),
+								grantAdmin = new SButton("Grant Admin", SButton.GREY),
+								grantPlayer = new SButton("Grant Player", SButton.GREY),
+								revokeMod = new SButton("Revoke Mod", SButton.GREY),
+								revokeAdmin = new SButton("Revoke Admin", SButton.GREY),
+								revokePlayer = new SButton("Revoke Player", SButton.GREY);
+	private ActionAdapter 		aa = new ActionAdapter();
+	private Administrator		admin = null;
+	private RegisterPanel 		rp;
+	private JFrame 				newPlayerFrame, 
+								editPlayerFrame;
+	private JPanel 				newPlayerPanel, 
+								wrapper, 
+								editPlayerPanel;
+	private String 				title = "New Player";
+	private MenuPanel 			mp;
+	private STextField 			username;
+	private SPasswordField 		password, 
+								passwordValidate;
+	private SButton 			register, 
+								back;
 
 	public AdminPanel(GUI gui) {
 		rp = new RegisterPanel(gui);
@@ -66,12 +70,12 @@ public class AdminPanel extends JPanel{
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
 		this.setLayout(new BorderLayout());
-		
-		if(gui.getApplication().getCurrentAccount().getPlayer() != null) {
+
+		if (gui.getApplication().getCurrentAccount().getPlayer() != null) {
 			mp = new MenuPanel(gui, new PlayerPanel(gui));
 			this.add(mp, BorderLayout.NORTH);
 		}
-		
+
 		wrapper = new JPanel();
 		wrapper.setLayout(new GridBagLayout());
 		wrapper.setOpaque(false);
@@ -172,7 +176,17 @@ public class AdminPanel extends JPanel{
 							"Player");
 				}
 				if (e.getSource().equals(editPlayer)) {
-					// TODO
+					editPlayerFrame = new JFrame();
+					editPlayerPanel = new SettingsPanel(gui, new Account(
+							playerLookupBox.getSelectedItem()), editPlayerFrame);
+					editPlayerFrame.setResizable(false);
+					editPlayerFrame.setTitle(title);
+					editPlayerFrame.setContentPane(editPlayerPanel);
+					editPlayerFrame.setIconImage(Loader.ICON);
+
+					editPlayerFrame.pack();
+					editPlayerFrame.setLocationRelativeTo(null);
+					editPlayerFrame.setVisible(true);
 				}
 
 				update();
@@ -180,25 +194,26 @@ public class AdminPanel extends JPanel{
 			if (e.getSource().equals(newPlayer)) {
 				newPlayerFrame = new JFrame();
 				newPlayerPanel = new JPanel();
-				
-				username 			= new STextField("Username", 220, 40);
-				password 			= new SPasswordField("Password", 220, 40);
-				passwordValidate 	= new SPasswordField("Confirm Password", 220, 40);
-				register			= new SButton("Register", SButton.GREY, 220, 40);
-				back				= new SButton("Back", SButton.GREY, 220, 40);
-				
+
+				username = new STextField("Username", 220, 40);
+				password = new SPasswordField("Password", 220, 40);
+				passwordValidate = new SPasswordField("Confirm Password", 220,
+						40);
+				register = new SButton("Register", SButton.GREY, 220, 40);
+				back = new SButton("Back", SButton.GREY, 220, 40);
+
 				newPlayerFrame.setResizable(false);
 				newPlayerFrame.setTitle(title);
 				newPlayerFrame.setContentPane(newPlayerPanel);
 				newPlayerFrame.setIconImage(Loader.ICON);
-				//newPlayerFrame.add(newPlayerPanel);
-				
+				// newPlayerFrame.add(newPlayerPanel);
+
 				newPlayerPanel.setLayout(new GridBagLayout());
-				newPlayerPanel.setPreferredSize(new Dimension(300,300));
+				newPlayerPanel.setPreferredSize(new Dimension(300, 300));
 				newPlayerPanel.setBackground(new Color(94, 94, 94));
-				
+
 				GridBagConstraints c = new GridBagConstraints();
-				
+
 				c.gridy = 0;
 				c.insets = new Insets(5, 0, 0, 0);
 				newPlayerPanel.add(username, c);
@@ -210,152 +225,151 @@ public class AdminPanel extends JPanel{
 				newPlayerPanel.add(register, c);
 				c.gridy++;
 				newPlayerPanel.add(back, c);
-				
-				username.addActionListener(new ActionListener(){
+
+				username.addActionListener(new ActionListener() {
 
 					@Override
-					public void actionPerformed(ActionEvent action)
-					{
-						if(action.getSource().equals(username)){
-							password.requestFocusInWindow();						
+					public void actionPerformed(ActionEvent action) {
+						if (action.getSource().equals(username)) {
+							password.requestFocusInWindow();
 						}
-					
+
 					}
 				});
-				
-				password.addActionListener(new ActionListener(){
+
+				password.addActionListener(new ActionListener() {
 
 					@Override
-					public void actionPerformed(ActionEvent action)
-					{
-						if(action.getSource().equals(password)){
-							passwordValidate.requestFocusInWindow();						
+					public void actionPerformed(ActionEvent action) {
+						if (action.getSource().equals(password)) {
+							passwordValidate.requestFocusInWindow();
 						}
-					
+
 					}
 				});
-				
-				passwordValidate.addActionListener(new ActionListener(){
+
+				passwordValidate.addActionListener(new ActionListener() {
 
 					@Override
-					public void actionPerformed(ActionEvent action)
-					{
-						if(action.getSource().equals(passwordValidate)){
-							registerPlayer();					
+					public void actionPerformed(ActionEvent action) {
+						if (action.getSource().equals(passwordValidate)) {
+							registerPlayer();
 						}
-					
+
 					}
 				});
-				
-				register.addActionListener(new ActionListener(){
+
+				register.addActionListener(new ActionListener() {
 
 					@Override
-					public void actionPerformed(ActionEvent action)
-					{
-						if(action.getSource().equals(register)){
-							registerPlayer();						
+					public void actionPerformed(ActionEvent action) {
+						if (action.getSource().equals(register)) {
+							registerPlayer();
 						}
-					
+
 					}
 				});
-				
-				back.addActionListener(new ActionListener(){
+
+				back.addActionListener(new ActionListener() {
 
 					@Override
-					public void actionPerformed(ActionEvent action)
-					{
-						if(action.getSource().equals(back)){
-							newPlayerFrame.dispose();						
+					public void actionPerformed(ActionEvent action) {
+						if (action.getSource().equals(back)) {
+							newPlayerFrame.dispose();
 						}
-					
+
 					}
 				});
-				
+
 				newPlayerFrame.pack();
 				newPlayerFrame.setLocationRelativeTo(null);
 				newPlayerFrame.setVisible(true);
-				
+
 			}
 		}
-		
-		private void registerPlayer()
-		{
+
+		private void registerPlayer() {
 			boolean allowed = true;
-			for(int i = 0; i < username.getText().length(); i++) {
-				if(Character.isWhitespace(username.getText().charAt(i))){
+			for (int i = 0; i < username.getText().length(); i++) {
+				if (Character.isWhitespace(username.getText().charAt(i))) {
 					allowed = false;
 				}
-				
+
 			}
-			String[] safe = new String[] {"\"", "\'"};
-			for(int i = 0; i < safe.length; i++) {
-				if(username.getText().contains(safe[i]) || String.valueOf(password.getPassword()).contains(safe[i])) {
+			String[] safe = new String[] { "\"", "\'" };
+			for (int i = 0; i < safe.length; i++) {
+				if (username.getText().contains(safe[i])
+						|| String.valueOf(password.getPassword()).contains(
+								safe[i])) {
 					allowed = false;
 				}
-				
+
 			}
-			if(allowed){
-				if(DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '" + username.getText() + "'") == null) {
-					if(String.valueOf(password.getPassword()).equals(String.valueOf(passwordValidate.getPassword()))) {
-						if(!String.valueOf(password.getPassword()).isEmpty() && !(String.valueOf(password.getPassword()).length() < 1)) {
-							DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username.getText() + "', '" + String.valueOf(password.getPassword()) + "')");
-							DBCommunicator.writeData("INSERT INTO accountrol(account_naam, rol_type) VALUES('" + username.getText() + "', 'Player')");
+			if (allowed) {
+				if (DBCommunicator
+						.requestData("SELECT naam FROM account WHERE naam = '"
+								+ username.getText() + "'") == null) {
+					if (String.valueOf(password.getPassword()).equals(
+							String.valueOf(passwordValidate.getPassword()))) {
+						if (!String.valueOf(password.getPassword()).isEmpty()
+								&& !(String.valueOf(password.getPassword())
+										.length() < 1)) {
+							DBCommunicator
+									.writeData("INSERT INTO account(naam, wachtwoord) VALUES('"
+											+ username.getText()
+											+ "', '"
+											+ String.valueOf(password
+													.getPassword()) + "')");
+							DBCommunicator
+									.writeData("INSERT INTO accountrol(account_naam, rol_type) VALUES('"
+											+ username.getText()
+											+ "', 'Player')");
 						}
-					}				
+					}
 				}
-				
-			}	
+
+			}
 		}
 	}
 
 	/**
 	 * method to update the buttons to have the right color.
 	 */
-	@SuppressWarnings("deprecation")
 	public void update() {
-		for (SButton sb : buttonCollection) {
-			sb.setColor(SButton.CYAN);
-			sb.enable(true);
-		}
-		/*ArrayList<String> rights = admin.getUserRights(this.playerLookupBox
-				.getSelectedItem());
-		System.out.println(rights);
-		if (rights.size() != 0) {
-			for (String s : rights) {
-				System.out.println(s);
-				if (s.equals("Player")) {
-					this.grantPlayer.setColor(SButton.GREY);
-					this.grantPlayer.disable();
-				} else if (s.equals("Moderator")) {
-					this.grantMod.setColor(SButton.GREY);
-					this.grantMod.disable();
-				} else if (s.equals("Administrator")) {
-					this.grantAdmin.setColor(SButton.GREY);
-					this.grantAdmin.disable();
-				}
+		if (this.playerLookupBox.getSelectedItem().equals("")) {
+			for (SButton sb : buttonCollection) {
+				sb.setColor(SButton.GREY);
+				sb.setEnabled(false);
 			}
-		}*/
-		Account acc = new Account(this.playerLookupBox.getSelectedItem());
-		if (acc.isPlayer()) {
-			this.grantPlayer.setColor(SButton.GREY);
-			this.grantPlayer.setEnabled(false);
+			this.newPlayer.setColor(SButton.CYAN);
+			this.newPlayer.setEnabled(true);
 		} else {
-			this.revokePlayer.setColor(SButton.GREY);
-			this.revokePlayer.disable();
-		}
-		if (acc.isModerator()) {
-			this.grantMod.setColor(SButton.GREY);
-			this.grantMod.disable();
-		} else {
-			this.revokeMod.setColor(SButton.GREY);
-			this.revokeMod.disable();
-		}
-		if (acc.isAdministrator()) {
-			this.grantAdmin.setColor(SButton.GREY);
-			this.grantAdmin.disable();
-		}else {
-			this.revokeAdmin.setColor(SButton.GREY);
-			this.revokeAdmin.disable();
+			for (SButton sb : buttonCollection) {
+				sb.setColor(SButton.CYAN);
+				sb.setEnabled(true);
+			}
+			Account acc = new Account(this.playerLookupBox.getSelectedItem());
+			if (acc.isPlayer()) {
+				this.grantPlayer.setColor(SButton.GREY);
+				this.grantPlayer.setEnabled(false);
+			} else {
+				this.revokePlayer.setColor(SButton.GREY);
+				this.revokePlayer.setEnabled(false);
+			}
+			if (acc.isModerator()) {
+				this.grantMod.setColor(SButton.GREY);
+				this.grantMod.setEnabled(false);
+			} else {
+				this.revokeMod.setColor(SButton.GREY);
+				this.revokeMod.setEnabled(false);
+			}
+			if (acc.isAdministrator()) {
+				this.grantAdmin.setColor(SButton.GREY);
+				this.grantAdmin.setEnabled(false);
+			} else {
+				this.revokeAdmin.setColor(SButton.GREY);
+				this.revokeAdmin.setEnabled(false);
+			}
 		}
 		repaint();
 	}
