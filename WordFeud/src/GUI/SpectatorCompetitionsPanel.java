@@ -30,7 +30,12 @@ public class SpectatorCompetitionsPanel extends JPanel{
 	public SpectatorCompetitionsPanel(GUI myGui) {
 		
 		this.gui = myGui;
-		this.mp = new MenuPanel(gui, null);
+		if(myGui.getApplication().getCurrentAccount() == null){
+			this.mp = new MenuPanel(gui, new LoginPanel(myGui));
+		}
+		else{
+			this.mp = new MenuPanel(gui, null);
+		}
 		gui.setLoadingCursor(true);
 		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));

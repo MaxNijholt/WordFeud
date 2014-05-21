@@ -34,7 +34,7 @@ public class SpectatorPanel extends JPanel {
 
 	public SpectatorPanel(GUI gui, int compID){
 		this.gui = gui;
-		this.mp = new MenuPanel(gui, null);
+		this.mp = new MenuPanel(gui, new SpectatorCompetitionsPanel(gui));
 		gui.setLoadingCursor(true);
 		this.compID = compID;
 		

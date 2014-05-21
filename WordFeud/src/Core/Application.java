@@ -42,7 +42,7 @@ public class Application {
 	/**create a new competition*/
 	public void addCompetition(String endDate, String description, int mini, int maxi){
 		selectedCompetition = new Competition(endDate, description, mini, maxi, currentAccount.getUsername());
-		myGui.switchPanel(new CompetitionPanel());
+		myGui.switchPanel(new CompetitionPanel(myGui));
 	}	
 	
 	/**
@@ -72,7 +72,7 @@ public class Application {
 	 */
 	public void selectCompetition(int compID){
 		selectedCompetition = new Competition(compID);
-		myGui.switchPanel(new CompetitionPanel());
+		myGui.switchPanel(new CompetitionPanel(myGui));
 	}
 
 	/**
