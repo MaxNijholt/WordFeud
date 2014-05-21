@@ -2,9 +2,6 @@ package Utility;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -13,13 +10,12 @@ import javax.swing.JScrollPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 
-public class AScrollPane extends JScrollPane implements MouseListener{
+public class AScrollPane extends JScrollPane{
 
-	private Color bg;
-	private Color normal = new Color(68, 68, 68);
-	private Color hLight = new Color(58, 58, 58);
-	private Color clicked = new Color(78, 78, 78);
-	private int state = 0;
+	private Color bg		 = new Color(94, 94, 94);;
+	private Color normal	 = new Color(68, 68, 68);
+//	private Color clicked 	 = new Color(80, 80, 80);
+	private Color hLight	 = new Color(88, 88, 88);
 	
 	public AScrollPane(int width, int height, JPanel panel, Boolean horizontal, Boolean vertical) {
 
@@ -28,13 +24,9 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 		this.setBorder(null);
 		this.setBackground(bg);
 
-		
-//		normal	 = new Color(237, 67, 33);
-		bg		 = new Color(94, 94, 94);
-		
 		if (horizontal == true && vertical == true) {
-			this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-			this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			
 			this.setVerticalScrollBar(getScrollBarForScrollPane("hor"));
 			this.setVerticalScrollBar(getScrollBarForScrollPane("vert"));
@@ -47,7 +39,7 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 		}
 		
 		if (horizontal == true && vertical == false) {
-			this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 			
 			this.setVerticalScrollBar(getScrollBarForScrollPane("hor"));
@@ -58,7 +50,7 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 		}
 		
 		if (horizontal == false && vertical == true) {
-			this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			
 			this.setVerticalScrollBar(getScrollBarForScrollPane("vert"));
@@ -70,37 +62,6 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 
 	}
 	
-
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		state = 1; repaint();
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		state = 2; repaint();
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		state = 3; repaint();
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		state = 1; repaint();
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		state = 5; repaint();
-		
-	}
 
 	 public JScrollBar getScrollBarForScrollPane(String orientation) {
 		 JScrollBar jScrollBar = null;
@@ -117,23 +78,13 @@ public class AScrollPane extends JScrollPane implements MouseListener{
 	        	@Override
 	        	protected void configureScrollBarColors() {
 	        		super.configureScrollBarColors();
-	        		if(state == 0){
-		        		thumbColor = normal;
-		        		thumbDarkShadowColor = normal;
-		        		thumbHighlightColor = normal;
-		        		thumbLightShadowColor = normal;
-		        		trackColor = bg;
-	        		}
-
-	        		if(state == 1){
-		        		thumbColor = normal;
-		        		thumbDarkShadowColor = clicked;
-		        		thumbHighlightColor = clicked;
-		        		thumbLightShadowColor = clicked;
-		        		trackColor = bg;
-	        		}
-
-
+		        		thumbColor 				= normal;
+		        		thumbDarkShadowColor	= normal;
+		        		thumbHighlightColor 	= normal;
+		        		thumbLightShadowColor 	= normal;
+		        		
+		        		trackColor 				= hLight;
+		        		trackHighlightColor		= bg;
 	        	}
 	        	
 	            @Override
