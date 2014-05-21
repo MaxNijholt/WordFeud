@@ -21,6 +21,7 @@ public class Loader {
 	public static BufferedImage				TW_TILE;
 	public static BufferedImage				DL_TILE;
 	public static BufferedImage				DW_TILE;
+	public static BufferedImage 			GAMESTONE;
 	
 	
 	public static HashMap<String, String>	TILEVALUES;
@@ -37,6 +38,7 @@ public class Loader {
 			TW_TILE 			= ImageIO.read(getClass().getResourceAsStream("/images/tw_tile.png"));
 			DL_TILE				= ImageIO.read(getClass().getResourceAsStream("/images/dl_tile.png"));
 			DW_TILE 			= ImageIO.read(getClass().getResourceAsStream("/images/dw_tile.png"));
+			GAMESTONE 			= ImageIO.read(getClass().getResourceAsStream("/images/tile.png"));
 			
 			System.out.println("All images have been loaded succesfully");
 			

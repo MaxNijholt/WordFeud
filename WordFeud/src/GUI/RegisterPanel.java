@@ -64,13 +64,13 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		register.addActionListener(this);
 		back.addActionListener(this);
 
-		title.setLayout(new GridLayout(1, 8, 2, 2));
+		title.setLayout(new GridLayout(1, 8, 1, 1));
 		title.setBackground(new Color(255, 255, 255, 0));
 
 		String letters 	= "WORDFEUD";
 		for(int i = 0; i < letters.length(); i++) {
 			GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
-			s.setDimension(70, 70);
+			s.setPreferredSize(new Dimension(80, 80));
 			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
 			title.add(s);
 		}
