@@ -32,9 +32,19 @@ public class Moderator{
 	 * @param word
 	 */
 	public void addWord(String word) {
-		DBCommunicator
-				.writeData("INSERT  INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES("
-						+ "'" + word + "'" + ",'EN','Accepted')");
+			DBCommunicator
+					.writeData("INSERT  INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES("
+							+ "'" + word + "'" + ",'EN','Accepted')");
+			
+	}
+	
+	public boolean tryAddWord(String word){
+		if (DBCommunicator.requestData("Select * FROM woordenboek where woord = '" + word + "'") == null){
+			return true;
+		}
+		else return false;
+			
+		
 	}
 
 	/**
