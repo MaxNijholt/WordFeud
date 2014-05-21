@@ -44,9 +44,13 @@ public class Loader {
 			
 			TILEVALUES			= new HashMap<String, String>();
 			for(char i = 'A'; i < 'Z'; i++) {
-				TILEVALUES.put(
-						DBCommunicator.requestData("SELECT karakter FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + i + "'"), 
-						DBCommunicator.requestData("SELECT waarde FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + i + "'"));
+				String character 	= "";
+				String value 		= "";
+				if(DBCommunicator.checkConnection() != null) {
+					character 	= DBCommunicator.requestData("SELECT karakter FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + i + "'");
+					value		= DBCommunicator.requestData("SELECT waarde FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + i + "'");
+				}
+				TILEVALUES.put(character, value);
 			}
 			
 			System.out.println("All Characters have been loaded succesfully");
