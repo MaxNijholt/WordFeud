@@ -55,7 +55,7 @@ public class Application {
 			visible = "openbaar";
 		}
 		else{
-			visible = "priv�";
+			visible = "priv���";
 		}
 			
 		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
