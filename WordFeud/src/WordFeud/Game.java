@@ -213,4 +213,10 @@ public class Game {
 	public int[] getGameStones(){
 		return gameStones;
 	}
+	
+	public String getGameStoneLetters(){
+		int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
+		String letters = DBCommunicator.requestData("SELECT inhoud FROM plankje WHERE spel_id = " + id + " AND beurt_id = " + turnID);
+		return letters;
+	}
 }

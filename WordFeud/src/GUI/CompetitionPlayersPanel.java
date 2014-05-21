@@ -22,7 +22,7 @@ import Utility.SButton;
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
-public class SpectatorPanel extends JPanel {
+public class CompetitionPlayersPanel extends JPanel {
 
 	private JScrollPane scrollPane;
 	private JScrollPane playerScrollPane;
@@ -31,15 +31,16 @@ public class SpectatorPanel extends JPanel {
 	private GUI gui;
 	private MenuPanel mp;
 	private int compID;
+	private int playerID;
 	private SButton back;
 
-	public SpectatorPanel(GUI myGui, int compID){
+	public CompetitionPlayersPanel(GUI myGui, int compID, int playerID){
 		this.gui = myGui;
 		if(gui.getApplication().getCurrentAccount() == null){
 			back = new SButton("Back", SButton.GREY, 220, 40);
 		}
 		else{
-			this.mp = new MenuPanel(gui, new SpectatorCompetitionsPanel(gui));
+			this.mp = new MenuPanel(gui, new PlayerPanel(gui));
 		}
 		
 		gui.setLoadingCursor(true);
@@ -109,7 +110,7 @@ public class SpectatorPanel extends JPanel {
 			back.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.switchPanel(new SpectatorCompetitionsPanel(gui));
+					gui.switchPanel(new PlayerPanel(gui));
 				}
 			});
 			this.add(back, BorderLayout.NORTH);
