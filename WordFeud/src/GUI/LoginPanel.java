@@ -38,7 +38,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private GUI 			gui;
 	private Login 			l;
 	private SPopupMenu		popup;
-	private SplashText		sp = new SplashText("Nice", SButton.RED, 700, 150, this);
+	private SplashText		sp = new SplashText(SButton.RED, 700, 150, this);
 	
 	/**
 	 * The panel that is used to log in to our program.
@@ -133,7 +133,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 */
 	private void login() {
 		String text	= l.login(new Account(username.getText()), String.valueOf(password.getPassword()));
-		if(text == "0") {return;}
+		if(text == "0") {
+			sp.setRunning(false);
+			return;
+		}
 		if(text != null) {
 			popup.show(username, username.getWidth() + 10, 0, popup.getTextDimension(text).width + 10, popup.getTextDimension(text).height, text, SButton.RED);
 /*			Graphics2D g2d = (Graphics2D)this.getGraphics();
@@ -151,12 +154,18 @@ public class LoginPanel extends JPanel implements ActionListener {
 	/**
 	 * This method sends you to the register panel
 	 */
-	private void register() {gui.switchPanel(new RegisterPanel(gui));}
+	private void register() {
+		gui.switchPanel(new RegisterPanel(gui));
+		sp.setRunning(false);
+	}
 
 	/**
 	 * This methods sends you to the spectator panel
 	 */
-	private void spectate() {gui.switchPanel(new SpectatorPanel());}
+	private void spectate() {
+		gui.switchPanel(new SpectatorCompetitionsPanel(gui));
+		sp.setRunning(false);
+	}
 
 	/**
 	 * This method is the actionListener for the buttons in the LoginPanel

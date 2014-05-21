@@ -13,6 +13,7 @@ public class Game {
 	private Application app;
 	private int id;
 	private String opponent;
+	private int[] gameStones;
 	
 	/**
 	 * cronstruct the game
@@ -24,6 +25,13 @@ public class Game {
 		myField = new Field(id);
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
+		
+		opponent = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
+		if(opponent.equals(app.getCurrentAccount().getUsername())){
+			opponent = DBCommunicator.requestData("SELECT account_naam_tegenstander FROM spel WHERE id = " + gameID);
+		}
+		
+		this.setGameStones();
 	}
 	
 	/**
@@ -90,26 +98,61 @@ public class Game {
 	/**
 	 * tell the DB to swap
 	 * get new gamestones
-	 * -------------------------------------------------
 	 */
-	public void swapGameStones(){
-		/*
-		 * tell the DB it's the opponents turn
-		 * tell the DB the swapped gamestones
-		 * get new gamestones
-		 * tell the db the new gamestones
-		 */
+	public void swapGameStones(int[] stoneIDs){
+		int beurt = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " ORDER BY id DESC");
+		beurt ++;
+		
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) Values(" + beurt + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "',0 ,  'Swap')");
+		
+		
+		for(int stoneID : stoneIDs){
+			boolean swapped = false;
+			while(!swapped){
+				int letterID = (int) (Math.random() * 105);
+				
+				String character = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + id + " AND letter_id = " + letterID);
+				if(character != null){
+					swapped = true;
+					
+					for(int e = 0; e < gameStones.length; e++){
+						if(gameStones[e] == stoneID){
+							gameStones[e] = letterID;
+							break;
+						}
+					}
+				}
+			}
+		}
+		for(int stoneID : gameStones){
+			if(stoneID != 0){
+				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + stoneID + ", " + beurt + ")");
+			}
+		}
 	}
 	
 	/**
 	 * shuffle your gamestones around
 	 * does not end turn
-	 * -------------------------------------------------
 	 */
 	public void shuffle(){
-		/*
-		 * show the gamestones in a different order
-		 */
+		
+		boolean[] used = {false,false,false,false,false,false,false};
+		int[] copyStones = new int[7];
+		for(int e = 0; e < gameStones.length; e++){
+			copyStones[e] = gameStones[e];
+		}
+		for(int e : copyStones){
+			boolean placed = false;		
+			while(!placed){
+				int randNumber = (int) (Math.random() * 7);
+				if(!used[randNumber]){
+					gameStones[randNumber] = e;
+					used[randNumber] = true;
+					placed = true;
+				}
+			}
+		}
 	}
 	
 	/**
@@ -144,5 +187,30 @@ public class Game {
 	
 	public String getOpponent(){
 		return opponent;
+	}
+	
+	private void setGameStones(){
+		gameStones = new int[7];
+		int counter = 0;
+		boolean done = false;
+		int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
+		String restQuery = "";
+		String query = "SELECT letter_id FROM letterbakjeletter WHERE spel_id = " + id + " AND beurt_id = " + turnID + " " + restQuery + " ORDER BY beurt_id DESC";
+		while(!done){
+			int newCharachter = DBCommunicator.requestInt(query);
+			if(!(newCharachter == 0)){
+				gameStones[counter] = newCharachter;
+				restQuery += " AND letter_id <> " + newCharachter;
+				query = "SELECT letter_id FROM letterbakjeletter WHERE spel_id = " + id + " AND beurt_id = " + turnID + "  " + restQuery + " ORDER BY beurt_id DESC";
+				counter++;
+			}
+			else{
+				done = true;
+			}
+		}
+	}
+	
+	public int[] getGameStones(){
+		return gameStones;
 	}
 }
