@@ -111,7 +111,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	/**
 	 * This is a method that is testing with the DBCommunicator if the user name and password are correct to register
 	 */
-	private void register() {
+	public void register() {
 		String text = l.register(new Account(username.getText()), String.valueOf(password.getPassword()), String.valueOf(passwordValidate.getPassword()));
 		if(text == "0") {return;}
 		if(text != null) {
