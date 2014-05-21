@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
@@ -76,11 +77,23 @@ public class GamePanel extends JPanel implements MouseListener {
 			xPos = bp.getPreferredSize().width + 20;
 			yPos += 33;
 		}
+		
+		String letters 				= game.getGameStoneLetters();
+		ArrayList<Character> chars 	= new ArrayList<Character>();
+		System.out.println(letters);
+		for(int i = 0; i < letters.length(); i++) {
+			if(letters.charAt(i) == ',') {}
+			else {
+				chars.add(letters.charAt(i));
+				System.out.println(letters.charAt(i));
+			}
+		}
+		
 		xPos = bp.getPreferredSize().width + 20;
 		yPos = 550;
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i, 0);
-			tile.setGameStone(new GameStone(Integer.parseInt(Loader.TILEVALUES.get("F")), 'F'));
+			tile.setGameStone(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(Character.toString(chars.get(i).charValue()))), chars.get(i).charValue()));
 			tile.addMouseListener(this);
 			add(tile);
 			tile.setBounds(xPos, yPos, 32, 32);
