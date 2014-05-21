@@ -140,7 +140,6 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 	}
 
 	public String getSelectedItem() {
-		System.out.println(placeholder.getText());
 		return placeholder.getText();
 	}
 
