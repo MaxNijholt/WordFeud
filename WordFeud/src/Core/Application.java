@@ -227,6 +227,39 @@ public class Application {
 		
 		return turnInts;
 	}
+
+	public ArrayList<Integer> getPlayingGames(Boolean myTurn, int compID) {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		ArrayList<Integer> turnInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing' AND competitie_id = '" + compID +"'";
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		
+		for(int e : gameInts){
+			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
+			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
+				turnInts.add(e);
+			}
+			else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
+				turnInts.add(e);
+			}
+		}
+		
+		return turnInts;
+	}
+
 	
 	/**
 	 * get all requested games (currentAccount or opponents request) (denied or unknown) and return their integers
