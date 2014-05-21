@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,9 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.RenderingHints;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Utility.SLabel;
@@ -28,6 +26,9 @@ public class StatisticsPanel extends JPanel {
 	private SLabel highestGameScoreView;
 	private SLabel highestWordScore;
 	private SLabel highestWordScoreView;
+	
+	private MenuPanel mp;
+	private JPanel allPanel;
 
 	private String title = "Statistics";
 
@@ -41,10 +42,17 @@ public class StatisticsPanel extends JPanel {
 		highestGameScoreView = new SLabel("800", SLabel.RIGHT);//test		
 		highestWordScore = new SLabel("Highest score with one word", SLabel.LEFT);
 		highestWordScoreView = new SLabel("60", SLabel.RIGHT);
-
-		this.setPreferredSize(new Dimension(GUI.WIDTH,GUI.HEIGHT));
-		this.setBackground(new Color(94, 94, 94));	
-		this.setLayout(null);
+		
+		mp = new MenuPanel(gui, null);
+		
+		this.setLayout(new BorderLayout());
+		this.setBackground(new Color(94,94,94));
+		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
+		
+		allPanel = new JPanel();
+		allPanel.setPreferredSize(new Dimension(GUI.WIDTH,GUI.HEIGHT));
+		allPanel.setBackground(new Color(94, 94, 94));	
+		allPanel.setLayout(null);
 
 		centerPanel.setLayout(new GridLayout(4,1));
 		centerPanel.setBackground(Color.GRAY);
@@ -59,9 +67,9 @@ public class StatisticsPanel extends JPanel {
 		centerPanel.add(highestWordScore);
 		centerPanel.add(highestWordScoreView);
 
-		this.add(centerPanel);
-
-
+		allPanel.add(centerPanel);
+		this.add(mp, BorderLayout.NORTH);
+		this.add(allPanel, BorderLayout.CENTER);
 	}
 
 	public void paintComponent(Graphics g) {

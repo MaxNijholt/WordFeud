@@ -201,8 +201,12 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			play.add(new SLabel("wants to play a game with you", SLabel.CENTER, new Font("Arial", Font.PLAIN, 20)));
 			
-			opponent.setMinimumSize(new Dimension(200,30));
-			play.setMinimumSize(new Dimension(300, 30));
+			opponent.setMinimumSize(new Dimension(200,40));
+			opponent.setPreferredSize(new Dimension(200,40));
+			opponent.setMaximumSize(new Dimension(200,40));
+			play.setMinimumSize(new Dimension(300, 40));
+			play.setPreferredSize(new Dimension(300, 40));
+			play.setMaximumSize(new Dimension(300, 40));
 			accept.setMinimumSize(accept.getPreferredSize());
 			deny.setMinimumSize(deny.getPreferredSize());
 			
@@ -243,8 +247,12 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
 			
-			opponent.setMinimumSize(new Dimension(200,30));
-			lastTurn.setMinimumSize(new Dimension(200,30));
+			opponent.setMinimumSize(new Dimension(200,40));
+			opponent.setPreferredSize(new Dimension(200,40));
+			opponent.setMaximumSize(new Dimension(200,40));
+			lastTurn.setMinimumSize(new Dimension(200,40));
+			lastTurn.setPreferredSize(new Dimension(200,40));
+			lastTurn.setMaximumSize(new Dimension(200,40));
 			select.setMinimumSize(select.getPreferredSize());
 			
 			opponent.setBackground(panel.getBackground());

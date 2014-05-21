@@ -1,7 +1,5 @@
 package Core;
 
-import Utility.Loader;
-
 public class Main {
 
 	@SuppressWarnings("unused")
@@ -14,7 +12,6 @@ public class Main {
 
 	private void initialize() {
 		this.application = new Application();
-		Loader.getTiles();
 	}
 
 }

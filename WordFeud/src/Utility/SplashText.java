@@ -34,9 +34,9 @@ public class SplashText implements Runnable {
 				{	
 					"This is awesome", "So cool", "Really nice!", "35% bug free!", "Awesome", "LOL!",
 					"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
-					"Deja  vu!", "Deja  vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
+					"Deja vu!", "Deja vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
 					"Woah!", "Wow!", "Yaay!", "Water proof!", "Superfragilisticexpialidocious!",
-					"This message will never appear on the splash screen, isn't that weird?", "Try it!"
+					"This message will never appear on the splash screen, isn't that weird?", "Try it!", "this.addBeer(new Beer());"
 				};
 		text		= texts[new Random().nextInt(texts.length)];
 		running		= true;

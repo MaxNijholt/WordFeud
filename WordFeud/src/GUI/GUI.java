@@ -77,6 +77,11 @@ public class GUI extends JFrame{
 		return gameInts;
 	}
 	
+	public ArrayList<Integer> getPlayingGames(boolean myTurn, int compID){
+		ArrayList<Integer> gameInts = app.getPlayingGames(myTurn, compID);
+		return gameInts;
+	}
+	
 	public ArrayList<Integer> getRequestedGames(boolean myRequest, boolean denied){
 		ArrayList<Integer> gameInts = app.getRequestedGames(myRequest, denied);
 		return gameInts;
