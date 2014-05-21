@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import Utility.SButton;
 import Utility.SLabel;
 
+@SuppressWarnings("serial")
 public class SpectatorCompetitionsPanel extends JPanel{
 
 	private JScrollPane scrollPane;
