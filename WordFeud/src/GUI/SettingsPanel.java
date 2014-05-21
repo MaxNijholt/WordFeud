@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -24,6 +25,7 @@ import Utility.STextField;
  * 
  */
 
+@SuppressWarnings("serial")
 public class SettingsPanel extends JPanel{
 	private GUI gui;
 	private Account user;
@@ -31,6 +33,8 @@ public class SettingsPanel extends JPanel{
 	private SLabel password, username;
 	private STextField userfield;
 	private SButton save;
+	private JPanel allPanel;
+	private MenuPanel mp;
 	private ActionAdapter aa = new ActionAdapter();
 	private SPopupMenu pop = new SPopupMenu();
 
@@ -38,11 +42,18 @@ public class SettingsPanel extends JPanel{
 		this.gui = gui;
 		gui.setLoadingCursor(true);
 		this.user = user;
-
-		this.setPreferredSize(new Dimension(GUI.WIDTH , GUI.HEIGHT));
+		
+		mp = new MenuPanel(gui, null);
+		
+		this.setLayout(new BorderLayout());
+		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
+		
+		allPanel = new JPanel();
+		allPanel.setPreferredSize(new Dimension(GUI.WIDTH , GUI.HEIGHT));
+		allPanel.setBackground(new Color(94, 94, 94));
 
-		this.setLayout(new GridBagLayout());
+		allPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
 		this.passwordfield 		= new SPasswordField("password");
@@ -58,20 +69,23 @@ public class SettingsPanel extends JPanel{
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 1;
 		c.insets = new Insets(0, 0, 5, 50);
-		this.add(username, c);
+		allPanel.add(username, c);
 		c.gridy ++;
-		this.add(userfield, c);
+		allPanel.add(userfield, c);
 		c.gridy ++;
 		c.gridx ++;
-		this.add(password, c);
+		allPanel.add(password, c);
 		c.gridx ++;
-		this.add(passwordfield, c);
+		allPanel.add(passwordfield, c);
 		c.gridy ++;
-		this.add(passwordControle, c);
+		allPanel.add(passwordControle, c);
 		c.gridx++;
 		c.gridy++;
-		this.add(save, c);
+		allPanel.add(save, c);
 		gui.setLoadingCursor(false);
+		
+		this.add(mp, BorderLayout.NORTH);
+		this.add(allPanel, BorderLayout.CENTER);
 	}
 
 	class ActionAdapter implements ActionListener {

@@ -57,7 +57,7 @@ public class GameStone extends SLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
-		g2d.setColor(new Color(255, 255, 255, 220));
+		g2d.setColor(new Color(255, 255, 255, 180));
 		g2d.fillRoundRect(0, 0, this.getPreferredSize().width, this.getPreferredSize().height, 5, 5);
 		g2d.setColor(Color.BLACK);
 		FontMetrics fmLarge = g2d.getFontMetrics(large);
