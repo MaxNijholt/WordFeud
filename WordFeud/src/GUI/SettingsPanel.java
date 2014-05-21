@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -8,12 +9,14 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import AccountType.Account;
 import Utility.SButton;
 import Utility.SLabel;
 import Utility.SPasswordField;
+import Utility.SPopupMenu;
 import Utility.STextField;
 
 /**
@@ -29,6 +32,7 @@ public class SettingsPanel extends JPanel{
 	private STextField userfield;
 	private SButton save;
 	private ActionAdapter aa = new ActionAdapter();
+	private SPopupMenu pop = new SPopupMenu();
 
 	public SettingsPanel(GUI gui , Account user){
 		this.gui = gui;
@@ -48,6 +52,7 @@ public class SettingsPanel extends JPanel{
 
 		this.userfield			= new STextField(user.getUsername());
 		this.save				= new SButton("Save", SButton.GREY);
+		this.save.addActionListener(aa);
 
 
 		c.fill = GridBagConstraints.BOTH;
@@ -72,7 +77,13 @@ public class SettingsPanel extends JPanel{
 	class ActionAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(save)) {
-				//TODO write what to do on save.
+				gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
+				if(passwordfield.getText().equals(passwordControle.getText())){
+					gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
+				} else {
+					String s =  "Passwords do not match!";
+					pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
+				}
 			}
 		}
 	}

@@ -33,7 +33,7 @@ public class Moderator{
 	 */
 	public void addWord(String word) {
 		DBCommunicator
-				.writeData("INSERT  INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES("
+				.writeData("INSERT INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES("
 						+ "'" + word + "'" + ",'EN','Accepted')");
 	}
 
