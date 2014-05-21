@@ -2,11 +2,9 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
@@ -18,7 +16,7 @@ import WordFeud.GameStone;
 import WordFeud.Tile;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements MouseListener, MouseMotionListener, Runnable {
+public class GamePanel extends JPanel implements MouseListener {
 
 	private SButton 	pass, swap, resign, play;
 	private ChatPanel 	cp;
@@ -27,19 +25,14 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 	@SuppressWarnings("unused")
 	private GUI 		gui;
 	private GameStone 	currentGameStone;
-	private int 		mouseX, mouseY;
-	private Thread		thread;
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
 		this.game = gui.getApplication().getSelectedGame();
-		gui.setLoadingCursor(true);
-		this.addMouseMotionListener(this);
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(null);
-		thread = new Thread(this);
-		thread.start();
-		this.setBackground(new Color(94, 94, 94));
+		this.setBackground(new Color(23, 26, 30));
+		this.requestFocus();
 		mp		= new MenuPanel(gui, new PlayerPanel(gui));
 		mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
 		cp	 	= new ChatPanel(gui, game);
@@ -74,8 +67,10 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 			for(int x = 1; x < 16; x++) {
 				Tile tile = tiles.get(x + "," + y);
 				add(tile);
+				tile.addMouseListener(this);
+				tile.setPickablity(false);
 				tile.setBounds(xPos, yPos, 32, 32);
-				if(x == 1 && y == 1) {tile.setGameStone(new GameStone(1, 'A'));}
+				if(x == 1 && y == 1) {tile.setGameStone(new GameStone(5, 'W'));}
 				xPos += 33;
 			}
 			xPos = bp.getPreferredSize().width + 20;
@@ -93,13 +88,6 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 		}
 
 	}
-	
-	public void paint(Graphics g) {
-		super.paint(g);
-		if(currentGameStone != null) {
-			g.drawImage(currentGameStone.getImage(), mouseX, mouseY, null);
-		}
-	}
 
 	public void mouseClicked(MouseEvent e) {
 		
@@ -116,42 +104,23 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 	public void mousePressed(MouseEvent e) {
 		if(currentGameStone == null) {
 			if(((Tile) e.getSource()).getGameStone() != null) {
-				currentGameStone = ((Tile) e.getSource()).getGameStone();
+				if(((Tile) e.getSource()).getPickablity()) {
+					currentGameStone = ((Tile) e.getSource()).getGameStone();
+					((Tile) e.getSource()).setGameStone(null);
+				}
+			}
+		}
+		else {
+			if(((Tile) e.getSource()).getGameStone() == null) {
+				((Tile) e.getSource()).setGameStone(currentGameStone);
+				((Tile) e.getSource()).setPickablity(true);
+				currentGameStone = null;
 			}
 		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
 		
-	}
-	// Mouse motion
-	public void mouseDragged(MouseEvent e) {
-		/*if(currentGameStone != null) {
-			Point locOnScreen = e.getLocationOnScreen();
-			
-			int x = locOnScreen.x - initLocOnScreen.x + initLoc.x - 16;
-			int y = locOnScreen.y - initLocOnScreen.y + initLoc.y - 16;
-			currentGameStone.setLocation(x, y);
-		}*/
-	}
-
-	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX() - 16;
-		mouseY = e.getY() - 16;
-		repaint();
-	}
-
-	@Override
-	public void run() {
-		while(true) {
-			repaint();
-			try {
-				Thread.sleep(1000/60);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 	
 }

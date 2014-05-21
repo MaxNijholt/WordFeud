@@ -15,6 +15,13 @@ public class Loader {
 	public static BufferedImage 			BACKGROUND;
 	public static BufferedImage 			BACKGROUNDHD;
 	public static BufferedImage 			ICON;
+	public static BufferedImage				NORMAL_TILE;
+	public static BufferedImage				STAR_TILE;
+	public static BufferedImage				TL_TILE;
+	public static BufferedImage				TW_TILE;
+	public static BufferedImage				DL_TILE;
+	public static BufferedImage				DW_TILE;
+	
 	
 	public static HashMap<String, String>	TILEVALUES;
 
@@ -23,6 +30,13 @@ public class Loader {
 			BACKGROUND 			= ImageIO.read(getClass().getResourceAsStream("/images/background.jpg"));
 			BACKGROUNDHD		= ImageIO.read(getClass().getResourceAsStream("/images/background_hd.png"));
 			ICON 				= ImageIO.read(getClass().getResourceAsStream("/images/icon.png"));
+			
+			NORMAL_TILE 		= ImageIO.read(getClass().getResourceAsStream("/images/normal_tile.png"));
+			STAR_TILE			= ImageIO.read(getClass().getResourceAsStream("/images/star_tile.png"));
+			TL_TILE 			= ImageIO.read(getClass().getResourceAsStream("/images/tl_tile.png"));
+			TW_TILE 			= ImageIO.read(getClass().getResourceAsStream("/images/tw_tile.png"));
+			DL_TILE				= ImageIO.read(getClass().getResourceAsStream("/images/dl_tile.png"));
+			DW_TILE 			= ImageIO.read(getClass().getResourceAsStream("/images/dw_tile.png"));
 			
 			System.out.println("All images have been loaded succesfully");
 			
