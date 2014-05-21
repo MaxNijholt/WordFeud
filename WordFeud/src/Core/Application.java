@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import AccountType.Account;
 import GUI.CompetitionPanel;
+import GUI.CompetitionPlayersPanel;
 import GUI.GUI;
 import GUI.GamePanel;
 import GUI.LoginPanel;
@@ -54,7 +55,7 @@ public class Application {
 			visible = "openbaar";
 		}
 		else{
-			visible = "priv���";
+			visible = "prive";
 		}
 			
 		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
@@ -64,7 +65,17 @@ public class Application {
 								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
 	}
 	
-
+	public boolean getHaveGameWith(String opponent, int compID){
+		int gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + currentAccount.getUsername() + "' AND account_naam_tegenstander = '" + opponent + "'");
+		if(gameID == 0){
+			gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + opponent + "' AND account_naam_tegenstander = '" + currentAccount.getUsername() + "'");
+			if(gameID == 0){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	/**
 	 * create the new competition
 	 * switch to the competitionpanel
@@ -119,6 +130,17 @@ public class Application {
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
 	
+	public void acceptGame(int gameID, int compID){
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', moment_reaktie = CURRENT_TIMESTAMP(), toestand_type = 'Playing' WHERE id = " + gameID);
+		String opponent = this.getOpponentName(gameID);
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
+				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
+		
+		this.createGameLetters(gameID);
+		this.createGameHands(gameID);
+		myGui.switchPanel(new CompetitionPlayersPanel(myGui, compID));
+	}
+	
 	/**
 	 * add all the letters for the beginning of a game to the DB
 	 * @param gameID
@@ -160,6 +182,11 @@ public class Application {
 	public void denyGame(int gameID){
 		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected', moment_reaktie = CURRENT_TIMESTAMP() WHERE id = " + gameID);
 		myGui.switchPanel(new PlayerPanel(myGui));
+	}
+	
+	public void denyGame(int gameID, int compID){
+		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Rejected', moment_reaktie = CURRENT_TIMESTAMP() WHERE id = " + gameID);
+		myGui.switchPanel(new CompetitionPlayersPanel(myGui, compID));
 	}
 	
 	/**

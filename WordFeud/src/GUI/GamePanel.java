@@ -3,6 +3,8 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -17,9 +19,9 @@ import WordFeud.GameStone;
 import WordFeud.Tile;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements MouseListener {
+public class GamePanel extends JPanel implements MouseListener, ActionListener {
 
-	private SButton 	pass, swap, resign, play;
+	private SButton 	pass, swap, resign, play, shuffle;
 	private ChatPanel 	cp;
 	private MenuPanel 	mp;
 	private Game 		game;
@@ -39,18 +41,26 @@ public class GamePanel extends JPanel implements MouseListener {
 		cp	 	= new ChatPanel(gui, game);
 		cp.setPreferredSize(new Dimension(250, GUI.HEIGHT));
 		pass 	= new SButton("Pass", SButton.CYAN, 150, 40);
-		swap 	= new SButton("Swap",  SButton.YELLOW, 150, 40);
-		resign 	= new SButton("Resign",  SButton.RED, 150, 40);
-		play	= new SButton("Play",  SButton.GREEN, 150, 40);
+		swap 	= new SButton("Swap", SButton.YELLOW, 150, 40);
+		resign 	= new SButton("Resign", SButton.RED, 150, 40);
+		play	= new SButton("Play", SButton.GREEN, 150, 40);
+		shuffle	= new SButton("Shuffle", SButton.PURPLE, 150, 40);
+		
+		pass.addActionListener(this);
+		swap.addActionListener(this);
+		resign.addActionListener(this);
+		play.addActionListener(this);
+		shuffle.addActionListener(this);
 		
 		// The buttons
 		JPanel bp = new JPanel();
-		bp.setLayout(new GridLayout(4, 1, 0, 10));
+		bp.setLayout(new GridLayout(5, 1, 0, 10));
 		bp.setOpaque(false);
 		bp.add(pass);
 		bp.add(swap);
 		bp.add(resign);
-		bp.add(play);		
+		bp.add(play);
+		bp.add(shuffle);
 		
 		add(mp);
 		mp.setBounds(0, 0, mp.getPreferredSize().width, mp.getPreferredSize().height);
@@ -134,6 +144,12 @@ public class GamePanel extends JPanel implements MouseListener {
 
 	public void mouseReleased(MouseEvent e) {
 		
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(shuffle)) {
+			game.shuffle();
+		}
 	}
 	
 }

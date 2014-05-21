@@ -96,10 +96,18 @@ public class GUI extends JFrame{
 		app.acceptGame(gameID);
 	}
 	
+	public void acceptGame(int gameID, int compID) {
+		app.acceptGame(gameID, compID);
+	}
+	
 	public void denyGame(int gameID) {
 		app.denyGame(gameID);
 	}
 
+	public void denyGame(int gameID, int compID) {
+		app.denyGame(gameID, compID);
+	}
+	
 	public String getLastTurntype(int gameID) {
 		String turnType = app.getLastTurnType(gameID);
 		return turnType;
@@ -169,5 +177,14 @@ public class GUI extends JFrame{
 	public String getPlayerRanking(int compID, String player){
 		String ranking = app.getPlayerRanking(compID, player);
 		return ranking;
+	}
+	
+	public boolean getHaveGameWith(String opponent, int compID){
+		boolean doHave = app.getHaveGameWith(opponent, compID);
+		return doHave;
+	}
+	
+	public void newGame(String player, boolean visibility){
+		app.newGame(player, visibility);
 	}
 }
