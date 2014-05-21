@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -12,6 +13,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -20,13 +22,15 @@ import Utility.Loader;
 import Utility.MComboBox;
 import Utility.SButton;
 import Utility.SLabel;
+import Utility.SPasswordField;
+import Utility.STextField;
 
 /**
  * @author Max Nijholt
  * 
  */
 @SuppressWarnings({ "serial", "unused" })
-public class AdminPanel extends JPanel {
+public class AdminPanel extends JPanel{
 	private MComboBox playerLookupBox = new MComboBox(150, 25, null);
 	private Vector<String> players;
 	private SLabel selectPlayer;
@@ -42,18 +46,33 @@ public class AdminPanel extends JPanel {
 			revokePlayer = new SButton("Revoke Player", SButton.GREY);
 	private ActionAdapter aa = new ActionAdapter();
 	private Administrator admin = null;
+	private RegisterPanel rp;
 	private JFrame newPlayerFrame;
 	private JPanel newPlayerPanel;
 	private String title = "New Player";
+	private JPanel wrapper;
+	private MenuPanel mp;
+	private STextField		username;
+	private SPasswordField	password, passwordValidate;
+	private SButton			register, back;
 
 	public AdminPanel(GUI gui) {
+		rp = new RegisterPanel(gui);
 		this.gui = gui;
 		gui.setLoadingCursor(true);
 
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
-
-		this.setLayout(new GridBagLayout());
+		this.setLayout(new BorderLayout());
+		
+		if(gui.getApplication().getCurrentAccount().getPlayer() != null) {
+			mp = new MenuPanel(gui, new PlayerPanel(gui));
+			this.add(mp, BorderLayout.NORTH);
+		}
+		
+		wrapper = new JPanel();
+		wrapper.setLayout(new GridBagLayout());
+		wrapper.setOpaque(false);
 		GridBagConstraints c = new GridBagConstraints();
 
 		this.admin = gui.getApplication().getCurrentAccount().getAdmin();
@@ -65,28 +84,28 @@ public class AdminPanel extends JPanel {
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 1;
 		c.insets = new Insets(0, 0, 5, 50);
-		this.add(this.selectPlayer, c);
-		this.add(this.playerLookupBox, c);
+		wrapper.add(this.selectPlayer, c);
+		wrapper.add(this.playerLookupBox, c);
 		c.gridy++;
 		c.gridx = c.gridx + 3;
-		this.add(this.newPlayer, c);
+		wrapper.add(this.newPlayer, c);
 		c.gridx++;
-		this.add(this.editPlayer, c);
+		wrapper.add(this.editPlayer, c);
 		c.gridx--;
 		c.gridy++;
-		this.add(this.grantPlayer, c);
+		wrapper.add(this.grantPlayer, c);
 		c.gridx++;
-		this.add(this.revokePlayer, c);
+		wrapper.add(this.revokePlayer, c);
 		c.gridx--;
 		c.gridy++;
-		this.add(this.grantMod, c);
+		wrapper.add(this.grantMod, c);
 		c.gridx++;
-		this.add(this.revokeMod, c);
+		wrapper.add(this.revokeMod, c);
 		c.gridx--;
 		c.gridy++;
-		this.add(this.grantAdmin, c);
+		wrapper.add(this.grantAdmin, c);
 		c.gridx++;
-		this.add(this.revokeAdmin, c);
+		wrapper.add(this.revokeAdmin, c);
 
 		// Adding buttons to the ButtonCollection.
 		this.buttonCollection.add(editPlayer);
@@ -127,7 +146,7 @@ public class AdminPanel extends JPanel {
 
 			});
 		}
-
+		this.add(wrapper, BorderLayout.CENTER);
 		gui.setLoadingCursor(false);
 	}
 
@@ -169,14 +188,100 @@ public class AdminPanel extends JPanel {
 				newPlayerFrame = new JFrame();
 				newPlayerPanel = new JPanel();
 				
+				username 			= new STextField("Username", 220, 40);
+				password 			= new SPasswordField("Password", 220, 40);
+				passwordValidate 	= new SPasswordField("Confirm Password", 220, 40);
+				register			= new SButton("Register", SButton.GREY, 220, 40);
+				back				= new SButton("Back", SButton.GREY, 220, 40);
+				
 				newPlayerFrame.setResizable(false);
 				newPlayerFrame.setTitle(title);
 				newPlayerFrame.setContentPane(newPlayerPanel);
+				newPlayerFrame.setIconImage(Loader.ICON);
+				//newPlayerFrame.add(newPlayerPanel);
+				
+				newPlayerPanel.setLayout(new GridBagLayout());
+				newPlayerPanel.setPreferredSize(new Dimension(300,300));
+				newPlayerPanel.setBackground(new Color(94, 94, 94));
+				
+				GridBagConstraints c = new GridBagConstraints();
+				
+				c.gridy = 0;
+				c.insets = new Insets(5, 0, 0, 0);
+				newPlayerPanel.add(username, c);
+				c.gridy++;
+				newPlayerPanel.add(password, c);
+				c.gridy++;
+				newPlayerPanel.add(passwordValidate, c);
+				c.gridy++;
+				newPlayerPanel.add(register, c);
+				c.gridy++;
+				newPlayerPanel.add(back, c);
+				
+				username.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent action)
+					{
+						if(action.getSource().equals(back)){
+							password.requestFocusInWindow();						
+						}
+					
+					}
+				});
+				
+				password.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent action)
+					{
+						if(action.getSource().equals(back)){
+							passwordValidate.requestFocusInWindow();						
+						}
+					
+					}
+				});
+				
+				passwordValidate.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent action)
+					{
+						if(action.getSource().equals(back)){
+							rp.register();						
+						}
+					
+					}
+				});
+				
+				register.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent action)
+					{
+						if(action.getSource().equals(back)){
+							rp.register();						
+						}
+					
+					}
+				});
+				
+				back.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent action)
+					{
+						if(action.getSource().equals(back)){
+							newPlayerFrame.dispose();						
+						}
+					
+					}
+				});
+				
 				newPlayerFrame.pack();
 				newPlayerFrame.setLocationRelativeTo(null);
 				newPlayerFrame.setVisible(true);
-				newPlayerFrame.setIconImage(Loader.ICON);
-				newPlayerFrame.add(newPlayerPanel);
+				
 			}
 		}
 	}
