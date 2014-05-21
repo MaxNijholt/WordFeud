@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 
+import GUI.AdminPanel;
+
 @SuppressWarnings("serial")
 public class MComboBox extends JPanel implements ActionListener, ObjectChangeListener {
 
@@ -25,14 +27,16 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 	private SButton arrow;
 	private JPopupMenu pop;
 	private ArrayList<SButton> buttonList;
+	private AdminPanel adpa;
 
-	public MComboBox(int width, int height, String[] items) {
+	public MComboBox(int width, int height, String[] items, AdminPanel ap) {
 		// Default Component stuff
 		this.setPreferredSize(new Dimension(width, height));
 		this.setBackground(new Color(255, 255, 255, 0));
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
 
+		this.adpa = ap;
 		this.pop = new JPopupMenu();
 		pop.setLayout(new GridLayout(0, 1));
 		pop.setOpaque(false);
@@ -117,6 +121,7 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 				@Override
 				public void actionPerformed(ActionEvent e) {
 						placeholder.setText(s.getName());
+						adpa.update();
 				}
 				
 			});

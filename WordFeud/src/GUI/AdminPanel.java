@@ -17,6 +17,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import AccountType.Account;
 import AccountType.Administrator;
 import Utility.DBCommunicator;
 import Utility.Loader;
@@ -32,7 +33,7 @@ import Utility.STextField;
  */
 @SuppressWarnings({ "serial", "unused" })
 public class AdminPanel extends JPanel{
-	private MComboBox playerLookupBox = new MComboBox(150, 25, null);
+	private MComboBox playerLookupBox = new MComboBox(150, 25, null, this);
 	private Vector<String> players;
 	private SLabel selectPlayer;
 	private GUI gui;
@@ -138,15 +139,6 @@ public class AdminPanel extends JPanel{
 				update();
 			}
 		});
-		for (SButton sb : playerLookupBox.getButtons()) {
-			sb.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					update();
-				}
-
-			});
-		}
 		this.add(wrapper, BorderLayout.CENTER);
 		gui.setLoadingCursor(false);
 	}
@@ -319,12 +311,13 @@ public class AdminPanel extends JPanel{
 	/**
 	 * method to update the buttons to have the right color.
 	 */
+	@SuppressWarnings("deprecation")
 	public void update() {
 		for (SButton sb : buttonCollection) {
 			sb.setColor(SButton.CYAN);
 			sb.enable(true);
 		}
-		ArrayList<String> rights = admin.getUserRights(this.playerLookupBox
+		/*ArrayList<String> rights = admin.getUserRights(this.playerLookupBox
 				.getSelectedItem());
 		System.out.println(rights);
 		if (rights.size() != 0) {
@@ -341,7 +334,29 @@ public class AdminPanel extends JPanel{
 					this.grantAdmin.disable();
 				}
 			}
+		}*/
+		Account acc = new Account(this.playerLookupBox.getSelectedItem());
+		if (acc.isPlayer()) {
+			this.grantPlayer.setColor(SButton.GREY);
+			this.grantPlayer.setEnabled(false);
+		} else {
+			this.revokePlayer.setColor(SButton.GREY);
+			this.revokePlayer.disable();
 		}
-		revalidate();
+		if (acc.isModerator()) {
+			this.grantMod.setColor(SButton.GREY);
+			this.grantMod.disable();
+		} else {
+			this.revokeMod.setColor(SButton.GREY);
+			this.revokeMod.disable();
+		}
+		if (acc.isAdministrator()) {
+			this.grantAdmin.setColor(SButton.GREY);
+			this.grantAdmin.disable();
+		}else {
+			this.revokeAdmin.setColor(SButton.GREY);
+			this.revokeAdmin.disable();
+		}
+		repaint();
 	}
 }
