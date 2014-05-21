@@ -28,16 +28,15 @@ public class SplashText implements Runnable {
 		panel		= p;
 		x			= xPos;
 		y			= yPos;
-		font		= new Font("Arial", Font.PLAIN, 10);
+		font		= new Font("Arial", Font.PLAIN, 30);
 		thread 		= new Thread(this);
 		texts		= new String[] 
 				{	
-//					"This is awesome", "So cool", "Really nice!", "35% bug free!", "Awesome", "LOL!",
-//					"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
-//					"Dejaï¿½ vu!", "Dejaï¿½ vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
-//					"Woah!", "Wow!", "Yaay!", "Water proof!", "Superfragilisticexpialidocious!",
-//					"This message will never appear on the splash screen, isn't that weird?", "Try it!"
-					"Administrator Adam = new Administrator();"
+					"This is awesome", "So cool", "Really nice!", "35% bug free!", "Awesome", "LOL!",
+					"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
+					"Deja  vu!", "Deja  vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
+					"Woah!", "Wow!", "Yaay!", "Water proof!", "Superfragilisticexpialidocious!",
+					"This message will never appear on the splash screen, isn't that weird?", "Try it!"
 				};
 		text		= texts[new Random().nextInt(texts.length)];
 		running		= true;
@@ -60,16 +59,16 @@ public class SplashText implements Runnable {
 	}
 	
 	public void run() {
-		int i = 20;
+		int i = 45;
 		int j = 1;
 		while(running) {
 			font = new Font("Aharoni", Font.BOLD, i);
-			if(i == 25) {j = -1;}
-			if(i == 10) {j = 1;}
+			if(i == 55) {j = -1;}
+			if(i == 35) {j = 1;}
 			i += j;
 			panel.repaint();
 			try {
-				Thread.sleep(20);
+				Thread.sleep(16);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
