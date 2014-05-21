@@ -15,6 +15,7 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import AccountType.Account;
 import AccountType.Administrator;
 import Utility.Loader;
 import Utility.MComboBox;
@@ -48,16 +49,15 @@ public class AdminPanel extends JPanel {
 
 	public AdminPanel(GUI gui) {
 		this.gui = gui;
-		gui.setLoadingCursor(true);
 
+		gui.setLoadingCursor(true);
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setBackground(new Color(94, 94, 94));
-
 		this.setLayout(new GridBagLayout());
+
 		GridBagConstraints c = new GridBagConstraints();
 
 		this.admin = gui.getApplication().getCurrentAccount().getAdmin();
-
 		this.selectPlayer = new SLabel("Select player: ", 0);
 		this.players = new Vector<String>();
 
@@ -168,7 +168,7 @@ public class AdminPanel extends JPanel {
 			if (e.getSource().equals(newPlayer)) {
 				newPlayerFrame = new JFrame();
 				newPlayerPanel = new JPanel();
-				
+
 				newPlayerFrame.setResizable(false);
 				newPlayerFrame.setTitle(title);
 				newPlayerFrame.setContentPane(newPlayerPanel);
@@ -184,29 +184,36 @@ public class AdminPanel extends JPanel {
 	/**
 	 * method to update the buttons to have the right color.
 	 */
+	@SuppressWarnings("deprecation")
 	public void update() {
 		for (SButton sb : buttonCollection) {
 			sb.setColor(SButton.CYAN);
 			sb.enable(true);
 		}
-		ArrayList<String> rights = admin.getUserRights(this.playerLookupBox
-				.getSelectedItem());
-		System.out.println(rights);
-		if (rights.size() != 0) {
-			for (String s : rights) {
-				System.out.println(s);
-				if (s.equals("Player")) {
-					this.grantPlayer.setColor(SButton.GREY);
-					this.grantPlayer.disable();
-				} else if (s.equals("Moderator")) {
-					this.grantMod.setColor(SButton.GREY);
-					this.grantMod.disable();
-				} else if (s.equals("Administrator")) {
-					this.grantAdmin.setColor(SButton.GREY);
-					this.grantAdmin.disable();
-				}
-			}
+		Account acc = new Account(this.playerLookupBox.getSelectedItem());
+
+		if (acc.isPlayer()) {
+			this.grantPlayer.setColor(SButton.GREY);
+			this.grantPlayer.disable();
+		} else {
+			this.revokePlayer.setColor(SButton.GREY);
+			this.revokePlayer.disable();
 		}
+		if (acc.isModerator()) {
+			this.grantMod.setColor(SButton.GREY);
+			this.grantMod.disable();
+		} else {
+			this.revokeMod.setColor(SButton.GREY);
+			this.revokeMod.disable();
+		}
+		if (acc.isAdministrator()) {
+			this.grantAdmin.setColor(SButton.GREY);
+			this.grantAdmin.disable();
+		}else {
+			this.revokeAdmin.setColor(SButton.GREY);
+			this.revokeAdmin.disable();
+		}
+
 		revalidate();
 	}
 }

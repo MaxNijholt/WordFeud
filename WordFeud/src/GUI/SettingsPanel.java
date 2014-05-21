@@ -2,7 +2,6 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,7 +9,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import AccountType.Account;
@@ -89,6 +87,7 @@ public class SettingsPanel extends JPanel{
 	}
 
 	class ActionAdapter implements ActionListener {
+		@SuppressWarnings("deprecation")
 		public void actionPerformed(ActionEvent e) {
 			if(gui.getApplication().getCurrentAccount().getUsername().equals(user.getUsername())){
 				if (e.getSource().equals(save)) {
