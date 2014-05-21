@@ -27,15 +27,16 @@ public class SplashText implements Runnable {
 		panel		= p;
 		x			= xPos;
 		y			= yPos;
-		font		= new Font("Arial", Font.PLAIN, 30);
+		font		= new Font("Arial", Font.PLAIN, 10);
 		thread 		= new Thread(this);
 		texts		= new String[] 
 				{	
-					"This is awesome", "So cool", "Really nice!", "35% bug free!", "Awesome", "LOL!",
-					"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
-					"Déjà vu!", "Déjà vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
-					"Woah!", "Wow!", "Yaay!", "Water proof!", "你好中国！", "Superfragilisticexpialidocious!",
-					"This message will never appear on the splash screen, isn't that weird?", "Try it!"
+//					"This is awesome", "So cool", "Really nice!", "35% bug free!", "Awesome", "LOL!",
+//					"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
+//					"D��j�� vu!", "D��j�� vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
+//					"Woah!", "Wow!", "Yaay!", "Water proof!", "���������������", "Superfragilisticexpialidocious!",
+//					"This message will never appear on the splash screen, isn't that weird?", "Try it!", 
+					"Administrator Adam = new Administrator();"
 				};
 		text		= texts[new Random().nextInt(texts.length)];
 		thread.start();
@@ -57,17 +58,17 @@ public class SplashText implements Runnable {
 	}
 	
 	public void run() {
-		int i = 45;
+		int i = 25;
 		int j = 1;
 		while(true) {
 			
 			font = new Font("Aharoni", Font.BOLD, i);
-			if(i == 55) {j = -1;}
-			if(i == 35) {j = 1;}
+			if(i == 30) {j = -1;}
+			if(i == 10) {j = 1;}
 			i += j;
 			panel.repaint();
 			try {
-				Thread.sleep(16);
+				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
