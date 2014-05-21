@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import AccountType.Administrator;
+import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.MComboBox;
 import Utility.SButton;
@@ -223,7 +224,7 @@ public class AdminPanel extends JPanel{
 					@Override
 					public void actionPerformed(ActionEvent action)
 					{
-						if(action.getSource().equals(back)){
+						if(action.getSource().equals(username)){
 							password.requestFocusInWindow();						
 						}
 					
@@ -235,7 +236,7 @@ public class AdminPanel extends JPanel{
 					@Override
 					public void actionPerformed(ActionEvent action)
 					{
-						if(action.getSource().equals(back)){
+						if(action.getSource().equals(password)){
 							passwordValidate.requestFocusInWindow();						
 						}
 					
@@ -247,8 +248,8 @@ public class AdminPanel extends JPanel{
 					@Override
 					public void actionPerformed(ActionEvent action)
 					{
-						if(action.getSource().equals(back)){
-							rp.register();						
+						if(action.getSource().equals(passwordValidate)){
+							registerPlayer();					
 						}
 					
 					}
@@ -259,8 +260,8 @@ public class AdminPanel extends JPanel{
 					@Override
 					public void actionPerformed(ActionEvent action)
 					{
-						if(action.getSource().equals(back)){
-							rp.register();						
+						if(action.getSource().equals(register)){
+							registerPlayer();						
 						}
 					
 					}
@@ -283,6 +284,35 @@ public class AdminPanel extends JPanel{
 				newPlayerFrame.setVisible(true);
 				
 			}
+		}
+		
+		private void registerPlayer()
+		{
+			boolean allowed = true;
+			for(int i = 0; i < username.getText().length(); i++) {
+				if(Character.isWhitespace(username.getText().charAt(i))){
+					allowed = false;
+				}
+				
+			}
+			String[] safe = new String[] {"\"", "\'"};
+			for(int i = 0; i < safe.length; i++) {
+				if(username.getText().contains(safe[i]) || String.valueOf(password.getPassword()).contains(safe[i])) {
+					allowed = false;
+				}
+				
+			}
+			if(allowed){
+				if(DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '" + username.getText() + "'") == null) {
+					if(String.valueOf(password.getPassword()).equals(String.valueOf(passwordValidate.getPassword()))) {
+						if(!String.valueOf(password.getPassword()).isEmpty() && !(String.valueOf(password.getPassword()).length() < 1)) {
+							DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username.getText() + "', '" + String.valueOf(password.getPassword()) + "')");
+							DBCommunicator.writeData("INSERT INTO accountrol(account_naam, rol_type) VALUES('" + username.getText() + "', 'Player')");
+						}
+					}				
+				}
+				
+			}	
 		}
 	}
 
