@@ -8,7 +8,6 @@ import GUI.GUI;
 import GUI.GamePanel;
 import GUI.LoginPanel;
 import GUI.PlayerPanel;
-import GUI.SpectatorCompetitionsPanel;
 import GUI.SpectatorGamePanel;
 import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
@@ -300,7 +299,6 @@ public class Application {
 			else{
 				query += " AND id <> " + compID;
 				compInts.add(compID);
-				System.out.println("comp added " + compID);
 			}
 		}
 		return compInts;

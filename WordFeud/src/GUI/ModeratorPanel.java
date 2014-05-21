@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,6 +23,8 @@ public class ModeratorPanel extends JPanel {
 	private GUI mygui;
 	private SLabel selectWord;
 	private ArrayList<String> posibleWords;
+	private MenuPanel mp;
+	private JPanel allPanel;
 	private JComboBox<String> wordList = new JComboBox<String>();
 	private SButton acceptWord = new SButton("Accept word", SButton.GREY),
 			rejectWord = new SButton("Reject word", SButton.GREY),
@@ -29,17 +33,25 @@ public class ModeratorPanel extends JPanel {
 	public ModeratorPanel(GUI gui) {
 		mygui = gui;
 		mygui.setLoadingCursor(true);
+		this.mp = new MenuPanel(gui, null);
+		allPanel = new JPanel();
+		allPanel.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
+		allPanel.setBackground(new Color(94, 94, 94));
+
+		allPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
+		
+		this.setLayout(new BorderLayout());
+		this.setBackground(new Color(94,94,94));
+		
 		posibleWords = mygui.getApplication().getCurrentAccount().getMod()
 				.getNotAprovedWords();
 
 		for (String merge : posibleWords) {
 			wordList.addItem(merge);
 		}
-		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.setBackground(new Color(94, 94, 94));
-
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		
 
 		// actionlisteners==================================================
 		addNewWord.addActionListener(new ActionListener() {
@@ -127,15 +139,17 @@ public class ModeratorPanel extends JPanel {
 		c.gridwidth = 1;
 		c.insets = new Insets(0, 0, 5, 50);
 
-		this.add(this.selectWord, c);
-		this.add(this.wordList, c);
+		allPanel.add(this.selectWord, c);
+		allPanel.add(this.wordList, c);
 		c.gridy++;
-		this.add(this.acceptWord, c);
-		this.add(this.rejectWord, c);
+		allPanel.add(this.acceptWord, c);
+		allPanel.add(this.rejectWord, c);
 		c.gridy++;
 		c.gridx = c.gridx + 3;
-		this.add(this.addNewWord, c);
+		allPanel.add(this.addNewWord, c);
 
 		mygui.setLoadingCursor(false);
+		this.add(mp, BorderLayout.NORTH);
+		this.add(allPanel, BorderLayout.CENTER);
 	}
 }
