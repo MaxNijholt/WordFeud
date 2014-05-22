@@ -16,6 +16,7 @@ import Utility.Loader;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
+import java.util.Calendar;
 
 
 public class Application {
@@ -342,6 +343,90 @@ public class Application {
 		}
 		return gameInts;
 	}
+	
+	public ArrayList<Integer> getPlayingCompetitions(){
+		ArrayList<Integer> compInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+
+		Calendar rightNow = Calendar.getInstance();
+		String now = rightNow.get(1) + "-" + rightNow.get(2) + "-" + rightNow.get(5);
+		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam = '" + player + "'" + " AND einde > '" + now + "%'";
+		boolean searching = true;
+		
+		while(searching){
+			int compID = DBCommunicator.requestInt(query);
+			if(compID == 0){
+				
+				
+				searching = false;
+			}
+				else{
+						query += " AND competitie_id <> " + compID;
+						compInts.add(compID);
+					
+
+			}
+		}
+		
+		
+		return compInts;
+	}
+	
+	public ArrayList<Integer> getFinishedCompetitions(){
+		ArrayList<Integer> compInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+
+		Calendar rightNow = Calendar.getInstance();
+		String now = rightNow.get(1) + "-" + rightNow.get(2) + "-" + rightNow.get(5);
+		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam = '" + player + "'" + " AND einde < '" + now + "%'";
+		boolean searching = true;
+		
+		while(searching){
+			int compID = DBCommunicator.requestInt(query);
+			if(compID == 0){
+				
+				
+				searching = false;
+			}
+				else{
+						query += " AND competitie_id <> " + compID;
+						compInts.add(compID);
+					
+
+			}
+		}
+		
+		
+		return compInts;
+	}
+
+	public ArrayList<Integer> getJoinableCompetitions(){
+		ArrayList<Integer> compInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+
+		Calendar rightNow = Calendar.getInstance();
+		String now = rightNow.get(1) + "-" + rightNow.get(2) + "-" + rightNow.get(5);
+		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam != '" + player + "'" + " AND einde > '" + now + "%'";
+		boolean searching = true;
+		
+		while(searching){
+			int compID = DBCommunicator.requestInt(query);
+			if(compID == 0){
+				
+				
+				searching = false;
+			}
+				else{
+							query += " AND competitie_id <> " + compID;
+							compInts.add(compID);	
+							}
+
+						}
+		
+		
+		return compInts;
+	}
+	
 	
 	public ArrayList<Integer> getSpectatableCompetitions() {
 		ArrayList<Integer> compInts = new ArrayList<Integer>();
