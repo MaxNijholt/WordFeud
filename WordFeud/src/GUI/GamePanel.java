@@ -2,11 +2,14 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,7 +22,7 @@ import WordFeud.GameStone;
 import WordFeud.Tile;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements MouseListener, ActionListener {
+public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener {
 
 	private SButton 	pass, swap, resign, play, shuffle;
 	private ChatPanel 	cp;
@@ -28,7 +31,11 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 	@SuppressWarnings("unused")
 	private GUI 		gui;
 	private GameStone 	currentGameStone;
-	private ArrayList<Tile> hand = new ArrayList<Tile>();
+	private boolean		running		= true;
+	private Thread		thread		= new Thread(this);
+	private ArrayList<Tile> hand 	= new ArrayList<Tile>();
+	private ArrayList<Tile> field	= new ArrayList<Tile>();
+	private int mouseX, mouseY;
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
@@ -36,7 +43,8 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(null);
 		this.setBackground(new Color(23, 26, 30));
-		this.requestFocus();
+		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 		mp		= new MenuPanel(gui, new PlayerPanel(gui));
 		mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
 		cp	 	= new ChatPanel(gui, game);
@@ -72,84 +80,117 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 		
 		
 		HashMap<String, Tile> tiles = game.getMyField().getTiles();
-		System.out.println(tiles);
 		
-		int xPos = bp.getPreferredSize().width + 20;
-		int yPos = 50;
 		for(int y = 1; y < 16; y++) {
 			for(int x = 1; x < 16; x++) {
 				Tile tile = tiles.get(x + "," + y);
-				add(tile);
-				tile.addMouseListener(this);
+				field.add(tile);
 				tile.setPickablity(false);
-				tile.setBounds(xPos, yPos, 32, 32);
 				if(x == 1 && y == 1) {tile.setGameStone(new GameStone(5, 'W'));}
-				xPos += 33;
 			}
-			xPos = bp.getPreferredSize().width + 20;
-			yPos += 33;
 		}
-		
-		ArrayList<Integer> gameStones 		= game.getGameStones();
-		HashMap<Integer, Character> chars 	= game.getStoneChars();
-		
+				
 		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
 		
-		for(int i = 0; i < gameStones.size(); i++) {
-			currentGameStones.add(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(chars.get(gameStones.get(i)).toString())), chars.get(gameStones.get(i)).charValue()));
+		for(int i = 0; i < game.getGameStones().size(); i++) {
+			currentGameStones.add(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(game.getStoneChars().get(game.getGameStones().get(i)).toString())), game.getStoneChars().get(game.getGameStones().get(i)).charValue()));
 		}
 		
-		xPos = bp.getPreferredSize().width + 20;
-		yPos = 550;
 		for(int i = 0; i < 7; i++) {
-			Tile tile = new Tile(i, 0);
+			Tile tile = new Tile(i + 1, -1);
 			tile.setGameStone(currentGameStones.get(i));
-			tile.addMouseListener(this);
 			hand.add(tile);
-			add(tile);
-			tile.setBounds(xPos, yPos, 32, 32);
-			xPos += 33;
 		}
 
+		
+		thread.start();
+	}
+	
+	public void run() {
+		while(running) {
+			repaint();
+			try {
+				Thread.sleep(1000/60);
+			} 
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D)g.create();
+		for(Tile t:field) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180, (t.getYPos() * 33) + 10, null);
+		}
+		for(Tile t:hand) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180, (t.getYPos() * 33) + 580, null);
+		}
+		if(currentGameStone != null) {
+			g2d.drawImage(currentGameStone.getImage(), mouseX - (currentGameStone.getImage().getWidth() / 2), mouseY - (currentGameStone.getImage().getHeight() / 2), null);
+		}
+		g2d.dispose();
 	}
 
-	public void mouseClicked(MouseEvent e) {
-		
-	}
-
-	public void mouseEntered(MouseEvent e) {
-		
-	}
-
-	public void mouseExited(MouseEvent e) {
-		
-	}
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
 
 	public void mousePressed(MouseEvent e) {
-		if(currentGameStone == null) {
-			if(((Tile) e.getSource()).getGameStone() != null) {
-				if(((Tile) e.getSource()).getPickablity()) {
-					currentGameStone = ((Tile) e.getSource()).getGameStone();
-					((Tile) e.getSource()).setGameStone(null);
+		for(Tile t:field) {
+			if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
+				if(currentGameStone == null) {
+					if(t.getPickablity()) {
+						currentGameStone = t.getGameStone();
+						t.setPickablity(false);
+						t.setGameStone(null);
+					}
 				}
+				else {
+					if(t.getGameStone() == null) {
+						t.setGameStone(currentGameStone);
+						t.setPickablity(true);
+						currentGameStone = null;
+					}
+				}
+				System.out.println("You clicked tile=" + t.getXPos() + ":" + t.getYPos());
 			}
 		}
-		else {
-			if(((Tile) e.getSource()).getGameStone() == null) {
-				((Tile) e.getSource()).setGameStone(currentGameStone);
-				((Tile) e.getSource()).setPickablity(true);
-				currentGameStone = null;
-			}
-		}
-	}
-
-	public void mouseReleased(MouseEvent e) {
 		
+		for(Tile t:hand) {
+			if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
+				if(currentGameStone == null) {
+					if(t.getPickablity()) {
+						currentGameStone = t.getGameStone();
+						t.setGameStone(null);
+					}
+				}
+				else {
+					if(t.getGameStone() == null) {
+						t.setGameStone(currentGameStone);
+						currentGameStone = null;
+					}
+				}
+				System.out.println("You clicked tile=" + t.getXPos() + ":" + t.getYPos());
+			}
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(shuffle)) {
 			game.shuffle();
+			
+			/*HashMap<String, Tile> tiles = game.getMyField().getTiles();
+
+			for(int y = 1; y < 16; y++) {
+				for(int x = 1; x < 16; x++) {
+					Tile tile = tiles.get(x + "," + y);
+					field.add(tile);
+					tile.setPickablity(false);
+				}
+			}
 			
 			ArrayList<Integer> gameStones 		= game.getGameStones();
 			HashMap<Integer, Character> chars 	= game.getStoneChars();
@@ -158,9 +199,17 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 				GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(chars.get(gameStones.get(i)).toString())), chars.get(gameStones.get(i)).charValue());
 				hand.get(i).setGameStone(s);
 			}
-			currentGameStone = null;
-			repaint();
+			currentGameStone = null;*/
 		}
+	}
+
+	public void mouseDragged(MouseEvent w) {
+		
+	}
+
+	public void mouseMoved(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
 	
 }
