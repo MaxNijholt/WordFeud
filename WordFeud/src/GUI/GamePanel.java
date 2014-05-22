@@ -158,6 +158,7 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 				GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(chars.get(gameStones.get(i)).toString())), chars.get(gameStones.get(i)).charValue());
 				hand.get(i).setGameStone(s);
 			}
+			currentGameStone = null;
 			repaint();
 		}
 	}
