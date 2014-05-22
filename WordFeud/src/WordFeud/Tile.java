@@ -108,7 +108,6 @@ public class Tile extends SLabel {
 
 	public void setGameStone(GameStone gamestone) {
 		this.gameStone = gamestone;
-		System.out.println(gamestone.getLetter() + gamestone.getValue());
 		repaint();
 	}
 	
