@@ -231,6 +231,7 @@ public class SpectatorPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				gui.spectateGame(gameID);
+				System.out.println(gameID);
 			}
 		});
 		return panel;
