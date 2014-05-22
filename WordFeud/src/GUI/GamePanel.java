@@ -88,7 +88,7 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 			yPos += 33;
 		}
 		
-		String letters 				= game.getGameStoneLetters();
+		/*String letters 				= game.getGameStoneLetters();
 		ArrayList<Character> chars 	= new ArrayList<Character>();
 		System.out.println(letters);
 		for(int i = 0; i < letters.length(); i++) {
@@ -108,7 +108,7 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 			add(tile);
 			tile.setBounds(xPos, yPos, 32, 32);
 			xPos += 33;
-		}
+		}*/
 
 	}
 
