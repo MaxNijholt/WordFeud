@@ -38,6 +38,8 @@ public class DBCommunicator {
 			System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
 		}
 	}
+	
+	public static Connection checkConnection() {return con;}
 
 	/**
 	 * This method allows you to request data from the Database.</br>

@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import Utility.Loader;
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
@@ -41,17 +42,7 @@ public class GameStone extends SLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
-		g2d.setColor(new Color(255, 255, 255, 220));
-		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 5, 5);
-		g2d.setColor(Color.BLACK);
-		FontMetrics fmLarge = g2d.getFontMetrics(new Font("Arial", Font.BOLD, 52));
-		FontMetrics fmSmall = g2d.getFontMetrics(small);
-		g2d.setFont(new Font("Arial", Font.BOLD, 52));
-		g2d.drawString(String.valueOf(letter), (getWidth() / 2) - (fmLarge.stringWidth(String.valueOf(letter)) / 2), (0 + (this.getHeight()+1-0) / 2) - ((fmLarge.getAscent() + fmLarge.getDescent()) / 2) + fmLarge.getAscent());
-		String temp = String.valueOf(value);
-		g2d.setColor(Color.BLACK);
-		g2d.setFont(small);
-		g2d.drawString(temp, getWidth() - fmSmall.stringWidth(String.valueOf(value)) - 2, (fmSmall.getHeight() / 2) + 5);
+		g2d.drawImage(getImage(), 0, 0, null);
 	}
 	
 	public int getValue(){return value;}
@@ -71,7 +62,7 @@ public class GameStone extends SLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
 		g2d.setColor(new Color(255, 255, 255, 180));
-		g2d.fillRoundRect(0, 0, this.getPreferredSize().width, this.getPreferredSize().height, 5, 5);
+		g2d.drawImage(Loader.GAMESTONE, 0, 0, this.getPreferredSize().width, this.getPreferredSize().height, null);
 		g2d.setColor(Color.BLACK);
 		FontMetrics fmLarge = g2d.getFontMetrics(large);
 		FontMetrics fmSmall = g2d.getFontMetrics(small);
@@ -80,7 +71,7 @@ public class GameStone extends SLabel {
 		String temp = String.valueOf(value);
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(small);
-		g2d.drawString(temp, this.getPreferredSize().width - fmSmall.stringWidth(String.valueOf(value)) - 2, (fmSmall.getHeight() / 2) + 5);
+		g2d.drawString(temp, this.getPreferredSize().width - fmSmall.stringWidth(String.valueOf(value)) - (fmSmall.stringWidth(String.valueOf(value)) / 2), (fmSmall.getHeight()) - (fmSmall.getHeight() / 4));
 		return image;
 	}
 	
