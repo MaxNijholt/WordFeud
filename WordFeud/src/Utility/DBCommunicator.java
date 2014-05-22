@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import WordFeud.GameStone;
+import WordFeud.Tile;
 
 public class DBCommunicator {
 
@@ -95,6 +96,59 @@ public class DBCommunicator {
 		}
 		return result;
 	}
+	
+	/**
+	 * This method allows you to write data to the Database.</br>
+	 * It uses a query as variable.</br>
+	 * Example: "INSERT INTO account(naam, wachtwoord) VALUES('test', '123')"</br>
+	 * This method adds the query to the Database.
+	 */
+	public static void writeData(String query) {
+		PreparedStatement	stm;
+
+		try {
+			stm = con.prepareStatement(query);
+			stm.executeUpdate();
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void writeNamePassword(String name, String password) {
+		PreparedStatement	stm;
+
+		try {
+			stm = con.prepareStatement("INSERT INTO account(naam, wachtwoord) VALUES(" + "'" + name + "', '" + password + "')");
+			stm.executeUpdate();
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static int requestInt(String query) {
+		Statement	stm;
+		ResultSet 	res;
+		int		result = 0;
+		try {
+			stm = con.createStatement();
+			res = stm.executeQuery(query + " limit 1;");
+
+			while(res.next()) {
+				result = res.getInt(1);
+			}	
+			res.close();
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	/**
 	 * @author Max
 	 * @param letterSetCode is either EN or NL
@@ -166,8 +220,7 @@ public class DBCommunicator {
 		PreparedStatement	stm;
 		try {
 			for(GameStone gs : gameStones){
-				stm = con.prepareStatement("INSERT INTO letter (spel_id, lettertype_letterset_code, lettertype_karakter) VALUES('"
-						+ gameID + "','" + gs.getLetterSet() + "', '" + gs.getLetter() + "')");
+				stm = con.prepareStatement("INSERT INTO letter (spel_id, lettertype_letterset_code, lettertype_karakter) VALUES('" + gameID + "','" + gs.getLetterSet() + "', '" + gs.getLetter() + "')");
 				stm.executeUpdate();
 				stm.close();
 			}
@@ -204,56 +257,31 @@ public class DBCommunicator {
 		return gameStones;
 	}
 
-	/**
-	 * This method allows you to write data to the Database.</br>
-	 * It uses a query as variable.</br>
-	 * Example: "INSERT INTO account(naam, wachtwoord) VALUES('test', '123')"</br>
-	 * This method adds the query to the Database.
-	 */
-	public static void writeData(String query) {
-		PreparedStatement	stm;
-
-		try {
-			stm = con.prepareStatement(query);
-			stm.executeUpdate();
-			stm.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void writeNamePassword(String name, String password) {
-		PreparedStatement	stm;
-
-		try {
-			stm = con.prepareStatement("INSERT INTO account(naam, wachtwoord) VALUES(" + "'" + name + "', '" + password + "')");
-			stm.executeUpdate();
-			stm.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static int requestInt(String query) {
+	public static HashMap<String, Tile> updateTilesWithStones(HashMap<String, Tile> hmap, ArrayList<GameStone> gameStones, int gameID) {
 		Statement	stm;
 		ResultSet 	res;
-		int		result = 0;
+//		gameStones = Loader.getGameStones(gameStones.get(0).getLetterSet().toUpperCase());
 		try {
-			stm = con.createStatement();
-			res = stm.executeQuery(query + " limit 1;");
-
-			while(res.next()) {
-				result = res.getInt(1);
-			}	
-			res.close();
-			stm.close();
+				stm = con.createStatement();
+				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id FROM gelegdeletter WHERE spel_id='" + gameID + "'");
+				while(res.next()) {
+					for(GameStone gs : gameStones){
+						if(res.getString(3).equals(gs.getID())){
+							for(String s : hmap.keySet()){
+								String loc = res.getString(1)+","+res.getString(2);
+								if(loc.equals(s)){
+									hmap.get(s).setGameStone(gs);
+								}
+							}
+						}
+					}
+				}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return hmap;
 	}
+
 
 }
