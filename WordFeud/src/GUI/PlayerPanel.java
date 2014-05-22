@@ -24,6 +24,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 
 	private AScrollPane scrollPane;
 	private JPanel gameContent;
+	private SButton competition;
 	private GUI gui;
 	private MenuPanel mp;
 
@@ -40,6 +41,16 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		JPanel allPanel = new JPanel();
 		allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.PAGE_AXIS));
 		allPanel.setBackground(new Color(94,94,94));
+		
+		//create the competition button
+		competition = new SButton("Competitions", SButton.T_GREY, 2000, 60);
+		allPanel.add(competition);
+		competition.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				gui.switchPanel(new CompetitionPanel(gui));
+			}
+		});
 				
 		//create the gameContent panel here go all the games
 		gameContent 	= 	new JPanel();
@@ -49,11 +60,6 @@ public class PlayerPanel extends JPanel implements ActionListener {
 
 		//create the scrollpane as container for the gameContent
 		scrollPane 		= 	new AScrollPane(1000, 500, gameContent, false, true);
-//		scrollPane.setBorder(null);
-//		scrollPane.setPreferredSize(new Dimension(1000, 500));
-//		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-//		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(scrollPane);
 
 		

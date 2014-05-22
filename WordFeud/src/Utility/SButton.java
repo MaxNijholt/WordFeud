@@ -65,7 +65,9 @@ public class SButton extends JButton implements MouseListener {
 	public SButton(String name, Color color, int width, int height) {
 		init(name);
 		calculateColors(color);
+		setMinimumSize(new Dimension(width, height));
 		setPreferredSize(new Dimension(width, height));
+		setMaximumSize(new Dimension(width, height));
 	}
 	
 	/**
