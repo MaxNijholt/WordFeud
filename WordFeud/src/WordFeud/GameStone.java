@@ -14,16 +14,26 @@ import Utility.SLabel;
 @SuppressWarnings("serial")
 public class GameStone extends SLabel {
 
-	private int 	value;
+	private int 	value,
+					id = -1;
 	private char 	letter;
 	private Font 	large, small;
-	
+	private String letterSet;
+
 	public GameStone(int value, char letter){
 		super(String.valueOf(letter), SLabel.CENTER, 30, 30);
 		this.value 	= value;
 		this.letter = letter;
 		this.large 	= new Font("Arial", Font.BOLD, 20);
 		this.small	= new Font("Arial", Font.PLAIN, 8);
+	}	
+	public GameStone(int value, char letter, String letterSet){
+		super(String.valueOf(letter), SLabel.CENTER, 30, 30);
+		this.value 		= value;
+		this.letter 	= letter;
+		this.letterSet 	= letterSet;
+		this.large 		= new Font("Arial", Font.BOLD, 20);
+		this.small		= new Font("Arial", Font.PLAIN, 8);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -50,6 +60,9 @@ public class GameStone extends SLabel {
 	public Font getSmallFont() {return small;}
 	public void setDimension(int width, int height) 	{this.setPreferredSize(new Dimension(width, height));}
 	public void setFonts(Font large, Font small)		{this.large = large; this.small = small;}
+	public String getLetterSet() 						{return this.letterSet;}
+	public void setID(int id) 							{this.id = id;}
+	public int getID() 									{return this.id;}
 	
 	public BufferedImage getImage() {
 		BufferedImage image = new BufferedImage(this.getPreferredSize().width, this.getPreferredSize().height, BufferedImage.TYPE_INT_ARGB);

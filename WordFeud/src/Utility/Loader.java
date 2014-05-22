@@ -2,6 +2,8 @@ package Utility;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,17 +55,34 @@ public class Loader {
 			e.printStackTrace();
 		} 
 	}
+	/**
+	 * @author Max
+	 * @param int gameID, HashMap<String (location), Tile> , ArrayList<GameStone> gameStones
+	 * @return HashMap<String, Tile> updated with the right gamestones on tiles
+	 */
+	public static HashMap<String, Tile> updateTiles(int gameID, ArrayList<GameStone> gameStones, HashMap<String, Tile> hmap){
+		gameStones = DBCommunicator.getGeneratedStoneIDs(gameID, gameStones);
+		for(GameStone gs : gameStones){
+			System.out.println(gs.getX() + gs.getY());
+			hmap.get(gs.getX()+1+ "," + gs.getY()+1).setGameStone(gs);
+		}
+		return hmap;
+	}
 	
 	public static ArrayList<GameStone> getGameStones(String language){
 		ArrayList<GameStone> gamestones = new ArrayList<GameStone>();
 		HashMap<Character, HashMap<Integer, Integer>> letterset = DBCommunicator.requestLetters("EN");
-		for(char ch = 'A'; ch < 'Z'; ch++ ){
+		for(char ch = 'A'; ch <= 'Z'; ch++ ){
 		 	for(int i = 1; i < Integer.parseInt(letterset.get(ch).values().toString().substring(letterset.get(ch).values().toString().indexOf('[')+1,letterset.get(ch).values().toString().indexOf(']')))+1; i++){
 		 		int value = Integer.parseInt(letterset.get(ch).keySet().toString().substring(letterset.get(ch).keySet().toString().indexOf('[')+1,letterset.get(ch).keySet().toString().indexOf(']')));
-		 		new GameStone(value ,ch);
-		 		System.out.println(value + " " + ch);
+		 		gamestones.add(new GameStone(value ,ch, "EN"));
 		 	}
 		}
+		char ch = '?';
+		for(int i = 1; i < Integer.parseInt(letterset.get(ch).values().toString().substring(letterset.get(ch).values().toString().indexOf('[')+1,letterset.get(ch).values().toString().indexOf(']')))+1; i++){
+	 		int value = Integer.parseInt(letterset.get(ch).keySet().toString().substring(letterset.get(ch).keySet().toString().indexOf('[')+1,letterset.get(ch).keySet().toString().indexOf(']')));
+	 		gamestones.add(new GameStone(value ,ch, "EN"));
+	 	}
 		return gamestones;
 	}
 	
@@ -75,9 +94,10 @@ public class Loader {
 		for(String s : loc){
 			String x = "" + s.substring(0, s.indexOf(","));
 			String y = "" + s.substring(s.indexOf(",")+1);
-			Tile ile = new Tile(Integer.parseInt(x), Integer.parseInt(y) ,tiles.get(s));
-			tilemap.put(s, ile);
+			Tile tile = new Tile(Integer.parseInt(x), Integer.parseInt(y) ,tiles.get(s));
+			tilemap.put(s, tile);
 		}
+		System.out.println("Succesfully added all tiles to the right locations");
 		return tilemap;
 	}
 

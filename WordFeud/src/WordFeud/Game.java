@@ -16,7 +16,7 @@ public class Game {
 	private int[] gameStones;
 	
 	/**
-	 * cronstruct the game
+	 * construct the game
 	 * -------------------------------------------------
 	 */
 	public Game(int gameID, Application app){
