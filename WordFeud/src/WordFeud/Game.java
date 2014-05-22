@@ -137,6 +137,7 @@ public class Game {
 			}
 		}
 		for(int stoneID : gameStones){
+			System.out.println(stoneID);
 			if(stoneID != 0){
 				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + stoneID + ", " + beurt + ")");
 			}
@@ -239,6 +240,7 @@ public class Game {
 	}
 	
 	public void setStoneLetters(){
+		stoneLetters = new ArrayList<Character>();
 		int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
 		String letterString = DBCommunicator.requestData("SELECT inhoud FROM plankje WHERE spel_id = " + id + " AND beurt_id = " + turnID);
 		char[] fullChar = letterString.toCharArray();
@@ -250,6 +252,7 @@ public class Game {
 	}
 
 	public void fillStoneChars(){
+		stoneChars = new HashMap<Integer, Character>();
 		for(int e = 0; e < gameStones.size(); e++){
 			stoneChars.put(gameStones.get(e), stoneLetters.get(e));
 		}
