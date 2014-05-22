@@ -11,6 +11,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
+import Utility.DBCommunicator;
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
@@ -36,12 +37,12 @@ public class StatisticsPanel extends JPanel {
 
 		playerName = new SLabel("Player name:", SLabel.LEFT);
 		playerNameView = new SLabel(gui.getApplication().getCurrentAccount().getUsername(), SLabel.RIGHT);
-		winLoss = new SLabel("Win/Loss ratio", SLabel.LEFT);
-		winLossView = new SLabel("5/7", SLabel.RIGHT); //test
-		highestGameScore = new SLabel("Highest score in a game", SLabel.LEFT);
-		highestGameScoreView = new SLabel("800", SLabel.RIGHT);//test		
-		highestWordScore = new SLabel("Highest score with one word", SLabel.LEFT);
-		highestWordScoreView = new SLabel("60", SLabel.RIGHT);
+		winLoss = new SLabel("Win/Loss ratio:", SLabel.LEFT);
+		winLossView = new SLabel(DBCommunicator.requestData("SELECT AVG(avg_wins) FROM mnijholt_db2.rank_bayesian WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT); //test
+		highestGameScore = new SLabel("Highest gamescore:", SLabel.LEFT);
+		highestGameScoreView = new SLabel(DBCommunicator.requestData("SELECT MAX(totaalscore) FROM mnijholt_db2.score WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT);		
+		highestWordScore = new SLabel("Highest wordscore:", SLabel.LEFT);
+		highestWordScoreView = new SLabel(DBCommunicator.requestData("SELECT MAX(score) FROM mnijholt_db2.beurt WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT);
 		
 		mp = new MenuPanel(gui, null);
 		
@@ -56,7 +57,7 @@ public class StatisticsPanel extends JPanel {
 
 		centerPanel.setLayout(new GridLayout(4,1));
 		centerPanel.setBackground(new Color(94, 94, 94));
-		centerPanel.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 200, 200);
+		centerPanel.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 300, 200);
 
 		centerPanel.add(playerName);
 		centerPanel.add(playerNameView);
