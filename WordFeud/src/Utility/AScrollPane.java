@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 
+@SuppressWarnings("serial")
 public class AScrollPane extends JScrollPane{
 
 	private Color bg		 = new Color(94, 94, 94);;
@@ -31,8 +32,8 @@ public class AScrollPane extends JScrollPane{
 			this.setVerticalScrollBar(getScrollBarForScrollPane("hor"));
 			this.setVerticalScrollBar(getScrollBarForScrollPane("vert"));
 			
-			this.getHorizontalScrollBar().setUnitIncrement(16);
-			this.getVerticalScrollBar().setUnitIncrement(16);
+			this.getHorizontalScrollBar().setUnitIncrement(30);
+			this.getVerticalScrollBar().setUnitIncrement(30);
 			
 			this.getHorizontalScrollBar().setBackground(bg);
 			this.getVerticalScrollBar().setBackground(bg);
@@ -44,7 +45,7 @@ public class AScrollPane extends JScrollPane{
 			
 			this.setVerticalScrollBar(getScrollBarForScrollPane("hor"));
 			
-			this.getHorizontalScrollBar().setUnitIncrement(16);
+			this.getHorizontalScrollBar().setUnitIncrement(30);
 			
 			this.getHorizontalScrollBar().setBackground(bg);
 		}
@@ -55,7 +56,7 @@ public class AScrollPane extends JScrollPane{
 			
 			this.setVerticalScrollBar(getScrollBarForScrollPane("vert"));
 			
-			this.getVerticalScrollBar().setUnitIncrement(16);
+			this.getVerticalScrollBar().setUnitIncrement(30);
 		
 			this.getVerticalScrollBar().setBackground(bg);
 		}

@@ -18,6 +18,7 @@ import AccountType.Account;
 import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
+import Utility.SLabel;
 import Utility.SPasswordField;
 import Utility.SPopupMenu;
 import Utility.STextField;
@@ -39,7 +40,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private GUI 			gui;
 	private Login 			l;
 	private SPopupMenu		popup;
-	private SplashText		sp = new SplashText(SplashText.PRE1_T, SplashText.PRE1_S, 760, 120, this);
+	private SplashText		sp = new SplashText(SplashText.PRE2_T, SplashText.PRE2_S, 760, 120, this);
 	
 	/**
 	 * The panel that is used to log in to our program.
@@ -79,9 +80,9 @@ public class LoginPanel extends JPanel implements ActionListener {
 			if(DBCommunicator.checkConnection() != null) {
 				s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
 			}
-			s.setPreferredSize(new Dimension(80, 80));
 			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
-			title.add(s);
+			s.setDimension(80, 80);
+			title.add(new SLabel(s.getImage(), 80, 80));
 		}
 		
 		JPanel mainPanel = new JPanel();

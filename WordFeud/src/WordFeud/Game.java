@@ -1,5 +1,8 @@
 package WordFeud;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import Core.Application;
 import Utility.DBCommunicator;
 import Utility.PointCounter;
@@ -13,10 +16,12 @@ public class Game {
 	private Application app;
 	private int id;
 	private String opponent;
-	private int[] gameStones;
+	private ArrayList<Integer> gameStones;
+	private HashMap<Integer, Character> stoneChars;
+	private ArrayList<Character> stoneLetters;
 	
 	/**
-	 * cronstruct the game
+	 * construct the game
 	 * -------------------------------------------------
 	 */
 	public Game(int gameID, Application app){
@@ -25,6 +30,9 @@ public class Game {
 		myField = new Field(id);
 		myPC = new PointCounter(myField);
 		myWC = new WordChecker();
+		gameStones = new ArrayList<Integer>();
+		stoneLetters = new ArrayList<Character>();
+		stoneChars = new HashMap<Integer, Character>();
 		
 		opponent = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
 		if(opponent.equals(app.getCurrentAccount().getUsername())){
@@ -32,6 +40,8 @@ public class Game {
 		}
 		
 		this.setGameStones();
+		this.setStoneLetters();
+		this.fillStoneChars();
 	}
 	
 	/**
@@ -99,12 +109,14 @@ public class Game {
 	 * tell the DB to swap
 	 * get new gamestones
 	 */
-	public void swapGameStones(int[] stoneIDs){
+	public void swapGameStones(ArrayList<Integer> stoneIDs){
 		int beurt = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " ORDER BY id DESC");
 		beurt ++;
 		
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) Values(" + beurt + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "',0 ,  'Swap')");
-		
+		System.out.println(gameStones);
+		System.out.println(stoneLetters);
+		System.out.println(stoneChars);
 		
 		for(int stoneID : stoneIDs){
 			boolean swapped = false;
@@ -115,9 +127,9 @@ public class Game {
 				if(character != null){
 					swapped = true;
 					
-					for(int e = 0; e < gameStones.length; e++){
-						if(gameStones[e] == stoneID){
-							gameStones[e] = letterID;
+					for(int e = 0; e < gameStones.size(); e++){
+						if(gameStones.get(e) == stoneID){
+							gameStones.set(e, letterID);
 							break;
 						}
 					}
@@ -125,10 +137,17 @@ public class Game {
 			}
 		}
 		for(int stoneID : gameStones){
+			System.out.println(stoneID);
 			if(stoneID != 0){
 				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + stoneID + ", " + beurt + ")");
 			}
 		}
+		this.setStoneLetters();
+		this.fillStoneChars();
+		
+		System.out.println(gameStones);
+		System.out.println(stoneLetters);
+		System.out.println(stoneChars);
 	}
 	
 	/**
@@ -139,15 +158,17 @@ public class Game {
 		
 		boolean[] used = {false,false,false,false,false,false,false};
 		int[] copyStones = new int[7];
-		for(int e = 0; e < gameStones.length; e++){
-			copyStones[e] = gameStones[e];
+		for(int e = 0; e < gameStones.size(); e++){
+			copyStones[e] = gameStones.get(e);
 		}
 		for(int e : copyStones){
+			char l = stoneChars.get(e);
 			boolean placed = false;		
 			while(!placed){
 				int randNumber = (int) (Math.random() * 7);
 				if(!used[randNumber]){
-					gameStones[randNumber] = e;
+					gameStones.set(randNumber, e);
+					stoneLetters.set(randNumber, l);
 					used[randNumber] = true;
 					placed = true;
 				}
@@ -190,7 +211,7 @@ public class Game {
 	}
 	
 	private void setGameStones(){
-		gameStones = new int[7];
+		gameStones = new ArrayList<Integer>();
 		int counter = 0;
 		boolean done = false;
 		int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
@@ -199,7 +220,7 @@ public class Game {
 		while(!done){
 			int newCharachter = DBCommunicator.requestInt(query);
 			if(!(newCharachter == 0)){
-				gameStones[counter] = newCharachter;
+				gameStones.add(newCharachter);
 				restQuery += " AND letter_id <> " + newCharachter;
 				query = "SELECT letter_id FROM letterbakjeletter WHERE spel_id = " + id + " AND beurt_id = " + turnID + "  " + restQuery + " ORDER BY beurt_id DESC";
 				counter++;
@@ -210,13 +231,30 @@ public class Game {
 		}
 	}
 	
-	public int[] getGameStones(){
+	public ArrayList<Integer> getGameStones(){
 		return gameStones;
 	}
 	
-	public String getGameStoneLetters(){
+	public HashMap<Integer, Character> getStoneChars(){
+		return stoneChars;
+	}
+	
+	public void setStoneLetters(){
+		stoneLetters = new ArrayList<Character>();
 		int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
-		String letters = DBCommunicator.requestData("SELECT inhoud FROM plankje WHERE spel_id = " + id + " AND beurt_id = " + turnID);
-		return letters;
+		String letterString = DBCommunicator.requestData("SELECT inhoud FROM plankje WHERE spel_id = " + id + " AND beurt_id = " + turnID);
+		char[] fullChar = letterString.toCharArray();
+		for(char a : fullChar){
+			if(a != ','){
+				stoneLetters.add(a);
+			}
+		}		
+	}
+
+	public void fillStoneChars(){
+		stoneChars = new HashMap<Integer, Character>();
+		for(int e = 0; e < gameStones.size(); e++){
+			stoneChars.put(gameStones.get(e), stoneLetters.get(e));
+		}
 	}
 }

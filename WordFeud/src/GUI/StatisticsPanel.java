@@ -11,6 +11,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
+import Utility.DBCommunicator;
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
@@ -36,12 +37,12 @@ public class StatisticsPanel extends JPanel {
 
 		playerName = new SLabel("Player name:", SLabel.LEFT);
 		playerNameView = new SLabel(gui.getApplication().getCurrentAccount().getUsername(), SLabel.RIGHT);
-		winLoss = new SLabel("Win/Loss ratio", SLabel.LEFT);
-		winLossView = new SLabel("5/7", SLabel.RIGHT); //test
-		highestGameScore = new SLabel("Highest score in a game", SLabel.LEFT);
-		highestGameScoreView = new SLabel("800", SLabel.RIGHT);//test		
-		highestWordScore = new SLabel("Highest score with one word", SLabel.LEFT);
-		highestWordScoreView = new SLabel("60", SLabel.RIGHT);
+		winLoss = new SLabel("Win/Loss ratio:", SLabel.LEFT);
+		winLossView = new SLabel(DBCommunicator.requestData("SELECT AVG(avg_wins) FROM mnijholt_db2.rank_bayesian WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT); //test
+		highestGameScore = new SLabel("Highest gamescore:", SLabel.LEFT);
+		highestGameScoreView = new SLabel(DBCommunicator.requestData("SELECT MAX(totaalscore) FROM mnijholt_db2.score WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT);		
+		highestWordScore = new SLabel("Highest wordscore:", SLabel.LEFT);
+		highestWordScoreView = new SLabel(DBCommunicator.requestData("SELECT MAX(score) FROM mnijholt_db2.beurt WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT);
 		
 		mp = new MenuPanel(gui, null);
 		
@@ -55,8 +56,8 @@ public class StatisticsPanel extends JPanel {
 		allPanel.setLayout(null);
 
 		centerPanel.setLayout(new GridLayout(4,1));
-		centerPanel.setBackground(Color.GRAY);
-		centerPanel.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 200, 200);
+		centerPanel.setBackground(new Color(94, 94, 94));
+		centerPanel.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 300, 200);
 
 		centerPanel.add(playerName);
 		centerPanel.add(playerNameView);
@@ -72,12 +73,12 @@ public class StatisticsPanel extends JPanel {
 		this.add(allPanel, BorderLayout.CENTER);
 	}
 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);	
+	public void paint(Graphics g) {
+		super.paint(g);	
 		Graphics2D g2d = (Graphics2D)g;
 
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(Color.white);
 		g2d.setFont(new Font("Arial", Font.BOLD, 100));
 		g2d.drawString(title, (int) ((GUI.WIDTH / 2) - (g.getFontMetrics().getStringBounds(GUI.TITLE, g).getWidth() / 2)), 150);
 	}

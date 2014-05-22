@@ -1,128 +1,110 @@
 package WordFeud;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import Utility.Loader;
-import Utility.SLabel;
 
-@SuppressWarnings("serial")
-public class Tile extends SLabel {
+public class Tile {
+	
+	// Instance variables
+	private int 		xPos, yPos, width, height;
+	private boolean 	bonusUsed, pickablity;
+	private String 		bonus;
+	private GameStone 	gameStone;
 
-	private String bonus;
-	private boolean bonusUsed;
-	private int xPos;
-	private int yPos;
-	private GameStone gameStone;
-	private boolean pickablity;
-
+	/**
+	 * Constructor parameters: x, y<br>
+	 * This constructor creates a Object that hold information about a Tile<br>
+	 * You can get its GUI aspect by calling the .getImage() method
+	 */
 	public Tile(int x, int y) {
-		super("", SLabel.CENTER, 32, 32);
-		this.xPos = x;
-		this.yPos = y;
-		bonus = "";
-		bonusUsed = false;
-		pickablity = true;
+		init(x, y);
 	}
 
-	public Tile(int x, int y, String bonus) {
-		super("", SLabel.CENTER, 32, 32);
-		this.xPos = x;
-		this.yPos = y;
-		this.bonus = bonus;
-		bonusUsed = false;
-		pickablity = true;
+	/**
+	 * Constructor parameters: x, y, bonus<br>
+	 * This constructor creates a Object that hold information about a Tile<br>
+	 * You can get its GUI aspect by calling the .getImage() method<br>
+	 * This constructor gives the tile a bonus
+	 */
+	public Tile(int x, int y, String b) {
+		init(x, y);
+		bonus = b;
 	}
 
+	/**
+	 * Constructor parameters: x, y, gameStone<br>
+	 * This constructor creates a Object that hold information about a Tile<br>
+	 * You can get its GUI aspect by calling the .getImage() method<br>
+	 * This constructor gives the tile a GameStone
+	 */
 	public Tile(int x, int y, GameStone stone){
-		super("", SLabel.CENTER, 32, 32);
-		this.xPos = x;
-		this.yPos = y;
-		bonus = "";
-		bonusUsed = false;
-		this.gameStone = stone;
-		pickablity = true;
+		init(x, y);
+		gameStone = stone;
 	}
 	
-	public void paintComponent(Graphics g) {
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-		Graphics image_g = image.getGraphics();
-		switch(bonus) {
-			case "":
-				image_g.drawImage(Loader.NORMAL_TILE, 0, 0, 32, 32, null);
-				break;
-			case "*":
-				image_g.drawImage(Loader.STAR_TILE, 0, 0, 32, 32, null);
-				break;
-			case "DL":
-				image_g.drawImage(Loader.DL_TILE, 0, 0, 32, 32, null);
-				break;
-			case "DW":
-				image_g.drawImage(Loader.DW_TILE, 0, 0, 32, 32, null);
-				break;
-			case "TL":
-				image_g.drawImage(Loader.TL_TILE, 0, 0, 32, 32, null);
-				break;
-			case "TW":
-				image_g.drawImage(Loader.TW_TILE, 0, 0, 32, 32, null);
-				break;
-		}
-		
-		g2d.drawImage(image, 0, 0, 32, 32, null);
-		
-		if(gameStone != null) {
-			g2d.drawImage(gameStone.getImage(), 0, 0, getWidth(), getHeight(), null);
-		}
+	/**
+	 * This is a private initialize method for the constructor
+	 */
+	private void init(int x, int y) {
+		xPos 		= x;
+		yPos 		= y;
+		width		= 32;
+		height		= 32;
+		bonus 		= "";
+		bonusUsed 	= false;
+		pickablity 	= true;
+		gameStone	= null;
 	}
 
 	// Getters	
-	public String getBonus() {
-		return bonus;
-	}
-
-	public GameStone getGameStone() {
-		return gameStone;
-	}
-
-	public boolean getBonusUsed() {
-		return bonusUsed;
-	}
-
-	public int getXPos() {
-		return xPos;
-	}
-
-	public int getYPos() {
-		return yPos;
-	}
-
+	public int getXPos() 			{return xPos;}
+	public int getYPos() 			{return yPos;}
+	public boolean getBonusUsed() 	{return bonusUsed;}
+	public boolean getPickablity() 	{return pickablity;}
+	public String getBonus() 		{return bonus;}
+	public GameStone getGameStone() {return gameStone;}
+	
 	// Setters
-	public void setBonusUsed(boolean used) {
-		this.bonusUsed = used;
-	}
+	public void setBonusUsed(boolean used) 			{bonusUsed = used;}
+	public void setGameStone(GameStone stone) 		{gameStone = stone;}
+	public void setPickablity(boolean pick) 		{pickablity = pick;}
+	public void setCoordinates(int posX, int posY) 	{xPos = posX; yPos = posY;}
+	public void setBonus(String b) 					{bonus = b;}
 
-	public void setGameStone(GameStone gamestone) {
-		this.gameStone = gamestone;
-		repaint();
+	public BufferedImage getImage() {
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = (Graphics2D)image.getGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		if(gameStone == null) {
+			switch(bonus) {
+			case "":
+				g2d.drawImage(Loader.NORMAL_TILE, 0, 0, width, height, null);
+				break;
+			case "*":
+				g2d.drawImage(Loader.STAR_TILE, 0, 0, width, height, null);
+				break;
+			case "DL":
+				g2d.drawImage(Loader.DL_TILE, 0, 0, width, height, null);
+				break;
+			case "DW":
+				g2d.drawImage(Loader.DW_TILE, 0, 0, width, height, null);
+				break;
+			case "TL":
+				g2d.drawImage(Loader.TL_TILE, 0, 0, width, height, null);
+				break;
+			case "TW":
+				g2d.drawImage(Loader.TW_TILE, 0, 0, width, height, null);
+				break;
+			}
+		}
+		else {
+			g2d.drawImage(gameStone.getImage(), 0, 0, null);
+		}
+		return image;
 	}
 	
-	public void setPickablity(boolean pick) {
-		pickablity = pick;
-	}
-	
-	public boolean getPickablity() {return pickablity;}
-
-	public void setCoordinates(int posX, int posY) {
-		this.xPos = posX;
-		this.yPos = posY;
-	}
-
-	public void setBonus(String bonus) {
-		this.bonus = bonus;
-	}
 }

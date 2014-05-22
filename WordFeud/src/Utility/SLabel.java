@@ -7,6 +7,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JLabel;
 
@@ -17,13 +18,14 @@ import javax.swing.JLabel;
 public class SLabel extends JLabel {
 
 	// Instance variables
-	private String 	text;
-	private int 	arc;
-	private boolean topLeftRounded, topRightRounded, bottomLeftRounded, bottomRightRounded;
-	private Font	font;
-	private int		alignment;
-	private Color	foreground, background;
-	private boolean drawBackground;
+	private String 			text;
+	private int 			arc;
+	private boolean 		topLeftRounded, topRightRounded, bottomLeftRounded, bottomRightRounded;
+	private Font			font;
+	private int				alignment;
+	private Color			foreground, background;
+	private boolean 		drawBackground;
+	private BufferedImage 	image;
 
 	// Constants
 	public static final int LEFT		=	0;
@@ -37,6 +39,14 @@ public class SLabel extends JLabel {
 	 */
 	public SLabel(String name, int align) {
 		init(name, align);
+	}
+	
+	/**
+	 * SLabel constructor parameters: BufferedImage image
+	 */
+	public SLabel(BufferedImage i, int width, int height) {
+		image = i;
+		setPreferredSize(new Dimension(width, height));
 	}
 
 	/**
@@ -93,41 +103,46 @@ public class SLabel extends JLabel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setFont(font);
-		if(drawBackground) {
-			g2d.setColor(background);
-			g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+		if(image == null) {
+			if(drawBackground) {
+				g2d.setColor(background);
+				g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
 
-			if(!topLeftRounded) 	{g2d.fillRect(0, 0, arc, arc);}
-			if(!topRightRounded) 	{g2d.fillRect(getWidth() - arc, 0, arc, arc);}
-			if(!bottomLeftRounded)	{g2d.fillRect(0, getHeight() - arc, arc, arc);}
-			if(!bottomRightRounded)	{g2d.fillRect(getWidth() - arc, getHeight() - arc, arc, arc);}
+				if(!topLeftRounded) 	{g2d.fillRect(0, 0, arc, arc);}
+				if(!topRightRounded) 	{g2d.fillRect(getWidth() - arc, 0, arc, arc);}
+				if(!bottomLeftRounded)	{g2d.fillRect(0, getHeight() - arc, arc, arc);}
+				if(!bottomRightRounded)	{g2d.fillRect(getWidth() - arc, getHeight() - arc, arc, arc);}
 
+			}
+
+			g2d.setColor(foreground);
+			FontMetrics fm = g2d.getFontMetrics(font);
+			g2d.setFont(font);
+			int xalign = 0;
+			int yalign = (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent();
+			switch(alignment) {
+				case 0:
+					xalign = 0;
+					break;
+				case 1:
+					xalign = getWidth() - fm.stringWidth(text);
+					break;
+				case 2:
+					xalign = (getWidth() / 2) - (fm.stringWidth(text) / 2);
+					break;
+				case 3:
+					xalign = (getWidth() / 2) - (fm.stringWidth(text) / 2);
+					yalign = ((fm.getAscent() + fm.getDescent()) / 2);
+					break;
+				case 4:
+					xalign = 5;
+					break;
+			}
+			g2d.drawString(text, xalign, yalign);
 		}
-
-		g2d.setColor(foreground);
-		FontMetrics fm = g2d.getFontMetrics(font);
-		g2d.setFont(font);
-		int xalign = 0;
-		int yalign = (0 + (this.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent();
-		switch(alignment) {
-			case 0:
-				xalign = 0;
-				break;
-			case 1:
-				xalign = getWidth() - fm.stringWidth(text);
-				break;
-			case 2:
-				xalign = (getWidth() / 2) - (fm.stringWidth(text) / 2);
-				break;
-			case 3:
-				xalign = (getWidth() / 2) - (fm.stringWidth(text) / 2);
-				yalign = ((fm.getAscent() + fm.getDescent()) / 2);
-				break;
-			case 4:
-				xalign = 5;
-				break;
+		else {
+			g2d.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		}
-		g2d.drawString(text, xalign, yalign);
 		g2d.dispose();
 	}
 
