@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
 import WordFeud.Game;
@@ -29,6 +28,7 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 	@SuppressWarnings("unused")
 	private GUI 		gui;
 	private GameStone 	currentGameStone;
+	private ArrayList<Tile> hand = new ArrayList<Tile>();
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
@@ -90,23 +90,22 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 			yPos += 33;
 		}
 		
-		/*String letters 				= game.getGameStoneLetters();
-		ArrayList<Character> chars 	= new ArrayList<Character>();
-		System.out.println(letters);
-		for(int i = 0; i < letters.length(); i++) {
-			if(letters.charAt(i) == ',') {}
-			else {
-				chars.add(letters.charAt(i));
-				System.out.println(letters.charAt(i));
-			}
-		}*/
+		ArrayList<Integer> gameStones 		= game.getGameStones();
+		HashMap<Integer, Character> chars 	= game.getStoneLetters();
+		
+		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
+		
+		for(int i = 0; i < gameStones.size(); i++) {
+			currentGameStones.add(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(chars.get(gameStones.get(i)).toString())), chars.get(gameStones.get(i)).charValue()));
+		}
 		
 		xPos = bp.getPreferredSize().width + 20;
 		yPos = 550;
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i, 0);
-//			tile.setGameStone(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(Character.toString(chars.get(i).charValue()))), chars.get(i).charValue()));
+			tile.setGameStone(currentGameStones.get(i));
 			tile.addMouseListener(this);
+			hand.add(tile);
 			add(tile);
 			tile.setBounds(xPos, yPos, 32, 32);
 			xPos += 33;
@@ -151,6 +150,15 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(shuffle)) {
 			game.shuffle();
+			
+			ArrayList<Integer> gameStones 		= game.getGameStones();
+			HashMap<Integer, Character> chars 	= game.getStoneLetters();
+			
+			for(int i = 0; i < gameStones.size(); i++) {
+				GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(chars.get(gameStones.get(i)).toString())), chars.get(gameStones.get(i)).charValue());
+				hand.get(i).setGameStone(s);
+			}
+			repaint();
 		}
 	}
 	
