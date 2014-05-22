@@ -36,6 +36,15 @@ public class Application {
 		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
+		
+		currentAccount = new Account("stijnvangaal");
+		this.selectGame(530);
+		ArrayList<Integer> swapInts = new ArrayList<Integer>();
+		swapInts.add(14);
+		swapInts.add(39);
+		swapInts.add(43);
+		swapInts.add(64);
+		this.swapGameStones(swapInts);
 	}
 	
 	
@@ -472,7 +481,7 @@ public class Application {
 	/**
 	 *tell game to swapGameStones
 	 */
-	public void swapGameStones(int[] stoneIDs){
+	public void swapGameStones(ArrayList<Integer> stoneIDs){
 		selectedGame.swapGameStones(stoneIDs);
 	}
 	
