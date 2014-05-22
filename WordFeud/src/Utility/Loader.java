@@ -68,10 +68,7 @@ public class Loader {
 	 */
 	public static HashMap<String, Tile> updateTiles(int gameID, ArrayList<GameStone> gameStones, HashMap<String, Tile> hmap){
 		gameStones = DBCommunicator.getGeneratedStoneIDs(gameID, gameStones);
-		for(GameStone gs : gameStones){
-			System.out.println(gs.getX() + gs.getY());
-			hmap.get(gs.getX()+1+ "," + gs.getY()+1).setGameStone(gs);
-		}
+		hmap = DBCommunicator.updateTilesWithStones(hmap, gameStones, gameID);
 		return hmap;
 	}
 	
