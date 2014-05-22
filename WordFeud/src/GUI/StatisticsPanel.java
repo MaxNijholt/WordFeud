@@ -55,7 +55,7 @@ public class StatisticsPanel extends JPanel {
 		allPanel.setLayout(null);
 
 		centerPanel.setLayout(new GridLayout(4,1));
-		centerPanel.setBackground(Color.GRAY);
+		centerPanel.setBackground(new Color(94, 94, 94));
 		centerPanel.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 200, 200);
 
 		centerPanel.add(playerName);
@@ -72,12 +72,12 @@ public class StatisticsPanel extends JPanel {
 		this.add(allPanel, BorderLayout.CENTER);
 	}
 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);	
+	public void paint(Graphics g) {
+		super.paint(g);	
 		Graphics2D g2d = (Graphics2D)g;
 
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(Color.white);
 		g2d.setFont(new Font("Arial", Font.BOLD, 100));
 		g2d.drawString(title, (int) ((GUI.WIDTH / 2) - (g.getFontMetrics().getStringBounds(GUI.TITLE, g).getWidth() / 2)), 150);
 	}

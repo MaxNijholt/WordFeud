@@ -21,7 +21,7 @@ public class Game {
 	private ArrayList<Character> stoneLetters;
 	
 	/**
-	 * cronstruct the game
+	 * construct the game
 	 * -------------------------------------------------
 	 */
 	public Game(int gameID, Application app){

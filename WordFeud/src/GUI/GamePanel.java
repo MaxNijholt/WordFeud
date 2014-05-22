@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
+import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
 import WordFeud.Game;
@@ -71,6 +72,7 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 		
 		
 		HashMap<String, Tile> tiles = game.getMyField().getTiles();
+		System.out.println(tiles);
 		
 		int xPos = bp.getPreferredSize().width + 20;
 		int yPos = 50;
@@ -97,18 +99,18 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 				chars.add(letters.charAt(i));
 				System.out.println(letters.charAt(i));
 			}
-		}
+		}*/
 		
 		xPos = bp.getPreferredSize().width + 20;
 		yPos = 550;
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i, 0);
-			tile.setGameStone(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(Character.toString(chars.get(i).charValue()))), chars.get(i).charValue()));
+//			tile.setGameStone(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(Character.toString(chars.get(i).charValue()))), chars.get(i).charValue()));
 			tile.addMouseListener(this);
 			add(tile);
 			tile.setBounds(xPos, yPos, 32, 32);
 			xPos += 33;
-		}*/
+		}
 
 	}
 

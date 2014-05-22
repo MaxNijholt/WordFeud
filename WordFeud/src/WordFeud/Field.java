@@ -2,22 +2,19 @@ package WordFeud;
 
 import java.util.HashMap;
 
-import Utility.DBCommunicator;
 import Utility.Loader;
 
 public class Field {
 
 	private HashMap<String, GameStone> newWords;
 	private HashMap<String, Tile> field;
-	private String tileValue;
 
-	public Field(int spelID) {
+	public Field(int gameID) {
 		newWords = new HashMap<String, GameStone>();
-		field = Loader.getTiles();
+		field = Loader.updateTiles(gameID,Loader.getGameStones("EN"),Loader.getTiles());
 	}
 
 	public void layGameStone(GameStone gamestone, String location) {
-
 		if (field.get(location).getGameStone() == null) {
 			field.get(location).setGameStone(gamestone);
 			newWords.put(location, gamestone);
@@ -48,5 +45,4 @@ public class Field {
 	public void clearNewWords() {
 		newWords.clear();
 	}
-
 }

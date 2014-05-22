@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import Utility.AScrollPane;
 import Utility.SButton;
@@ -27,20 +26,10 @@ public class PlayerPanel extends JPanel implements ActionListener {
 	private JPanel gameContent;
 	private GUI gui;
 	private MenuPanel mp;
-	private SButton test;
 
 	public PlayerPanel(final GUI gui){
 		this.gui = gui;
 		this.mp = new MenuPanel(gui, null);
-		test = new SButton("test", SButton.GREY);
-		test.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				gui.switchPanel(new CompetitionPanel(gui));
-				
-			}
-		});
 		
 		gui.setLoadingCursor(true);
 		
@@ -60,11 +49,11 @@ public class PlayerPanel extends JPanel implements ActionListener {
 
 		//create the scrollpane as container for the gameContent
 		scrollPane 		= 	new AScrollPane(1000, 500, gameContent, false, true);
-		scrollPane.setBorder(null);
-		scrollPane.setPreferredSize(new Dimension(1000, 500));
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+//		scrollPane.setBorder(null);
+//		scrollPane.setPreferredSize(new Dimension(1000, 500));
+//		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+//		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(scrollPane);
 
 		
