@@ -91,7 +91,7 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 		}
 		
 		ArrayList<Integer> gameStones 		= game.getGameStones();
-		HashMap<Integer, Character> chars 	= game.getStoneLetters();
+		HashMap<Integer, Character> chars 	= game.getStoneChars();
 		
 		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
 		
@@ -152,7 +152,7 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 			game.shuffle();
 			
 			ArrayList<Integer> gameStones 		= game.getGameStones();
-			HashMap<Integer, Character> chars 	= game.getStoneLetters();
+			HashMap<Integer, Character> chars 	= game.getStoneChars();
 			
 			for(int i = 0; i < gameStones.size(); i++) {
 				GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(chars.get(gameStones.get(i)).toString())), chars.get(gameStones.get(i)).charValue());
