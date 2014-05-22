@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 
+@SuppressWarnings("serial")
 public class AScrollPane extends JScrollPane{
 
 	private Color bg		 = new Color(94, 94, 94);;

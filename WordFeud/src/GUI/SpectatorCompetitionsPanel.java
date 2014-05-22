@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
+import Utility.AScrollPane;
 import Utility.SButton;
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
 public class SpectatorCompetitionsPanel extends JPanel{
 
-	private JScrollPane scrollPane;
+	private AScrollPane scrollPane;
 	private JPanel gameContent;
 	private GUI gui;
 	private MenuPanel mp;
@@ -55,12 +55,12 @@ public class SpectatorCompetitionsPanel extends JPanel{
 		gameContent.add(Box.createRigidArea(new Dimension(500,15)));
 
 		//create the scrollpane as container for the gameContent
-		scrollPane 		= 	new JScrollPane(gameContent);
-		scrollPane.setBorder(null);
-		scrollPane.setPreferredSize(new Dimension(1000, 500));
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane 		= 	new AScrollPane(1000, 500, gameContent, false, true);
+//		scrollPane.setBorder(null);
+//		scrollPane.setPreferredSize(new Dimension(1000, 500));
+//		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+//		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(scrollPane);
 			
 		ArrayList<Integer> compInts;

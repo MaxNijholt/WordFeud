@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import Utility.AScrollPane;
 import Utility.Loader;
 import Utility.SButton;
 import Utility.SLabel;
@@ -28,10 +29,10 @@ import Utility.SLabel;
 public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 	private int compID;
-	private JScrollPane scrollPane;
+	private AScrollPane scrollPane;
 	private JPanel gameContent;
 	private JPanel playerContent;
-	private JScrollPane playerScrollPane;
+	private AScrollPane playerScrollPane;
 	private GUI gui;
 	private MenuPanel mp;
 
@@ -57,12 +58,12 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		playerContent.add(Box.createRigidArea(new Dimension(400, 15)));
 
 		// create the scrollpane as container for the playercontent
-		playerScrollPane = new JScrollPane(playerContent);
-		playerScrollPane.setBorder(null);
-		playerScrollPane.setPreferredSize(new Dimension(500, 550));
-		playerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		playerScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		playerScrollPane = new AScrollPane(500, 550, playerContent, false, true);
+//		playerScrollPane.setBorder(null);
+//		playerScrollPane.setPreferredSize(new Dimension(500, 550));
+//		playerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//		playerScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+//		playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(playerScrollPane);
 		
 		// create the gameContent panel here go all the games
@@ -72,14 +73,14 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		gameContent.add(Box.createRigidArea(new Dimension(500, 15)));
 
 		// create the scrollpane as container for the gameContent
-		scrollPane = new JScrollPane(gameContent);
-		scrollPane.setBorder(null);
-		scrollPane.setPreferredSize(new Dimension(475, 550));
-		scrollPane
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		scrollPane
-				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane = new AScrollPane(475, 500, gameContent, false, true);
+//		scrollPane.setBorder(null);
+//		scrollPane.setPreferredSize(new Dimension(475, 550));
+//		scrollPane
+//				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+//		scrollPane
+//				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(scrollPane);
 		
 		//get all the players in the competition
