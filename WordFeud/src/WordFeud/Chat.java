@@ -9,12 +9,10 @@ public class Chat {
 		
 	}
 	
-	public void sendMsg(String msg, Game game, Account player){
-		String username = player.getUsername();
-		int gameID = game.getID();
+	public void sendMsg(String msg, int gameID, String username){
 		System.out.println(username);
 		System.out.println(gameID);
-		DBCommunicator.writeData("INSERT INTO chatregel (account_naam, spel_id, tijdstip, bericht) VALUES(" + username + ", '" + gameID +"',  CURRENT_TIMESTAMP(), '" + msg + "')");
+		DBCommunicator.writeData("INSERT INTO chatregel (account_naam, spel_id, tijdstip, bericht) VALUES('" + username + "', " + gameID +",  CURRENT_TIMESTAMP(), '" + msg + "')");
 	}
 	
 	public String getMsg(){
