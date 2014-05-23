@@ -159,7 +159,7 @@ public class CompetitionPanel extends Panel {
 	}
 	
 	private JPanel paintComp(final int compID, String compType){
-		System.out.println("paint game: " + compID);
+		System.out.println("paint comp: " + compID);
 
 		JPanel panel = new JPanel();
 		panel.setMinimumSize(new Dimension(600,90));
@@ -251,8 +251,8 @@ public class CompetitionPanel extends Panel {
 			
 			select.addActionListener(new ActionListener(){
 				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().selectCompetition(compID);
+				public void actionPerformed(ActionEvent arg0) {				
+					gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
 				}
 			});
 		}
@@ -260,7 +260,7 @@ public class CompetitionPanel extends Panel {
 		else if(compType.equals("Finished")){
 			JPanel owner		= new JPanel();
 			JPanel description 	= new JPanel();
-			SButton spectate 	= new SButton("Ranking", SButton.GREY, 220, 40);
+			SButton spectate 	= new SButton("Spectate", SButton.GREY, 220, 40);
 			
 			owner.add(new SLabel(gui.getCompetitionOwner(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
@@ -287,7 +287,7 @@ public class CompetitionPanel extends Panel {
 			spectate.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().selectCompetition(compID);
+					gui.spectateCompetition(compID);
 				}
 			});
 		}
@@ -295,7 +295,8 @@ public class CompetitionPanel extends Panel {
 		else if(compType.equals("Joinable")){
 			JPanel owner 	= new JPanel();
 			JPanel description 		= new JPanel();
-			SButton join		= new SButton("Join", SButton.GREY, 220, 40);
+			SButton join 	= new SButton("Join", SButton.GREY, 220, 40);
+			SButton spectate 	= new SButton("Spectate", SButton.GREY, 220, 40);
 			
 			owner.add(new SLabel(gui.getCompetitionOwner(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
@@ -309,25 +310,33 @@ public class CompetitionPanel extends Panel {
 			
 			c.gridx = 0;
 			c.gridy = 0;
-			c.insets = new Insets(0,50,0,0);
+			c.insets = new Insets(5,15,0,0);
 			panel.add(owner, c);
-			c.gridx++;
-			c.gridheight = 2;
-			panel.add(join, c);
-			c.gridheight = 1;
-			c.gridx = 0;
 			c.gridy++;
-			panel.add(description, c);
-			
-			join.addActionListener(new ActionListener() {
+			panel.add(description,c);
+			c.gridx++;
+			c.gridy--;
+			panel.add(join, c);
+			c.gridy++;
+			panel.add(spectate, c);
 				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().selectCompetition(compID);
-					gui.getApplication().getSelectedCompetition().addPlayer(gui.getApplication().getCurrentAccount().getUsername());
-					
-				}
-			});
+				join.addActionListener(new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						gui.getApplication().setSelectedCompetition(new Competition(compID));
+						Competition comp = gui.getApplication().getSelectedCompetition();		
+
+						comp.addPlayer(gui.getApplication().getCurrentAccount());
+						gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
+						
+					}
+				});
+				spectate.addActionListener(new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						gui.spectateCompetition(compID);
+					}
+				});
 			
 		}
 		return panel;
