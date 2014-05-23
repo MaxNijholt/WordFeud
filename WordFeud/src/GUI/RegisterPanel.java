@@ -126,7 +126,10 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	 */
 	public void register() {
 		String text = l.register(new Account(username.getText()), String.valueOf(password.getPassword()), String.valueOf(passwordValidate.getPassword()));
-		if(text == "0") {return;}
+		if(text == "0") {
+			sp.setRunning(false);
+			return;
+		}
 		if(text != null) {
 			Graphics2D g2d 	= (Graphics2D)this.getGraphics();
 			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
@@ -148,5 +151,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		if(e.getSource().equals(password)) 			{passwordValidate.requestFocusInWindow();}
 		if(e.getSource().equals(passwordValidate)) 	{register();}
 		if(e.getSource().equals(register)) 			{register();}
-		if(e.getSource().equals(back)) 				{gui.switchPanel(new LoginPanel(gui)); sp.setRunning(false);}}
+		if(e.getSource().equals(back)) 				{gui.switchPanel(new LoginPanel(gui)); sp.setRunning(false);}
+	}
+	
 }

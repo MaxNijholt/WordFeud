@@ -61,6 +61,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		play.addActionListener(this);
 		shuffle.addActionListener(this);
 		
+		//MenuPanel thread not stopping glitch fix:
+		mp.getBackButton().addActionListener(this);
+		
 		// The buttons
 		JPanel bp = new JPanel();
 		bp.setLayout(new GridLayout(5, 1, 0, 10));
@@ -186,6 +189,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(mp.getBackButton())) {running = false;}
 		if(e.getSource().equals(shuffle)) {
 			game.shuffle();
 			
