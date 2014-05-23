@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import WordFeud.GameStone;
@@ -280,6 +282,24 @@ public class DBCommunicator {
 			e.printStackTrace();
 		}
 		return hmap;
+	}
+	
+	public static void sendMsg(String message, int gameID, String username) {
+		PreparedStatement stm;
+		try {
+			String query = "INSERT INTO chatregel (account_naam, spel_id, tijdstip, bericht) VALUES (?,?,?,?)";
+			stm = con.prepareStatement(query);
+			stm.setString(1, username);
+			stm.setInt(2, gameID);
+			stm.setTimestamp(3, new Timestamp(new Date().getTime()));
+			stm.setString(4, message);
+			stm.executeUpdate();
+			System.out.println("You just send a message to the database: " + message);
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 
