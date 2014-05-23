@@ -23,6 +23,7 @@ public class SplashText implements Runnable {
 	private JPanel				panel;
 	private int					x, y, width, height;
 	private boolean				running;
+	private Color[] 			colors = new Color[8];
 	
 	// Color constants : TEXT
 	public static final Color	PRE1_T 		= new Color(255, 255, 0);		// Yellow
@@ -50,7 +51,9 @@ public class SplashText implements Runnable {
 			"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
 			"Deja vu!", "Deja vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
 			"Woah!", "Wow!", "Yaay!", "Water proof!", "Superfragilisticexpialidocious!",
-			"This message will be to small for you to see, am i right?", "Try it!", "this.addBeer(new Beer());"
+			"This message will be to small for you to see, am i right?", "Try it!", "this.addBeer(new Beer());",
+			"Random Splashtexts ftw", "if(this.beer.isEmpty()){newBeer();}", "Colormatic!", "$W@G", "OverPowered",
+			"Might contain penuts"
 		};
 		
 		String text	 	= texts[new Random().nextInt(texts.length)];
@@ -89,6 +92,14 @@ public class SplashText implements Runnable {
 	private void createImage(String text, Color textColor, Color shadowColor, Font font) {
 		Graphics2D imageGraphics 	= (Graphics2D)image.getGraphics();
 		FontMetrics fm	 			= imageGraphics.getFontMetrics(font);
+		colors[0] = Color.blue;
+		colors[1] = Color.green;
+		colors[2] = Color.pink;
+		colors[3] = Color.orange;
+		colors[4] = Color.white;
+		colors[5] = Color.cyan;
+		colors[6] = Color.magenta;
+		colors[7] = Color.red;
 		
 		imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		imageGraphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -97,8 +108,14 @@ public class SplashText implements Runnable {
 		imageGraphics.rotate(Math.toRadians(-20), image.getWidth() / 2, image.getHeight() / 2);
 		imageGraphics.setColor(shadowColor);
 		imageGraphics.drawString(text, 5, ((image.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent() + 5);
-		imageGraphics.setColor(textColor);
-		imageGraphics.drawString(text, 0, ((image.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
+		if(text.equals("Colormatic!")){
+			Random r = new Random();
+			imageGraphics.setColor(colors[r.nextInt(8)]);
+			imageGraphics.drawString(text, 0, ((image.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
+		}else {
+			imageGraphics.setColor(textColor);
+			imageGraphics.drawString(text, 0, ((image.getHeight()+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
+		}
 	}
 	
 	/**

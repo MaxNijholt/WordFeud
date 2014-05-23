@@ -12,7 +12,7 @@ public class Field {
 
 	public Field(int gameID) {
 		newWords = new HashMap<String, GameStone>();
-		String language = DBCommunicator.requestData("SELECT letterset_naam FROM mnijholt_db2.spel WHERE id='" + gameID +"'");
+		String language = DBCommunicator.requestData("SELECT letterset_naam FROM spel WHERE id='" + gameID +"'");
 		field = Loader.updateTiles(gameID,Loader.getGameStones(language),Loader.getTiles());
 	}
 
