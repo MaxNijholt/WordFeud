@@ -156,7 +156,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						currentGameStone = null;
 					}
 				}
-				System.out.println("You clicked tile=" + t.getXPos() + ":" + t.getYPos());
 			}
 		}
 		
@@ -174,7 +173,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						currentGameStone = null;
 					}
 				}
-				System.out.println("You clicked tile=" + t.getXPos() + ":" + t.getYPos());
 			}
 		}
 	}
