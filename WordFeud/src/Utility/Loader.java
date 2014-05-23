@@ -72,6 +72,11 @@ public class Loader {
 		return hmap;
 	}
 	
+
+	/**
+	 * @author Max
+	 * @param String language like NL or EN
+	 */
 	public static ArrayList<GameStone> getGameStones(String language){
 		ArrayList<GameStone> gamestones = new ArrayList<GameStone>();
 		HashMap<Character, HashMap<Integer, Integer>> letterset = DBCommunicator.requestLetters(language);
@@ -88,9 +93,14 @@ public class Loader {
 	 	}
 		return gamestones;
 	}
-	
-	public static HashMap<String, Tile> getTiles(){
-		HashMap<String, String> tiles = DBCommunicator.requestTilesMap("Standard");
+
+	/**
+	 * @author Max
+	 * @return HashMap with initialized tiles.
+	 * Just a method to initialize the game field
+	 */
+	public static HashMap<String, Tile> getTiles(String maptype){
+		HashMap<String, String> tiles = DBCommunicator.requestTilesMap(maptype);
 		HashMap<String, Tile> tilemap = new HashMap<String, Tile>();
 		ArrayList<String> loc = new ArrayList<String>();
 		loc.addAll(tiles.keySet());

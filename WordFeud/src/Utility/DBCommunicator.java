@@ -264,6 +264,11 @@ public class DBCommunicator {
 		return gameStones;
 	}
 
+	/**
+	 * @author Max
+	 * @param HashMap with initialized tiles, ArrayList with initialized gameStones, int gameID for the right game.
+	 * @return HashMap with tiles containing the right gamestones.
+	 */
 	public static HashMap<String, Tile> updateTilesWithStones(HashMap<String, Tile> hmap, ArrayList<GameStone> gameStones, int gameID) {
 		Statement	stm;
 		ResultSet 	res;
@@ -289,7 +294,11 @@ public class DBCommunicator {
 		}
 		return hmap;
 	}
-	
+
+	/**
+	 * @author Stan van Heumen
+	 * @param String "Message", int gameID, String username whom sent the msg
+	 */
 	public static void sendMsg(String message, int gameID, String username) {
 		PreparedStatement stm;
 		try {

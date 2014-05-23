@@ -13,7 +13,8 @@ public class Field {
 	public Field(int gameID) {
 		newWords = new HashMap<String, GameStone>();
 		String language = DBCommunicator.requestData("SELECT letterset_naam FROM spel WHERE id='" + gameID +"'");
-		field = Loader.updateTiles(gameID,Loader.getGameStones(language),Loader.getTiles());
+		String bordtype = DBCommunicator.requestData("SELECT bord_naam FROM spel WHERE id='" + gameID +"'");
+		field = Loader.updateTiles(gameID,Loader.getGameStones(language),Loader.getTiles(bordtype));
 	}
 
 	public void layGameStone(GameStone gamestone, String location) {
