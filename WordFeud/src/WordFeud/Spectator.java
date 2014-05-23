@@ -14,6 +14,12 @@ public class Spectator {
 		
 		
 	}
+	
+	public int getLastTurn(){
+		lastTurn = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + myGameID + " ORDER BY id DESC");
+		return lastTurn;
+	}
+	
 
 	public String getLastTurnLetters() {
 		lastTurn = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + myGameID + " ORDER BY id DESC");
