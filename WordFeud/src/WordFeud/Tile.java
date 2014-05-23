@@ -9,7 +9,7 @@ import Utility.Loader;
 public class Tile {
 	
 	// Instance variables
-	private int 		xPos, yPos, width, height;
+	private int 		xPos, yPos, width, height, turn;
 	private boolean 	bonusUsed, pickablity;
 	private String 		bonus;
 	private GameStone 	gameStone;
@@ -66,6 +66,7 @@ public class Tile {
 	public boolean getPickablity() 	{return pickablity;}
 	public String getBonus() 		{return bonus;}
 	public GameStone getGameStone() {return gameStone;}
+	public int getTurn()			{return turn;}
 	
 	// Setters
 	public void setBonusUsed(boolean used) 			{bonusUsed = used;}
@@ -73,6 +74,7 @@ public class Tile {
 	public void setPickablity(boolean pick) 		{pickablity = pick;}
 	public void setCoordinates(int posX, int posY) 	{xPos = posX; yPos = posY;}
 	public void setBonus(String b) 					{bonus = b;}
+	public void setTurn(int i) 						{turn = i;}
 
 	public BufferedImage getImage() {
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

@@ -15,6 +15,7 @@ public class GameStone {
 	private int 	value, id;
 	private int 	width, height;
 	private char 	letter;
+	private boolean	hand;
 	private String 	letterSet;
 	private Font 	large, small;
 	
@@ -47,6 +48,7 @@ public class GameStone {
 		letter 	= l;
 		width	= 32;
 		height	= 32;
+		hand	= false;
 		large 	= new Font("Arial", Font.BOLD, 20);
 		small	= new Font("Arial", Font.PLAIN, 8);
 	}
@@ -55,6 +57,7 @@ public class GameStone {
 	public void setDimension(int w, int h) 				{width = w; height = h;}
 	public void setFonts(Font l, Font s)				{large = l; small = s;}
 	public void setID(int i) 							{id = i;}
+	public boolean getHand()							{return hand;}
 	
 	// Setters
 	public int getID() 									{return id;}
@@ -63,6 +66,7 @@ public class GameStone {
 	public Font getSmallFont() 							{return small;}
 	public Font getLargeFont() 							{return large;}
 	public String getLetterSet() 						{return letterSet;}
+	public void setHand(boolean h)						{hand = h;}
 	
 	public BufferedImage getImage() {
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
