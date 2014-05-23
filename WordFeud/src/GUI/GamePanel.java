@@ -140,40 +140,45 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void mouseReleased(MouseEvent e) {}
 
 	public void mousePressed(MouseEvent e) {
-		for(Tile t:field) {
-			if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
-				if(currentGameStone == null) {
-					if(t.getPickablity()) {
-						currentGameStone = t.getGameStone();
-						t.setPickablity(false);
-						t.setGameStone(null);
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			for(Tile t:field) {
+				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
+					if(currentGameStone == null) {
+						if(t.getPickablity()) {
+							currentGameStone = t.getGameStone();
+							t.setPickablity(false);
+							t.setGameStone(null);
+						}
+					}
+					else {
+						if(t.getGameStone() == null) {
+							t.setGameStone(currentGameStone);
+							t.setPickablity(true);
+							currentGameStone = null;
+						}
 					}
 				}
-				else {
-					if(t.getGameStone() == null) {
-						t.setGameStone(currentGameStone);
-						t.setPickablity(true);
-						currentGameStone = null;
+			}
+			
+			for(Tile t:hand) {
+				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
+					if(currentGameStone == null) {
+						if(t.getPickablity()) {
+							currentGameStone = t.getGameStone();
+							t.setGameStone(null);
+						}
+					}
+					else {
+						if(t.getGameStone() == null) {
+							t.setGameStone(currentGameStone);
+							currentGameStone = null;
+						}
 					}
 				}
 			}
 		}
-		
-		for(Tile t:hand) {
-			if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
-				if(currentGameStone == null) {
-					if(t.getPickablity()) {
-						currentGameStone = t.getGameStone();
-						t.setGameStone(null);
-					}
-				}
-				else {
-					if(t.getGameStone() == null) {
-						t.setGameStone(currentGameStone);
-						currentGameStone = null;
-					}
-				}
-			}
+		if(e.getButton() == MouseEvent.BUTTON2) {
+			
 		}
 	}
 
@@ -198,6 +203,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				hand.get(i).setGameStone(s);
 			}
 			currentGameStone = null;
+		}if(e.getSource().equals(swap)) {
+			
 		}
 	}
 
