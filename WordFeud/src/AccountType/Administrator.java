@@ -19,14 +19,16 @@ public class Administrator{
 	}
 	
 	public ArrayList<String> getUserRights(String player) {
-		ArrayList<String> data = DBCommunicator
-				.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='"
-						+ player + "'");
+		ArrayList<String> data = DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='" + player + "'");
 		return data;
 	}
 	
-	public void newPlayer(){
-		
+	public void changeUsername(Account account, String newName) {
+		DBCommunicator.writeData("UPDATE account SET naam = '" + newName +"' WHERE naam='" + account.getUsername() + "'");
+	}
+
+	public void changePassword(Account account, String newPass) {
+		DBCommunicator.writeData("UPDATE account SET wachtwoord = '" + newPass +"' WHERE naam='" + account.getUsername() + "'");
 	}
 	
 }

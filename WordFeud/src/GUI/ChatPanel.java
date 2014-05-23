@@ -12,35 +12,31 @@ import javax.swing.JPanel;
 
 import Utility.SButton;
 import Utility.STextArea;
+import WordFeud.Chat;
+import WordFeud.Game;
 
 @SuppressWarnings("serial")
-public class ChatPanel extends JPanel implements ActionListener {
+public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 
 	private STextArea 	printArea;
 	private STextArea 	typeArea;
 	private SButton		send;
+	private Chat 		chat;
+	private Game		game;
+	private GUI			gui;
 	
-	public ChatPanel(){
+	public ChatPanel(GUI gui, Game game){
 		this.setLayout(new GridBagLayout());
 		this.setOpaque(false);
 		GridBagConstraints c = new GridBagConstraints();
-		
+		this.game = game;
+		this.gui = gui;
 		printArea = new STextArea(220, 350);	
 		printArea.setEditable(false);
 		
 		typeArea= new STextArea(160, 30);
 		typeArea.setCustomRounded(true, false, true, false);
-		typeArea.addKeyListener(new KeyListener() {
-			public void keyPressed(KeyEvent e) {
-				 if(e.getKeyCode() == KeyEvent.VK_ENTER){
-					e.consume();
-					printArea.setText(printArea.getText() + "\n" + typeArea.getText());
-					typeArea.setText("");
-				 }
-			}
-			public void keyReleased(KeyEvent e) {}
-			public void keyTyped(KeyEvent e) {}
-		});
+		typeArea.addKeyListener(this);
 		
 		send = new SButton("Send", SButton.GREEN, 60, 30);
 		send.setCustomRounded(false, true, false, true);
@@ -59,8 +55,36 @@ public class ChatPanel extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		chat.sendMsg(typeArea.getText(), game, gui.getApplication().getCurrentAccount());
 		printArea.setText(printArea.getText() + "\n" + typeArea.getText());
 		typeArea.setText("");
+	}
+
+	
+	public void keyPressed(KeyEvent e)
+	{
+		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+			e.consume();
+			System.out.println(typeArea.getText());
+			System.out.println(gui.getApplication().getCurrentAccount().getUsername());
+			//chat.sendMsg(typeArea.getText(), new Game(1), gui.getApplication().getCurrentAccount());
+			
+			printArea.setText(printArea.getText() + "\n" + typeArea.getText());
+			typeArea.setText("");
+		 }
+	}
+
+	
+	public void keyReleased(KeyEvent e)
+	{
+		
+	}
+
+
+	public void keyTyped(KeyEvent e)
+	{
+		
+		
 	}
 	
 	

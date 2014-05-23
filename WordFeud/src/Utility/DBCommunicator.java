@@ -9,8 +9,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import WordFeud.GameStone;
+import WordFeud.Tile;
+
 public class DBCommunicator {
 
+	/**
+	 * @author Stan van Heumen
+	 */
+	
 	/* CONSTANTS */
 	private static final String CLASS_NAME	=	"com.mysql.jdbc.Driver";
 	private static final String DB_URL		=	"jdbc:mysql://databases.aii.avans.nl:3306/mnijholt_db2";
@@ -32,6 +39,8 @@ public class DBCommunicator {
 			System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
 		}
 	}
+	
+	public static Connection checkConnection() {return con;}
 
 	/**
 	 * This method allows you to request data from the Database.</br>
@@ -61,6 +70,7 @@ public class DBCommunicator {
 	}
 
 	/**
+	 * @author Max
 	 * This method allows you to request a ArrayList of data from the Database.</br>
 	 * It uses a query and a column, so you can get all the records from a certain column.</br>
 	 * MUST fill in both variables!</br>
@@ -86,33 +96,7 @@ public class DBCommunicator {
 		}
 		return result;
 	}
-	/**
-	 * @param letterSetCode is either EN or NL
-	 * @return hashmap within a hashmap
-	 * For an example how this works see Utility/Loader.java
-	 */
-	public static HashMap<Character , HashMap<Integer, Integer>> requestLetters(String letterSetCode){
-		Statement	stm;
-		ResultSet 	res;
-		HashMap<Character , HashMap<Integer, Integer>> result = new HashMap<Character , HashMap<Integer, Integer>>();
-		try {
-			stm = con.createStatement();
-			res = stm.executeQuery("SELECT waarde, karakter, aantal FROM lettertype WHERE letterset_code='"+letterSetCode.toUpperCase()+"'");
-			while(res.next()) {
-				HashMap<Integer, Integer> valueamount = new HashMap<Integer, Integer>();
-				valueamount.put(res.getInt(1), res.getInt(3));
-				result.put(res.getString(2).toString().charAt(0), valueamount);
-//				}	
-			}
-			res.close();
-			stm.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
+	
 	/**
 	 * This method allows you to write data to the Database.</br>
 	 * It uses a query as variable.</br>
@@ -164,5 +148,139 @@ public class DBCommunicator {
 		}
 		return result;
 	}
+	
+	/**
+	 * @author Max
+	 * @param letterSetCode is either EN or NL
+	 * @return hashmap within a hashmap
+	 * For an example how this works see Utility/Loader.java
+	 */
+	public static HashMap<Character , HashMap<Integer, Integer>> requestLetters(String letterSetCode){
+		Statement	stm;
+		ResultSet 	res;
+		HashMap<Character , HashMap<Integer, Integer>> result = new HashMap<Character , HashMap<Integer, Integer>>();
+		try {
+			stm = con.createStatement();
+			res = stm.executeQuery("SELECT waarde, karakter, aantal FROM lettertype WHERE letterset_code='"+ letterSetCode.toUpperCase() +"'");
+			while(res.next()) {
+				HashMap<Integer, Integer> valueamount = new HashMap<Integer, Integer>();
+				valueamount.put(res.getInt(1), res.getInt(3));
+				result.put(res.getString(2).toString().charAt(0), valueamount);	
+			}
+			res.close();
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * @author Max
+	 * @param "Standard"
+	 * @return HashMap<String (Location), String (Bonus)> including the right bonuses and empty locations.
+	 */
+	public static HashMap<String, String> requestTilesMap(String boardType){
+		Statement	stm;
+		ResultSet 	res;
+		HashMap<String, String> result = new HashMap<String, String>();
+		try {
+			stm = con.createStatement();
+			res = stm.executeQuery("SELECT tegeltype_soort, x, y FROM tegel WHERE bord_naam='"+ boardType +"'");
+			while(res.next()) {
+				if(		res.getString(1).equals("TW") || 
+						res.getString(1).equals("DW") ||
+						res.getString(1).equals("TL") || 
+						res.getString(1).equals("DL") ||
+						res.getString(1).equals("*") 
+					){
+					String s = "";
+					result.put(s = s + res.getInt(2) +"," + res.getInt(3) , res.getString(1));
+				}	else{
+					String s = "";
+					result.put(s = s + res.getInt(2) +"," + res.getInt(3), "");
+				}
+			}
+			res.close();
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * @author Max
+	 * @param "int gameID, ArrayList<GameStone>"
+	 * @return HashMap<String (Location), String (Bonus)> including the right bonuses and empty locations.
+	 */
+	public static void generateStoneIDs(int gameID, ArrayList<GameStone> gameStones){
+		PreparedStatement	stm;
+		try {
+			for(GameStone gs : gameStones){
+				stm = con.prepareStatement("INSERT INTO letter (spel_id, lettertype_letterset_code, lettertype_karakter) VALUES('" + gameID + "','" + gs.getLetterSet() + "', '" + gs.getLetter() + "')");
+				stm.executeUpdate();
+				stm.close();
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @author Max
+	 * @param "int gameID, ArrayList<GameStone>"
+	 * @return HashMap<String (Location), String (Bonus)> including the right bonuses and empty locations.
+	 */
+	public static ArrayList<GameStone> getGeneratedStoneIDs(int gameID, ArrayList<GameStone> gameStones){
+		Statement	stm;
+		ResultSet 	res;
+//		gameStones = Loader.getGameStones(gameStones.get(0).getLetterSet().toUpperCase());
+		try {
+				stm = con.createStatement();
+				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "' AND lettertype_letterset_code='" + "EN" + "'");
+				while(res.next()) {
+					for(GameStone gs : gameStones){
+						if(res.getString(2).equals(gs.getLetter()) && gs.getID() == -1){
+							gs.setID(res.getInt(1));
+						}
+					}
+				}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return gameStones;
+	}
+
+	public static HashMap<String, Tile> updateTilesWithStones(HashMap<String, Tile> hmap, ArrayList<GameStone> gameStones, int gameID) {
+		Statement	stm;
+		ResultSet 	res;
+		try {
+				stm = con.createStatement();
+				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id, beurt_id FROM gelegdeletter WHERE spel_id='" + gameID + "'");
+				while(res.next()) {
+					for(GameStone gs : gameStones){
+						if(res.getString(3).equals(gs.getID())){
+							for(String s : hmap.keySet()){
+								String loc = res.getString(1)+","+res.getString(2);
+								if(loc.equals(s)){
+									hmap.get(s).setGameStone(gs);
+									hmap.get(s).setBeurt(res.getInt(4));
+								}
+							}
+						}
+					}
+				}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return hmap;
+	}
+
 
 }

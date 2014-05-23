@@ -17,8 +17,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 import AccountType.Account;
+import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
+import Utility.SLabel;
 import Utility.SPasswordField;
 import Utility.STextField;
 import WordFeud.GameStone;
@@ -64,15 +66,19 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		register.addActionListener(this);
 		back.addActionListener(this);
 
-		title.setLayout(new GridLayout(1, 8, 2, 2));
+		title.setLayout(new GridLayout(1, 8, 1, 1));
 		title.setBackground(new Color(255, 255, 255, 0));
 
 		String letters 	= "WORDFEUD";
+		
 		for(int i = 0; i < letters.length(); i++) {
-			GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
-			s.setDimension(70, 70);
+			GameStone s = new GameStone(-1, letters.charAt(i));
+			if(DBCommunicator.checkConnection() != null) {
+				s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
+			}
 			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
-			title.add(s);
+			s.setDimension(80, 80);
+			title.add(new SLabel(s.getImage(), 80, 80));
 		}
 
 		JPanel mainPanel = new JPanel();
@@ -111,7 +117,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	/**
 	 * This is a method that is testing with the DBCommunicator if the user name and password are correct to register
 	 */
-	private void register() {
+	public void register() {
 		String text = l.register(new Account(username.getText()), String.valueOf(password.getPassword()), String.valueOf(passwordValidate.getPassword()));
 		if(text == "0") {return;}
 		if(text != null) {

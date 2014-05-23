@@ -25,10 +25,11 @@ public class Account {
 		}
 	}
 
-	public void Update() {
+	public void update() {
 		this.player = null;
 		this.admin = null;
 		this.mod = null;
+		rights = this.getUserRights(username);
 		if (this.isAdministrator()) {
 			admin = new Administrator();
 		}
@@ -92,6 +93,15 @@ public class Account {
 			}
 		}
 		return bool;
+	}
+
+	public void changeUsername(String newName) {
+		DBCommunicator.writeData("UPDATE account SET naam = '" + newName +"'");
+		this.username = newName;
+	}
+
+	public void changePassword(String newPass) {
+		DBCommunicator.writeData("UPDATE account SET wachtwoord = '" + newPass +"'");
 	}
 
 }

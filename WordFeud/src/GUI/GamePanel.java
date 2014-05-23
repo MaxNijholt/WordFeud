@@ -1,78 +1,210 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
 
+import Utility.Loader;
 import Utility.SButton;
+import WordFeud.Game;
+import WordFeud.GameStone;
 import WordFeud.Tile;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener {
 
-	private GUI gui;
-	private SButton pass, swap, resign, play;
-	private ChatPanel chat;
-	private MenuPanel mp;
+	private SButton 	pass, swap, resign, play, shuffle;
+	private ChatPanel 	cp;
+	private MenuPanel 	mp;
+	private Game 		game;
+	@SuppressWarnings("unused")
+	private GUI 		gui;
+	private GameStone 	currentGameStone;
+	private boolean		running		= true;
+	private Thread		thread		= new Thread(this);
+	private ArrayList<Tile> hand 	= new ArrayList<Tile>();
+	private ArrayList<Tile> field	= new ArrayList<Tile>();
+	private int mouseX, mouseY;
 	
 	public GamePanel(GUI gui){
 		this.gui = gui;
-		gui.setLoadingCursor(true);
-		
+		this.game = gui.getApplication().getSelectedGame();
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
-		this.setLayout(new BorderLayout());
-		this.setBackground(new Color(94, 94, 94));
-		mp		= new MenuPanel(gui);
-		chat 	= new ChatPanel();
+		this.setLayout(null);
+		this.setBackground(new Color(23, 26, 30));
+		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
+		mp		= new MenuPanel(gui, new PlayerPanel(gui));
+		mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
+		cp	 	= new ChatPanel(gui, game);
+		cp.setPreferredSize(new Dimension(250, GUI.HEIGHT));
+		pass 	= new SButton("Pass", SButton.CYAN, 150, 40);
+		swap 	= new SButton("Swap", SButton.YELLOW, 150, 40);
+		resign 	= new SButton("Resign", SButton.RED, 150, 40);
+		play	= new SButton("Play", SButton.GREEN, 150, 40);
+		shuffle	= new SButton("Shuffle", SButton.PURPLE, 150, 40);
 		
-		pass 	= new SButton("Pass", SButton.CYAN, 120, 40);
-		swap 	= new SButton("Swap",  SButton.YELLOW, 120, 40);
-		resign 	= new SButton("Resign",  SButton.RED, 120, 40);
-		play	= new SButton("Play",  SButton.GREEN, 120, 40);
+		pass.addActionListener(this);
+		swap.addActionListener(this);
+		resign.addActionListener(this);
+		play.addActionListener(this);
+		shuffle.addActionListener(this);
 		
-		JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		mainPanel.setBackground(new Color(50, 50, 50));
+		// The buttons
+		JPanel bp = new JPanel();
+		bp.setLayout(new GridLayout(5, 1, 0, 10));
+		bp.setOpaque(false);
+		bp.add(pass);
+		bp.add(swap);
+		bp.add(resign);
+		bp.add(play);
+		bp.add(shuffle);
 		
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(4, 1, 0, 10));
-		buttonPanel.setOpaque(false);
-		/*		
-		JPanel handPanel = new JPanel();
-		handPanel.setLayout(new GridLayout(1, 7, 3, 3));
-		for(int i = 0; i < 7; i++) {
-			Tile tile = new Tile(i, 0);
-			handPanel.add(tile);
+		add(mp);
+		mp.setBounds(0, 0, mp.getPreferredSize().width, mp.getPreferredSize().height);
+		add(bp);
+		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
+		add(cp);
+		cp.setBounds(GUI.WIDTH - cp.getPreferredSize().width - 10, 10, cp.getPreferredSize().width, cp.getPreferredSize().height);
+		
+		
+		HashMap<String, Tile> tiles = game.getMyField().getTiles();
+		
+		for(int y = 1; y < 16; y++) {
+			for(int x = 1; x < 16; x++) {
+				Tile tile = tiles.get(x + "," + y);
+				field.add(tile);
+				tile.setPickablity(false);
+				if(x == 1 && y == 1) {tile.setGameStone(new GameStone(5, 'W'));}
+			}
 		}
-		*/
+				
+		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
 		
-		JPanel gamePanel = new JPanel();
-		gamePanel.setLayout(new GridLayout(15, 15, 3, 3));
-		gamePanel.setOpaque(false);
+		for(int i = 0; i < game.getGameStones().size(); i++) {
+			currentGameStones.add(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(game.getStoneChars().get(game.getGameStones().get(i)).toString())), game.getStoneChars().get(game.getGameStones().get(i)).charValue()));
+		}
 		
-		for(int y = 0; y < 15; y++) {
-			for(int x = 0; x < 15; x++) {
-				Tile tile = new Tile(x, y);
-				gamePanel.add(tile);
+		for(int i = 0; i < 7; i++) {
+			Tile tile = new Tile(i + 1, -1);
+			tile.setGameStone(currentGameStones.get(i));
+			tile.setHand(true);
+			hand.add(tile);
+		}
+
+		
+		thread.start();
+	}
+	
+	public void run() {
+		while(running) {
+			repaint();
+			try {
+				Thread.sleep(1000/60);
+			} 
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D)g.create();
+		for(Tile t:field) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180, (t.getYPos() * 33) + 10, null);
+		}
+		for(Tile t:hand) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180, (t.getYPos() * 33) + 580, null);
+		}
+		if(currentGameStone != null) {
+			g2d.drawImage(currentGameStone.getImage(), mouseX - (currentGameStone.getImage().getWidth() / 2), mouseY - (currentGameStone.getImage().getHeight() / 2), null);
+		}
+		g2d.dispose();
+	}
+
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+
+	public void mousePressed(MouseEvent e) {
+		for(Tile t:field) {
+			if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
+				if(currentGameStone == null) {
+					if(t.getPickablity()) {
+						currentGameStone = t.getGameStone();
+						t.setPickablity(false);
+						t.setGameStone(null);
+					}
+				}
+				else {
+					if(t.getGameStone() == null) {
+						t.setGameStone(currentGameStone);
+						t.setPickablity(true);
+						currentGameStone = null;
+					}
+				}
+				System.out.println("You clicked tile=" + t.getXPos() + ":" + t.getYPos());
 			}
 		}
 		
-		buttonPanel.add(pass);
-		buttonPanel.add(swap);
-		buttonPanel.add(resign);
-		buttonPanel.add(play);		
-		
-		mainPanel.add(buttonPanel);
-		mainPanel.add(gamePanel);
-		
-		add(mp, BorderLayout.NORTH);
-		add(mainPanel, BorderLayout.CENTER);
-		add(chat, BorderLayout.EAST);
-		gui.setLoadingCursor(false);
-		
+		for(Tile t:hand) {
+			if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
+				if(currentGameStone == null) {
+					if(t.getPickablity()) {
+						currentGameStone = t.getGameStone();
+						t.setGameStone(null);
+					}
+				}
+				else {
+					if(t.getGameStone() == null) {
+						t.setGameStone(currentGameStone);
+						currentGameStone = null;
+					}
+				}
+				System.out.println("You clicked tile=" + t.getXPos() + ":" + t.getYPos());
+			}
+		}
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(shuffle)) {
+			game.shuffle();
+			
+			for(int i = 0; i < field.size(); i++) {
+				if(field.get(i).getHand()) {
+					
+				}
+			}
+			
+			ArrayList<Integer> gameStones 		= game.getGameStones();
+			HashMap<Integer, Character> chars 	= game.getStoneChars();
+			
+			for(int i = 0; i < gameStones.size(); i++) {
+				GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(chars.get(gameStones.get(i)).toString())), chars.get(gameStones.get(i)).charValue());
+				hand.get(i).setGameStone(s);
+			}
+			currentGameStone = null;
+		}
+	}
+
+	public void mouseDragged(MouseEvent w) {}
+
+	public void mouseMoved(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
 	
 }

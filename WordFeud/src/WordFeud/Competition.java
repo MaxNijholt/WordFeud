@@ -50,14 +50,14 @@ public class Competition {
 	 * Method to add a player (String) to the competition
 	 */
 	public void addPlayer(String player){
-		DBCommunicator.writeData("UPDATE deelnemer SET account_naam='" + player + "', competition_id='"+ this.id + "'");
+		DBCommunicator.writeData("INSERT INTO deelnemer SET account_naam='" + player + "', competitie_id='"+ this.id + "'");
 	}
 	
 	/**
 	 * Method to add a player (String) to the competition
 	 */
 	public void addPlayer(Account player){
-		DBCommunicator.writeData("UPDATE deelnemer SET account_naam='" + player.getUsername() + "', competition_id='"+ this.id + "'");
+		DBCommunicator.writeData("INSERT INTO deelnemer SET account_naam='" + player.getUsername() + "', competition_id='"+ this.id + "'");
 	}
 
 	/**
@@ -78,14 +78,14 @@ public class Competition {
 	 * Getter for the minimum amount of players
 	 */
 	public int getMinimum(){
-		return DBCommunicator.requestInt("SELECT minimum_aantal FROM competitie WHERE id='" + this.id + "'");
+		return DBCommunicator.requestInt("SELECT minimum_aantal_deelnemers FROM competitie WHERE id='" + this.id + "'");
 	}
 	
 	/*
 	 * Getter for the maximum amount of players
 	 */
 	private int getMaximum() {
-		return DBCommunicator.requestInt("SELECT maximum_aantal FROM competitie WHERE id='" + this.id + "'");
+		return DBCommunicator.requestInt("SELECT maximum_aantal_deelnemers FROM competitie WHERE id='" + this.id + "'");
 	}
 
 	public int getID() {

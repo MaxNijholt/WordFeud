@@ -4,24 +4,25 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
 import AccountType.Account;
+import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
+import Utility.SLabel;
 import Utility.SPasswordField;
+import Utility.SPopupMenu;
 import Utility.STextField;
+import Utility.SplashText;
 import WordFeud.GameStone;
 import WordFeud.Login;
 
@@ -38,6 +39,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private SButton 		login, register, spectate, exit;
 	private GUI 			gui;
 	private Login 			l;
+	private SPopupMenu		popup;
+	private SplashText		sp = new SplashText(SplashText.PRE2_T, SplashText.PRE2_S, 760, 120, this);
 	
 	/**
 	 * The panel that is used to log in to our program.
@@ -67,16 +70,19 @@ public class LoginPanel extends JPanel implements ActionListener {
 		spectate.addActionListener(this);
 		exit.addActionListener(this);
 		
-		title.setLayout(new GridLayout(1, 8, 2, 2));
+		title.setLayout(new GridLayout(1, 8, 1, 1));
 		title.setBackground(new Color(255, 255, 255, 0));
 		
 		String letters 	= "WORDFEUD";
 
 		for(int i = 0; i < letters.length(); i++) {
-			GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
-			s.setDimension(70, 70);
+			GameStone s = new GameStone(-1, letters.charAt(i));
+			if(DBCommunicator.checkConnection() != null) {
+				s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
+			}
 			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
-			title.add(s);
+			s.setDimension(80, 80);
+			title.add(new SLabel(s.getImage(), 80, 80));
 		}
 		
 		JPanel mainPanel = new JPanel();
@@ -110,6 +116,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 		gbc.gridy++;
 		this.add(mainPanel, gbc);
 		gui.setLoadingCursor(false);
+		
+		this.popup = new SPopupMenu();
 	}
 
 	/**
@@ -120,14 +128,23 @@ public class LoginPanel extends JPanel implements ActionListener {
 		g.drawImage(Loader.BACKGROUNDHD, 0, 0, Loader.BACKGROUNDHD.getWidth() * 2, Loader.BACKGROUNDHD.getHeight() * 2, null);
 	}
 	
+	public void paint(Graphics g) {
+		super.paint(g);
+		sp.drawSplash(g);
+	}
+	
 	/**
 	 * This is a method that is testing with the DBCommunicator if the user name and password are correct
 	 */
 	private void login() {
 		String text	= l.login(new Account(username.getText()), String.valueOf(password.getPassword()));
-		if(text == "0") {return;}
+		if(text == "0") {
+			sp.setRunning(false);
+			return;
+		}
 		if(text != null) {
-			Graphics2D g2d = (Graphics2D)this.getGraphics();
+			popup.show(username, username.getWidth() + 10, 0, popup.getTextDimension(text).width + 10, popup.getTextDimension(text).height, text, SButton.RED);
+/*			Graphics2D g2d = (Graphics2D)this.getGraphics();
 			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
 			g2d.setFont(new Font("Arial", Font.BOLD, 16));
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -135,19 +152,25 @@ public class LoginPanel extends JPanel implements ActionListener {
 			g2d.setColor(Color.RED);
 			g2d.fillRoundRect(10, 10, 335, 30, 10, 10);
 			g2d.setColor(Color.WHITE);
-			g2d.drawString(text, (350 / 2) - (fm.stringWidth(text) / 2), (0 + (50+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());
+			g2d.drawString(text, (350 / 2) - (fm.stringWidth(text) / 2), (0 + (50+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());*/
 		}
 	}
 
 	/**
 	 * This method sends you to the register panel
 	 */
-	private void register() {gui.switchPanel(new RegisterPanel(gui));}
+	private void register() {
+		gui.switchPanel(new RegisterPanel(gui));
+		sp.setRunning(false);
+	}
 
 	/**
 	 * This methods sends you to the spectator panel
 	 */
-	private void spectate() {gui.switchPanel(new SpectatorPanel());}
+	private void spectate() {
+		gui.switchPanel(new SpectatorCompetitionsPanel(gui));
+		sp.setRunning(false);
+	}
 
 	/**
 	 * This method is the actionListener for the buttons in the LoginPanel

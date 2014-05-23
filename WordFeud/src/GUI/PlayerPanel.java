@@ -14,22 +14,24 @@ import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
+import Utility.AScrollPane;
 import Utility.SButton;
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel implements ActionListener {
 
-	private JScrollPane scrollPane;
+	private AScrollPane scrollPane;
 	private JPanel gameContent;
+	private SButton competition;
 	private GUI gui;
 	private MenuPanel mp;
 
-	public PlayerPanel(GUI gui){
+	public PlayerPanel(final GUI gui){
 		this.gui = gui;
-		this.mp = new MenuPanel(gui);
+		this.mp = new MenuPanel(gui, null);
+		
 		gui.setLoadingCursor(true);
 		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -39,6 +41,16 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		JPanel allPanel = new JPanel();
 		allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.PAGE_AXIS));
 		allPanel.setBackground(new Color(94,94,94));
+		
+		//create the competition button
+		competition = new SButton("Competitions", SButton.T_GREY, 2000, 60);
+		allPanel.add(competition);
+		competition.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				gui.switchPanel(new CompetitionPanel(gui));
+			}
+		});
 				
 		//create the gameContent panel here go all the games
 		gameContent 	= 	new JPanel();
@@ -47,12 +59,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		gameContent.add(Box.createRigidArea(new Dimension(500,15)));
 
 		//create the scrollpane as container for the gameContent
-		scrollPane 		= 	new JScrollPane(gameContent);
-		scrollPane.setBorder(null);
-		scrollPane.setPreferredSize(new Dimension(1000, 500));
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane 		= 	new AScrollPane(1000, 500, gameContent, false, true);
 		allPanel.add(scrollPane);
 
 		
@@ -200,8 +207,12 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			play.add(new SLabel("wants to play a game with you", SLabel.CENTER, new Font("Arial", Font.PLAIN, 20)));
 			
-			opponent.setMinimumSize(new Dimension(200,30));
-			play.setMinimumSize(new Dimension(300, 30));
+			opponent.setMinimumSize(new Dimension(200,40));
+			opponent.setPreferredSize(new Dimension(200,40));
+			opponent.setMaximumSize(new Dimension(200,40));
+			play.setMinimumSize(new Dimension(300, 40));
+			play.setPreferredSize(new Dimension(300, 40));
+			play.setMaximumSize(new Dimension(300, 40));
 			accept.setMinimumSize(accept.getPreferredSize());
 			deny.setMinimumSize(deny.getPreferredSize());
 			
@@ -219,8 +230,8 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			panel.add(accept, c);
 			c.gridy++;
 			panel.add(deny, c);
+			
 			accept.addActionListener(new ActionListener(){
-
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					gui.acceptGame(gameID);
@@ -242,8 +253,12 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
 			
-			opponent.setMinimumSize(new Dimension(200,30));
-			lastTurn.setMinimumSize(new Dimension(200,30));
+			opponent.setMinimumSize(new Dimension(200,40));
+			opponent.setPreferredSize(new Dimension(200,40));
+			opponent.setMaximumSize(new Dimension(200,40));
+			lastTurn.setMinimumSize(new Dimension(200,40));
+			lastTurn.setPreferredSize(new Dimension(200,40));
+			lastTurn.setMaximumSize(new Dimension(200,40));
 			select.setMinimumSize(select.getPreferredSize());
 			
 			opponent.setBackground(panel.getBackground());
@@ -299,7 +314,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			spectate.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.spectateGame();
+					gui.spectateGame(gameID);
 				}
 			});
 		}

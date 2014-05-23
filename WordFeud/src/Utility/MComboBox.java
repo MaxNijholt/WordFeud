@@ -10,26 +10,33 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import javax.naming.event.NamingEvent;
+import javax.naming.event.NamingExceptionEvent;
+import javax.naming.event.ObjectChangeListener;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 
+import GUI.AdminPanel;
+
 @SuppressWarnings("serial")
-public class MComboBox extends JPanel implements ActionListener  {
+public class MComboBox extends JPanel implements ActionListener, ObjectChangeListener {
 
 	private STextField placeholder;
 	private SButton arrow;
 	private JPopupMenu pop;
 	private ArrayList<SButton> buttonList;
+	private AdminPanel adpa;
 
-	public MComboBox(int width, int height, String[] items) {
+	public MComboBox(int width, int height, String[] items, AdminPanel ap) {
 		// Default Component stuff
 		this.setPreferredSize(new Dimension(width, height));
 		this.setBackground(new Color(255, 255, 255, 0));
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
 
+		this.adpa = ap;
 		this.pop = new JPopupMenu();
 		pop.setLayout(new GridLayout(0, 1));
 		pop.setOpaque(false);
@@ -69,7 +76,11 @@ public class MComboBox extends JPanel implements ActionListener  {
 
 		this.placeholder.addKeyListener(new KeyListener(){
 			@Override
-			public void keyTyped(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {}
+			@Override
+			public void keyPressed(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {
 				buttonList = new ArrayList<SButton>();
 				pop.removeAll();
 					ArrayList<String> data = null;
@@ -79,16 +90,11 @@ public class MComboBox extends JPanel implements ActionListener  {
 					for (String pl : data) {
 						addItem(pl);
 					}
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {}
-			@Override
-			public void keyReleased(KeyEvent e) {
 			}});
 	}
 
 	public void addItem(String item) {
-		SButton s = new SButton(item, Color.WHITE, this.getWidth(),
+		final SButton s = new SButton(item, Color.WHITE, this.getWidth(),
 				this.getHeight());
 		s.setTextColor(new Color(100, 100, 100));
 		s.setRounded(true);
@@ -111,6 +117,15 @@ public class MComboBox extends JPanel implements ActionListener  {
 
 		buttonList.add(s);
 		pop.add(s);
+			s.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+						placeholder.setText(s.getName());
+						adpa.update();
+				}
+				
+			});
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -118,8 +133,8 @@ public class MComboBox extends JPanel implements ActionListener  {
 		for (SButton s : buttonList) {
 			if (e.getSource().equals(s)) {
 				placeholder.setText(s.getName());
-				pop.setVisible(false); 
-				repaint();
+				pop.setVisible(false);
+				revalidate();
 			}
 		}
 	}
@@ -134,6 +149,16 @@ public class MComboBox extends JPanel implements ActionListener  {
 
 	public ArrayList<SButton> getButtons(){
 		return buttonList;
+	}
+
+	@Override
+	public void namingExceptionThrown(NamingExceptionEvent evt) {
+		
+	}
+
+	@Override
+	public void objectChanged(NamingEvent evt) {
+		
 	}
 
 }

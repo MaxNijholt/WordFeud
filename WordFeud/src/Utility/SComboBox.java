@@ -48,6 +48,14 @@ public class SComboBox extends JPanel implements ActionListener {
 		init(width, height, items);
 	}
 	
+	public SComboBox(int width, int height, SButton[] buttons, boolean rounded) {
+		topLeftRounded		= rounded;
+		topRightRounded		= rounded;
+		bottomLeftRounded 	= rounded;
+		bottomRightRounded	= rounded;
+		buttons(width, height, buttons);
+	}
+	
 	/**
 	 * Private init method for the constructor
 	 */
@@ -82,6 +90,56 @@ public class SComboBox extends JPanel implements ActionListener {
 					name.setOpaque(false);
 				}
 				addItem(items[i]);
+			}
+		}
+		
+		arrow = new SButton("\u25BC", SButton.WHITE, 40, 40);
+		arrow.setColors(new Color(255, 255, 255), new Color(235, 235, 235), new Color(220, 220, 220));
+		arrow.setTextColor(Color.BLACK);
+		arrow.addActionListener(this);
+		arrow.setCustomRounded(false, topRightRounded, false, bottomRightRounded);
+		
+		
+		
+		add(name, BorderLayout.CENTER);
+		add(arrow, BorderLayout.EAST);
+	}
+	
+	/**
+	 * Private init method for the constructor
+	 */
+	private void buttons(int width, int height, SButton[] buttons) {
+		// Default Component stuff
+		setPreferredSize(new Dimension(width, height));
+		setBackground(new Color(255, 255, 255, 0));
+		setOpaque(false);
+		setLayout(new BorderLayout());
+		
+		pop = new JPopupMenu();
+		pop.setLayout(new GridLayout(0, 1));
+		pop.setOpaque(false);
+	
+		///////////	UIManager ///////////
+		UIManager.put("PopupMenu.background", new Color(255, 255, 255, 0));
+		UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
+		///////////	UIManager ///////////
+		
+		this.items 	= new ArrayList<SButton>();
+		
+		// Adding the items that are given in the String[] parameter 
+		// and setting the first String in the String[] to the currentSelected item
+		if(buttons != null) {
+			for(int i = 0; i < buttons.length; i++) {
+				if(i == 0) {
+					name = new STextField(buttons[i].getName(), 180, 40);
+					name.setName(buttons[i].getName());
+					name.setEditable(false);
+					name.setCustomRounded(topLeftRounded, false, bottomLeftRounded, false);
+					name.setForeground(new Color(100, 100, 100));
+					name.setOpaque(false);
+				}
+				items.add(buttons[i]);
+				pop.add(buttons[i]);
 			}
 		}
 		
@@ -153,5 +211,6 @@ public class SComboBox extends JPanel implements ActionListener {
 		this.bottomLeftRounded 	= bottomLeft;
 		this.bottomRightRounded = bottomRight;
 	}
+	public JPopupMenu getPopop() {return pop;}
 	
 }
