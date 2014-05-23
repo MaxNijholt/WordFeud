@@ -28,7 +28,7 @@ public class Game {
 		this.app = app;
 		this.id = gameID;
 		myField = new Field(id);
-		myPC = new PointCounter(myField);
+		myPC = new PointCounter();
 		myWC = new WordChecker();
 		gameStones = new ArrayList<Integer>();
 		stoneLetters = new ArrayList<Character>();

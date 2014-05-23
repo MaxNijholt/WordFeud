@@ -269,7 +269,7 @@ public class DBCommunicator {
 								String loc = res.getString(1)+","+res.getString(2);
 								if(loc.equals(s)){
 									hmap.get(s).setGameStone(gs);
-									hmap.get(s).setBeurt(res.getInt(4));
+									hmap.get(s).setTurn(res.getInt(4));
 								}
 							}
 						}
