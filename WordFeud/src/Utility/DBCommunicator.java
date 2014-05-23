@@ -240,7 +240,6 @@ public class DBCommunicator {
 	public static ArrayList<GameStone> getGeneratedStoneIDs(int gameID, ArrayList<GameStone> gameStones){
 		Statement	stm;
 		ResultSet 	res;
-//		gameStones = Loader.getGameStones(gameStones.get(0).getLetterSet().toUpperCase());
 		try {
 				stm = con.createStatement();
 				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
@@ -251,7 +250,6 @@ public class DBCommunicator {
 				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
 					for(GameStone gs : gameStones){
-//						System.out.println(res.getString(2) + " " + gs.getLetter() + " " + gs.getID());
 						String s =  "" + gs.getLetter();
 						if(res.getString(2).equals(s) && gs.getID() == -1 && leftoverIDs.contains(res.getInt(1))){
 							gs.setID(res.getInt(1));
@@ -273,27 +271,15 @@ public class DBCommunicator {
 				stm = con.createStatement();
 				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id, beurt_id FROM gelegdeletter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
-//					System.out.println(res.getString(1) + "=x + " +res.getString(2) + "=y + " +res.getString(3) + "=letter + " +res.getString(4) + "=turn");
 					if(!gameStones.isEmpty()){
 						if(gameStones.get(1).getID()==-1){
 							gameStones = getGeneratedStoneIDs(gameID, gameStones);
 						}
 					}
 					for(GameStone gs : gameStones){
-//						System.out.println(gs.getID() + " and " + res.getString(3));
 						if(res.getInt(3)==gs.getID()){
-							System.out.println(gs.getID() + " has a match." + res.getInt(3));
 							hmap.get(res.getString(1)+","+res.getString(2)).setGameStone(gs);
 							hmap.get(res.getString(1)+","+res.getString(2)).setTurn(res.getInt(4));
-							/*for(String s : hmap.keySet()){
-								String loc = res.getString(1)+","+res.getString(2);
-								System.out.println(loc);
-								if(loc.equals(s)){
-									hmap.get(s).setGameStone(gs);
-									System.out.println(hmap.get(s).getGameStone().getLetter() + " was added.");
-									hmap.get(s).setTurn(res.getInt(4));
-								}
-							}*/
 						}
 					}
 				}

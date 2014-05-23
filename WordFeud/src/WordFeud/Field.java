@@ -2,6 +2,7 @@ package WordFeud;
 
 import java.util.HashMap;
 
+import Utility.DBCommunicator;
 import Utility.Loader;
 
 public class Field {
@@ -11,7 +12,8 @@ public class Field {
 
 	public Field(int gameID) {
 		newWords = new HashMap<String, GameStone>();
-		field = Loader.updateTiles(gameID,Loader.getGameStones("EN"),Loader.getTiles());
+		String language = DBCommunicator.requestData("SELECT letterset_naam FROM mnijholt_db2.spel WHERE id='" + gameID +"';");
+		field = Loader.updateTiles(gameID,Loader.getGameStones(language),Loader.getTiles());
 	}
 
 	public void layGameStone(GameStone gamestone, String location) {
