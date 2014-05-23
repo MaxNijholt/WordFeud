@@ -40,7 +40,7 @@ public class Game {
 		}
 		
 		this.setGameStones();
-		stoneLetters = this.getStoneLettersDB();
+		this.setStoneLetters();
 		this.fillStoneChars();
 	}
 	
@@ -109,12 +109,14 @@ public class Game {
 	 * tell the DB to swap
 	 * get new gamestones
 	 */
-	public void swapGameStones(int[] stoneIDs){
+	public void swapGameStones(ArrayList<Integer> stoneIDs){
 		int beurt = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " ORDER BY id DESC");
 		beurt ++;
 		
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) Values(" + beurt + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "',0 ,  'Swap')");
-		
+		System.out.println(gameStones);
+		System.out.println(stoneLetters);
+		System.out.println(stoneChars);
 		
 		for(int stoneID : stoneIDs){
 			boolean swapped = false;
@@ -135,10 +137,17 @@ public class Game {
 			}
 		}
 		for(int stoneID : gameStones){
+			System.out.println(stoneID);
 			if(stoneID != 0){
 				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + stoneID + ", " + beurt + ")");
 			}
 		}
+		this.setStoneLetters();
+		this.fillStoneChars();
+		
+		System.out.println(gameStones);
+		System.out.println(stoneLetters);
+		System.out.println(stoneChars);
 	}
 	
 	/**
@@ -226,24 +235,24 @@ public class Game {
 		return gameStones;
 	}
 	
-	public HashMap<Integer, Character> getStoneLetters(){
+	public HashMap<Integer, Character> getStoneChars(){
 		return stoneChars;
 	}
 	
-	public ArrayList<Character> getStoneLettersDB(){
+	public void setStoneLetters(){
+		stoneLetters = new ArrayList<Character>();
 		int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
 		String letterString = DBCommunicator.requestData("SELECT inhoud FROM plankje WHERE spel_id = " + id + " AND beurt_id = " + turnID);
 		char[] fullChar = letterString.toCharArray();
-		ArrayList<Character> letters = new ArrayList<Character>();
 		for(char a : fullChar){
 			if(a != ','){
-				letters.add(a);
+				stoneLetters.add(a);
 			}
 		}		
-		return letters;
 	}
 
 	public void fillStoneChars(){
+		stoneChars = new HashMap<Integer, Character>();
 		for(int e = 0; e < gameStones.size(); e++){
 			stoneChars.put(gameStones.get(e), stoneLetters.get(e));
 		}
