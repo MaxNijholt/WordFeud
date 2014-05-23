@@ -242,18 +242,20 @@ public class DBCommunicator {
 		ResultSet 	res;
 //		gameStones = Loader.getGameStones(gameStones.get(0).getLetterSet().toUpperCase());
 		try {
-				int i = 0;
 				stm = con.createStatement();
+				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
+				ArrayList<Integer> leftoverIDs =  new ArrayList<Integer>();
+				while(res.next()){
+					leftoverIDs.add(res.getInt(1));
+				}
 				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
 					for(GameStone gs : gameStones){
 //						System.out.println(res.getString(2) + " " + gs.getLetter() + " " + gs.getID());
 						String s =  "" + gs.getLetter();
-						if(res.getString(2).equals(s) && gs.getID() == -1){
-							System.out.println("Updated id");
-							i=i+1;
-							System.out.println(i);
+						if(res.getString(2).equals(s) && gs.getID() == -1 && leftoverIDs.contains(res.getInt(1))){
 							gs.setID(res.getInt(1));
+							leftoverIDs.remove((Integer) res.getInt(1));
 						}
 					}
 				}
@@ -280,8 +282,9 @@ public class DBCommunicator {
 					for(GameStone gs : gameStones){
 //						System.out.println(gs.getID() + " and " + res.getString(3));
 						if(res.getInt(3)==gs.getID()){
-							System.out.println(gs.getID() + " has a match.");
+							System.out.println(gs.getID() + " has a match." + res.getInt(3));
 							hmap.get(res.getString(1)+","+res.getString(2)).setGameStone(gs);
+							hmap.get(res.getString(1)+","+res.getString(2)).setTurn(res.getInt(4));
 							/*for(String s : hmap.keySet()){
 								String loc = res.getString(1)+","+res.getString(2);
 								System.out.println(loc);
