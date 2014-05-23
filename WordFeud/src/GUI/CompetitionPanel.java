@@ -46,12 +46,12 @@ public class CompetitionPanel extends Panel {
 
 		currentCompPanel.setLayout(new BoxLayout(currentCompPanel, BoxLayout.Y_AXIS));
 		currentCompPanel.setBackground(bg);
-		
+		currentCompPanel.add(addLabel("Competitions you're in", 0));
 		
 		ArrayList<Integer> compInts;
 		compInts = gui.getApplication().getPlayingCompetitions();
 		if(compInts.size() != 0){
-			currentCompPanel.add(addLabel("Competitions you're in", 0));
+
 			currentCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : compInts){
 				currentCompPanel.add(paintComp(e, "Active"));
@@ -65,9 +65,11 @@ public class CompetitionPanel extends Panel {
 		
 		finishedCompPanel.setLayout(new BoxLayout(finishedCompPanel, BoxLayout.Y_AXIS));
 		finishedCompPanel.setBackground(bg);
+		finishedCompPanel.add(addLabel("Finished competitions", 0));
+		
 		compInts = gui.getApplication().getFinishedCompetitions();
 		if(compInts.size() != 0){
-			finishedCompPanel.add(addLabel("Finished competitions", 0));
+
 			finishedCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : compInts){
 				finishedCompPanel.add(paintComp(e, "Finished"));
@@ -81,10 +83,21 @@ public class CompetitionPanel extends Panel {
 		
 		joinableCompPanel.setLayout(new BoxLayout(joinableCompPanel, BoxLayout.Y_AXIS));
 		joinableCompPanel.setBackground(bg);
+		joinableCompPanel.add(addLabel("Joinable competitions", 0));
 		
-		compInts = gui.getApplication().getJoinableCompetitions();
+		compInts = gui.getApplication().getAllCompetitions();
+		ArrayList<Integer> activeInts = gui.getApplication().getPlayingCompetitions();
+			int x = 0;
+			while(x < activeInts.size()){
+				if(compInts.contains(activeInts.get(x))){
+					compInts.remove(activeInts.get(x));
+
+				}					x++;
+			}
+			
+		
 		if(compInts.size() != 0){
-			joinableCompPanel.add(addLabel("Joinable competitions", 0));
+
 			joinableCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : compInts){
 				joinableCompPanel.add(paintComp(e, "Joinable"));

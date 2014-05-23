@@ -400,13 +400,13 @@ public class Application {
 		return compInts;
 	}
 
-	public ArrayList<Integer> getJoinableCompetitions(){
+	public ArrayList<Integer> getAllCompetitions(){
 		ArrayList<Integer> compInts = new ArrayList<Integer>();
 		String player = currentAccount.getUsername();
 
 		Calendar rightNow = Calendar.getInstance();
 		String now = rightNow.get(1) + "-" + rightNow.get(2) + "-" + rightNow.get(5);
-		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam != '" + player + "'" + " AND einde > '" + now + "%'";
+		String query = "SELECT DISTINCT id FROM competitie WHERE einde > '" + now + "'";
 		boolean searching = true;
 		
 		while(searching){
@@ -417,13 +417,11 @@ public class Application {
 				searching = false;
 			}
 				else{
-							query += " AND competitie_id <> " + compID;
+							query+= " AND id <> " + compID;
 							compInts.add(compID);	
 							}
 
 						}
-		
-		
 		return compInts;
 	}
 	
