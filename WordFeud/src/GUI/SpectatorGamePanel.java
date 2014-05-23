@@ -52,15 +52,18 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		
 		
 		HashMap<String, Tile> tiles = spectate.getMyField().getTiles();
+		turn = spectate.getLastTurn();
 		
 		int xPos = bp.getPreferredSize().width + 20;
 		int yPos = 50;
 		for(int y = 1; y < 16; y++) {
 			for(int x = 1; x < 16; x++) {
-				Tile tile = tiles.get(x + "," + y);
-				field.add(tile);
-				tile.setPickablity(false);
-				xPos += 33;
+//				if(tile.getTurn == turn){
+					Tile tile = tiles.get(x + "," + y);
+					field.add(tile);
+					tile.setPickablity(false);
+					xPos += 33;
+//				}
 			}
 			xPos = bp.getPreferredSize().width + 20;
 			yPos += 33;
@@ -91,9 +94,14 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(next)) {
-			
+			if(turn != spectate.getLastTurn()){
+				turn++;
+			}
 		}
 		if(e.getSource().equals(previous)) {
+			if(turn != 2){
+				turn--;
+			}
 			
 		}
 		if(e.getSource().equals(back)) {
