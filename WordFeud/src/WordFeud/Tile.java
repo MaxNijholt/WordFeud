@@ -13,8 +13,9 @@ public class Tile extends SLabel {
 
 	private String bonus;
 	private boolean bonusUsed;
-	private int xPos;
-	private int yPos;
+	private int xPos,
+				yPos,
+				turn;
 	private GameStone gameStone;
 	private boolean pickablity;
 
@@ -125,5 +126,13 @@ public class Tile extends SLabel {
 
 	public void setBonus(String bonus) {
 		this.bonus = bonus;
+	}
+
+	public void setBeurt(int turnid) {
+		this.turn =  turnid;
+	}
+
+	public int getTurn() {
+		return turn;
 	}
 }

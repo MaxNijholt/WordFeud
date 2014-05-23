@@ -72,13 +72,13 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 		
 		
 		HashMap<String, Tile> tiles = game.getMyField().getTiles();
-		System.out.println(tiles);
 		
 		int xPos = bp.getPreferredSize().width + 20;
 		int yPos = 50;
 		for(int y = 1; y < 16; y++) {
 			for(int x = 1; x < 16; x++) {
 				Tile tile = tiles.get(x + "," + y);
+//				if(tile.getTurn() <= 7) Example for Joost
 				add(tile);
 				tile.addMouseListener(this);
 				tile.setPickablity(false);

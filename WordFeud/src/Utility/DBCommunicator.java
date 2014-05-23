@@ -246,7 +246,6 @@ public class DBCommunicator {
 					for(GameStone gs : gameStones){
 						if(res.getString(2).equals(gs.getLetter()) && gs.getID() == -1){
 							gs.setID(res.getInt(1));
-							System.out.println(gs.getID());
 						}
 					}
 				}
@@ -260,10 +259,9 @@ public class DBCommunicator {
 	public static HashMap<String, Tile> updateTilesWithStones(HashMap<String, Tile> hmap, ArrayList<GameStone> gameStones, int gameID) {
 		Statement	stm;
 		ResultSet 	res;
-//		gameStones = Loader.getGameStones(gameStones.get(0).getLetterSet().toUpperCase());
 		try {
 				stm = con.createStatement();
-				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id FROM gelegdeletter WHERE spel_id='" + gameID + "'");
+				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id, beurt_id FROM gelegdeletter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
 					for(GameStone gs : gameStones){
 						if(res.getString(3).equals(gs.getID())){
@@ -271,6 +269,7 @@ public class DBCommunicator {
 								String loc = res.getString(1)+","+res.getString(2);
 								if(loc.equals(s)){
 									hmap.get(s).setGameStone(gs);
+									hmap.get(s).setBeurt(res.getInt(4));
 								}
 							}
 						}
