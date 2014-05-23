@@ -25,12 +25,12 @@ import WordFeud.Competition;
 
 public class CompetitionPanel extends Panel {
 	
-//	private AScrollPane currentScrollPane, finishedScrollPane, comps;
+	private AScrollPane currentScrollPane, finishedScrollPane, comps, joinableScrollPane;
 	private JPanel currentCompPanel, finishedCompPanel, competitions, joinableCompPanel;
 	private MenuPanel menu;
 	private Color bg = new Color(94, 94, 94);
 	private GUI gui;
-	
+	private ArrayList<Integer> compInts;
 	
 	public CompetitionPanel(GUI gui){
 		this.gui = gui;
@@ -38,6 +38,7 @@ public class CompetitionPanel extends Panel {
 		this.setLayout(new BorderLayout());
 		menu = new MenuPanel(gui, new PlayerPanel(gui));
 		
+
 		currentCompPanel = new JPanel();	
 		finishedCompPanel = new JPanel();
 		joinableCompPanel = new JPanel();
@@ -47,8 +48,19 @@ public class CompetitionPanel extends Panel {
 		currentCompPanel.setLayout(new BoxLayout(currentCompPanel, BoxLayout.Y_AXIS));
 		currentCompPanel.setBackground(bg);
 		currentCompPanel.add(addLabel("Competitions you're in", 0));
+		currentCompPanel.setAlignmentX(CENTER_ALIGNMENT);
 		
-		ArrayList<Integer> compInts;
+		finishedCompPanel.setLayout(new BoxLayout(finishedCompPanel, BoxLayout.Y_AXIS));
+		finishedCompPanel.setBackground(bg);
+		finishedCompPanel.add(addLabel("Finished competitions", 0));
+		finishedCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+		
+		joinableCompPanel.setLayout(new BoxLayout(joinableCompPanel, BoxLayout.Y_AXIS));
+		joinableCompPanel.setBackground(bg);
+		joinableCompPanel.add(addLabel("Joinable competitions", 0));
+		joinableCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+		
+
 		compInts = gui.getApplication().getPlayingCompetitions();
 		if(compInts.size() != 0){
 
@@ -60,12 +72,10 @@ public class CompetitionPanel extends Panel {
 		}
 		
 		
-		currentCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+
 
 		
-		finishedCompPanel.setLayout(new BoxLayout(finishedCompPanel, BoxLayout.Y_AXIS));
-		finishedCompPanel.setBackground(bg);
-		finishedCompPanel.add(addLabel("Finished competitions", 0));
+
 		
 		compInts = gui.getApplication().getFinishedCompetitions();
 		if(compInts.size() != 0){
@@ -78,12 +88,10 @@ public class CompetitionPanel extends Panel {
 		}
 		
 		
-		finishedCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+
 		
 		
-		joinableCompPanel.setLayout(new BoxLayout(joinableCompPanel, BoxLayout.Y_AXIS));
-		joinableCompPanel.setBackground(bg);
-		joinableCompPanel.add(addLabel("Joinable competitions", 0));
+
 		
 		compInts = gui.getApplication().getAllCompetitions();
 		ArrayList<Integer> activeInts = gui.getApplication().getPlayingCompetitions();
@@ -106,7 +114,7 @@ public class CompetitionPanel extends Panel {
 		}
 		
 		
-		joinableCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+
 		
 		
 		
@@ -114,12 +122,17 @@ public class CompetitionPanel extends Panel {
 		competitions.setLayout(new BoxLayout(competitions, BoxLayout.Y_AXIS));
 		competitions.setBackground(bg);
 		
-		competitions.add(currentCompPanel);
-		competitions.add(joinableCompPanel);		
-		competitions.add(finishedCompPanel);
+		currentScrollPane = new AScrollPane(currentCompPanel.getWidth(), currentCompPanel.getHeight(), currentCompPanel, false, true);
+		comps = new AScrollPane(competitions.getWidth(), competitions.getHeight(), competitions, false, true);
+		finishedScrollPane = new AScrollPane(finishedCompPanel.getWidth(), finishedCompPanel.getHeight(), finishedCompPanel, false, true);
+		joinableScrollPane = new AScrollPane(joinableCompPanel.getWidth(), joinableCompPanel.getHeight(), joinableCompPanel, false, true);
+		
+		competitions.add(currentScrollPane);
+		competitions.add(joinableScrollPane);		
+		competitions.add(finishedScrollPane);
 		
 		this.add(menu, BorderLayout.NORTH);
-		this.add(competitions, BorderLayout.CENTER);
+		this.add(comps, BorderLayout.CENTER);
 		
 	}
 	
