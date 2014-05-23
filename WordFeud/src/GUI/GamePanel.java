@@ -99,7 +99,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
 			tile.setGameStone(currentGameStones.get(i));
-			tile.setHand(true);
+			tile.getGameStone().setHand(true);
 			hand.add(tile);
 		}
 
@@ -184,8 +184,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			game.shuffle();
 			
 			for(int i = 0; i < field.size(); i++) {
-				if(field.get(i).getHand()) {
-					
+				if(field.get(i).getGameStone() != null) {
+					if(field.get(i).getGameStone().getHand()) {
+						field.get(i).setGameStone(null);
+					}
 				}
 			}
 			
@@ -194,6 +196,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			
 			for(int i = 0; i < gameStones.size(); i++) {
 				GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(chars.get(gameStones.get(i)).toString())), chars.get(gameStones.get(i)).charValue());
+				s.setHand(true);
 				hand.get(i).setGameStone(s);
 			}
 			currentGameStone = null;

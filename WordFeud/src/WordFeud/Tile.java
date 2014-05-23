@@ -13,7 +13,6 @@ public class Tile {
 	private boolean 	bonusUsed, pickablity;
 	private String 		bonus;
 	private GameStone 	gameStone;
-	private boolean		hand;
 
 	/**
 	 * Constructor parameters: x, y<br>
@@ -57,7 +56,6 @@ public class Tile {
 		bonus 		= "";
 		bonusUsed 	= false;
 		pickablity 	= true;
-		hand		= false;
 		gameStone	= null;
 	}
 
@@ -66,7 +64,6 @@ public class Tile {
 	public int getYPos() 			{return yPos;}
 	public boolean getBonusUsed() 	{return bonusUsed;}
 	public boolean getPickablity() 	{return pickablity;}
-	public boolean getHand()		{return hand;}
 	public String getBonus() 		{return bonus;}
 	public GameStone getGameStone() {return gameStone;}
 	
@@ -74,7 +71,6 @@ public class Tile {
 	public void setBonusUsed(boolean used) 			{bonusUsed = used;}
 	public void setGameStone(GameStone stone) 		{gameStone = stone;}
 	public void setPickablity(boolean pick) 		{pickablity = pick;}
-	public void setHand(boolean h)					{hand = h;}
 	public void setCoordinates(int posX, int posY) 	{xPos = posX; yPos = posY;}
 	public void setBonus(String b) 					{bonus = b;}
 
