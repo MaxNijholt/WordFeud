@@ -86,7 +86,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				Tile tile = tiles.get(x + "," + y);
 				field.add(tile);
 				tile.setPickablity(false);
-				if(x == 1 && y == 1) {tile.setGameStone(new GameStone(5, 'W'));}
 			}
 		}
 				
@@ -98,8 +97,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
-			tile.setGameStone(currentGameStones.get(i));
-			tile.getGameStone().setHand(true);
+			if(i < currentGameStones.size()) {
+				if(currentGameStones.get(i) != null) {
+					tile.setGameStone(currentGameStones.get(i));
+					tile.getGameStone().setHand(true);
+				}
+			}
 			hand.add(tile);
 		}
 
