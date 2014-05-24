@@ -57,7 +57,7 @@ public class Competition {
 	 * Method to add a player (String) to the competition
 	 */
 	public void addPlayer(Account player){
-		DBCommunicator.writeData("INSERT INTO deelnemer SET account_naam='" + player.getUsername() + "', competition_id='"+ this.id + "'");
+		DBCommunicator.writeData("INSERT INTO deelnemer SET account_naam='" + player.getUsername() + "', competitie_id='"+ this.id + "'");
 	}
 
 	/**

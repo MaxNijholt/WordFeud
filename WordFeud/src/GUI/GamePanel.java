@@ -61,6 +61,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		play.addActionListener(this);
 		shuffle.addActionListener(this);
 		
+		//MenuPanel thread not stopping glitch fix:
+		mp.getBackButton().addActionListener(this);
+		
 		// The buttons
 		JPanel bp = new JPanel();
 		bp.setLayout(new GridLayout(5, 1, 0, 10));
@@ -86,7 +89,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				Tile tile = tiles.get(x + "," + y);
 				field.add(tile);
 				tile.setPickablity(false);
-				if(x == 1 && y == 1) {tile.setGameStone(new GameStone(5, 'W'));}
 			}
 		}
 				
@@ -98,8 +100,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
-			tile.setGameStone(currentGameStones.get(i));
-			tile.getGameStone().setHand(true);
+			if(i < currentGameStones.size()) {
+				if(currentGameStones.get(i) != null) {
+					tile.setGameStone(currentGameStones.get(i));
+					tile.getGameStone().setHand(true);
+				}
+			}
 			hand.add(tile);
 		}
 
@@ -140,44 +146,50 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void mouseReleased(MouseEvent e) {}
 
 	public void mousePressed(MouseEvent e) {
-		for(Tile t:field) {
-			if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
-				if(currentGameStone == null) {
-					if(t.getPickablity()) {
-						currentGameStone = t.getGameStone();
-						t.setPickablity(false);
-						t.setGameStone(null);
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			for(Tile t:field) {
+				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
+					if(currentGameStone == null) {
+						if(t.getPickablity()) {
+							currentGameStone = t.getGameStone();
+							t.setPickablity(false);
+							t.setGameStone(null);
+						}
+					}
+					else {
+						if(t.getGameStone() == null) {
+							t.setGameStone(currentGameStone);
+							t.setPickablity(true);
+							currentGameStone = null;
+						}
 					}
 				}
-				else {
-					if(t.getGameStone() == null) {
-						t.setGameStone(currentGameStone);
-						t.setPickablity(true);
-						currentGameStone = null;
+			}
+			
+			for(Tile t:hand) {
+				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
+					if(currentGameStone == null) {
+						if(t.getPickablity()) {
+							currentGameStone = t.getGameStone();
+							t.setGameStone(null);
+						}
+					}
+					else {
+						if(t.getGameStone() == null) {
+							t.setGameStone(currentGameStone);
+							currentGameStone = null;
+						}
 					}
 				}
 			}
 		}
-		
-		for(Tile t:hand) {
-			if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
-				if(currentGameStone == null) {
-					if(t.getPickablity()) {
-						currentGameStone = t.getGameStone();
-						t.setGameStone(null);
-					}
-				}
-				else {
-					if(t.getGameStone() == null) {
-						t.setGameStone(currentGameStone);
-						currentGameStone = null;
-					}
-				}
-			}
+		if(e.getButton() == MouseEvent.BUTTON2) {
+			
 		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(mp.getBackButton())) {running = false;}
 		if(e.getSource().equals(shuffle)) {
 			game.shuffle();
 			
@@ -198,6 +210,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				hand.get(i).setGameStone(s);
 			}
 			currentGameStone = null;
+		}if(e.getSource().equals(swap)) {
+			
 		}
 	}
 

@@ -47,18 +47,14 @@ public class Game {
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
-	 * -------------------------------------------------tj vragen
 	 * @param gamestone
 	 * @param location
 	 * @return
 	 */
 	public int layGameStone(GameStone gamestone, String location){
-		System.out.println(myField.getNewWords());
 		myField.layGameStone(gamestone, location);
-		System.out.println(myField.getNewWords());
-		
+	
 		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
-		System.out.println(points);
 		return points;
 	}
 	

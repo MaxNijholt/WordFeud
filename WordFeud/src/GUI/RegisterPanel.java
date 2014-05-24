@@ -23,6 +23,7 @@ import Utility.SButton;
 import Utility.SLabel;
 import Utility.SPasswordField;
 import Utility.STextField;
+import Utility.SplashText;
 import WordFeud.GameStone;
 import WordFeud.Login;
 
@@ -39,6 +40,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 	private SButton			register, back;
 	private GUI				gui;
 	private Login			l;
+	private SplashText		sp = new SplashText(SplashText.PRE2_T, SplashText.PRE2_S, 760, 120, this);
 
 	/**
 	 * The panel that is used to register to our program.
@@ -114,12 +116,20 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		g.drawImage(Loader.BACKGROUNDHD, 0, 0, Loader.BACKGROUNDHD.getWidth() * 2, Loader.BACKGROUNDHD.getHeight() * 2, null);
 	}
 
+	public void paint(Graphics g) {
+		super.paint(g);
+		sp.drawSplash(g);
+	}
+	
 	/**
 	 * This is a method that is testing with the DBCommunicator if the user name and password are correct to register
 	 */
 	public void register() {
 		String text = l.register(new Account(username.getText()), String.valueOf(password.getPassword()), String.valueOf(passwordValidate.getPassword()));
-		if(text == "0") {return;}
+		if(text == "0") {
+			sp.setRunning(false);
+			return;
+		}
 		if(text != null) {
 			Graphics2D g2d 	= (Graphics2D)this.getGraphics();
 			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
@@ -141,6 +151,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 		if(e.getSource().equals(password)) 			{passwordValidate.requestFocusInWindow();}
 		if(e.getSource().equals(passwordValidate)) 	{register();}
 		if(e.getSource().equals(register)) 			{register();}
-		if(e.getSource().equals(back)) 				{gui.switchPanel(new LoginPanel(gui));}
+		if(e.getSource().equals(back)) 				{gui.switchPanel(new LoginPanel(gui)); sp.setRunning(false);}
 	}
+	
 }

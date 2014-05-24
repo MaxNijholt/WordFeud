@@ -37,12 +37,6 @@ public class Application {
 		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
-		
-		currentAccount = new Account("stijnvangaal");
-		selectedGame = new Game(530, this);
-		selectedGame.layGameStone(new GameStone(10, 'A'), "8,8");
-		selectedGame.layGameStone(new GameStone(10, 'A'), "8,9");
-		selectedGame.layGameStone(new GameStone(10, 'A'), "8,10");
 	}
 	
 	
