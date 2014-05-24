@@ -53,9 +53,12 @@ public class Game {
 	 * @return
 	 */
 	public int layGameStone(GameStone gamestone, String location){
+		System.out.println(myField.getNewWords());
 		myField.layGameStone(gamestone, location);
-		int points = 0;
+		System.out.println(myField.getNewWords());
 		
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		System.out.println(points);
 		return points;
 	}
 	
@@ -64,11 +67,25 @@ public class Game {
 	 * let the wordchecker check if it is correct
 	 * -------------------------------------------------tj vragen
 	 */
-	public String[] playWord(){
+	public ArrayList<String> playWord(){
 		myField.getNewWords();
-		//myWC.checkWords(myField.getNewWords(), playedMove, playBoard)
+		ArrayList<String> words =  myWC.checkWords(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getNewWords(), myField.getTiles());
 		
-		return null;
+		if(words.size() == 0){
+			playDB();
+			return null;
+		}
+		else{
+			return words;
+		}
+		
+	}
+	
+	/**
+	 * write the word to the db
+	 */
+	public void playDB(){
+		
 	}
 	
 	/**
