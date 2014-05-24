@@ -25,12 +25,12 @@ import WordFeud.Competition;
 
 public class CompetitionPanel extends Panel {
 	
-//	private AScrollPane currentScrollPane, finishedScrollPane, comps;
+	private AScrollPane currentScrollPane, finishedScrollPane, comps, joinableScrollPane;
 	private JPanel currentCompPanel, finishedCompPanel, competitions, joinableCompPanel;
 	private MenuPanel menu;
 	private Color bg = new Color(94, 94, 94);
 	private GUI gui;
-	
+	private ArrayList<Integer> compInts;
 	
 	public CompetitionPanel(GUI gui){
 		this.gui = gui;
@@ -38,6 +38,7 @@ public class CompetitionPanel extends Panel {
 		this.setLayout(new BorderLayout());
 		menu = new MenuPanel(gui, new PlayerPanel(gui));
 		
+
 		currentCompPanel = new JPanel();	
 		finishedCompPanel = new JPanel();
 		joinableCompPanel = new JPanel();
@@ -46,12 +47,23 @@ public class CompetitionPanel extends Panel {
 
 		currentCompPanel.setLayout(new BoxLayout(currentCompPanel, BoxLayout.Y_AXIS));
 		currentCompPanel.setBackground(bg);
+		currentCompPanel.add(addLabel("Competitions you're in", 0));
+		currentCompPanel.setAlignmentX(CENTER_ALIGNMENT);
 		
+		finishedCompPanel.setLayout(new BoxLayout(finishedCompPanel, BoxLayout.Y_AXIS));
+		finishedCompPanel.setBackground(bg);
+		finishedCompPanel.add(addLabel("Finished competitions", 0));
+		finishedCompPanel.setAlignmentX(CENTER_ALIGNMENT);
 		
-		ArrayList<Integer> compInts;
+		joinableCompPanel.setLayout(new BoxLayout(joinableCompPanel, BoxLayout.Y_AXIS));
+		joinableCompPanel.setBackground(bg);
+		joinableCompPanel.add(addLabel("Joinable competitions", 0));
+		joinableCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+		
+
 		compInts = gui.getApplication().getPlayingCompetitions();
 		if(compInts.size() != 0){
-			currentCompPanel.add(addLabel("Competitions you're in", 0));
+
 			currentCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : compInts){
 				currentCompPanel.add(paintComp(e, "Active"));
@@ -60,14 +72,14 @@ public class CompetitionPanel extends Panel {
 		}
 		
 		
-		currentCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+
 
 		
-		finishedCompPanel.setLayout(new BoxLayout(finishedCompPanel, BoxLayout.Y_AXIS));
-		finishedCompPanel.setBackground(bg);
+
+		
 		compInts = gui.getApplication().getFinishedCompetitions();
 		if(compInts.size() != 0){
-			finishedCompPanel.add(addLabel("Finished competitions", 0));
+
 			finishedCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : compInts){
 				finishedCompPanel.add(paintComp(e, "Finished"));
@@ -76,15 +88,24 @@ public class CompetitionPanel extends Panel {
 		}
 		
 		
-		finishedCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+
 		
 		
-		joinableCompPanel.setLayout(new BoxLayout(joinableCompPanel, BoxLayout.Y_AXIS));
-		joinableCompPanel.setBackground(bg);
+
 		
-		compInts = gui.getApplication().getJoinableCompetitions();
+		//compInts = gui.getApplication().getAllCompetitions();
+		ArrayList<Integer> activeInts = gui.getApplication().getPlayingCompetitions();
+			int x = 0;
+			while(x < activeInts.size()){
+				if(compInts.contains(activeInts.get(x))){
+					compInts.remove(activeInts.get(x));
+
+				}					x++;
+			}
+			
+		
 		if(compInts.size() != 0){
-			joinableCompPanel.add(addLabel("Joinable competitions", 0));
+
 			joinableCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : compInts){
 				joinableCompPanel.add(paintComp(e, "Joinable"));
@@ -93,7 +114,7 @@ public class CompetitionPanel extends Panel {
 		}
 		
 		
-		joinableCompPanel.setAlignmentX(CENTER_ALIGNMENT);
+
 		
 		
 		
@@ -101,12 +122,17 @@ public class CompetitionPanel extends Panel {
 		competitions.setLayout(new BoxLayout(competitions, BoxLayout.Y_AXIS));
 		competitions.setBackground(bg);
 		
-		competitions.add(currentCompPanel);
-		competitions.add(joinableCompPanel);		
-		competitions.add(finishedCompPanel);
+		currentScrollPane = new AScrollPane(currentCompPanel.getWidth(), currentCompPanel.getHeight(), currentCompPanel, false, true);
+		comps = new AScrollPane(competitions.getWidth(), competitions.getHeight(), competitions, false, true);
+		finishedScrollPane = new AScrollPane(finishedCompPanel.getWidth(), finishedCompPanel.getHeight(), finishedCompPanel, false, true);
+		joinableScrollPane = new AScrollPane(joinableCompPanel.getWidth(), joinableCompPanel.getHeight(), joinableCompPanel, false, true);
+		
+		competitions.add(currentScrollPane);
+		competitions.add(joinableScrollPane);		
+		competitions.add(finishedScrollPane);
 		
 		this.add(menu, BorderLayout.NORTH);
-		this.add(competitions, BorderLayout.CENTER);
+		this.add(comps, BorderLayout.CENTER);
 		
 	}
 	
@@ -133,7 +159,7 @@ public class CompetitionPanel extends Panel {
 	}
 	
 	private JPanel paintComp(final int compID, String compType){
-		System.out.println("paint game: " + compID);
+		System.out.println("paint comp: " + compID);
 
 		JPanel panel = new JPanel();
 		panel.setMinimumSize(new Dimension(600,90));
@@ -225,8 +251,8 @@ public class CompetitionPanel extends Panel {
 			
 			select.addActionListener(new ActionListener(){
 				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().selectCompetition(compID);
+				public void actionPerformed(ActionEvent arg0) {				
+					gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
 				}
 			});
 		}
@@ -234,7 +260,7 @@ public class CompetitionPanel extends Panel {
 		else if(compType.equals("Finished")){
 			JPanel owner		= new JPanel();
 			JPanel description 	= new JPanel();
-			SButton spectate 	= new SButton("Ranking", SButton.GREY, 220, 40);
+			SButton spectate 	= new SButton("Spectate", SButton.GREY, 220, 40);
 			
 			owner.add(new SLabel(gui.getCompetitionOwner(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
@@ -261,7 +287,7 @@ public class CompetitionPanel extends Panel {
 			spectate.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().selectCompetition(compID);
+					gui.spectateCompetition(compID);
 				}
 			});
 		}
@@ -269,7 +295,8 @@ public class CompetitionPanel extends Panel {
 		else if(compType.equals("Joinable")){
 			JPanel owner 	= new JPanel();
 			JPanel description 		= new JPanel();
-			SButton join		= new SButton("Join", SButton.GREY, 220, 40);
+			SButton join 	= new SButton("Join", SButton.GREY, 220, 40);
+			SButton spectate 	= new SButton("Spectate", SButton.GREY, 220, 40);
 			
 			owner.add(new SLabel(gui.getCompetitionOwner(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
@@ -283,25 +310,33 @@ public class CompetitionPanel extends Panel {
 			
 			c.gridx = 0;
 			c.gridy = 0;
-			c.insets = new Insets(0,50,0,0);
+			c.insets = new Insets(5,15,0,0);
 			panel.add(owner, c);
-			c.gridx++;
-			c.gridheight = 2;
-			panel.add(join, c);
-			c.gridheight = 1;
-			c.gridx = 0;
 			c.gridy++;
-			panel.add(description, c);
-			
-			join.addActionListener(new ActionListener() {
+			panel.add(description,c);
+			c.gridx++;
+			c.gridy--;
+			panel.add(join, c);
+			c.gridy++;
+			panel.add(spectate, c);
 				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().selectCompetition(compID);
-					gui.getApplication().getSelectedCompetition().addPlayer(gui.getApplication().getCurrentAccount().getUsername());
-					
-				}
-			});
+				join.addActionListener(new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						gui.getApplication().setSelectedCompetition(new Competition(compID));
+						Competition comp = gui.getApplication().getSelectedCompetition();		
+
+						comp.addPlayer(gui.getApplication().getCurrentAccount());
+						gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
+						
+					}
+				});
+				spectate.addActionListener(new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						gui.spectateCompetition(compID);
+					}
+				});
 			
 		}
 		return panel;

@@ -131,4 +131,6 @@ public class MenuPanel extends JPanel implements ActionListener {
 		switcher.getPopop().setVisible(false);
 	}
 	
+	public SButton getBackButton() {return back;}
+	
 }

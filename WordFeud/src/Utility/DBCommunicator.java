@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import WordFeud.GameStone;
@@ -238,14 +240,20 @@ public class DBCommunicator {
 	public static ArrayList<GameStone> getGeneratedStoneIDs(int gameID, ArrayList<GameStone> gameStones){
 		Statement	stm;
 		ResultSet 	res;
-//		gameStones = Loader.getGameStones(gameStones.get(0).getLetterSet().toUpperCase());
 		try {
 				stm = con.createStatement();
-				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "' AND lettertype_letterset_code='" + "EN" + "'");
+				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
+				ArrayList<Integer> leftoverIDs =  new ArrayList<Integer>();
+				while(res.next()){
+					leftoverIDs.add(res.getInt(1));
+				}
+				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
 					for(GameStone gs : gameStones){
-						if(res.getString(2).equals(gs.getLetter()) && gs.getID() == -1){
+						String s =  "" + gs.getLetter();
+						if(res.getString(2).equals(s) && gs.getID() == -1 && leftoverIDs.contains(res.getInt(1))){
 							gs.setID(res.getInt(1));
+							leftoverIDs.remove((Integer) res.getInt(1));
 						}
 					}
 				}
@@ -256,6 +264,11 @@ public class DBCommunicator {
 		return gameStones;
 	}
 
+	/**
+	 * @author Max
+	 * @param HashMap with initialized tiles, ArrayList with initialized gameStones, int gameID for the right game.
+	 * @return HashMap with tiles containing the right gamestones.
+	 */
 	public static HashMap<String, Tile> updateTilesWithStones(HashMap<String, Tile> hmap, ArrayList<GameStone> gameStones, int gameID) {
 		Statement	stm;
 		ResultSet 	res;
@@ -263,15 +276,15 @@ public class DBCommunicator {
 				stm = con.createStatement();
 				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id, beurt_id FROM gelegdeletter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
+					if(!gameStones.isEmpty()){
+						if(gameStones.get(1).getID()==-1){
+							gameStones = getGeneratedStoneIDs(gameID, gameStones);
+						}
+					}
 					for(GameStone gs : gameStones){
-						if(res.getString(3).equals(gs.getID())){
-							for(String s : hmap.keySet()){
-								String loc = res.getString(1)+","+res.getString(2);
-								if(loc.equals(s)){
-									hmap.get(s).setGameStone(gs);
-									hmap.get(s).setTurn(res.getInt(4));
-								}
-							}
+						if(res.getInt(3)==gs.getID()){
+							hmap.get(res.getString(1)+","+res.getString(2)).setGameStone(gs);
+							hmap.get(res.getString(1)+","+res.getString(2)).setTurn(res.getInt(4));
 						}
 					}
 				}
@@ -280,6 +293,28 @@ public class DBCommunicator {
 			e.printStackTrace();
 		}
 		return hmap;
+	}
+
+	/**
+	 * @author Stan van Heumen
+	 * @param String "Message", int gameID, String username whom sent the msg
+	 */
+	public static void sendMsg(String message, int gameID, String username) {
+		PreparedStatement stm;
+		try {
+			String query = "INSERT INTO chatregel (account_naam, spel_id, tijdstip, bericht) VALUES (?,?,?,?)";
+			stm = con.prepareStatement(query);
+			stm.setString(1, username);
+			stm.setInt(2, gameID);
+			stm.setTimestamp(3, new Timestamp(new Date().getTime()));
+			stm.setString(4, message);
+			stm.executeUpdate();
+			System.out.println("You just send a message to the database: " + message);
+			stm.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

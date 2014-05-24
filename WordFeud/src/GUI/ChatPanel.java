@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
+import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.STextArea;
 import WordFeud.Chat;
@@ -31,6 +32,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		GridBagConstraints c = new GridBagConstraints();
 		this.game = game;
 		this.gui = gui;
+		chat = new Chat();
 		printArea = new STextArea(220, 350);	
 		printArea.setEditable(false);
 		
@@ -55,7 +57,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		chat.sendMsg(typeArea.getText(), game, gui.getApplication().getCurrentAccount());
+		DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
 		printArea.setText(printArea.getText() + "\n" + typeArea.getText());
 		typeArea.setText("");
 	}
@@ -66,9 +68,10 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
 			e.consume();
 			System.out.println(typeArea.getText());
+			System.out.println(game.getID());
 			System.out.println(gui.getApplication().getCurrentAccount().getUsername());
 			//chat.sendMsg(typeArea.getText(), new Game(1), gui.getApplication().getCurrentAccount());
-			
+			DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
 			printArea.setText(printArea.getText() + "\n" + typeArea.getText());
 			typeArea.setText("");
 		 }
