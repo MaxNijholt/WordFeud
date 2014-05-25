@@ -221,8 +221,11 @@ public class DBCommunicator {
 	public static void generateStoneIDs(int gameID, ArrayList<GameStone> gameStones){
 		PreparedStatement	stm;
 		try {
+			int id = 1;
 			for(GameStone gs : gameStones){
-				stm = con.prepareStatement("INSERT INTO letter (spel_id, lettertype_letterset_code, lettertype_karakter) VALUES('" + gameID + "','" + gs.getLetterSet() + "', '" + gs.getLetter() + "')");
+				gs.setID(id);
+				id++;
+				stm = con.prepareStatement("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES('" + gs.getID() + "','" + gameID + "','" + gs.getLetterSet() + "', '" + gs.getLetter() + "')");
 				stm.executeUpdate();
 				stm.close();
 			}
