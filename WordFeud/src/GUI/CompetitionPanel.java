@@ -93,7 +93,7 @@ public class CompetitionPanel extends Panel {
 		
 
 		
-		//compInts = gui.getApplication().getAllCompetitions();
+		compInts = gui.getApplication().getAllCompetitions();
 		ArrayList<Integer> activeInts = gui.getApplication().getPlayingCompetitions();
 			int x = 0;
 			while(x < activeInts.size()){
@@ -287,7 +287,7 @@ public class CompetitionPanel extends Panel {
 			spectate.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.spectateCompetition(compID);
+					gui.seeComps(compID, getPanel());
 				}
 			});
 		}
@@ -342,6 +342,9 @@ public class CompetitionPanel extends Panel {
 		return panel;
 	}
 	
+	public JPanel getPanel(){
+		return this;
+	}
 	
 	
 }
