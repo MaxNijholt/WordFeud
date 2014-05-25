@@ -225,12 +225,14 @@ public class Game {
 		ArrayList<Integer> copyStones = new ArrayList<Integer>();
 		for(int e = 0; e < gameStones.size(); e++){
 			copyStones.add(gameStones.get(e));
+			used.add(false);
 		}
 		for(int e : copyStones){
 			char l = stoneChars.get(e);
 			boolean placed = false;		
 			while(!placed){
 				int randNumber = (int) (Math.random() * copyStones.size());
+				System.out.println(randNumber);
 				if(!used.get(randNumber)){
 					gameStones.set(randNumber, e);
 					stoneLetters.set(randNumber, l);

@@ -187,4 +187,8 @@ public class GUI extends JFrame{
 	public void newGame(String player, boolean visibility){
 		app.newGame(player, visibility);
 	}
+	
+	public void seeComps(int compID, JPanel panel){
+		app.seeComps(compID, panel);
+	}
 }
