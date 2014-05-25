@@ -266,6 +266,35 @@ public class DBCommunicator {
 		}
 		return gameStones;
 	}
+	
+	/**
+	 * @author Max
+	 * Method to get the gameStones that a player has in his hands.
+	 */
+	public static ArrayList<GameStone> getHandLetters(int gameID, int turn, ArrayList<GameStone> gameStones){
+		ArrayList<GameStone> hand = new ArrayList<GameStone>();
+		if(gameStones.get(1).getID()==-1){
+			generateStoneIDs(gameID, gameStones);
+			gameStones = getGeneratedStoneIDs(gameID, gameStones);
+		}
+		Statement	stm;
+		ResultSet 	res;
+		try {
+				stm = con.createStatement();
+				res = stm.executeQuery("SELECT letter_id FROM letterbakjeletter WHERE spel_id='"+gameID+"' AND beurt_id='" + turn +"'");
+				while(res.next()){
+					for(GameStone gs: gameStones){
+						if(gs.getID()==res.getInt(1)){
+							hand.add(gs);
+						}
+					}
+				}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return hand;
+	}
 
 	/**
 	 * @author Max
