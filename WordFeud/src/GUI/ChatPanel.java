@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -7,14 +8,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.STextArea;
 import WordFeud.Chat;
 import WordFeud.Game;
+import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
 public class ChatPanel extends JPanel implements ActionListener, KeyListener {
@@ -22,9 +26,10 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	private STextArea 	printArea;
 	private STextArea 	typeArea;
 	private SButton		send;
-	private Chat 		chat;
 	private Game		game;
 	private GUI			gui;
+	private JScrollPane	scrollTypePanel;
+	private Chat 		chat;
 	
 	public ChatPanel(GUI gui, Game game){
 		this.setLayout(new GridBagLayout());
@@ -32,15 +37,23 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		GridBagConstraints c = new GridBagConstraints();
 		this.game = game;
 		this.gui = gui;
-		chat = new Chat();
+		
+		chat = new Chat(game.getID(), this);
+		
 		printArea = new STextArea(220, 350);	
 		printArea.setEditable(false);
 		
-		typeArea= new STextArea(160, 30);
+		typeArea= new STextArea(160, 90);
 		typeArea.setCustomRounded(true, false, true, false);
 		typeArea.addKeyListener(this);
 		
-		send = new SButton("Send", SButton.GREEN, 60, 30);
+		scrollTypePanel = new JScrollPane(typeArea);
+		scrollTypePanel.setPreferredSize(new Dimension(160,90));		
+		
+		
+		
+		
+		send = new SButton("Send", SButton.GREEN, 60, 90);
 		send.setCustomRounded(false, true, false, true);
 		send.addActionListener(this);
 		
@@ -51,14 +64,13 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		this.add(printArea, c);
 		c.gridy++;
 		c.gridwidth = 1;
-		this.add(typeArea, c);
+		this.add(scrollTypePanel, c);
 		c.gridx++;
 		this.add(send, c);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
-		printArea.setText(printArea.getText() + "\n" + typeArea.getText());
 		typeArea.setText("");
 	}
 
@@ -67,12 +79,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	{
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
 			e.consume();
-			System.out.println(typeArea.getText());
-			System.out.println(game.getID());
-			System.out.println(gui.getApplication().getCurrentAccount().getUsername());
-			//chat.sendMsg(typeArea.getText(), new Game(1), gui.getApplication().getCurrentAccount());
 			DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
-			printArea.setText(printArea.getText() + "\n" + typeArea.getText());
 			typeArea.setText("");
 		 }
 	}
@@ -87,6 +94,14 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	public void keyTyped(KeyEvent e)
 	{
 		
+		
+	}
+	
+	public void setChatText(ArrayList<String> chat){
+		
+		for(String e : chat){
+			printArea.addText(e);
+		}
 		
 	}
 	
