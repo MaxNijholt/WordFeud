@@ -15,17 +15,20 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Utility.MComboBox;
 import Utility.SButton;
+import Utility.SComboBox;
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
 public class ModeratorPanel extends JPanel {
 	private GUI mygui;
 	private SLabel selectWord;
-	private ArrayList<String> posibleWords;
+	private ArrayList<String> posibleWords = new ArrayList<String>();
 	private MenuPanel mp;
 	private JPanel allPanel;
-	private JComboBox<String> wordList = new JComboBox<String>();
+	private SComboBox wordList;
+//	private JComboBox<String> wordList = new JComboBox<String>();
 	private SButton acceptWord = new SButton("Accept word", SButton.GREY),
 			rejectWord = new SButton("Reject word", SButton.GREY),
 			addNewWord = new SButton("Add new word", SButton.GREY);
@@ -44,9 +47,8 @@ public class ModeratorPanel extends JPanel {
 		
 		this.setLayout(new BorderLayout());
 		this.setBackground(new Color(94,94,94));
-		
-		posibleWords = mygui.getApplication().getCurrentAccount().getMod()
-				.getNotAprovedWords();
+		wordList = new SComboBox(150, 25, posibleWords, true);
+		posibleWords = mygui.getApplication().getCurrentAccount().getMod().getNotAprovedWords();
 
 		for (String merge : posibleWords) {
 			wordList.addItem(merge);
