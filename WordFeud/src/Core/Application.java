@@ -40,6 +40,8 @@ public class Application {
 		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
+		
+		
 	}
 	
 	
@@ -62,11 +64,8 @@ public class Application {
 			visible = "prive";
 		}
 			
-		int lastID = DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC");
-		int newID = lastID + 1;
-			
 		DBCommunicator.writeData("INSERT INTO spel (id, competitie_id, toestand_type, account_naam_uitdager, account_naam_tegenstander, moment_uitdaging, reaktie_type, zichtbaarheid_type, bord_naam, letterset_naam)"
-								+ " VALUES(" + newID + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
+								+ " VALUES(" + (DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC") + 1) + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
 	}
 	
 	public boolean getHaveGameWith(String opponent, int compID){
@@ -574,8 +573,9 @@ public class Application {
 	/**
 	 * call the game to play a word
 	 */
-	public void playWord(){
-		selectedGame.playWord();
+	public ArrayList<String> playWord(){
+		ArrayList<String> words = selectedGame.playWord();
+		return words;
 	}
 	
 	/**

@@ -31,6 +31,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 	public PlayerPanel(final GUI gui){
 		this.gui = gui;
 		this.mp = new MenuPanel(gui, new LoginPanel(gui));
+		this.mp.getBackButton().addActionListener(this);
 		
 		gui.setLoadingCursor(true);
 		
@@ -340,11 +341,15 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		}
 		return panel;
 	}
+	
 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getSource().equals(this.mp.getBackButton())){
+			gui.logout();
+			gui.switchPanel(new LoginPanel(gui));
+		}
 		
 	}
 }

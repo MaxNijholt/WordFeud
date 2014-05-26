@@ -33,7 +33,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private GameStone 	currentGameStone;
 	private boolean		running			= true;
 	private Thread		thread			= new Thread(this);
-	private ArrayList<Tile> hand = new ArrayList<Tile>(), field 	= new ArrayList<Tile>();
+	private ArrayList<Tile> hand 	= new ArrayList<Tile>();
+	private ArrayList<Tile> field 	= new ArrayList<Tile>();
 	private int mouseX, mouseY;
 	
 	public GamePanel(GUI gui){
@@ -105,7 +106,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					tile.getGameStone().setHand(true);
 				}
 			}
-			if(hand == null) {System.out.println("shit");}
 			hand.add(tile);
 		}
 
@@ -159,6 +159,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					else {
 						if(t.getGameStone() == null) {
 							t.setGameStone(currentGameStone);
+							System.out.println(gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							t.setPickablity(true);
 							currentGameStone = null;
 						}
@@ -211,6 +212,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			}
 			currentGameStone = null;
 		}if(e.getSource().equals(swap)) {
+			
+		}
+		if(e.getSource().equals(play)) {
+			System.out.println(gui.playWord());
+		}
+		if(e.getSource().equals(resign)) {
 			
 		}
 	}

@@ -38,13 +38,33 @@ public class StatisticsPanel extends JPanel {
 		playerName = new SLabel("Player name:", SLabel.LEFT);
 		playerNameView = new SLabel(gui.getApplication().getCurrentAccount().getUsername(), SLabel.RIGHT);
 		winLoss = new SLabel("Win/Loss ratio:", SLabel.LEFT);
-		winLossView = new SLabel(DBCommunicator.requestData("SELECT AVG(avg_wins) FROM mnijholt_db2.rank_bayesian WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT); //test
-		highestGameScore = new SLabel("Highest gamescore:", SLabel.LEFT);
-		highestGameScoreView = new SLabel(DBCommunicator.requestData("SELECT MAX(totaalscore) FROM mnijholt_db2.score WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT);		
-		highestWordScore = new SLabel("Highest wordscore:", SLabel.LEFT);
-		highestWordScoreView = new SLabel(DBCommunicator.requestData("SELECT MAX(score) FROM mnijholt_db2.beurt WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT);
 		
-		mp = new MenuPanel(gui, null);
+		if(DBCommunicator.requestData("SELECT AVG(avg_wins) FROM rank_bayesian WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'") != null){
+			winLossView = new SLabel(DBCommunicator.requestData("SELECT AVG(avg_wins) FROM rank_bayesian WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT); //test
+		}
+		else{
+			winLossView = new SLabel("Unknown", SLabel.RIGHT);
+		}
+		
+		highestGameScore = new SLabel("Highest gamescore:", SLabel.LEFT);
+		
+		if(DBCommunicator.requestData("SELECT MAX(totaalscore) FROM score WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'") != null){
+			highestGameScoreView = new SLabel(DBCommunicator.requestData("SELECT MAX(totaalscore) FROM score WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT);		
+		}
+		
+		else {
+			highestGameScoreView = new SLabel("Unknown", SLabel.RIGHT);
+		}
+		
+		highestWordScore = new SLabel("Highest wordscore:", SLabel.LEFT);
+		
+		if(DBCommunicator.requestData("SELECT MAX(score) FROM beurt WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'") != null){
+			highestWordScoreView = new SLabel(DBCommunicator.requestData("SELECT MAX(score) FROM beurt WHERE account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "'"), SLabel.RIGHT);
+		}
+		else{
+			highestWordScoreView = new SLabel("Unknown", SLabel.RIGHT);
+		}
+		mp = new MenuPanel(gui, new PlayerPanel(gui));
 		
 		this.setLayout(new BorderLayout());
 		this.setBackground(new Color(94,94,94));
