@@ -49,10 +49,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		
 		scrollTypePanel = new JScrollPane(typeArea);
 		scrollTypePanel.setPreferredSize(new Dimension(160,90));		
-		
-		
-		
-		
+				
 		send = new SButton("Send", SButton.GREEN, 60, 90);
 		send.setCustomRounded(false, true, false, true);
 		send.addActionListener(this);
@@ -91,7 +88,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		printArea.setText("");
 		for(String e : chat){
 			printArea.addText(e);
-			System.out.println(e);
+			//System.out.println(e);
 		}
 	}
 }
