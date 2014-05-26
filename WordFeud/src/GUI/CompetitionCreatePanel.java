@@ -125,7 +125,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(back)) {
-			gui.switchPanel(new LoginPanel(gui));
+			gui.switchPanel(new CompetitionPanel(gui));
 		}
 		if(e.getSource().equals(add)) {
 			addedPlayers.add(new SLabel(addPlayers.getSelectedItem(), SLabel.LEFT, 220, 40));
