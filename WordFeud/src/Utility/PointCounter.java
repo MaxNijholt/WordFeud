@@ -29,9 +29,6 @@ public class PointCounter {
 		// merging the fields
 		for (String merge : play.keySet())
 		{
-			Tile gt = field.get(merge);
-			gt.setGameStone(play.get(merge));
-			field.put(merge, gt);
 			coordinates.add(merge);
 		}
 		ArrayList<String> createdWords = letterChecker(field, coordinates);
@@ -50,7 +47,7 @@ public class PointCounter {
 	 * @return
 	 */
 	public int count(ArrayList<String> wordsForCount,
-			HashMap<String, Tile> playBoard)
+			HashMap<String, Tile> playBoard, int stonesPlayed)
 	{
 
 		HashMap<String, Tile> field = playBoard;
@@ -86,6 +83,12 @@ public class PointCounter {
 					}
 					else
 					{
+						if (field.get(x + "," + y).getBonus().equals("*"))
+						{
+							wordScore = wordScore
+									+ (field.get(x + "," + y).getGameStone()
+											.getValue());
+						}
 						if (field.get(x + "," + y).getBonus().equals("DL"))
 						{
 							wordScore = wordScore
@@ -136,6 +139,12 @@ public class PointCounter {
 					}
 					else
 					{
+						if (field.get(x + "," + y).getBonus().equals("*"))
+						{
+							wordScore = wordScore
+									+ (field.get(x + "," + y).getGameStone()
+											.getValue());
+						}
 						if (field.get(x + "," + y).getBonus().equals("DL"))
 						{
 							wordScore = wordScore
@@ -151,10 +160,16 @@ public class PointCounter {
 						if (field.get(x + "," + y).getBonus().equals("DW"))
 						{
 							wordMultiplier = wordMultiplier * 2;
+							wordScore = wordScore
+									+ (field.get(x + "," + y).getGameStone()
+											.getValue());
 						}
 						if (field.get(x + "," + y).getBonus().equals("TW"))
 						{
 							wordMultiplier = wordMultiplier * 3;
+							wordScore = wordScore
+									+ (field.get(x + "," + y).getGameStone()
+											.getValue());
 						}
 
 					}
@@ -168,6 +183,10 @@ public class PointCounter {
 			}
 
 			score = score + wordScore;
+		}
+		if (stonesPlayed == 7)
+		{
+			score = score + 40;
 		}
 		return score;
 
