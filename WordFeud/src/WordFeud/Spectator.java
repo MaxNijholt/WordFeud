@@ -44,17 +44,11 @@ public class Spectator {
 		return myField;
 	}
 	
-	public Field nextTurn(){
-		
+	public Field getTurn(int turn){
 		
 		return myField;
 	}
 	
-	public Field previousTurn(){
-		
-		
-		return myField;
-	}
 
 	public ArrayList<Integer> getGameStones(){
 		return gameStones;
@@ -67,6 +61,10 @@ public class Spectator {
 	public int getCompID(int gameID){
 		int compID = DBCommunicator.requestInt("SELECT competitie_id FROM spel where id = '"+ gameID + "'");
 		return compID;
+	}
+
+	public void setTurn(int turn) {
+		this.turn = turn;
 	}
 	
 	

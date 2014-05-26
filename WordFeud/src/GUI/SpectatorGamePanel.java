@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -25,11 +24,11 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 	private SButton 	next, previous, back;
 	private Spectator 	spectate;
 	private MenuPanel 	mp;
+	private JPanel 		bp;
 	private GUI 		gui;
-	private	int 		gameID, turn;
+	private	int 		gameID, turn, xPos, yPos;
 	private ArrayList<Tile> hand 	= new ArrayList<Tile>();
 	private ArrayList<Tile> field	= new ArrayList<Tile>();
-	private boolean		running		= true;
 	
 	public SpectatorGamePanel(GUI gui, int gameID){
 		this.gui = gui;
@@ -48,13 +47,13 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		this.setBackground(new Color(23, 26, 30));
 		this.requestFocus();
 		next 	= new SButton("Next turn", SButton.CYAN, 150, 40);
-		previous 	= new SButton("Previous turn", SButton.YELLOW, 150, 40);
+		previous 	= new SButton("Previous turn", SButton.RED, 150, 40);
 		
 		next.addActionListener(this);
 		previous.addActionListener(this);
 		
 		// The buttons
-		JPanel bp = new JPanel();
+		bp = new JPanel();
 		bp.setLayout(new GridLayout(5, 1, 0, 10));
 		bp.setOpaque(false);
 		bp.add(next);
@@ -79,22 +78,22 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		HashMap<String, Tile> tiles = spectate.getMyField().getTiles();
 		turn = spectate.getLastTurn();
 		
-		int xPos = bp.getPreferredSize().width + 20;
-		int yPos = 50;
+		xPos = bp.getPreferredSize().width + 20;
+		yPos = 50;
 		for(int y = 1; y < 16; y++) {
 			for(int x = 1; x < 16; x++) {
-//				if(tile.getTurn == turn){
+				if(tiles.get(x + "," + y).getTurn() <= turn){
 					Tile tile = tiles.get(x + "," + y);
 					field.add(tile);
 					tile.setPickablity(false);
 					xPos += 33;
-//				}
+				}
 			}
 			xPos = bp.getPreferredSize().width + 20;
 			yPos += 33;
 		}
 		
-ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
+		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
 		
 		for(int i = 0; i < spectate.getGameStones().size(); i++) {
 			currentGameStones.add(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(spectate.getStoneChars().get(spectate.getGameStones().get(i)).toString())), spectate.getStoneChars().get(spectate.getGameStones().get(i)).charValue()));
@@ -129,11 +128,52 @@ ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
 		if(e.getSource().equals(next)) {
 			if(turn != spectate.getLastTurn()){
 				turn++;
+				spectate.setTurn(turn);
+				
+				HashMap<String, Tile> tiles = spectate.getMyField().getTiles();
+				
+				xPos = bp.getPreferredSize().width + 20;
+				yPos = 50;
+				for(int y = 1; y < 16; y++) {
+					for(int x = 1; x < 16; x++) {
+						if(tiles.get(x + "," + y).getTurn() <= turn){
+							Tile tile = tiles.get(x + "," + y);
+							field.add(tile);
+							tile.setPickablity(false);
+							xPos += 33;
+						}
+					}
+					xPos = bp.getPreferredSize().width + 20;
+					yPos += 33;
+				}
+				
+				revalidate();
 			}
+			else{ System.out.println("LastTurn");}
 		}
 		if(e.getSource().equals(previous)) {
 			if(turn != 2){
 				turn--;
+				spectate.setTurn(turn);
+				
+				HashMap<String, Tile> tiles = spectate.getMyField().getTiles();
+				
+				xPos = bp.getPreferredSize().width + 20;
+				yPos = 50;
+				for(int y = 1; y < 16; y++) {
+					for(int x = 1; x < 16; x++) {
+						if(tiles.get(x + "," + y).getTurn() <= turn){
+							Tile tile = tiles.get(x + "," + y);
+							field.add(tile);
+							tile.setPickablity(false);
+							xPos += 33;
+						}
+					}
+					xPos = bp.getPreferredSize().width + 20;
+					yPos += 33;
+				}
+				
+				revalidate();
 			}
 			
 		}

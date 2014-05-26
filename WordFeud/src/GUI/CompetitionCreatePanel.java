@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import Utility.AScrollPane;
 import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.SComboBox;
@@ -27,10 +29,12 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	private STextField 			name, player;
 	private SComboBox 			addPlayers;
 	private SLabel 				title, nameLabel, playerLabel, addLabel, addedLabel;
+	private AScrollPane			scroller;
 	private ArrayList<SLabel>	addedPlayers;
 	private SButton 			create, back, add;
 	private JPanel				addPanel, addedPanel;
 	private GUI 				gui;
+	private JPanel scrollPane;
 	
 	public CompetitionCreatePanel(GUI gui) {
 		this.gui = gui;
@@ -61,6 +65,20 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 				// Creating the challenger box
 		addPlayers		= new SComboBox(220, 40, players);
 		addPlayers.setPlaceholder("Playername");
+		
+		scrollPane = new JPanel();
+		scrollPane.setLayout(new GridLayout(0, 1));
+		scrollPane.setBackground(getBackground());
+		
+		scroller 		= new AScrollPane(100, 100, scrollPane, false, true);
+		for(int i = 0; i < 20; i++) {
+			SButton l = new SButton("Sla" + i, SButton.WHITE);
+			l.setCustomRounded(false, false, false, false);
+			l.setTextColor(Color.BLACK);
+			l.addActionListener(this);
+			scrollPane.add(l);
+		}
+		
 		
 		back.addActionListener(this);
 		add.addActionListener(this);
@@ -109,7 +127,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		addedPanel.setBackground(getBackground());
 		addedPanel.setLayout(new BorderLayout());
 		addedPanel.add(addedLabel, BorderLayout.NORTH);
-		addedPanel.add(addPanel, BorderLayout.CENTER);
+		addedPanel.add(scroller, BorderLayout.CENTER);
 		addedPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 		
 		JPanel mainPanel = new JPanel();
@@ -128,10 +146,31 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 			gui.switchPanel(new CompetitionPanel(gui));
 		}
 		if(e.getSource().equals(add)) {
-			addedPlayers.add(new SLabel(addPlayers.getSelectedItem(), SLabel.LEFT, 220, 40));
-			System.out.println("Players:");
-			for(int i = 0; i < addedPlayers.size(); i++) {
-				System.out.println(addedPlayers.get(i));
+			boolean alreadyThere = false;
+			for(int x = 0; x < scrollPane.getComponents().length; x++) {
+				SButton s = (SButton)scrollPane.getComponent(x);
+				if(e.getActionCommand().equals(s.getActionCommand())) {
+					alreadyThere = true;
+					return;
+				}
+			}
+			if(!alreadyThere) {
+				SButton l = new SButton(addPlayers.getSelectedItem(), SButton.WHITE);
+				l.setCustomRounded(false, false, false, false);
+				l.setTextColor(Color.BLACK);
+				l.addActionListener(this);
+				scrollPane.add(l);
+				scrollPane.revalidate();
+			}
+		}
+		for(int i = 0; i < scrollPane.getComponents().length; i ++) {
+			if(scrollPane.getComponent(i) instanceof SButton) {
+				SButton s = (SButton)scrollPane.getComponent(i);
+				if(s.getActionCommand().equals(e.getActionCommand())) {
+					scrollPane.remove(scrollPane.getComponent(i));
+					scrollPane.revalidate();
+					return;
+				}
 			}
 		}
 	}

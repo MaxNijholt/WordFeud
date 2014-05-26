@@ -59,6 +59,12 @@ public class Game {
 		return points;
 	}
 	
+	public int removeGameStone(String location){
+		myField.removeGameStone(location);
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		return points;
+	}
+	
 	/**
 	 * get the new words from the field
 	 * let the wordchecker check if it is correct
