@@ -33,7 +33,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private GameStone 	currentGameStone;
 	private boolean		running			= true;
 	private Thread		thread			= new Thread(this);
-	private ArrayList<Tile> hand,field 	= new ArrayList<Tile>();
+	private ArrayList<Tile> hand 	= new ArrayList<Tile>();
+	private ArrayList<Tile> field 	= new ArrayList<Tile>();
 	private int mouseX, mouseY;
 	
 	public GamePanel(GUI gui){
