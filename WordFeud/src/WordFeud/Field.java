@@ -18,19 +18,13 @@ public class Field {
 	}
 
 	public void layGameStone(GameStone gamestone, String location) {
-		if (field.get(location).getGameStone() == null) {
 			field.get(location).setGameStone(gamestone);
 			newWords.put(location, gamestone);
-		}
-
 	}
 
 	public void removeGameStone(String location) {
-		if (field.get(location).getGameStone() != null) {
 			field.get(location).setGameStone(null);
 			newWords.remove(location);
-
-		}
 	}
 
 	public HashMap<String, GameStone> getNewWords() {

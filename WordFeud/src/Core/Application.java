@@ -117,6 +117,11 @@ public class Application {
 		int retrievedPoints = selectedGame.layGameStone(gamestone, location);
 		return retrievedPoints;
 	}
+	
+	public int removeGameStone(String location){
+		int points = selectedGame.removeGameStone(location);
+		return points;
+	}
 
 	/**
 	 * accept or deny a game in the db
