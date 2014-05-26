@@ -89,6 +89,7 @@ public class SButton extends JButton implements MouseListener {
 		
 		// Button values
 		setName(name);
+		setActionCommand(name);
 		setFont(font);
 		setPreferredSize(new Dimension(getFontMetrics(font).stringWidth(name) + 10, getFontMetrics(font).getHeight() + 10));
 		setOpaque(false);

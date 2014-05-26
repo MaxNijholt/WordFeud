@@ -13,7 +13,7 @@ public class Chat implements Runnable {
 	public Chat(int gameID, ChatPanel cp){
 		this.gameID = gameID;
 		this.chatPanel = cp;
-		t = new Thread();
+		t = new Thread(this);
 		t.start();
 	}
 	
@@ -28,15 +28,16 @@ public class Chat implements Runnable {
 	@Override
 	public void run()
 	{
+		System.out.println("Thread has started");
 		while(chat){
 			
 			try{
 				chatPanel.setChatText(DBCommunicator.getChat(gameID));
 				
-				t.sleep(5000);
+				Thread.sleep(5000);
 			}
 			catch(InterruptedException e){
-				
+				e.printStackTrace();
 			}			
 		}		
 	}
