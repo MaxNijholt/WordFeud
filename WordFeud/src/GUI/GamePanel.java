@@ -28,7 +28,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private ChatPanel 	cp;
 	private MenuPanel 	mp;
 	private Game 		game;
-	@SuppressWarnings("unused")
 	private GUI 		gui;
 	private GameStone 	currentGameStone;
 	private boolean		running			= true;

@@ -55,13 +55,13 @@ public class Game {
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
 	
-		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
 		return points;
 	}
 	
 	public int removeGameStone(String location){
 		myField.removeGameStone(location);
-		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
 		return points;
 	}
 	
@@ -72,7 +72,7 @@ public class Game {
 	public ArrayList<String> playWord(){
 		myField.getNewWords();
 		ArrayList<String> words =  myWC.checkWords(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getNewWords(), myField.getTiles());
-		
+		System.out.println(words);
 		if(words.size() == 0){
 			playDB();
 			return null;
@@ -87,7 +87,7 @@ public class Game {
 	 * write the word to the db
 	 */
 	public void playDB(){
-		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
 		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
 		turn += 2;
 		
@@ -220,7 +220,7 @@ public class Game {
 		ArrayList<Boolean> used = new ArrayList<Boolean>();
 		ArrayList<Integer> copyStones = new ArrayList<Integer>();
 		for(int e = 0; e < gameStones.size(); e++){
-			copyStones.set(e, gameStones.get(e));
+			copyStones.add(gameStones.get(e));
 			used.add(false);
 		}
 		for(int e : copyStones){
