@@ -221,8 +221,11 @@ public class DBCommunicator {
 	public static void generateStoneIDs(int gameID, ArrayList<GameStone> gameStones){
 		PreparedStatement	stm;
 		try {
+			int id = 1;
 			for(GameStone gs : gameStones){
-				stm = con.prepareStatement("INSERT INTO letter (spel_id, lettertype_letterset_code, lettertype_karakter) VALUES('" + gameID + "','" + gs.getLetterSet() + "', '" + gs.getLetter() + "')");
+				gs.setID(id);
+				id++;
+				stm = con.prepareStatement("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES('" + gs.getID() + "','" + gameID + "','" + gs.getLetterSet() + "', '" + gs.getLetter() + "')");
 				stm.executeUpdate();
 				stm.close();
 			}
@@ -240,20 +243,20 @@ public class DBCommunicator {
 	public static ArrayList<GameStone> getGeneratedStoneIDs(int gameID, ArrayList<GameStone> gameStones){
 		Statement	stm;
 		ResultSet 	res;
-//		gameStones = Loader.getGameStones(gameStones.get(0).getLetterSet().toUpperCase());
 		try {
-				int i = 0;
 				stm = con.createStatement();
+				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
+				ArrayList<Integer> leftoverIDs =  new ArrayList<Integer>();
+				while(res.next()){
+					leftoverIDs.add(res.getInt(1));
+				}
 				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
 					for(GameStone gs : gameStones){
-//						System.out.println(res.getString(2) + " " + gs.getLetter() + " " + gs.getID());
 						String s =  "" + gs.getLetter();
-						if(res.getString(2).equals(s) && gs.getID() == -1){
-							System.out.println("Updated id");
-							i=i+1;
-							System.out.println(i);
+						if(res.getString(2).equals(s) && gs.getID() == -1 && leftoverIDs.contains(res.getInt(1))){
 							gs.setID(res.getInt(1));
+							leftoverIDs.remove((Integer) res.getInt(1));
 						}
 					}
 				}
@@ -263,7 +266,41 @@ public class DBCommunicator {
 		}
 		return gameStones;
 	}
+	
+	/**
+	 * @author Max
+	 * Method to get the gameStones that a player has in his hands.
+	 */
+	public static ArrayList<GameStone> getHandLetters(int gameID, int turn, ArrayList<GameStone> gameStones){
+		ArrayList<GameStone> hand = new ArrayList<GameStone>();
+		if(gameStones.get(0)!=null && gameStones.get(1).getID()==-1){
+			generateStoneIDs(gameID, gameStones);
+			gameStones = getGeneratedStoneIDs(gameID, gameStones);
+		}
+		Statement	stm;
+		ResultSet 	res;
+		try {
+				stm = con.createStatement();
+				res = stm.executeQuery("SELECT letter_id FROM letterbakjeletter WHERE spel_id='"+gameID+"' AND beurt_id='" + turn +"'");
+				while(res.next()){
+					for(GameStone gs: gameStones){
+						if(gs.getID()==res.getInt(1)){
+							hand.add(gs);
+						}
+					}
+				}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return hand;
+	}
 
+	/**
+	 * @author Max
+	 * @param HashMap with initialized tiles, ArrayList with initialized gameStones, int gameID for the right game.
+	 * @return HashMap with tiles containing the right gamestones.
+	 */
 	public static HashMap<String, Tile> updateTilesWithStones(HashMap<String, Tile> hmap, ArrayList<GameStone> gameStones, int gameID) {
 		Statement	stm;
 		ResultSet 	res;
@@ -271,26 +308,15 @@ public class DBCommunicator {
 				stm = con.createStatement();
 				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id, beurt_id FROM gelegdeletter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
-//					System.out.println(res.getString(1) + "=x + " +res.getString(2) + "=y + " +res.getString(3) + "=letter + " +res.getString(4) + "=turn");
 					if(!gameStones.isEmpty()){
 						if(gameStones.get(1).getID()==-1){
 							gameStones = getGeneratedStoneIDs(gameID, gameStones);
 						}
 					}
 					for(GameStone gs : gameStones){
-//						System.out.println(gs.getID() + " and " + res.getString(3));
 						if(res.getInt(3)==gs.getID()){
-							System.out.println(gs.getID() + " has a match.");
 							hmap.get(res.getString(1)+","+res.getString(2)).setGameStone(gs);
-							/*for(String s : hmap.keySet()){
-								String loc = res.getString(1)+","+res.getString(2);
-								System.out.println(loc);
-								if(loc.equals(s)){
-									hmap.get(s).setGameStone(gs);
-									System.out.println(hmap.get(s).getGameStone().getLetter() + " was added.");
-									hmap.get(s).setTurn(res.getInt(4));
-								}
-							}*/
+							hmap.get(res.getString(1)+","+res.getString(2)).setTurn(res.getInt(4));
 						}
 					}
 				}
@@ -300,7 +326,11 @@ public class DBCommunicator {
 		}
 		return hmap;
 	}
-	
+
+	/**
+	 * @author Stan van Heumen
+	 * @param String "Message", int gameID, String username whom sent the msg
+	 */
 	public static void sendMsg(String message, int gameID, String username) {
 		PreparedStatement stm;
 		try {

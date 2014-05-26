@@ -2,6 +2,7 @@ package WordFeud;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import Core.Application;
 import Utility.DBCommunicator;
@@ -25,14 +26,14 @@ public class Game {
 	 * -------------------------------------------------
 	 */
 	public Game(int gameID, Application app){
-		this.app = app;
-		this.id = gameID;
-		myField = new Field(id);
-		myPC = new PointCounter();
-		myWC = new WordChecker();
-		gameStones = new ArrayList<Integer>();
-		stoneLetters = new ArrayList<Character>();
-		stoneChars = new HashMap<Integer, Character>();
+		this.app		= app;
+		this.id			= gameID;
+		myField			= new Field(id);
+		myPC			= new PointCounter();
+		myWC			= new WordChecker();
+		gameStones		= new ArrayList<Integer>();
+		stoneLetters	= new ArrayList<Character>();
+		stoneChars		= new HashMap<Integer, Character>();
 		
 		opponent = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
 		if(opponent.equals(app.getCurrentAccount().getUsername())){
@@ -47,36 +48,107 @@ public class Game {
 	/**
 	 * tell field to lay a gamestone
 	 * let pointcounter calculate the points
-	 * -------------------------------------------------tj vragen
 	 * @param gamestone
 	 * @param location
 	 * @return
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-		int points = 0;
-		
+	
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
 		return points;
 	}
 	
 	/**
 	 * get the new words from the field
 	 * let the wordchecker check if it is correct
-	 * -------------------------------------------------tj vragen
 	 */
-	public String[] playWord(){
+	public ArrayList<String> playWord(){
 		myField.getNewWords();
-		//myWC.checkWords(myField.getNewWords(), playedMove, playBoard)
+		ArrayList<String> words =  myWC.checkWords(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getNewWords(), myField.getTiles());
 		
-		return null;
+		if(words.size() == 0){
+			playDB();
+			return null;
+		}
+		else{
+			return words;
+		}
+		
+	}
+	
+	/**
+	 * write the word to the db
+	 */
+	public void playDB(){
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
+		turn += 2;
+		
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES (" +  turn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', " + points + ", 'Word')");
+		
+		HashMap<String, GameStone> newWords = myField.getNewWords();
+		System.out.println(newWords);
+		
+		for(Entry<String, GameStone> word : newWords.entrySet()){
+			String key = word.getKey();
+			char[] charKey = key.toCharArray();
+			boolean doneX = false;
+			int x = 0;
+			int y = 0;
+			
+			for(char letter : charKey){
+				if(letter != ','){
+					if(!doneX){
+						if(x == 0){
+							x = (int) letter;
+						}
+						else{
+							x = ((int) letter) + 10;
+						}
+					}
+					else{
+						if(y == 0){
+							y = (int) letter;
+						}
+						else{
+							y = ((int) letter) + 10;
+						}
+					}
+				}
+				else{
+					doneX = true;
+				}
+			}
+			
+			int stoneID = word.getValue().getID();
+			String character = DBCommunicator.requestData("SELECT letterType_karakter FROM letter WHERE id = " + stoneID + " AND spel_id = " + id);
+			if(!character.equals("?")){
+				DBCommunicator.writeData("INSERT INTO gelegdeletter (letter_id, spel_id, beurt_id, tegel_x, tegel_y, tegel_bord_naam, blancoletterkarakter)"
+						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', NULL");
+			}
+			else{
+				DBCommunicator.writeData("INSERT INTO gelegdeletter (letter_id, spel_id, beurt_id, tegel_x, tegel_y, tegel_bord_naam, blancoletterkarakter)"
+						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', " + word.getValue().getLetter());
+			}
+		}
 	}
 	
 	/**
 	 * tell the db to end the game
-	 * -------------------------------------------------rest vragen
+	 * only when end by finish
+	 * -------------------------------------------------
 	 * @return
 	 */
 	public void endGame(){
+		
+	}
+	
+	/**
+	 * tell the db to end this game
+	 * only when end by 3rd pass or resign
+	 */
+	public void endGameByForce(){
 		
 	}
 	
@@ -93,7 +165,7 @@ public class Game {
 				int secondLastTurnID = lastTurnID - 2;
 				String secondLastTurn = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + id + " AND id = "+ secondLastTurnID);
 				if(secondLastTurn.equals("Pass")){
-					endGame();
+					endGameByForce();
 					thirdPass = true;
 				}
 			}
@@ -114,9 +186,6 @@ public class Game {
 		beurt ++;
 		
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) Values(" + beurt + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "',0 ,  'Swap')");
-		System.out.println(gameStones);
-		System.out.println(stoneLetters);
-		System.out.println(stoneChars);
 		
 		for(int stoneID : stoneIDs){
 			boolean swapped = false;
@@ -144,10 +213,6 @@ public class Game {
 		}
 		this.setStoneLetters();
 		this.fillStoneChars();
-		
-		System.out.println(gameStones);
-		System.out.println(stoneLetters);
-		System.out.println(stoneChars);
 	}
 	
 	/**
@@ -156,20 +221,22 @@ public class Game {
 	 */
 	public void shuffle(){
 		
-		boolean[] used = {false,false,false,false,false,false,false};
-		int[] copyStones = new int[7];
+		ArrayList<Boolean> used = new ArrayList<Boolean>();
+		ArrayList<Integer> copyStones = new ArrayList<Integer>();
 		for(int e = 0; e < gameStones.size(); e++){
-			copyStones[e] = gameStones.get(e);
+			copyStones.add(gameStones.get(e));
+			used.add(false);
 		}
 		for(int e : copyStones){
 			char l = stoneChars.get(e);
 			boolean placed = false;		
 			while(!placed){
-				int randNumber = (int) (Math.random() * 7);
-				if(!used[randNumber]){
+				int randNumber = (int) (Math.random() * copyStones.size());
+				System.out.println(randNumber);
+				if(!used.get(randNumber)){
 					gameStones.set(randNumber, e);
 					stoneLetters.set(randNumber, l);
-					used[randNumber] = true;
+					used.set(randNumber, true);
 					placed = true;
 				}
 			}
@@ -212,7 +279,6 @@ public class Game {
 	
 	private void setGameStones(){
 		gameStones = new ArrayList<Integer>();
-		int counter = 0;
 		boolean done = false;
 		int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
 		String restQuery = "";
@@ -223,7 +289,6 @@ public class Game {
 				gameStones.add(newCharachter);
 				restQuery += " AND letter_id <> " + newCharachter;
 				query = "SELECT letter_id FROM letterbakjeletter WHERE spel_id = " + id + " AND beurt_id = " + turnID + "  " + restQuery + " ORDER BY beurt_id DESC";
-				counter++;
 			}
 			else{
 				done = true;

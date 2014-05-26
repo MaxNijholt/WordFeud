@@ -247,4 +247,9 @@ public class SpectatorPanel extends JPanel {
 		panel.add(label);
 		return panel;
 	}
+	
+	public void setMenuPanel(JPanel panel){
+		this.mp = new MenuPanel(gui, panel);
+	}
+	
 }

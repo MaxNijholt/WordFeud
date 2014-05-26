@@ -67,7 +67,7 @@ public class Login {
 	}
 	
 	public String register(Account username, String password, String validatePassword) {
-		if(DBCommunicator.checkConnection() == null) {
+		if(DBCommunicator.checkConnection() != null) {
 			for(int i = 0; i < username.getUsername().length(); i++) {
 				if(Character.isWhitespace(username.getUsername().charAt(i))) {return "No whitespaces allowed!";}
 			}

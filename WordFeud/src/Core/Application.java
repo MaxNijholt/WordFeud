@@ -16,7 +16,10 @@ import Utility.Loader;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
+
 import java.util.Calendar;
+
+import javax.swing.JPanel;
 
 
 public class Application {
@@ -349,7 +352,7 @@ public class Application {
 		String player = currentAccount.getUsername();
 
 		Calendar rightNow = Calendar.getInstance();
-		String now = rightNow.get(1) + "-" + rightNow.get(2) + "-" + rightNow.get(5);
+		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
 		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam = '" + player + "'" + " AND einde > '" + now + "%'";
 		boolean searching = true;
 		
@@ -377,7 +380,7 @@ public class Application {
 		String player = currentAccount.getUsername();
 
 		Calendar rightNow = Calendar.getInstance();
-		String now = rightNow.get(1) + "-" + rightNow.get(2) + "-" + rightNow.get(5);
+		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
 		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam = '" + player + "'" + " AND einde < '" + now + "%'";
 		boolean searching = true;
 		
@@ -400,13 +403,39 @@ public class Application {
 		return compInts;
 	}
 
+//	public ArrayList<Integer> getJoinableCompetitions(){
+//		ArrayList<Integer> compInts = new ArrayList<Integer>();
+//		String player = currentAccount.getUsername();
+//
+//		Calendar rightNow = Calendar.getInstance();
+//		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
+//		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam != '" + player + "'" + " AND einde > '" + now + "%'";
+//		boolean searching = true;
+//		
+//		while(searching){
+//			int compID = DBCommunicator.requestInt(query);
+//			if(compID == 0){
+//				
+//				
+//				searching = false;
+//			}
+//				else{
+//							query += " AND competitie_id <> " + compID;
+//							compInts.add(compID);	
+//							}
+//
+//						}
+//		
+//		
+//		return compInts;
+//	}
+	
 	public ArrayList<Integer> getAllCompetitions(){
 		ArrayList<Integer> compInts = new ArrayList<Integer>();
-		String player = currentAccount.getUsername();
 
 		Calendar rightNow = Calendar.getInstance();
-		String now = rightNow.get(1) + "-" + rightNow.get(2) + "-" + rightNow.get(5);
-		String query = "SELECT DISTINCT id FROM competitie WHERE einde > '" + now + "'";
+		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
+		String query = "SELECT DISTINCT id FROM competitie WHERE einde > '"+ now + "'";
 		boolean searching = true;
 		
 		while(searching){
@@ -417,13 +446,17 @@ public class Application {
 				searching = false;
 			}
 				else{
-							query+= " AND id <> " + compID;
+							query += " AND id <> " + compID;
 							compInts.add(compID);	
 							}
 
 						}
+		
+		
 		return compInts;
 	}
+	
+	
 	
 	
 	public ArrayList<Integer> getSpectatableCompetitions() {
@@ -604,5 +637,11 @@ public class Application {
 	public void logout() {
 		this.setCurrentAccount(null);
 		myGui.switchPanel(new LoginPanel(myGui));
+	}
+	
+	public void seeComps(int compID, JPanel panel){
+		SpectatorPanel sp = new SpectatorPanel(myGui, compID);
+		sp.setMenuPanel(panel);
+		myGui.switchPanel(sp);
 	}
 }

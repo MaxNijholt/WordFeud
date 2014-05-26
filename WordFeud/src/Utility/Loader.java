@@ -72,25 +72,35 @@ public class Loader {
 		return hmap;
 	}
 	
+
+	/**
+	 * @author Max
+	 * @param String language like NL or EN
+	 */
 	public static ArrayList<GameStone> getGameStones(String language){
 		ArrayList<GameStone> gamestones = new ArrayList<GameStone>();
-		HashMap<Character, HashMap<Integer, Integer>> letterset = DBCommunicator.requestLetters("EN");
+		HashMap<Character, HashMap<Integer, Integer>> letterset = DBCommunicator.requestLetters(language);
 		for(char ch = 'A'; ch <= 'Z'; ch++ ){
 		 	for(int i = 1; i < Integer.parseInt(letterset.get(ch).values().toString().substring(letterset.get(ch).values().toString().indexOf('[')+1,letterset.get(ch).values().toString().indexOf(']')))+1; i++){
 		 		int value = Integer.parseInt(letterset.get(ch).keySet().toString().substring(letterset.get(ch).keySet().toString().indexOf('[')+1,letterset.get(ch).keySet().toString().indexOf(']')));
-		 		gamestones.add(new GameStone(value ,ch, "EN"));
+		 		gamestones.add(new GameStone(value ,ch, language));
 		 	}
 		}
 		char ch = '?';
 		for(int i = 1; i < Integer.parseInt(letterset.get(ch).values().toString().substring(letterset.get(ch).values().toString().indexOf('[')+1,letterset.get(ch).values().toString().indexOf(']')))+1; i++){
 	 		int value = Integer.parseInt(letterset.get(ch).keySet().toString().substring(letterset.get(ch).keySet().toString().indexOf('[')+1,letterset.get(ch).keySet().toString().indexOf(']')));
-	 		gamestones.add(new GameStone(value ,ch, "EN"));
+	 		gamestones.add(new GameStone(value ,ch, language));
 	 	}
 		return gamestones;
 	}
-	
-	public static HashMap<String, Tile> getTiles(){
-		HashMap<String, String> tiles = DBCommunicator.requestTilesMap("Standard");
+
+	/**
+	 * @author Max
+	 * @return HashMap with initialized tiles.
+	 * Just a method to initialize the game field
+	 */
+	public static HashMap<String, Tile> getTiles(String maptype){
+		HashMap<String, String> tiles = DBCommunicator.requestTilesMap(maptype);
 		HashMap<String, Tile> tilemap = new HashMap<String, Tile>();
 		ArrayList<String> loc = new ArrayList<String>();
 		loc.addAll(tiles.keySet());
