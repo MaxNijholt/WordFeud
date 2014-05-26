@@ -192,4 +192,9 @@ public class GUI extends JFrame{
 	public void seeComps(int compID, JPanel panel){
 		app.seeComps(compID, panel);
 	}
+
+	public int removeGameStone(String location) {
+		int points = app.removeGameStone(location);
+		return points;
+	}
 }
