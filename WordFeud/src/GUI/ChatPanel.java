@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,7 +16,9 @@ import javax.swing.JScrollPane;
 import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.STextArea;
+import WordFeud.Chat;
 import WordFeud.Game;
+import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
 public class ChatPanel extends JPanel implements ActionListener, KeyListener {
@@ -26,6 +29,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	private Game		game;
 	private GUI			gui;
 	private JScrollPane	scrollTypePanel;
+	private Chat 		chat;
 	
 	public ChatPanel(GUI gui, Game game){
 		this.setLayout(new GridBagLayout());
@@ -33,6 +37,9 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		GridBagConstraints c = new GridBagConstraints();
 		this.game = game;
 		this.gui = gui;
+		
+		chat = new Chat(game.getID(), this);
+		
 		printArea = new STextArea(220, 350);	
 		printArea.setEditable(false);
 		
@@ -64,7 +71,6 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 
 	public void actionPerformed(ActionEvent e) {
 		DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
-		printArea.setText(printArea.getText() + "\n" + typeArea.getText());
 		typeArea.setText("");
 	}
 
@@ -74,7 +80,6 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
 			e.consume();
 			DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
-			printArea.setText(printArea.getText() + "\n" + typeArea.getText());
 			typeArea.setText("");
 		 }
 	}
@@ -89,6 +94,14 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	public void keyTyped(KeyEvent e)
 	{
 		
+		
+	}
+	
+	public void setChatText(ArrayList<String> chat){
+		
+		for(String e : chat){
+			printArea.addText(e);
+		}
 		
 	}
 	

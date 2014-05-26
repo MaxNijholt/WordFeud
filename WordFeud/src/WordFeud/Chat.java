@@ -1,12 +1,17 @@
 package WordFeud;
 
+import GUI.ChatPanel;
 import Utility.DBCommunicator;
-import AccountType.Account;
 
-public class Chat {
+public class Chat implements Runnable {
+	
+	private boolean chat = true;
+	private int gameID;
+	private ChatPanel chatPanel;
 
-	public Chat(){
-		
+	public Chat(int gameID, ChatPanel cp){
+		this.gameID = gameID;
+		this.chatPanel = cp;
 	}
 	
 	public void sendMsg(String msg, int gameID, String username){
@@ -15,6 +20,17 @@ public class Chat {
 	
 	public String getMsg(){
 		return "";
+	}
+
+	@Override
+	public void run()
+	{
+		while(chat){
+			chatPanel.setChatText(DBCommunicator.getChat(gameID));
+			chat = false;
+		}
+		
+		
 	}
 	
 }

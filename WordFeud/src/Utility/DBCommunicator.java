@@ -348,6 +348,21 @@ public class DBCommunicator {
 			e.printStackTrace();
 		}
 	}
-
-
+	
+	public static ArrayList<String> getChat(int gameid){
+		ArrayList<String> result = new ArrayList<String>();
+		Statement	stm;
+		ResultSet 	res;
+		try {
+			stm = con.createStatement();
+			res = stm.executeQuery("SELECT account_naam, bericht FROM chatregel WHERE spel_id = '" + gameid + "' ORDER BY tijdstip ASC;");
+			while(res.next()) {
+				result.add(res.getString(1)+"zegt:\n"+res.getString(2) + "\n");
+			}
+		}
+		catch(Exception e) {
+		e.printStackTrace();
+		}
+	return result;
+	}
 }
