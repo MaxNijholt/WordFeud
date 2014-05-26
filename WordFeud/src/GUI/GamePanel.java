@@ -218,7 +218,11 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			System.out.println(gui.playWord());
 		}
 		if(e.getSource().equals(resign)) {
-			
+			game.resign();
+		}
+		if(e.getSource().equals(pass)) {
+			System.out.println("pass");
+			gui.pass();
 		}
 	}
 

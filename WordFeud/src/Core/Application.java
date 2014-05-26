@@ -122,6 +122,11 @@ public class Application {
 		int points = selectedGame.removeGameStone(location);
 		return points;
 	}
+	
+	public void resign(){
+		System.out.println("resign");
+		selectedGame.resign();
+	}
 
 	/**
 	 * accept or deny a game in the db
@@ -587,6 +592,7 @@ public class Application {
 	 * tell game to pass a turn
 	 */
 	public void pass(){
+		System.out.println("pass");
 		selectedGame.pass();
 	}
 	

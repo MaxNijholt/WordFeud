@@ -57,7 +57,7 @@ public class GUI extends JFrame{
 	}
 	
 	public void pass(){
-		
+		app.pass();
 	}
 	
 	public void shuffle(){
@@ -196,5 +196,9 @@ public class GUI extends JFrame{
 	public int removeGameStone(String location) {
 		int points = app.removeGameStone(location);
 		return points;
+	}
+	
+	public void resign(){
+		app.resign();
 	}
 }

@@ -87,6 +87,7 @@ public class Game {
 	 * write the word to the db
 	 */
 	public void playDB(){
+		boolean emptyPot = false;
 		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
 		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
 		turn += 2;
@@ -94,7 +95,6 @@ public class Game {
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES (" +  turn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', " + points + ", 'Word')");
 		
 		HashMap<String, GameStone> newWords = myField.getNewWords();
-		System.out.println(newWords);
 		
 		for(Entry<String, GameStone> word : newWords.entrySet()){
 			String key = word.getKey();
@@ -137,16 +137,94 @@ public class Game {
 				DBCommunicator.writeData("INSERT INTO gelegdeletter (letter_id, spel_id, beurt_id, tegel_x, tegel_y, tegel_bord_naam, blancoletterkarakter)"
 						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', " + word.getValue().getLetter());
 			}
+			
+			gameStones.remove(stoneID);
+			
+			int potSize = DBCommunicator.requestInt("SELECT COUNT(letter_id) FROM pot WHERE spel_id = " + id);
+			if(potSize != 0){
+				boolean added = false;
+				while(!added){
+					int letterID = (int) (Math.random() * 105);
+					String randCharacter = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + id + " AND letter_id = " + letterID);
+					if(randCharacter != null){
+						gameStones.add(letterID);
+						added = true;
+					}
+				}
+			}
+			else{
+				emptyPot = true;
+			}
+		}
+		
+		for(int e : gameStones){
+			DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + e + ", " + turn + ")");
+		}
+		
+		this.setStoneLetters();
+		this.fillStoneChars();
+		
+		if(emptyPot && (gameStones.size() == 0)){
+			DBCommunicator.writeData("UPDATE spel SET toestand_type = 'Finished' WHERE id = " + id );
+			endGame(true);
 		}
 	}
 	
 	/**
 	 * tell the db to end the game
-	 * -------------------------------------------------rest vragen
 	 * @return
 	 */
-	public void endGame(){
+	public void endGame(boolean emptyEnd){
 		
+		if(emptyEnd){
+			ArrayList<Integer> opponentStones = new ArrayList<Integer>();
+			boolean done = false;
+			int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + opponent + "' ORDER BY id DESC");
+			String restQuery = "";
+			String query = "SELECT letter_id FROM letterbakjeletter WHERE spel_id = " + id + " AND beurt_id = " + turnID + " " + restQuery + " ORDER BY beurt_id DESC";
+			while(!done){
+				int newCharachter = DBCommunicator.requestInt(query);
+				if(!(newCharachter == 0)){
+					opponentStones.add(newCharachter);
+					restQuery += " AND letter_id <> " + newCharachter;
+					query = "SELECT letter_id FROM letterbakjeletter WHERE spel_id = " + id + " AND beurt_id = " + turnID + "  " + restQuery + " ORDER BY beurt_id DESC";
+				}
+				else{
+					done = true;
+				}
+			}
+			
+			int totalValue = 0;
+			for(int e : opponentStones){
+				String letterChar = DBCommunicator.requestData("SELECT letterType_karakter FROM letter WHERE id = " + e + " AND spel_id = " + id + " AND lettertype_letterset_code = 'EN'");
+				int letterValue = DBCommunicator.requestInt("SELECT waarde FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + letterChar + "'");
+				totalValue += letterValue;
+			}
+			
+			int opTurn = turnID + 2;
+			int myTurn = opTurn + 1;
+			int opValue = totalValue * -1;
+			DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES "
+					+ "(" + opTurn + ", " + id + ", '" + opponent + "', " + opValue + ", 'End')"
+					+ "(" + myTurn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', " + totalValue + ", 'End')");
+		}
+		else{
+			int turnID = DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
+	
+			int totalValue = 0;
+			for(int e : gameStones){
+				String letterChar = DBCommunicator.requestData("SELECT letterType_karakter FROM letter WHERE id = " + e + " AND spel_id = " + id + " AND lettertype_letterset_code = 'EN'");
+				int letterValue = DBCommunicator.requestInt("SELECT waarde FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + letterChar + "'");
+				totalValue += letterValue;
+			}
+			
+			int opTurn = turnID + 1;
+			int myTurn = opTurn + 1;
+			int myValue = totalValue * -1;
+			DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES "
+					+ "(" + opTurn + ", " + id + ", '" + opponent + "', " + totalValue + ", 'End'),"
+					+ "(" + myTurn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', " + myValue + ", 'End')");
+		}
 	}
 	
 	/**
@@ -162,7 +240,8 @@ public class Game {
 				int secondLastTurnID = lastTurnID - 2;
 				String secondLastTurn = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + id + " AND id = "+ secondLastTurnID);
 				if(secondLastTurn.equals("Pass")){
-					endGame();
+					DBCommunicator.writeData("UPDATE spel SET toestand_type = 'Finished' WHERE id = " + id );
+					endGame(false);
 					thirdPass = true;
 				}
 			}
@@ -171,7 +250,24 @@ public class Game {
 		if(!thirdPass){
 			int newTurn = lastTurnID + 2;
 			DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES (" + newTurn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', 0, 'Pass')");
+			for(int e : gameStones){
+				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + e + ", " + newTurn + ")");
+			}
 		}
+	}
+	
+	/**
+	 * tell the db to resign, ending the game
+	 */
+	public void resign(){
+		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
+		turn += 2;
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES(" + turn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', 0, 'Resign')");
+		for(int e : gameStones){
+			DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + e + ", " + turn + ")");
+		}
+		DBCommunicator.writeData("UPDATE spel SET toestand_type = 'Resigned' WHERE id = " + id );
+		endGame(false);
 	}
 	
 	/**
@@ -179,10 +275,10 @@ public class Game {
 	 * get new gamestones
 	 */
 	public void swapGameStones(ArrayList<Integer> stoneIDs){
-		int beurt = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " ORDER BY id DESC");
-		beurt ++;
+		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " ORDER BY id DESC");
+		turn ++;
 		
-		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) Values(" + beurt + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "',0 ,  'Swap')");
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) Values(" + turn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "',0 ,  'Swap')");
 		
 		for(int stoneID : stoneIDs){
 			boolean swapped = false;
@@ -204,7 +300,7 @@ public class Game {
 		}
 		for(int stoneID : gameStones){
 			if(stoneID != 0){
-				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + stoneID + ", " + beurt + ")");
+				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + stoneID + ", " + turn + ")");
 			}
 		}
 		this.setStoneLetters();
