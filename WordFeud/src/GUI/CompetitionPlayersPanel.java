@@ -18,8 +18,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import Utility.AScrollPane;
 import Utility.Loader;
 import Utility.SButton;

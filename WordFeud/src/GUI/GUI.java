@@ -31,13 +31,14 @@ public class GUI extends JFrame{
 		this.setIconImage(Loader.ICON);
 	}
 	
-	public void playWord(){
-		
+	public ArrayList<String> playWord(){
+		ArrayList<String> words = app.playWord();
+		return words;
 	}
 	
-	public boolean layGameStone(GameStone gamestone, String location){
-		return false;
-		
+	public int layGameStone(GameStone gamestone, String location){
+		int points = app.layGameStone(gamestone, location);
+		return points;	
 	}
 	
 	public void switchPanel(JPanel panel){
