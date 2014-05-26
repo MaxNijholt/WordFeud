@@ -251,7 +251,8 @@ public class CompetitionPanel extends Panel {
 			
 			select.addActionListener(new ActionListener(){
 				@Override
-				public void actionPerformed(ActionEvent arg0) {				
+				public void actionPerformed(ActionEvent arg0) {		
+					gui.getApplication().setSelectedCompetition(new Competition(compID));
 					gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
 				}
 			});
@@ -287,6 +288,7 @@ public class CompetitionPanel extends Panel {
 			spectate.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					gui.getApplication().setSelectedCompetition(new Competition(compID));
 					gui.seeComps(compID, getPanel());
 				}
 			});
@@ -334,6 +336,7 @@ public class CompetitionPanel extends Panel {
 				spectate.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
+						gui.getApplication().setSelectedCompetition(new Competition(compID));
 						gui.spectateCompetition(compID);
 					}
 				});
