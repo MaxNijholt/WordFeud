@@ -28,7 +28,8 @@ public class PointCounter {
 
 		// merging the fields
 		for (String merge : play.keySet())
-		{	Tile gt =field.get(merge);
+		{
+			Tile gt = field.get(merge);
 			gt.setGameStone(play.get(merge));
 			field.put(merge, gt);
 			coordinates.add(merge);
@@ -172,8 +173,7 @@ public class PointCounter {
 
 	}
 
-	private ArrayList<String> letterChecker(
-			HashMap<String, Tile> playBoard,
+	private ArrayList<String> letterChecker(HashMap<String, Tile> playBoard,
 			ArrayList<String> coordinatesForCheck)
 	{
 		HashMap<String, Tile> field = playBoard;
@@ -276,45 +276,50 @@ public class PointCounter {
 		int t = 0;
 		int j = 0;
 		boolean first = false;
-		String checker = createdWords.get(j);
-
-		// verwijderen duplicaten
-		while (j < createdWords.size())
+		if (createdWords.size() != 0)
 		{
-			first = true;
-			checker = createdWords.get(j);
-			while (t < createdWords.size())
+
+			String checker = createdWords.get(j);
+
+			// verwijderen duplicaten
+			while (j < createdWords.size())
 			{
-				if (createdWords.get(t).equals(checker) && first == true)
+				first = true;
+				checker = createdWords.get(j);
+				while (t < createdWords.size())
 				{
-					first = false;
+					if (createdWords.get(t).equals(checker) && first == true)
+					{
+						first = false;
+					}
+					else
+					{
+						if (createdWords.get(t).equals(checker)
+								&& first == false)
+						{
+							createdWords.remove(t);
+						}
+					}
+					t++;
+				}
+				t = 0;
+				j++;
+			}
+			// verwijderen enkele letters
+			j = 0;
+			String[] checker2;
+			while (j < createdWords.size())
+			{
+				checker2 = createdWords.get(j).split("_");
+				if (checker2[0].equals(checker2[1]))
+				{
+					createdWords.remove(j);
+					j = 0;
 				}
 				else
 				{
-					if (createdWords.get(t).equals(checker) && first == false)
-					{
-						createdWords.remove(t);
-					}
+					j++;
 				}
-				t++;
-			}
-			t = 0;
-			j++;
-		}
-		// verwijderen enkele letters
-		j = 0;
-		String[] checker2;
-		while (j < createdWords.size())
-		{
-			checker2 = createdWords.get(j).split("_");
-			if (checker2[0].equals(checker2[1]))
-			{
-				createdWords.remove(j);
-				j = 0;
-			}
-			else
-			{
-				j++;
 			}
 		}
 		return createdWords;

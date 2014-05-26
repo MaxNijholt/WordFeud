@@ -5,13 +5,16 @@ import Utility.DBCommunicator;
 
 public class Chat implements Runnable {
 	
-	private boolean chat = true;
+	private final boolean chat = true;
 	private int gameID;
 	private ChatPanel chatPanel;
+	private Thread t;
 
 	public Chat(int gameID, ChatPanel cp){
 		this.gameID = gameID;
 		this.chatPanel = cp;
+		t = new Thread();
+		t.start();
 	}
 	
 	public void sendMsg(String msg, int gameID, String username){
@@ -26,11 +29,16 @@ public class Chat implements Runnable {
 	public void run()
 	{
 		while(chat){
-			chatPanel.setChatText(DBCommunicator.getChat(gameID));
-			chat = false;
-		}
-		
-		
+			
+			try{
+				chatPanel.setChatText(DBCommunicator.getChat(gameID));
+				
+				t.sleep(5000);
+			}
+			catch(InterruptedException e){
+				
+			}			
+		}		
 	}
 	
 }

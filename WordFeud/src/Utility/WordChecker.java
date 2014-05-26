@@ -9,20 +9,12 @@ import WordFeud.GameStone;
 import WordFeud.Tile;
 
 public class WordChecker {
-	private ArrayList<String> checkwords = new ArrayList<>();
 
 	/**
 	 * constructor no functions
 	 */
 	public WordChecker() {
-		checkwords.add("ra");
-		checkwords.add("dasse");
-		checkwords.add("dassen");
-		checkwords.add("as");
-		checkwords.add("re");
-		checkwords.add("at");
-		checkwords.add("ras");
-		checkwords.add("aa");
+
 	}
 
 	/**
