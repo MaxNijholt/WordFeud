@@ -55,13 +55,13 @@ public class Game {
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
 	
-		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
 		return points;
 	}
 	
 	public int removeGameStone(String location){
 		myField.removeGameStone(location);
-		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
 		return points;
 	}
 	
@@ -87,7 +87,7 @@ public class Game {
 	 * write the word to the db
 	 */
 	public void playDB(){
-		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles());
+		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
 		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
 		turn += 2;
 		
