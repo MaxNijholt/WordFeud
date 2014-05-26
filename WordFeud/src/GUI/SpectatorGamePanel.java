@@ -1,7 +1,10 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,26 +24,34 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 
 	private SButton 	next, previous, back;
 	private Spectator 	spectate;
+	private MenuPanel 	mp;
 	private GUI 		gui;
 	private	int 		gameID, turn;
 	private ArrayList<Tile> hand 	= new ArrayList<Tile>();
 	private ArrayList<Tile> field	= new ArrayList<Tile>();
+	private boolean		running		= true;
 	
 	public SpectatorGamePanel(GUI gui, int gameID){
 		this.gui = gui;
 		this.gameID = gameID;
 		spectate = new Spectator(gameID);
+		if(gui.getApplication().getCurrentAccount() == null){
+			back = new SButton("Back", SButton.GREY, 220, 40);
+			back.setPreferredSize(new Dimension(GUI.WIDTH, 30));
+		}
+		else{
+			this.mp = new MenuPanel(gui, new SpectatorCompetitionsPanel(gui));
+			mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
+		}
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(null);
 		this.setBackground(new Color(23, 26, 30));
 		this.requestFocus();
 		next 	= new SButton("Next turn", SButton.CYAN, 150, 40);
 		previous 	= new SButton("Previous turn", SButton.YELLOW, 150, 40);
-		back 	= new SButton("Back", SButton.RED, 150, 40);
 		
 		next.addActionListener(this);
 		previous.addActionListener(this);
-		back.addActionListener(this);
 		
 		// The buttons
 		JPanel bp = new JPanel();
@@ -48,7 +59,21 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		bp.setOpaque(false);
 		bp.add(next);
 		bp.add(previous);
-		bp.add(back);
+
+
+		add(bp);
+		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
+		
+		if(back != null){
+			back.addActionListener(this);
+			add(back);
+			back.setBounds(0, 0, back.getPreferredSize().width, back.getPreferredSize().height);
+		}
+		else{
+			add(mp);
+			mp.setBounds(0, 0, mp.getPreferredSize().width, mp.getPreferredSize().height);
+		}
+		
 		
 		
 		HashMap<String, Tile> tiles = spectate.getMyField().getTiles();
@@ -69,27 +94,35 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 			yPos += 33;
 		}
 		
-		String letters 				= spectate.getLastTurnLetters();
-		ArrayList<Character> chars 	= new ArrayList<Character>();
-		System.out.println(letters);
-		for(int i = 0; i < letters.length(); i++) {
-			if(letters.charAt(i) == ',') {}
-			else {
-				chars.add(letters.charAt(i));
-				System.out.println(letters.charAt(i));
-			}
+ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
+		
+		for(int i = 0; i < spectate.getGameStones().size(); i++) {
+			currentGameStones.add(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(spectate.getStoneChars().get(spectate.getGameStones().get(i)).toString())), spectate.getStoneChars().get(spectate.getGameStones().get(i)).charValue()));
 		}
 		
-		xPos = bp.getPreferredSize().width + 20;
-		yPos = 550;
 		for(int i = 0; i < 7; i++) {
-			Tile tile = new Tile(i, 0);
-			tile.setGameStone(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(Character.toString(chars.get(i).charValue()))), chars.get(i).charValue()));
-			field.add(tile);
-			tile.setPickablity(false);
-			xPos += 33;
+			Tile tile = new Tile(i + 1, -1);
+			if(i < currentGameStones.size()) {
+				if(currentGameStones.get(i) != null) {
+					tile.setGameStone(currentGameStones.get(i));
+					tile.getGameStone().setHand(true);
+				}
+			}
+			hand.add(tile);
 		}
 
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D)g.create();
+		for(Tile t:field) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180, (t.getYPos() * 33) + 10, null);
+		}
+		for(Tile t:hand) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180, (t.getYPos() * 33) + 580, null);
+		}
+		g2d.dispose();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -105,7 +138,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 			
 		}
 		if(e.getSource().equals(back)) {
-//			gui.switchPanel(new SpectatorPanel(gui));
+			gui.switchPanel(new SpectatorPanel(gui, spectate.getCompID(gameID)));
 		}
 
 	}
