@@ -13,9 +13,6 @@ import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Utility.AScrollPane;
@@ -23,20 +20,34 @@ import Utility.SButton;
 import Utility.SLabel;
 import WordFeud.Competition;
 
+@SuppressWarnings("serial")
 public class CompetitionPanel extends Panel {
 	
 	private AScrollPane currentScrollPane, finishedScrollPane, comps, joinableScrollPane;
 	private JPanel currentCompPanel, finishedCompPanel, competitions, joinableCompPanel;
 	private MenuPanel menu;
+	private SButton create;
 	private Color bg = new Color(94, 94, 94);
 	private GUI gui;
 	private ArrayList<Integer> compInts;
 	
-	public CompetitionPanel(GUI gui){
+	public CompetitionPanel(final GUI gui){
 		this.gui = gui;
 		this.setBackground(bg);
 		this.setLayout(new BorderLayout());
 		menu = new MenuPanel(gui, new PlayerPanel(gui));
+		create = new SButton("Create new competition", SButton.GREY);
+		
+		create.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				gui.switchPanel(new CompetitionCreatePanel(gui));
+				
+			}
+		});
+		
+		menu.add(create);
 		
 
 		currentCompPanel = new JPanel();	
@@ -251,8 +262,7 @@ public class CompetitionPanel extends Panel {
 			
 			select.addActionListener(new ActionListener(){
 				@Override
-				public void actionPerformed(ActionEvent arg0) {		
-					gui.getApplication().setSelectedCompetition(new Competition(compID));
+				public void actionPerformed(ActionEvent arg0) {				
 					gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
 				}
 			});
@@ -288,8 +298,7 @@ public class CompetitionPanel extends Panel {
 			spectate.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().setSelectedCompetition(new Competition(compID));
-					gui.seeComps(compID, getPanel());
+					gui.seeComps(compID, new CompetitionPanel(gui));
 				}
 			});
 		}
@@ -336,17 +345,12 @@ public class CompetitionPanel extends Panel {
 				spectate.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						gui.getApplication().setSelectedCompetition(new Competition(compID));
-						gui.spectateCompetition(compID);
+						gui.seeComps(compID, new CompetitionPanel(gui));
 					}
 				});
 			
 		}
 		return panel;
-	}
-	
-	public JPanel getPanel(){
-		return this;
 	}
 	
 	
