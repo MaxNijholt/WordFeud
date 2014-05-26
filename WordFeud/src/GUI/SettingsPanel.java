@@ -29,7 +29,7 @@ public class SettingsPanel extends JPanel{
 	private GUI gui;
 	private Account user;
 	private SPasswordField passwordfield, passwordControle;
-	private SLabel password, username;
+	private SLabel password, username, passwordConfirm;
 	private STextField userfield;
 	private SButton save;
 	private JPanel allPanel;
@@ -67,8 +67,9 @@ public class SettingsPanel extends JPanel{
 		GridBagConstraints c = new GridBagConstraints();
 
 		this.passwordfield 		= new SPasswordField("password");
-		this.passwordControle 	= new SPasswordField("passwordc");
+		this.passwordControle 	= new SPasswordField("password");
 		this.password			= new SLabel("New password:", 0);
+		this.passwordConfirm	= new SLabel("Confirm password:", 0);
 		this.username			= new SLabel("New username:", 0);
 
 		this.userfield			= new STextField(user.getUsername());
@@ -85,6 +86,9 @@ public class SettingsPanel extends JPanel{
 		c.gridy ++;
 		c.gridx ++;
 		allPanel.add(password, c);
+		c.gridy++;
+		allPanel.add(passwordConfirm, c);
+		c.gridy--;
 		c.gridx ++;
 		allPanel.add(passwordfield, c);
 		c.gridy ++;
