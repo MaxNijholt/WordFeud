@@ -53,7 +53,7 @@ public class SettingsPanel extends JPanel{
 	private void init(){
 		gui.setLoadingCursor(true);
 		
-		mp = new MenuPanel(gui, null);
+		mp = new MenuPanel(gui, new PlayerPanel(gui));
 		
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));

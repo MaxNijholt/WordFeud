@@ -30,7 +30,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 
 	public PlayerPanel(final GUI gui){
 		this.gui = gui;
-		this.mp = new MenuPanel(gui, null);
+		this.mp = new MenuPanel(gui, new LoginPanel(gui));
 		
 		gui.setLoadingCursor(true);
 		
@@ -44,7 +44,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		
 		//create the competition button
 		competition = new SButton("Competitions", SButton.T_GREY, 2000, 60);
-		allPanel.add(competition);
+		mp.add(competition);
 		competition.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
