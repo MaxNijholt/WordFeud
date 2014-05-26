@@ -69,9 +69,9 @@ public class Application {
 	}
 	
 	public boolean getHaveGameWith(String opponent, int compID){
-		int gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + currentAccount.getUsername() + "' AND account_naam_tegenstander = '" + opponent + "'");
+		int gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + currentAccount.getUsername() + "' AND account_naam_tegenstander = '" + opponent + "' AND reaktie_type = Accepted");
 		if(gameID == 0){
-			gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + opponent + "' AND account_naam_tegenstander = '" + currentAccount.getUsername() + "'");
+			gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + opponent + "' AND account_naam_tegenstander = '" + currentAccount.getUsername() + "' AND reaktie_type = Accepted");
 			if(gameID == 0){
 				return false;
 			}
