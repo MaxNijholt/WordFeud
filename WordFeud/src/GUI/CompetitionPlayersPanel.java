@@ -269,8 +269,15 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		c.gridx++;
 		panel.add(score, c);
 		c.gridx++;
+
 		if(rigidArea == null){
-			panel.add(challenge,c);
+			if(!name.equals(gui.getApplication().getCurrentAccount().getUsername())){
+				panel.add(challenge,c);
+			}
+			else{
+				rigidArea = Box.createRigidArea(new Dimension(100,35));
+				panel.add(rigidArea, c);
+			}
 		}
 		else{
 			panel.add(rigidArea, c);
