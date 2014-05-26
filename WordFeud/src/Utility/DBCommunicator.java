@@ -273,7 +273,7 @@ public class DBCommunicator {
 	 */
 	public static ArrayList<GameStone> getHandLetters(int gameID, int turn, ArrayList<GameStone> gameStones){
 		ArrayList<GameStone> hand = new ArrayList<GameStone>();
-		if(gameStones.get(1).getID()==-1){
+		if(gameStones.get(0)!=null && gameStones.get(1).getID()==-1){
 			generateStoneIDs(gameID, gameStones);
 			gameStones = getGeneratedStoneIDs(gameID, gameStones);
 		}
