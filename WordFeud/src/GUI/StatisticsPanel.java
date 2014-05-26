@@ -64,7 +64,7 @@ public class StatisticsPanel extends JPanel {
 		else{
 			highestWordScoreView = new SLabel("Unknown", SLabel.RIGHT);
 		}
-		mp = new MenuPanel(gui, null);
+		mp = new MenuPanel(gui, new PlayerPanel(gui));
 		
 		this.setLayout(new BorderLayout());
 		this.setBackground(new Color(94,94,94));
