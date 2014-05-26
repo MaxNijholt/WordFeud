@@ -73,7 +73,6 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
 		typeArea.setText("");
 	}
-
 	
 	public void keyPressed(KeyEvent e)
 	{
@@ -84,27 +83,15 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		 }
 	}
 
-	
-	public void keyReleased(KeyEvent e)
-	{
-		
-	}
+	public void keyReleased(KeyEvent e){}
 
-
-	public void keyTyped(KeyEvent e)
-	{
-		
-		
-	}
+	public void keyTyped(KeyEvent e){}
 	
 	public void setChatText(ArrayList<String> chat){
-		
+		printArea.setText("");
 		for(String e : chat){
 			printArea.addText(e);
 			System.out.println(e);
 		}
-		
 	}
-	
-	
 }
