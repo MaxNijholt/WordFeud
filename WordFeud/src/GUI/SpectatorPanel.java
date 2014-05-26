@@ -40,7 +40,7 @@ public class SpectatorPanel extends JPanel {
 			back = new SButton("Back", SButton.GREY, 220, 40);
 		}
 		else{
-			this.mp = new MenuPanel(gui, new SpectatorCompetitionsPanel(gui));
+			this.mp = new MenuPanel(gui, new CompetitionPanel(gui));
 		}
 		
 		gui.setLoadingCursor(true);
