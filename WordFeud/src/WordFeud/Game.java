@@ -317,4 +317,14 @@ public class Game {
 			stoneChars.put(gameStones.get(e), stoneLetters.get(e));
 		}
 	}
+	
+	public boolean getfirstWord(){
+		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND aktie_type = 'Word' ORDER BY id ASC");
+		if(turn == 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }
