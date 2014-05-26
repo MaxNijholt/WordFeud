@@ -26,14 +26,14 @@ public class Game {
 	 * -------------------------------------------------
 	 */
 	public Game(int gameID, Application app){
-		this.app		= app;
-		this.id			= gameID;
-		myField			= new Field(id);
-		myPC			= new PointCounter();
-		myWC			= new WordChecker();
-		gameStones		= new ArrayList<Integer>();
-		stoneLetters	= new ArrayList<Character>();
-		stoneChars		= new HashMap<Integer, Character>();
+		this.app = app;
+		this.id = gameID;
+		myField = new Field(id);
+		myPC = new PointCounter();
+		myWC = new WordChecker();
+		gameStones = new ArrayList<Integer>();
+		stoneLetters = new ArrayList<Character>();
+		stoneChars = new HashMap<Integer, Character>();
 		
 		opponent = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
 		if(opponent.equals(app.getCurrentAccount().getUsername())){
@@ -136,19 +136,10 @@ public class Game {
 	
 	/**
 	 * tell the db to end the game
-	 * only when end by finish
-	 * -------------------------------------------------
+	 * -------------------------------------------------rest vragen
 	 * @return
 	 */
 	public void endGame(){
-		
-	}
-	
-	/**
-	 * tell the db to end this game
-	 * only when end by 3rd pass or resign
-	 */
-	public void endGameByForce(){
 		
 	}
 	
@@ -165,7 +156,7 @@ public class Game {
 				int secondLastTurnID = lastTurnID - 2;
 				String secondLastTurn = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + id + " AND id = "+ secondLastTurnID);
 				if(secondLastTurn.equals("Pass")){
-					endGameByForce();
+					endGame();
 					thirdPass = true;
 				}
 			}
@@ -206,7 +197,6 @@ public class Game {
 			}
 		}
 		for(int stoneID : gameStones){
-			System.out.println(stoneID);
 			if(stoneID != 0){
 				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + stoneID + ", " + beurt + ")");
 			}
@@ -224,15 +214,14 @@ public class Game {
 		ArrayList<Boolean> used = new ArrayList<Boolean>();
 		ArrayList<Integer> copyStones = new ArrayList<Integer>();
 		for(int e = 0; e < gameStones.size(); e++){
-			copyStones.add(gameStones.get(e));
+			copyStones.set(e, gameStones.get(e));
 			used.add(false);
 		}
 		for(int e : copyStones){
 			char l = stoneChars.get(e);
 			boolean placed = false;		
 			while(!placed){
-				int randNumber = (int) (Math.random() * copyStones.size());
-				System.out.println(randNumber);
+				int randNumber = (int) (Math.random() * 7);
 				if(!used.get(randNumber)){
 					gameStones.set(randNumber, e);
 					stoneLetters.set(randNumber, l);

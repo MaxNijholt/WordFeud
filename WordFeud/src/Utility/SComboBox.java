@@ -56,6 +56,18 @@ public class SComboBox extends JPanel implements ActionListener {
 		buttons(width, height, buttons);
 	}
 	
+	public SComboBox(int width, int height, ArrayList<String> posibleWords, boolean rounded) {
+		topLeftRounded		= rounded;
+		topRightRounded		= rounded;
+		bottomLeftRounded 	= rounded;
+		bottomRightRounded	= rounded;
+		String[] words = new String[posibleWords.size()];
+		for(int i = 0; i < posibleWords.size(); i++){
+			words[i] = posibleWords.get(i);
+		}
+		init(width, height, words);
+	}
+
 	/**
 	 * Private init method for the constructor
 	 */
@@ -211,6 +223,8 @@ public class SComboBox extends JPanel implements ActionListener {
 		this.bottomLeftRounded 	= bottomLeft;
 		this.bottomRightRounded = bottomRight;
 	}
+	
+	public void removeAllItems(){ items.clear();}
 	public JPopupMenu getPopop() {return pop;}
 	
 }

@@ -265,6 +265,7 @@ public class AdminPanel extends JPanel {
 					public void actionPerformed(ActionEvent action) {
 						if (action.getSource().equals(register)) {
 							registerPlayer();
+							newPlayerFrame.dispose();
 						}
 
 					}

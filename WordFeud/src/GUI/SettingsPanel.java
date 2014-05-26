@@ -53,7 +53,7 @@ public class SettingsPanel extends JPanel{
 	private void init(){
 		gui.setLoadingCursor(true);
 		
-		mp = new MenuPanel(gui, null);
+		mp = new MenuPanel(gui, new PlayerPanel(gui));
 		
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -113,14 +113,19 @@ public class SettingsPanel extends JPanel{
 				}
 			} else{
 				if(e.getSource().equals(save)){
-					
 					if(passwordfield.getText().equals(passwordControle.getText())){
-						gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
+						System.out.println(passwordfield.getText());
+						if(!passwordfield.getText().equals("")){
+							gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
+						}
 					} else {
 						String s =  "Passwords do not match!";
 						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
 					}
-					gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
+					System.out.println(userfield.getText());
+					if(!userfield.getText().equals("")){
+						gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
+					}
 					frame.dispose();
 				}
 			}

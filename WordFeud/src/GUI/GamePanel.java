@@ -31,10 +31,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	@SuppressWarnings("unused")
 	private GUI 		gui;
 	private GameStone 	currentGameStone;
-	private boolean		running		= true;
-	private Thread		thread		= new Thread(this);
+	private boolean		running			= true;
+	private Thread		thread			= new Thread(this);
 	private ArrayList<Tile> hand 	= new ArrayList<Tile>();
-	private ArrayList<Tile> field	= new ArrayList<Tile>();
+	private ArrayList<Tile> field 	= new ArrayList<Tile>();
 	private int mouseX, mouseY;
 	
 	public GamePanel(GUI gui){
