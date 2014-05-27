@@ -87,7 +87,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	public void setChatText(ArrayList<String> chat){
 		printArea.setText("");
 		for(String e : chat){
-			printArea.addText(e);
+			printArea.setText(printArea.getText() + e);
 			//System.out.println(e);
 		}
 	}
