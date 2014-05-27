@@ -316,7 +316,7 @@ public class DBCommunicator {
 					for(GameStone gs : gameStones){
 						if(res.getInt(3)==gs.getID()){
 							hmap.get(res.getString(1)+","+res.getString(2)).setGameStone(gs);
-							hmap.get(res.getString(1)+","+res.getString(2)).setTurn(res.getInt(4));
+							hmap.get(res.getString(1)+","+res.getString(2)).getGameStone().setTurn(res.getInt(4));
 						}
 					}
 				}
@@ -357,7 +357,7 @@ public class DBCommunicator {
 			stm = con.createStatement();
 			res = stm.executeQuery("SELECT account_naam, bericht FROM chatregel WHERE spel_id = '" + gameid + "' ORDER BY tijdstip ASC;");
 			while(res.next()) {
-				result.add(		res.getString(1)+" zegt:\n" + res.getString(2) + "\n");
+				result.add(		res.getString(1)+" says:\n" + res.getString(2) + "\n\n");
 			}
 		}
 		catch(Exception e) {
