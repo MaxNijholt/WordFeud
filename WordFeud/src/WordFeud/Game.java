@@ -241,6 +241,11 @@ public class Game {
 				String secondLastTurn = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + id + " AND id = "+ secondLastTurnID);
 				if(secondLastTurn.equals("Pass")){
 					DBCommunicator.writeData("UPDATE spel SET toestand_type = 'Finished' WHERE id = " + id );
+					int newTurn = lastTurnID + 2;
+					DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES (" + newTurn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', 0, 'Pass')");
+					for(int e : gameStones){
+						DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + e + ", " + newTurn + ")");
+					}
 					endGame(false);
 					thirdPass = true;
 				}
