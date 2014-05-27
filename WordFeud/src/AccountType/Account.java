@@ -96,12 +96,12 @@ public class Account {
 	}
 
 	public void changeUsername(String newName) {
-		DBCommunicator.writeData("UPDATE account SET naam = '" + newName +"'");
+		DBCommunicator.writeData("UPDATE account SET naam = '" + newName +"' WHERE naam ='"+this.getUsername()+"'");
 		this.username = newName;
 	}
 
 	public void changePassword(String newPass) {
-		DBCommunicator.writeData("UPDATE account SET wachtwoord = '" + newPass +"'");
+		DBCommunicator.writeData("UPDATE account SET wachtwoord = '" + newPass +"' WHERE naam ='"+this.getUsername()+"'");
 	}
 
 }
