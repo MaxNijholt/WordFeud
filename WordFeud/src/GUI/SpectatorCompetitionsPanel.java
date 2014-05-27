@@ -36,7 +36,7 @@ public class SpectatorCompetitionsPanel extends JPanel{
 			back = new SButton("Back", SButton.GREY, 220, 40);
 		}
 		else{
-			this.mp = new MenuPanel(gui, new LoginPanel(gui));
+			this.mp = new MenuPanel(gui, null);
 		}
 		gui.setLoadingCursor(true);
 		

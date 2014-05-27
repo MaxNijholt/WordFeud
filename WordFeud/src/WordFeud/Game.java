@@ -71,7 +71,7 @@ public class Game {
 	 */
 	public ArrayList<String> playWord(){
 		myField.getNewWords();
-		ArrayList<String> words =  myWC.checkWords(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getNewWords(), myField.getTiles());
+		ArrayList<String> words =  myWC.checkWords(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getNewWords(), myField.getTiles(), getfirstWord());
 		System.out.println(words);
 		if(words.size() == 0){
 			playDB();
