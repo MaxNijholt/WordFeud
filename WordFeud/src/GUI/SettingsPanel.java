@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import AccountType.Account;
 import Utility.SButton;
@@ -26,17 +28,19 @@ import Utility.STextField;
 
 @SuppressWarnings("serial")
 public class SettingsPanel extends JPanel{
-	private GUI gui;
-	private Account user;
-	private SPasswordField passwordfield, passwordControle;
-	private SLabel password, username, passwordConfirm;
-	private STextField userfield;
-	private SButton save;
-	private JPanel allPanel;
-	private MenuPanel mp;
-	private ActionAdapter aa = new ActionAdapter();
-	private SPopupMenu pop = new SPopupMenu();
-	private JFrame frame;
+	private GUI 			gui;
+	private Account 		user;
+	private SPasswordField 	passwordfield, passwordControle;
+	private SLabel 			password, username, passwordConfirm;
+	private STextField 		userfield;
+	private SButton 		save;
+	private JPanel 			allPanel;
+	private MenuPanel 		mp;
+	private ActionAdapter 	aa = new ActionAdapter();
+	private SPopupMenu		pop = new SPopupMenu();
+	private JFrame 			frame;
+	private boolean			passChange = false,
+							userChange= false;
 
 	public SettingsPanel(GUI gui, Account user){
 		this.gui = gui;
@@ -100,6 +104,17 @@ public class SettingsPanel extends JPanel{
 		
 		this.add(mp, BorderLayout.NORTH);
 		this.add(allPanel, BorderLayout.CENTER);
+		
+		userfield.getDocument().addDocumentListener(new DocumentListener() {
+			  public void changedUpdate(DocumentEvent e) { if(!userfield.getText().equals("")){userChange=true;}else{userChange=false;}}
+			  public void removeUpdate(DocumentEvent e) { if(!userfield.getText().equals("")){userChange=true;}else{userChange=false;}}
+			  public void insertUpdate(DocumentEvent e) { if(!userfield.getText().equals("")){userChange=true;}else{userChange=false;}}
+		});
+		passwordfield.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) { if(!passwordfield.getText().equals("")){passChange=true;}else{passChange=false;}}
+			public void removeUpdate(DocumentEvent e) { if(!passwordfield.getText().equals("")){passChange=true;}else{passChange=false;}}
+			public void insertUpdate(DocumentEvent e) { if(!passwordfield.getText().equals("")){passChange=true;}else{passChange=false;}}
+		});
 	}
 
 	class ActionAdapter implements ActionListener {
@@ -108,19 +123,19 @@ public class SettingsPanel extends JPanel{
 			if(gui.getApplication().getCurrentAccount().getUsername().equals(user.getUsername())){
 				if (e.getSource().equals(save)) {
 					if(passwordfield.getText().equals(passwordControle.getText())){
-						gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
+						if(passChange) gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
 					} else {
 						String s =  "Passwords do not match!";
 						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
 					}
-					gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
+					if(userChange)gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
 				}
 			} else{
 				if(e.getSource().equals(save)){
 					if(passwordfield.getText().equals(passwordControle.getText())){
 						System.out.println(passwordfield.getText());
 						if(!passwordfield.getText().equals("")){
-							gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
+							if(passChange) gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
 						}
 					} else {
 						String s =  "Passwords do not match!";
@@ -128,7 +143,7 @@ public class SettingsPanel extends JPanel{
 					}
 					System.out.println(userfield.getText());
 					if(!userfield.getText().equals("")){
-						gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
+						if(userChange) gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
 					}
 					frame.dispose();
 				}
