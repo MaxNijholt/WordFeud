@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -11,11 +12,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
 import WordFeud.Game;
@@ -29,6 +32,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 	private SButton pass, swap, resign, play, shuffle;
 	private ChatPanel cp;
 	private MenuPanel mp;
+	private JLabel score=new JLabel();
 	private Game game;
 	private GUI gui;
 	private GameStone currentGameStone;
@@ -36,8 +40,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 	private Thread thread = new Thread(this);
 	private ArrayList<Tile> hand = new ArrayList<Tile>();
 	private ArrayList<Tile> field = new ArrayList<Tile>();
-	private int mouseX, mouseY, turnScore;
-	private JLabel score = new JLabel();
+	private int mouseX, mouseY, turnScore=0;
 
 	public GamePanel(GUI gui) {
 		this.gui = gui;
@@ -78,7 +81,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 
 		// infopanel
 
-		score.setText("Your turn score will be: " + getTurnScore());
+		score.setText("Your turn score will be: 0");
+		score.setOpaque(true);
+		score.setBackground(Color.GREEN);
+		score.setFont(new Font("Arial", Font.BOLD, 14));
 		JPanel infoPanel = new JPanel();
 		infoPanel.setLayout(new GridLayout(5, 1, 0, 10));
 		infoPanel.setPreferredSize(new Dimension(180, 215));
@@ -91,12 +97,11 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width,
 				bp.getPreferredSize().height);
+		add(infoPanel);
+		infoPanel.setBounds(10, 320, infoPanel.getPreferredSize().width, infoPanel.getPreferredSize().height);
 		add(cp);
 		cp.setBounds(GUI.WIDTH - cp.getPreferredSize().width - 10, 10,
 				cp.getPreferredSize().width, cp.getPreferredSize().height);
-		add(infoPanel);
-		infoPanel.setBounds(10, 320, infoPanel.getPreferredSize().width,
-				infoPanel.getPreferredSize().height);
 
 		HashMap<String, Tile> tiles = game.getMyField().getTiles();
 
@@ -110,16 +115,14 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 			}
 		}
 
-		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
-
-		for (int i = 0; i < game.getGameStones().size(); i++)
-		{
-			currentGameStones.add(new GameStone(Integer
-					.parseInt(Loader.TILEVALUES.get(game.getStoneChars()
-							.get(game.getGameStones().get(i)).toString())),
-					game.getStoneChars().get(game.getGameStones().get(i))
-							.charValue()));
-		}
+		ArrayList<GameStone> currentGameStones = DBCommunicator.getHandLetters(
+				game.getID(), DBCommunicator
+						.requestInt("SELECT id from beurt WHERE spel_id = "
+								+ game.getID()
+								+ " AND account_naam = '"
+								+ gui.getApplication().getCurrentAccount()
+										.getUsername() + "' ORDER BY id DESC"),
+				Loader.getGameStones("EN"));
 
 		for (int i = 0; i < 7; i++)
 		{
@@ -130,6 +133,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 				{
 					tile.setGameStone(currentGameStones.get(i));
 					tile.getGameStone().setHand(true);
+
 				}
 			}
 			hand.add(tile);
@@ -210,7 +214,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 						{
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
-							score.setText("Your turn score will be: "
+							score.setText("Your turn score would be: "
 									+ gui.layGameStone(currentGameStone,
 											(t.getXPos() + "," + t.getYPos())));
 
@@ -222,7 +226,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 						if (t.getGameStone() == null)
 						{
 							t.setGameStone(currentGameStone);
-							score.setText("Your turn score will be: "
+							score.setText("Your turn score would be: "
 									+ gui.layGameStone(currentGameStone,
 											(t.getXPos() + "," + t.getYPos())));
 							t.setPickablity(true);
@@ -285,17 +289,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 				}
 			}
 
-			ArrayList<Integer> gameStones = game.getGameStones();
-			HashMap<Integer, Character> chars = game.getStoneChars();
+			Collections.shuffle(hand);
 
-			for (int i = 0; i < gameStones.size(); i++)
-			{
-				GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES
-						.get(chars.get(gameStones.get(i)).toString())), chars
-						.get(gameStones.get(i)).charValue());
-				s.setHand(true);
-				hand.get(i).setGameStone(s);
-			}
 			currentGameStone = null;
 		}
 		if (e.getSource().equals(swap))
@@ -340,5 +335,4 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 	{
 		this.turnScore = turnScore;
 	}
-
 }
