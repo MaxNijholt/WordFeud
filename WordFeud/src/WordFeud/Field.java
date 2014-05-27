@@ -16,6 +16,12 @@ public class Field {
 		String bordtype = DBCommunicator.requestData("SELECT bord_naam FROM spel WHERE id='" + gameID +"'");
 		field = Loader.updateTiles(gameID,Loader.getGameStones(language),Loader.getTiles(bordtype));
 	}
+	
+	public HashMap<String, Tile> updateField(int gameID){
+		String language = DBCommunicator.requestData("SELECT letterset_naam FROM spel WHERE id='" + gameID +"'");
+		String bordtype = DBCommunicator.requestData("SELECT bord_naam FROM spel WHERE id='" + gameID +"'");
+		return field = Loader.updateTiles(gameID,Loader.getGameStones(language),Loader.getTiles(bordtype));
+	}
 
 	public void layGameStone(GameStone gamestone, String location) {
 			field.get(location).setGameStone(gamestone);
