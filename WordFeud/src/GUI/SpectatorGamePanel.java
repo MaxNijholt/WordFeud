@@ -21,37 +21,37 @@ import WordFeud.Tile;
 @SuppressWarnings("serial")
 public class SpectatorGamePanel extends JPanel implements ActionListener {
 
-	private SButton 	next, previous, back;
-	private Spectator 	spectate;
-	private MenuPanel 	mp;
-	private JPanel 		bp;
-	private GUI 		gui;
-	private	int 		gameID, turn, xPos, yPos;
-	private ArrayList<Tile> hand 	= new ArrayList<Tile>();
-	private ArrayList<Tile> field	= new ArrayList<Tile>();
-	
-	public SpectatorGamePanel(GUI gui, int gameID){
+	private SButton next, previous, back;
+	private Spectator spectate;
+	private MenuPanel mp;
+	private JPanel bp;
+	private GUI gui;
+	private int gameID, turn, xPos, yPos;
+	private ArrayList<Tile> hand = new ArrayList<Tile>();
+	private ArrayList<Tile> field = new ArrayList<Tile>();
+	private HashMap<String, Tile> tiles;
+
+	public SpectatorGamePanel(GUI gui, int gameID) {
 		this.gui = gui;
 		this.gameID = gameID;
 		spectate = new Spectator(gameID);
-		if(gui.getApplication().getCurrentAccount() == null){
+		if (gui.getApplication().getCurrentAccount() == null) {
 			back = new SButton("Back", SButton.GREY, 220, 40);
 			back.setPreferredSize(new Dimension(GUI.WIDTH, 30));
-		}
-		else{
-			this.mp = new MenuPanel(gui, null);
+		} else {
+			this.mp = new MenuPanel(gui, new SpectatorCompetitionsPanel(gui));
 			mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
 		}
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		this.setLayout(null);
 		this.setBackground(new Color(23, 26, 30));
 		this.requestFocus();
-		next 	= new SButton("Next turn", SButton.CYAN, 150, 40);
-		previous 	= new SButton("Previous turn", SButton.RED, 150, 40);
-		
+		next = new SButton("Next turn", SButton.CYAN, 150, 40);
+		previous = new SButton("Previous turn", SButton.RED, 150, 40);
+
 		next.addActionListener(this);
 		previous.addActionListener(this);
-		
+
 		// The buttons
 		bp = new JPanel();
 		bp.setLayout(new GridLayout(5, 1, 0, 10));
@@ -59,50 +59,60 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		bp.add(next);
 		bp.add(previous);
 
-
 		add(bp);
-		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
-		
-		if(back != null){
+		bp.setBounds(10, 50, bp.getPreferredSize().width,
+				bp.getPreferredSize().height);
+
+		if (back != null) {
 			back.addActionListener(this);
 			add(back);
-			back.setBounds(0, 0, back.getPreferredSize().width, back.getPreferredSize().height);
-		}
-		else{
+			back.setBounds(0, 0, back.getPreferredSize().width,
+					back.getPreferredSize().height);
+		} else {
 			add(mp);
-			mp.setBounds(0, 0, mp.getPreferredSize().width, mp.getPreferredSize().height);
+			mp.setBounds(0, 0, mp.getPreferredSize().width,
+					mp.getPreferredSize().height);
 		}
-		
-		
-		
-		HashMap<String, Tile> tiles = spectate.getMyField().getTiles();
+
+		tiles = spectate.getMyField().getTiles();
 		turn = spectate.getLastTurn();
-		
+
 		xPos = bp.getPreferredSize().width + 20;
 		yPos = 50;
-		for(int y = 1; y < 16; y++) {
-			for(int x = 1; x < 16; x++) {
-				if(tiles.get(x + "," + y).getTurn() <= turn){
-					Tile tile = tiles.get(x + "," + y);
-					field.add(tile);
-					tile.setPickablity(false);
-					xPos += 33;
+		for (int y = 1; y < 16; y++) {
+			for (int x = 1; x < 16; x++) {
+
+				if (tiles.get(x + "," + y).getGameStone() != null) {
+					System.out.println(tiles.get(x + "," + y).getGameStone()
+							.getTurn());
+					System.out.println(turn);
+					if (tiles.get(x + "," + y).getGameStone().getTurn() <= turn) {
+						System.out.println("steen gelegd op " + x + "," + y);
+						Tile tile = tiles.get(x + "," + y);
+						field.add(tile);
+						tile.setPickablity(false);
+						xPos += 33;
+					}
 				}
 			}
 			xPos = bp.getPreferredSize().width + 20;
 			yPos += 33;
 		}
-		
+
 		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
-		
-		for(int i = 0; i < spectate.getGameStones().size(); i++) {
-			currentGameStones.add(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(spectate.getStoneChars().get(spectate.getGameStones().get(i)).toString())), spectate.getStoneChars().get(spectate.getGameStones().get(i)).charValue()));
+
+		for (int i = 0; i < spectate.getGameStones().size(); i++) {
+			currentGameStones.add(new GameStone(Integer
+					.parseInt(Loader.TILEVALUES.get(spectate.getStoneChars()
+							.get(spectate.getGameStones().get(i)).toString())),
+					spectate.getStoneChars()
+							.get(spectate.getGameStones().get(i)).charValue()));
 		}
-		
-		for(int i = 0; i < 7; i++) {
+
+		for (int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
-			if(i < currentGameStones.size()) {
-				if(currentGameStones.get(i) != null) {
+			if (i < currentGameStones.size()) {
+				if (currentGameStones.get(i) != null) {
 					tile.setGameStone(currentGameStones.get(i));
 					tile.getGameStone().setHand(true);
 				}
@@ -111,76 +121,88 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		}
 
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D)g.create();
-		for(Tile t:field) {
-			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180, (t.getYPos() * 33) + 10, null);
+		Graphics2D g2d = (Graphics2D) g.create();
+		for (Tile t : field) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180,
+					(t.getYPos() * 33) + 10, null);
 		}
-		for(Tile t:hand) {
-			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180, (t.getYPos() * 33) + 580, null);
+		for (Tile t : hand) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180,
+					(t.getYPos() * 33) + 580, null);
 		}
 		g2d.dispose();
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(next)) {
-			if(turn != spectate.getLastTurn()){
+		if (e.getSource().equals(next)) {
+			if (turn != spectate.getLastTurn()) {
 				turn++;
 				spectate.setTurn(turn);
-				
-				HashMap<String, Tile> tiles = spectate.getMyField().getTiles();
-				
+
 				xPos = bp.getPreferredSize().width + 20;
 				yPos = 50;
-				for(int y = 1; y < 16; y++) {
-					for(int x = 1; x < 16; x++) {
-						if(tiles.get(x + "," + y).getTurn() <= turn){
-							Tile tile = tiles.get(x + "," + y);
-							field.add(tile);
-							tile.setPickablity(false);
-							xPos += 33;
+				for (int y = 1; y < 16; y++) {
+					for (int x = 1; x < 16; x++) {
+						if (tiles.get(x + "," + y).getGameStone() != null) {
+							System.out.println(tiles.get(x + "," + y).getGameStone()
+									.getTurn());
+							System.out.println(turn);
+							if (tiles.get(x + "," + y).getGameStone().getTurn() <= turn) {
+								System.out.println("steen gelegd op " + x + "," + y);
+								Tile tile = tiles.get(x + "," + y);
+								field.add(tile);
+								tile.setPickablity(false);
+								xPos += 33;
+							}
 						}
 					}
 					xPos = bp.getPreferredSize().width + 20;
 					yPos += 33;
 				}
-				
-				revalidate();
+
+				this.revalidate();
+			} else {
+				System.out.println("LastTurn");
 			}
-			else{ System.out.println("LastTurn");}
 		}
-		if(e.getSource().equals(previous)) {
-			if(turn != 2){
+		if (e.getSource().equals(previous)) {
+			if (turn != 3) {
 				turn--;
 				spectate.setTurn(turn);
-				
-				HashMap<String, Tile> tiles = spectate.getMyField().getTiles();
-				
+				System.out.println(turn);
+
 				xPos = bp.getPreferredSize().width + 20;
 				yPos = 50;
-				for(int y = 1; y < 16; y++) {
-					for(int x = 1; x < 16; x++) {
-						if(tiles.get(x + "," + y).getTurn() <= turn){
-							Tile tile = tiles.get(x + "," + y);
-							field.add(tile);
-							tile.setPickablity(false);
-							xPos += 33;
+				for (int y = 1; y < 16; y++) {
+					for (int x = 1; x < 16; x++) {
+						if (tiles.get(x + "," + y).getGameStone() != null) {
+							System.out.println(tiles.get(x + "," + y).getGameStone()
+									.getTurn());
+							System.out.println(turn);
+							if (tiles.get(x + "," + y).getGameStone().getTurn() <= turn) {
+								System.out.println("steen gelegd op " + x + "," + y);
+								Tile tile = tiles.get(x + "," + y);
+								field.add(tile);
+								tile.setPickablity(false);
+								xPos += 33;
+							}
 						}
 					}
 					xPos = bp.getPreferredSize().width + 20;
 					yPos += 33;
 				}
-				
-				revalidate();
+
+				this.revalidate();
 			}
-			
+
 		}
-		if(e.getSource().equals(back)) {
+		if (e.getSource().equals(back)) {
 			gui.switchPanel(new SpectatorPanel(gui, spectate.getCompID(gameID)));
 		}
 
 	}
-	
+
 }
