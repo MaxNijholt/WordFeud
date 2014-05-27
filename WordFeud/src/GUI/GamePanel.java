@@ -11,10 +11,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
 
+import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
 import WordFeud.Game;
@@ -92,11 +94,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 			}
 		}
 				
-		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
-		
-		for(int i = 0; i < game.getGameStones().size(); i++) {
-			currentGameStones.add(new GameStone(Integer.parseInt(Loader.TILEVALUES.get(game.getStoneChars().get(game.getGameStones().get(i)).toString())), game.getStoneChars().get(game.getGameStones().get(i)).charValue()));
-		}
+		ArrayList<GameStone> currentGameStones = DBCommunicator.getHandLetters(game.getID(), DBCommunicator.requestInt("SELECT id from beurt WHERE spel_id = " + game.getID() + " AND account_naam = '" + gui.getApplication().getCurrentAccount().getUsername() + "' ORDER BY id DESC"), Loader.getGameStones("EN"));
 		
 		for(int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
@@ -104,6 +102,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 				if(currentGameStones.get(i) != null) {
 					tile.setGameStone(currentGameStones.get(i));
 					tile.getGameStone().setHand(true);
+					
 				}
 			}
 			hand.add(tile);
@@ -243,32 +242,19 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 		{
 			running = false;
 		}
-		if (e.getSource().equals(shuffle))
-		{
+		if (e.getSource().equals(shuffle)) {
 			game.shuffle();
 
-			for (int i = 0; i < field.size(); i++)
-			{
-				if (field.get(i).getGameStone() != null)
-				{
-					if (field.get(i).getGameStone().getHand())
-					{
+			for (int i = 0; i < field.size(); i++) {
+				if (field.get(i).getGameStone() != null) {
+					if (field.get(i).getGameStone().getHand()) {
 						field.get(i).setGameStone(null);
 					}
 				}
 			}
-
-			ArrayList<Integer> gameStones = game.getGameStones();
-			HashMap<Integer, Character> chars = game.getStoneChars();
-
-			for (int i = 0; i < gameStones.size(); i++)
-			{
-				GameStone s = new GameStone(Integer.parseInt(Loader.TILEVALUES
-						.get(chars.get(gameStones.get(i)).toString())), chars
-						.get(gameStones.get(i)).charValue());
-				s.setHand(true);
-				hand.get(i).setGameStone(s);
-			}
+			
+			Collections.shuffle(hand);
+			
 			currentGameStone = null;
 		}
 		if (e.getSource().equals(swap))
