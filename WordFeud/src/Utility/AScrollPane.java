@@ -1,10 +1,10 @@
 package Utility;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -16,10 +16,10 @@ public class AScrollPane extends JScrollPane{
 
 	private Color bg		 = new Color(94, 94, 94);;
 	private Color normal	 = new Color(68, 68, 68);
-	private Color clicked 	 = new Color(88, 88, 88);
-	private Color hLight	 = new Color(85, 85, 85);
+//	private Color clicked 	 = new Color(80, 80, 80);
+	private Color hLight	 = new Color(88, 88, 88);
 	
-	public AScrollPane(int width, int height, Component panel, Boolean horizontal, Boolean vertical) {
+	public AScrollPane(int width, int height, JComponent panel, Boolean horizontal, Boolean vertical) {
 
 		super(panel);
 		this.setPreferredSize(new Dimension(width, height));
@@ -86,7 +86,7 @@ public class AScrollPane extends JScrollPane{
 		        		thumbLightShadowColor 	= normal;
 		        		
 		        		trackColor 				= hLight;
-		        		trackHighlightColor		= clicked;
+		        		trackHighlightColor		= bg;
 	        	}
 	        	
 	            @Override
