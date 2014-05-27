@@ -390,7 +390,7 @@ public class Application {
 
 		Calendar rightNow = Calendar.getInstance();
 		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
-		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam = '" + player + "'" + " AND einde < '" + now + "%'";
+		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE einde < '" + now + "%'";
 		boolean searching = true;
 		
 		while(searching){

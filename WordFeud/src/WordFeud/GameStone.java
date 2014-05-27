@@ -12,8 +12,7 @@ import Utility.Loader;
 public class GameStone {
 
 	// Instance variables
-	private int 	value, id;
-	private int 	width, height;
+	private int 	value, id, turn, width, height;
 	private char 	letter;
 	private boolean	hand;
 	private String 	letterSet;
@@ -86,6 +85,15 @@ public class GameStone {
 		g2d.setFont(small);
 		g2d.drawString(temp, width - fmSmall.stringWidth(String.valueOf(value)) - (fmSmall.stringWidth(String.valueOf(value)) / 2), (fmSmall.getHeight()) - (fmSmall.getHeight() / 4));
 		return image;
+	}
+
+	public void setTurn(int turn) {
+		this.turn = turn;
+		
+	}
+	
+	public int getTurn(){
+		return turn;
 	}
 	
 }

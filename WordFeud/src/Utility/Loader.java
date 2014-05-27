@@ -64,7 +64,7 @@ public class Loader {
 	/**
 	 * @author Max
 	 * @param int gameID, HashMap<String (location), Tile> , ArrayList<GameStone> gameStones
-	 * @return HashMap<String, Tile> updated with the right gamestones on tiles
+	 * @return HashMap<String, Tile> updated with the right GameStone on Tiles
 	 */
 	public static HashMap<String, Tile> updateTiles(int gameID, ArrayList<GameStone> gameStones, HashMap<String, Tile> hmap){
 		gameStones = DBCommunicator.getGeneratedStoneIDs(gameID, gameStones);
@@ -76,6 +76,7 @@ public class Loader {
 	/**
 	 * @author Max
 	 * @param String language like NL or EN
+	 * @return A ArrayList of GameStone objects. Does not contain IDs. See DBCommunicator.java getGeneratedGameStoneIDs()
 	 */
 	public static ArrayList<GameStone> getGameStones(String language){
 		ArrayList<GameStone> gamestones = new ArrayList<GameStone>();
