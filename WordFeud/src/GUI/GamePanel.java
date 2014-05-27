@@ -274,19 +274,23 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 		if (e.getSource().equals(swap))
 		{
 
+			gui.switchPanel(new GamePanel(gui));
 		}
 		if (e.getSource().equals(play))
 		{
 			System.out.println(gui.playWord());
+			gui.switchPanel(new GamePanel(gui));
 		}
 		if (e.getSource().equals(resign))
 		{
 			game.resign();
+			gui.switchPanel(new GamePanel(gui));
 		}
 		if (e.getSource().equals(pass))
 		{
 			System.out.println("pass");
 			gui.pass();
+			gui.switchPanel(new GamePanel(gui));
 		}
 	}
 
