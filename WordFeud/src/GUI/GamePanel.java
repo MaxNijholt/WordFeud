@@ -280,8 +280,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 	{
 	}
 
-	public void mouseMoved(MouseEvent e)
-	{
+	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
 	}
