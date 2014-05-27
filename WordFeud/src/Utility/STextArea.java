@@ -96,7 +96,7 @@ public class STextArea extends JTextArea {
 		font				= new Font("Arial", Font.PLAIN, 16);
 		
 		// TextArea variables
-		setRows(0);
+		//setRows(0);
 		setEditable(true);
 		setWrapStyleWord(true);
 		setLineWrap(true);
@@ -177,10 +177,10 @@ public class STextArea extends JTextArea {
 	public void setAlignment(int alignment)				{this.alignment = alignment;}
 	
 	// Add text
-	public void addText(String text) {
-		if(!this.getText().isEmpty()) {this.setText(this.getText() + "\n" + text);}
-		else {this.setText(text);}
-		setRows(getRows() + 1);
-	}
+//	public void addText(String text) {
+//		if(!this.getText().isEmpty()) {this.setText(this.getText() + "\n" + text);}
+//		else {this.setText(text);}
+//		setRows(getRows() + 1);
+//	}
 	
 }
