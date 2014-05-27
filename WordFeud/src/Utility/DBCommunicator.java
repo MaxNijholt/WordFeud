@@ -357,7 +357,7 @@ public class DBCommunicator {
 			stm = con.createStatement();
 			res = stm.executeQuery("SELECT account_naam, bericht FROM chatregel WHERE spel_id = '" + gameid + "' ORDER BY tijdstip ASC;");
 			while(res.next()) {
-				result.add(		res.getString(1)+" zegt:\n" + res.getString(2) + "\n");
+				result.add(		res.getString(1)+" says:\n" + res.getString(2) + "\n\n");
 			}
 		}
 		catch(Exception e) {

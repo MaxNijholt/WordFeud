@@ -11,8 +11,12 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
+import Utility.AScrollPane;
 import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.STextArea;
@@ -24,11 +28,11 @@ import WordFeud.GameStone;
 public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 
 	private STextArea 	printArea;
-	private STextArea 	typeArea;
+	private JTextArea 	typeArea;
 	private SButton		send;
 	private Game		game;
 	private GUI			gui;
-	private JScrollPane	scrollTypePanel;
+	private AScrollPane	scrollTypePanel;
 	private Chat 		chat;
 	
 	public ChatPanel(GUI gui, Game game){
@@ -37,18 +41,21 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		GridBagConstraints c = new GridBagConstraints();
 		this.game = game;
 		this.gui = gui;
-		
-		chat = new Chat(game.getID(), this);
-		
+			
 		printArea = new STextArea(220, 350);	
 		printArea.setEditable(false);
 		
-		typeArea= new STextArea(160, 90);
-		typeArea.setCustomRounded(true, false, true, false);
+		typeArea= new JTextArea();
 		typeArea.addKeyListener(this);
+		typeArea.setWrapStyleWord(true);
+		typeArea.setLineWrap(true);
 		
-		scrollTypePanel = new JScrollPane(typeArea);
-		scrollTypePanel.setPreferredSize(new Dimension(160,90));		
+		
+		scrollTypePanel = new AScrollPane(160, 90, typeArea, false, true);
+		scrollTypePanel.setPreferredSize(new Dimension(160,90));
+		scrollTypePanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollTypePanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
 				
 		send = new SButton("Send", SButton.GREEN, 60, 90);
 		send.setCustomRounded(false, true, false, true);
@@ -64,6 +71,8 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		this.add(scrollTypePanel, c);
 		c.gridx++;
 		this.add(send, c);
+		
+		chat = new Chat(game.getID(), this);
 	}
 
 	public void actionPerformed(ActionEvent e) {
