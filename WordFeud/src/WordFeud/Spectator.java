@@ -1,6 +1,5 @@
 package WordFeud;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,7 +7,7 @@ import Utility.DBCommunicator;
 
 public class Spectator {
 	private Field myField;
-	private int myGameID, lastTurn, turnCount, turn;
+	private int myGameID, lastTurn;
 	private String letters;
 	private ArrayList<Integer> gameStones;
 	private HashMap<Integer, Character> stoneChars;
@@ -41,11 +40,7 @@ public class Spectator {
 	
 
 	public Field getMyField() {
-		return myField;
-	}
-	
-	public Field getTurn(int turn){
-		
+		myField.updateField(myGameID);
 		return myField;
 	}
 	
@@ -61,11 +56,6 @@ public class Spectator {
 	public int getCompID(int gameID){
 		int compID = DBCommunicator.requestInt("SELECT competitie_id FROM spel where id = '"+ gameID + "'");
 		return compID;
-	}
-
-	public void setTurn(int turn) {
-		this.turn = turn;
-	}
-	
+	}	
 	
 }
