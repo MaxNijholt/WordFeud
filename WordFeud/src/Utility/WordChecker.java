@@ -155,20 +155,24 @@ public class WordChecker {
 			{
 				String[] parts = myValue.split(",");
 				coordinate.add(myValue);
-				xx = xx + parts[0];
-				yy = yy + parts[1];
+				xx = xx + parts[0] + " ";
+				yy = yy + parts[1] + " ";
 			}
 
 			int t = 0;
 			while (t < playd.size())
 			{
-				xCheck = xCheck + xx.substring(0, 1);
+				String[] parts = xx.split(" ");
+				int xxNumber = Integer.parseInt(parts[0]);
+				xCheck = xCheck + Integer.toString(xxNumber) + " ";
 				t++;
 			}
 			t = 0;
 			while (t < playd.size())
 			{
-				yCheck = yCheck + yy.substring(0, 1);
+				String[] parts = yy.split(" ");
+				int yyNumber = Integer.parseInt(parts[0]);
+				yCheck = yCheck + Integer.toString(yyNumber) + " ";
 				t++;
 			}
 
@@ -320,9 +324,9 @@ public class WordChecker {
 							{
 								down = true;
 							}
-							else
 
-								y--;
+							y--;
+							x--;
 							if ((field.get(x + "," + y) != null && field.get(
 									x + "," + y).getGameStone() != null)
 									&& !playd.keySet().contains(x + "," + y))
@@ -381,9 +385,9 @@ public class WordChecker {
 								{
 									down = true;
 								}
-								else
 
-									y--;
+								x--;
+								y--;
 								if ((field.get(x + "," + y) != null && field
 										.get(x + "," + y).getGameStone() != null)
 										&& !playd.keySet()
@@ -443,9 +447,9 @@ public class WordChecker {
 							{
 								down = true;
 							}
-							else
+							x--;
 
-								y--;
+							y--;
 							if ((field.get(x + "," + y) != null && field.get(
 									x + "," + y).getGameStone() != null)
 									&& !playd.keySet().contains(x + "," + y))
@@ -504,9 +508,9 @@ public class WordChecker {
 								{
 									down = true;
 								}
-								else
+								x--;
 
-									y--;
+								y--;
 								if ((field.get(x + "," + y) != null && field
 										.get(x + "," + y).getGameStone() != null)
 										&& !playd.keySet()
