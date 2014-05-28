@@ -40,8 +40,6 @@ public class Application {
 		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
-		
-		
 	}
 	
 	
@@ -550,7 +548,6 @@ public class Application {
 	 * -------------------------------------------------
 	 */
 	public Account[] searchPlayer(String partialname){
-		
 		return null;
 	}
 	

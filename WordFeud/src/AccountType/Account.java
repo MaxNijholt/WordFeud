@@ -96,8 +96,10 @@ public class Account {
 	}
 
 	public void changeUsername(String newName) {
-		DBCommunicator.writeData("UPDATE account SET naam = '" + newName +"' WHERE naam ='"+this.getUsername()+"'");
-		this.username = newName;
+		if(!DBCommunicator.requestData("SELECT naam FROM account WHERE naam='"+newName+"'").equals(newName)){
+			DBCommunicator.writeData("UPDATE account SET naam = '" + newName +"' WHERE naam ='"+this.getUsername()+"'");
+			this.username = newName;
+		}
 	}
 
 	public void changePassword(String newPass) {
