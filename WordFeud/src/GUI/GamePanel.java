@@ -214,26 +214,16 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 				}
 			}
-
-			for (Tile t : hand)
-			{
-				if ((e.getX() >= (t.getXPos() * 33) + 180)
-						&& (e.getX() <= (t.getXPos() * 33) + 180 + 32)
-						&& (e.getY() >= (t.getYPos() * 33) + 580)
-						&& (e.getY() <= (t.getYPos() * 33) + 580 + 32))
-				{
-					if (currentGameStone == null)
-					{
-						if (t.getPickablity())
-						{
+			for (Tile t : hand) {
+				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
+					if (currentGameStone == null) {
+						if (t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setGameStone(null);
 						}
 					}
-					else
-					{
-						if (t.getGameStone() == null)
-						{
+					else {
+						if (t.getGameStone() == null) {
 							t.setGameStone(currentGameStone);
 							currentGameStone = null;
 						}
@@ -241,26 +231,18 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				}
 			}
 		}
-		if (e.getButton() == MouseEvent.BUTTON2)
-		{
-
-		}
+		if(e.getButton() == MouseEvent.BUTTON2) {}
 	}
 
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
+	public void actionPerformed(ActionEvent e) {
+		if(e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
 			cp.getChat().closeThread();
 			running = false;
 		}
-		if (e.getSource().equals(shuffle))
-		{
-			for (int i = 0; i < field.size(); i++)
-			{
-				if (field.get(i).getGameStone() != null)
-				{
-					if (field.get(i).getGameStone().getHand())
-					{
+		if (e.getSource().equals(shuffle)) {
+			for (int i = 0; i < field.size(); i++) {
+				if (field.get(i).getGameStone() != null) {
+					if (field.get(i).getGameStone().getHand()) {
 						field.get(i).setGameStone(null);
 					}
 				}
@@ -280,45 +262,31 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			}
 			currentGameStone = null;
 		}
-		if (e.getSource().equals(swap))
-		{
-
+		if(e.getSource().equals(swap)) {
 			gui.switchPanel(new GamePanel(gui));
 		}
-		if (e.getSource().equals(play))
-		{
+		if(e.getSource().equals(play)) {
 			System.out.println(gui.playWord());
 			gui.switchPanel(new GamePanel(gui));
 		}
-		if (e.getSource().equals(resign))
-		{
+		if (e.getSource().equals(resign)) {
 			game.resign();
 			gui.switchPanel(new GamePanel(gui));
 		}
-		if (e.getSource().equals(pass))
-		{
+		if(e.getSource().equals(pass)) {
 			System.out.println("pass");
 			gui.pass();
 			gui.switchPanel(new GamePanel(gui));
 		}
 	}
 
-	public void mouseDragged(MouseEvent w)
-	{
-	}
+	public void mouseDragged(MouseEvent e) {}
 
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
 	}
 
-	public int getTurnScore()
-	{
-		return turnScore;
-	}
-
-	public void setTurnScore(int turnScore)
-	{
-		this.turnScore = turnScore;
-	}
+	public int getTurnScore() {return turnScore;}
+	public void setTurnScore(int turnScore) {this.turnScore = turnScore;}
 }
