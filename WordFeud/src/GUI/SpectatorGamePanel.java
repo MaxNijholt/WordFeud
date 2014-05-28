@@ -40,7 +40,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 			back = new SButton("Back", SButton.GREY, 220, 40);
 			back.setPreferredSize(new Dimension(GUI.WIDTH, 30));
 		} else {
-			this.mp = new MenuPanel(gui, new SpectatorCompetitionsPanel(gui));
+			this.mp = new MenuPanel(gui, "SpectatorCompetitionsPanel");
 			mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
 		}
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));

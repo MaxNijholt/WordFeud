@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 		this.setBackground(new Color(23, 26, 30));
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-		mp = new MenuPanel(gui, new PlayerPanel(gui));
+		mp = new MenuPanel(gui, "PlayerPanel");
 		mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
 		cp = new ChatPanel(gui, game);
 		cp.setPreferredSize(new Dimension(250, GUI.HEIGHT));
@@ -84,7 +84,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 		score.setText("Your turn score will be: 0");
 		score.setOpaque(true);
 		score.setBackground(Color.GREEN);
-		score.setFont(new Font("Arial", Font.BOLD, 14));
+		score.setFont(new Font("Arial", Font.BOLD, 10));
 		JPanel infoPanel = new JPanel();
 		infoPanel.setLayout(new GridLayout(5, 1, 0, 10));
 		infoPanel.setPreferredSize(new Dimension(180, 215));

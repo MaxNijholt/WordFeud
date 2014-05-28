@@ -189,7 +189,7 @@ public class GUI extends JFrame{
 		app.newGame(player, visibility);
 	}
 	
-	public void seeComps(int compID, JPanel panel){
+	public void seeComps(int compID, String panel){
 		app.seeComps(compID, panel);
 	}
 

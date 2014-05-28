@@ -40,7 +40,7 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 		this.setBackground(new Color(94, 94, 94));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		this.mp = new MenuPanel(gui, new PlayerPanel(gui));
+		this.mp = new MenuPanel(gui, "PlayerPanel");
 		
 		title			= new SLabel("New game", SLabel.LEFT, new Font("Arial", Font.PLAIN, 50));
 		game 			= new SLabel("Private game", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 340, 20);
