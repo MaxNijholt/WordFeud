@@ -109,12 +109,12 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 
 		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
 
-		for (int i = 0; i < spectate.getGameStones().size(); i++) {
+		for (int i = 0; i < spectate.getHand().size(); i++) {
 			currentGameStones.add(new GameStone(Integer
 					.parseInt(Loader.TILEVALUES.get(spectate.getStoneChars()
-							.get(spectate.getGameStones().get(i)).toString())),
+							.get(spectate.getHand().get(i)).toString())),
 					spectate.getStoneChars()
-							.get(spectate.getGameStones().get(i)).charValue()));
+							.get(spectate.getHand().get(i)).charValue()));
 		}
 
 		for (int i = 0; i < 7; i++) {
@@ -148,6 +148,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		if (e.getSource().equals(next)) {
 			if (turn != spectate.getLastTurn()) {
 				turn++;
+				spectate.setTurn(turn);
 				tiles = spectate.getMyField().getTiles();
 
 				xPos = bp.getPreferredSize().width + 20;
@@ -183,6 +184,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		if (e.getSource().equals(previous)) {
 			if (turn >= 3) {
 				turn--;
+				spectate.setTurn(turn);
 				tiles = spectate.getMyField().getTiles();
 
 				xPos = bp.getPreferredSize().width + 20;

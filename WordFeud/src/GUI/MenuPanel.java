@@ -14,7 +14,7 @@ import Utility.SComboBox;
 
 @SuppressWarnings("serial")
 public class MenuPanel extends JPanel implements ActionListener {
-	private GUI gui;
+	private GUI 		gui;
 	private SComboBox	switcher;
 	private SButton		settings, stats, logout, player, admin, mod, spectator, back;
 	private JPanel 		backPanel;
