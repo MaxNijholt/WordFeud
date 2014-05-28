@@ -39,6 +39,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private Thread thread = new Thread(this);
 	private ArrayList<Tile> hand = new ArrayList<Tile>();
 	private ArrayList<Tile> field = new ArrayList<Tile>();
+	private ArrayList<GameStone> stones = new ArrayList<GameStone>();
 	private int mouseX, mouseY, turnScore=0;
 
 	public GamePanel(GUI gui) {
@@ -137,6 +138,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				{
 					System.out.println(currentGameStones.get(i).getID());
 					tile.setGameStone(currentGameStones.get(i));
+					stones.add(currentGameStones.get(i));
 					tile.getGameStone().setHand(true);
 
 				}
@@ -222,8 +224,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
 							score.setText("Your turn score would be: "
-									+ gui.layGameStone(currentGameStone,
-											(t.getXPos() + "," + t.getYPos())));
+									+ gui.removeGameStone(t.getXPos() + "," + t.getYPos()));
 
 							t.setGameStone(null);
 						}
@@ -254,6 +255,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					{
 						if (t.getPickablity())
 						{
+							
 							currentGameStone = t.getGameStone();
 							t.setGameStone(null);
 						}
@@ -278,8 +280,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
-			cp.getChat().closeThread();
-			running = false;
+			turnOffThreads();
 		}
 		if (e.getSource().equals(shuffle))
 		{
@@ -293,40 +294,53 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 				}
 			}
-			ArrayList<GameStone> stones = new ArrayList<GameStone>();
-			for(Tile t:hand) {
-				if(t.getGameStone() != null) {
-					stones.add(t.getGameStone());
-				}
-				t.setGameStone(null);
-			}
 			Collections.shuffle(stones);
 			for(int i = 0; i < hand.size(); i++) {
-				if(stones.get(i) != null) {
-					hand.get(i).setGameStone(stones.get(i));
-				}
+				hand.get(i).setGameStone(stones.get(i));
 			}
 			currentGameStone = null;
 		}
 		if (e.getSource().equals(swap))
 		{
-
-			gui.switchPanel(new GamePanel(gui));
+			for (int i = 0; i < field.size(); i++) {
+				if (field.get(i).getGameStone() != null) {
+					if (field.get(i).getGameStone().getHand()) {
+						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+						field.get(i).setGameStone(null);
+					}
+				}
+			}
+			for(int i = 0; i < hand.size(); i++) {
+				hand.get(i).setGameStone(stones.get(i));
+			}
 		}
 		if (e.getSource().equals(play))
 		{
-			System.out.println(gui.playWord());
-			gui.switchPanel(new GamePanel(gui));
+			System.out.println(gui.playWord());			
+			for (int i = 0; i < field.size(); i++) {
+				if (field.get(i).getGameStone() != null) {
+					if (field.get(i).getGameStone().getHand()) {
+						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+						field.get(i).setGameStone(null);
+					}
+				}
+			}
+			for(int i = 0; i < hand.size(); i++) {
+				hand.get(i).setGameStone(stones.get(i));
+			}
+			currentGameStone = null;
 		}
 		if (e.getSource().equals(resign))
 		{
 			game.resign();
+			turnOffThreads();
 			gui.switchPanel(new GamePanel(gui));
 		}
 		if (e.getSource().equals(pass))
 		{
 			System.out.println("pass");
 			gui.pass();
+			turnOffThreads();
 			gui.switchPanel(new GamePanel(gui));
 		}
 	}
@@ -348,5 +362,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void setTurnScore(int turnScore)
 	{
 		this.turnScore = turnScore;
+	}
+	
+	public void turnOffThreads() {
+		cp.getChat().closeThread();
+		running = false;
 	}
 }
