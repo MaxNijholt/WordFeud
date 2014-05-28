@@ -78,6 +78,7 @@ public class Game {
 			return null;
 		}
 		else{
+			myField.updateField(id);
 			return words;
 		}
 		

@@ -24,7 +24,7 @@ public class Administrator{
 	}
 	
 	public void changeUsername(Account account, String newName) {
-		if(!DBCommunicator.requestData("SELECT naam FROM account WHERE naam='"+newName+"'").equals(newName)){
+		if(!DBCommunicator.requestData("SELECT naam FROM account WHERE naam='"+newName+"'").equals(newName) || DBCommunicator.requestData("SELECT naam FROM account WHERE naam='"+newName+"'") == null){
 			DBCommunicator.writeData("UPDATE account SET naam = '" + newName +"' WHERE naam='" + account.getUsername() + "'");
 		}
 	}
