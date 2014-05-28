@@ -277,8 +277,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 		}
 		if (e.getSource().equals(shuffle))
 		{
-			game.shuffle();
-
 			for (int i = 0; i < field.size(); i++)
 			{
 				if (field.get(i).getGameStone() != null)
@@ -289,9 +287,19 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 					}
 				}
 			}
-
-			Collections.shuffle(hand);
-
+			ArrayList<GameStone> stones = new ArrayList<GameStone>();
+			for(Tile t:hand) {
+				if(t.getGameStone() != null) {
+					stones.add(t.getGameStone());
+				}
+				t.setGameStone(null);
+			}
+			Collections.shuffle(stones);
+			for(int i = 0; i < hand.size(); i++) {
+				if(stones.get(i) != null) {
+					hand.get(i).setGameStone(stones.get(i));
+				}
+			}
 			currentGameStone = null;
 		}
 		if (e.getSource().equals(swap))
