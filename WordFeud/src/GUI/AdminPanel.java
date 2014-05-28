@@ -38,7 +38,7 @@ public class AdminPanel extends JPanel {
 	private SLabel 				selectPlayer;
 	private GUI 				gui;
 	private ArrayList<SButton> 	buttonCollection = new ArrayList<SButton>();
-	private SButton 			newPlayer = new SButton("New account", SButton.GREY),
+	private SButton 			newPlayer = new SButton("New account", SButton.CYAN),
 								editPlayer = new SButton("Edit Player", SButton.GREY),
 								grantMod = new SButton("Grant Mod", SButton.GREY),
 								grantAdmin = new SButton("Grant Admin", SButton.GREY),
