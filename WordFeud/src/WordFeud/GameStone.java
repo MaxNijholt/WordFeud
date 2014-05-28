@@ -95,5 +95,9 @@ public class GameStone {
 	public int getTurn(){
 		return turn;
 	}
+
+	public void setLetter(String string) {
+		this.letter = string.charAt(0);
+	}
 	
 }

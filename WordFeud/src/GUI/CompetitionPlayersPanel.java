@@ -57,11 +57,6 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 		// create the scrollpane as container for the playercontent
 		playerScrollPane = new AScrollPane(500, 550, playerContent, false, true);
-//		playerScrollPane.setBorder(null);
-//		playerScrollPane.setPreferredSize(new Dimension(500, 550));
-//		playerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		playerScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-//		playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(playerScrollPane);
 		
 		// create the gameContent panel here go all the games
@@ -72,13 +67,6 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 		// create the scrollpane as container for the gameContent
 		scrollPane = new AScrollPane(475, 500, gameContent, false, true);
-//		scrollPane.setBorder(null);
-//		scrollPane.setPreferredSize(new Dimension(475, 550));
-//		scrollPane
-//				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-//		scrollPane
-//				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(scrollPane);
 		
 		//get all the players in the competition
@@ -237,7 +225,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 			nameP.add(new SLabel(name, SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
 			String ranking = gui.getPlayerRanking(compID, name);
 			if(ranking != null){
-				ranking = ranking.substring(0, 7);
+				ranking = ranking.substring(0, 4);
 				score.add(new SLabel(ranking, SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
 			}
 			else{

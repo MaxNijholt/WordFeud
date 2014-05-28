@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Utility.DBCommunicator;
+import Utility.Loader;
 
 public class Spectator {
 	private Field myField;
-	private int myGameID, lastTurn;
+	private int myGameID, lastTurn, turn;
 	private String letters;
 	private ArrayList<Integer> gameStones;
 	private HashMap<Integer, Character> stoneChars;
+	private ArrayList<GameStone> handStones;
 	
 	public Spectator(int gameID){
 		myGameID = gameID;
@@ -57,5 +59,21 @@ public class Spectator {
 		int compID = DBCommunicator.requestInt("SELECT competitie_id FROM spel where id = '"+ gameID + "'");
 		return compID;
 	}	
+	
+
+	public int getTurn() {
+		return turn;
+	}
+
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
+	
+	public ArrayList<GameStone> getHand(){
+		handStones = Loader.getGameStones("EN");
+		handStones = DBCommunicator.getHandLetters(myGameID, turn, handStones);
+		return handStones;
+	}
+	
 	
 }
