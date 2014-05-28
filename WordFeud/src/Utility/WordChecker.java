@@ -388,7 +388,7 @@ public class WordChecker {
 								connectionsWithSelf++;
 							}
 							if (!(top || down || left || right)
-									&& (topSelf || downSelf || leftSelf || rightSelf))
+									&& !(topSelf || downSelf || leftSelf || rightSelf))
 							{
 								looseStone = true;
 							}
@@ -476,13 +476,13 @@ public class WordChecker {
 								{
 									connectionsWithBoard++;
 								}
-								if (!topSelf && !downSelf && !leftSelf
-										&& !rightSelf)
+								if (topSelf || downSelf || leftSelf
+										|| rightSelf)
 								{
 									connectionsWithSelf++;
 								}
 								if (!(top || down || left || right)
-										&& (topSelf || downSelf || leftSelf || rightSelf))
+										&& !(topSelf || downSelf || leftSelf || rightSelf))
 								{
 									looseStone = true;
 								}
@@ -567,13 +567,13 @@ public class WordChecker {
 							{
 								connectionsWithBoard++;
 							}
-							if (!topSelf && !downSelf && !leftSelf
-									&& !rightSelf)
+							if (topSelf || downSelf || leftSelf
+									|| rightSelf)
 							{
 								connectionsWithSelf++;
 							}
 							if (!(top || down || left || right)
-									&& (topSelf || downSelf || leftSelf || rightSelf))
+									&& !(topSelf || downSelf || leftSelf || rightSelf))
 							{
 								looseStone = true;
 							}
@@ -704,7 +704,7 @@ public class WordChecker {
 
 		}
 
-		if (connectionsWithBoard > 0 && connectionsWithSelf < 0)
+		if (connectionsWithBoard > 0 && connectionsWithSelf > 0)
 		{
 			connections = true;
 		}
