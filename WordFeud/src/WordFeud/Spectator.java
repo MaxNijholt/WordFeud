@@ -46,14 +46,6 @@ public class Spectator {
 		return myField;
 	}
 	
-
-	public ArrayList<Integer> getGameStones(){
-		return gameStones;
-	}
-	
-	public HashMap<Integer, Character> getStoneChars(){
-		return stoneChars;
-	}
 	
 	public int getCompID(int gameID){
 		int compID = DBCommunicator.requestInt("SELECT competitie_id FROM spel where id = '"+ gameID + "'");
@@ -69,7 +61,7 @@ public class Spectator {
 		this.turn = turn;
 	}
 	
-	public ArrayList<GameStone> getHand(){
+	public ArrayList<GameStone> getHand(int turn){
 		handStones = Loader.getGameStones("EN");
 		handStones = DBCommunicator.getHandLetters(myGameID, turn, handStones);
 		return handStones;

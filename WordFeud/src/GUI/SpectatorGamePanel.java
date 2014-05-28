@@ -28,6 +28,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 	private GUI gui;
 	private int gameID, turn, xPos, yPos;
 	private ArrayList<Tile> hand = new ArrayList<Tile>();
+	private ArrayList<Tile> opponentHand = new ArrayList<Tile>();
 	private ArrayList<Tile> field = new ArrayList<Tile>();
 	private HashMap<String, Tile> tiles;
 
@@ -107,25 +108,28 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 			yPos += 33;
 		}
 
-		ArrayList<GameStone> currentGameStones = new ArrayList<GameStone>();
-
-		for (int i = 0; i < spectate.getHand().size(); i++) {
-			currentGameStones.add(new GameStone(Integer
-					.parseInt(Loader.TILEVALUES.get(spectate.getStoneChars()
-							.get(spectate.getHand().get(i)).toString())),
-					spectate.getStoneChars()
-							.get(spectate.getHand().get(i)).charValue()));
-		}
+		ArrayList<GameStone> currentGameStones = spectate.getHand(turn);
 
 		for (int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
 			if (i < currentGameStones.size()) {
 				if (currentGameStones.get(i) != null) {
 					tile.setGameStone(currentGameStones.get(i));
-					tile.getGameStone().setHand(true);
 				}
 			}
 			hand.add(tile);
+		}
+		
+		ArrayList<GameStone> opponentGameStones = spectate.getHand(turn);
+
+		for (int i = 0; i < 7; i++) {
+			Tile tile = new Tile(i + 1, -1);
+			if (i < opponentGameStones.size()) {
+				if (opponentGameStones.get(i) != null) {
+					tile.setGameStone(opponentGameStones.get(i));
+				}
+			}
+			opponentHand.add(tile);
 		}
 
 	}
@@ -139,6 +143,10 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		}
 		for (Tile t : hand) {
 			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + 180,
+					(t.getYPos() * 33) + 580, null);
+		}
+		for (Tile t : opponentHand) {
+			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + (gui.getWidth() - 180),
 					(t.getYPos() * 33) + 580, null);
 		}
 		g2d.dispose();
@@ -178,6 +186,19 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 					xPos = bp.getPreferredSize().width + 20;
 					yPos += 33;
 				}
+
+				ArrayList<GameStone> currentGameStones = spectate.getHand(turn);
+
+				for (int i = 0; i < 7; i++) {
+					Tile tile = new Tile(i + 1, -1);
+					if (i < currentGameStones.size()) {
+						if (currentGameStones.get(i) != null) {
+							tile.setGameStone(currentGameStones.get(i));
+						}
+					}
+					hand.add(tile);
+				}
+
 				repaint();
 			}
 		}
@@ -214,6 +235,19 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 					xPos = bp.getPreferredSize().width + 20;
 					yPos += 33;
 				}
+
+				ArrayList<GameStone> currentGameStones = spectate.getHand(turn);
+
+				for (int i = 0; i < 7; i++) {
+					Tile tile = new Tile(i + 1, -1);
+					if (i < currentGameStones.size()) {
+						if (currentGameStones.get(i) != null) {
+							tile.setGameStone(currentGameStones.get(i));
+						}
+					}
+					hand.add(tile);
+				}
+
 				repaint();
 			}
 
