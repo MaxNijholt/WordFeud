@@ -70,13 +70,13 @@ public class SettingsPanel extends JPanel{
 		allPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		this.passwordfield 		= new SPasswordField("password");
-		this.passwordControle 	= new SPasswordField("password");
+		this.passwordfield 		= new SPasswordField("password", 120, 30);
+		this.passwordControle 	= new SPasswordField("password", 120, 30);
 		this.password			= new SLabel("New password:", 0);
 		this.passwordConfirm	= new SLabel("Confirm password:", 0);
 		this.username			= new SLabel("New username:", 0);
 
-		this.userfield			= new STextField(user.getUsername());
+		this.userfield			= new STextField(user.getUsername(), 120, 30);
 		this.save				= new SButton("Save", SButton.GREY);
 		this.save.addActionListener(aa);
 
