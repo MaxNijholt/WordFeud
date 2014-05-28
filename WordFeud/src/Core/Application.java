@@ -650,7 +650,7 @@ public class Application {
 		myGui.switchPanel(new LoginPanel(myGui));
 	}
 	
-	public void seeComps(int compID, JPanel panel){
+	public void seeComps(int compID, String panel){
 		SpectatorPanel sp = new SpectatorPanel(myGui, compID);
 		sp.setMenuPanel(panel);
 		myGui.switchPanel(sp);

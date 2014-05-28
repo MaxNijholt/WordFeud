@@ -36,7 +36,7 @@ public class ModeratorPanel extends JPanel {
 	public ModeratorPanel(GUI gui) {
 		mygui = gui;
 		mygui.setLoadingCursor(true);
-		this.mp = new MenuPanel(gui, new PlayerPanel(gui));
+		this.mp = new MenuPanel(gui, "LoginPanel");
 		allPanel = new JPanel();
 		allPanel.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
 		allPanel.setBackground(new Color(94, 94, 94));

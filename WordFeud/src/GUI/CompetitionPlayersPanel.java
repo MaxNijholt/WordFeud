@@ -36,7 +36,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 	public CompetitionPlayersPanel(GUI gui, int compID) {
 		this.gui = gui;
-		this.mp = new MenuPanel(gui, new CompetitionPanel(gui));
+		this.mp = new MenuPanel(gui, "CompetitionPanel");
 		this.compID = compID;
 
 		gui.setLoadingCursor(true);

@@ -72,7 +72,7 @@ public class AdminPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 
 		if (gui.getApplication().getCurrentAccount().getPlayer() != null) {
-			mp = new MenuPanel(gui, new PlayerPanel(gui));
+			mp = new MenuPanel(gui, "PlayerPanel");
 			this.add(mp, BorderLayout.NORTH);
 		}
 

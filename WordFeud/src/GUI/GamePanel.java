@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 		this.setBackground(new Color(23, 26, 30));
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-		mp = new MenuPanel(gui, new PlayerPanel(gui));
+		mp = new MenuPanel(gui, "PlayerPanel");
 		mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
 		cp = new ChatPanel(gui, game);
 		cp.setPreferredSize(new Dimension(250, GUI.HEIGHT));

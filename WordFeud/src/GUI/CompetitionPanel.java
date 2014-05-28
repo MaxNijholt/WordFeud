@@ -35,7 +35,7 @@ public class CompetitionPanel extends Panel {
 		this.gui = gui;
 		this.setBackground(bg);
 		this.setLayout(new BorderLayout());
-		menu = new MenuPanel(gui, new PlayerPanel(gui));
+		menu = new MenuPanel(gui, "PlayerPanel");
 		create = new SButton("Create new competition", SButton.GREY);
 		
 		create.addActionListener(new ActionListener() {
@@ -299,7 +299,7 @@ public class CompetitionPanel extends Panel {
 			spectate.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.seeComps(compID, new CompetitionPanel(gui));
+					gui.seeComps(compID, "CompetitionPanel");
 				}
 			});
 		}
@@ -346,7 +346,7 @@ public class CompetitionPanel extends Panel {
 				spectate.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						gui.seeComps(compID, new CompetitionPanel(gui));
+						gui.seeComps(compID, "CompetitionPanel");
 					}
 				});
 			
