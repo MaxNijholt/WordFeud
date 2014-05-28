@@ -28,7 +28,7 @@ public class DBCommunicator {
 
 	private static Connection con;
 
-	public static void getConnection() {
+	public static final void getConnection() {
 		try {
 			Class.forName(CLASS_NAME);
 			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
