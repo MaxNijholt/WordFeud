@@ -28,13 +28,14 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 
 	private STextField 			name, player;
 	private SComboBox 			addPlayers;
-	private SLabel 				title, nameLabel, playerLabel, addLabel, addedLabel;
+	private SLabel 				nameLabel, playerLabel, addLabel, addedLabel;
 	private AScrollPane			scroller;
 	private ArrayList<SLabel>	addedPlayers;
 	private SButton 			create, back, add;
 	private JPanel				addPanel, addedPanel;
 	private GUI 				gui;
 	private JPanel scrollPane;
+	private MenuPanel mp;
 	
 	public CompetitionCreatePanel(GUI gui) {
 		this.gui = gui;
@@ -46,7 +47,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		
 		addedPlayers	= new ArrayList<SLabel>();
 		
-		title 			= new SLabel("New competition", SLabel.LEFT, new Font("Arial", Font.BOLD, 50));
+//		title 			= new SLabel("New competition", SLabel.LEFT, new Font("Arial", Font.BOLD, 50));
 		nameLabel		= new SLabel("Competition name", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
 		playerLabel		= new SLabel("Maximum players", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
 		addLabel		= new SLabel("Add player", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
@@ -54,10 +55,12 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		
 		create 			= new SButton("Create", SButton.GREY, 220, 40);
 		back 			= new SButton("Back", SButton.GREY, 220, 40);
-		add 			= new SButton("Add", SButton.GREY, 110, 40);
+		add 			= new SButton("Add players", SButton.GREY, 220, 40);
 		
 		name 			= new STextField("Competition name", 220, 40);
 		player 			= new STextField("Maximum players (2 up to 24)", 220, 40);
+		
+		mp				= new MenuPanel(gui, "CompetitionPanel");
 		// To fill the challenger box
 				ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account ORDER BY naam ASC");
 				String[] players = new String[allPlayers.size()];
@@ -82,6 +85,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		
 		back.addActionListener(this);
 		add.addActionListener(this);
+		create.addActionListener(this);
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
@@ -95,26 +99,27 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		buttonPanel.add(name, c);
 		c.gridx++;
 		c.gridy = 0;
-		buttonPanel.add(addLabel, c);
-		c.gridy++;
-		buttonPanel.add(addPlayers, c);
-		c.gridx++;
-		buttonPanel.add(add, c);
-		c.gridx = 0;
-		c.gridy++;
 		buttonPanel.add(playerLabel, c);
 		c.gridy++;
 		buttonPanel.add(player, c);
+		c.gridx++;
+//		buttonPanel.add(add, c);
+		c.gridx = 0;
+		c.gridy++;
+//		buttonPanel.add(playerLabel, c);
+		c.gridy++;
+//		buttonPanel.add(player, c);
 		c.gridy++;
 		buttonPanel.add(create, c);
-		c.gridy++;
-		buttonPanel.add(back, c);
+		c.gridx++;
+		buttonPanel.add(add, c);
+//		buttonPanel.add(back, c);
 		
-		JPanel titlePanel = new JPanel();
-		titlePanel.setBackground(new Color(0, 0, 0, 100));
-		titlePanel.setLayout(new BorderLayout());
-		titlePanel.add(title, BorderLayout.WEST);
-		titlePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+//		JPanel titlePanel = new JPanel();
+//		titlePanel.setBackground(new Color(0, 0, 0, 100));
+//		titlePanel.setLayout(new BorderLayout());
+//		titlePanel.add(title, BorderLayout.WEST);
+//		titlePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
 		addPanel = new JPanel();
 		addPanel.setBackground(getBackground());
@@ -133,7 +138,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBackground(getBackground());
 		mainPanel.setLayout(new BorderLayout());
-		mainPanel.add(titlePanel, BorderLayout.NORTH);
+		mainPanel.add(mp, BorderLayout.NORTH);
 		mainPanel.add(buttonPanel, BorderLayout.WEST);
 		mainPanel.add(addedPanel, BorderLayout.EAST);
 		
@@ -145,6 +150,11 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		if(e.getSource().equals(back)) {
 			gui.switchPanel(new CompetitionPanel(gui));
 		}
+		
+		if(e.getSource().equals(add)){
+			gui.switchPanel(new AddPlayersPanel(gui));
+		}
+		
 		if(e.getSource().equals(add)) {
 			boolean alreadyThere = false;
 			for(int x = 0; x < scrollPane.getComponents().length; x++) {
