@@ -268,28 +268,38 @@ public class WordChecker {
 				}
 				if (yCheckerNumbers[0] == yCheckerNumbers[1])
 				{
+					boolean firstTurnChecker = true;
 					for (int myValue = 0; myValue < xCheckerNumbers.length; myValue++)
 					{
 						if (myValue + 1 < xCheckerNumbers.length)
 						{
 							if (xCheckerNumbers[myValue + 1] != xCheckerNumbers[myValue] + 1)
 							{
-								connections = false;
+								firstTurnChecker = false;
 							}
 						}
+					}
+					if (firstTurnChecker)
+					{
+						connections = true;
 					}
 				}
 				else
 				{
+					boolean firstTurnChecker = true;
 					for (int myValue = 0; myValue < yCheckerNumbers.length; myValue++)
 					{
 						if (myValue + 1 < yCheckerNumbers.length)
 						{
-							if (yCheckerNumbers[myValue + 1] != yCheckerNumbers[myValue] + 1)
+							if (xCheckerNumbers[myValue + 1] != xCheckerNumbers[myValue] + 1)
 							{
-								connections = false;
+								firstTurnChecker = false;
 							}
 						}
+					}
+					if (firstTurnChecker)
+					{
+						connections = true;
 					}
 				}
 			}
