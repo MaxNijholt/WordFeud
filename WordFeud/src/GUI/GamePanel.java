@@ -302,14 +302,33 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		}
 		if (e.getSource().equals(swap))
 		{
-			turnOffThreads();
-			gui.switchPanel(new GamePanel(gui));
+			for (int i = 0; i < field.size(); i++) {
+				if (field.get(i).getGameStone() != null) {
+					if (field.get(i).getGameStone().getHand()) {
+						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+						field.get(i).setGameStone(null);
+					}
+				}
+			}
+			for(int i = 0; i < hand.size(); i++) {
+				hand.get(i).setGameStone(stones.get(i));
+			}
 		}
 		if (e.getSource().equals(play))
 		{
-			System.out.println(gui.playWord());
-			turnOffThreads();
-			gui.switchPanel(new GamePanel(gui));
+			System.out.println(gui.playWord());			
+			for (int i = 0; i < field.size(); i++) {
+				if (field.get(i).getGameStone() != null) {
+					if (field.get(i).getGameStone().getHand()) {
+						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+						field.get(i).setGameStone(null);
+					}
+				}
+			}
+			for(int i = 0; i < hand.size(); i++) {
+				hand.get(i).setGameStone(stones.get(i));
+			}
+			currentGameStone = null;
 		}
 		if (e.getSource().equals(resign))
 		{
