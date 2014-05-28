@@ -24,7 +24,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 
 	private AScrollPane scrollPane;
 	private JPanel gameContent;
-	private SButton competition;
+	private SButton competition, refresh;
 	private GUI gui;
 	private MenuPanel mp;
 
@@ -42,6 +42,17 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		JPanel allPanel = new JPanel();
 		allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.PAGE_AXIS));
 		allPanel.setBackground(new Color(94,94,94));
+		
+		refresh = new SButton("Refresh", SButton.T_GREY, 2000, 60);
+		allPanel.add(refresh);
+		refresh.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				gui.switchPanel(new PlayerPanel(gui));
+			}
+			
+		});
 		
 		//create the competition button
 		competition = new SButton("Competitions", SButton.T_GREY, 2000, 60);
