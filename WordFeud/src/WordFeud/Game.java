@@ -56,6 +56,7 @@ public class Game {
 		myField.layGameStone(gamestone, location);
 		System.out.println(gamestone.getID());
 		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
+		
 		return points;
 	}
 	
