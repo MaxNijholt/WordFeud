@@ -27,7 +27,7 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 	private SButton arrow;
 	private JPopupMenu pop;
 	private ArrayList<SButton> buttonList;
-	private AdminPanel adpa;
+	private JPanel adpa;
 
 	public MComboBox(int width, int height, String[] items, AdminPanel ap) {
 		// Default Component stuff
@@ -104,15 +104,16 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 			s.setCustomRounded(false, false, false, false);
 		} 
 		else {
-			s.setCustomRounded(false, false, false, false);
+			buttonList.get(buttonList.size()-1).setCustomRounded(false, false, false, false);
+			s.setCustomRounded(false, false, true, true);
 		}
-
+		
 		s.setColors(new Color(255, 255, 255), new Color(235, 235, 235),
 				new Color(220, 220, 220));
 		s.setPreferredSize(this.getPreferredSize());
 		s.addActionListener(this);
 		for (int i = 1; i < buttonList.size(); i++) {
-			buttonList.get(i).setRounded(false);
+//			buttonList.get(i).setRounded(false);
 		}
 
 		buttonList.add(s);
@@ -121,7 +122,7 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 				@Override
 				public void actionPerformed(ActionEvent e) {
 						placeholder.setText(s.getName());
-						adpa.update();
+						if(adpa instanceof AdminPanel) ((AdminPanel) adpa).update();
 				}
 				
 			});
@@ -130,6 +131,10 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 
 	public void actionPerformed(ActionEvent e) {
 		pop.show(this, 0, this.getHeight());
+		if(e.getSource().equals(arrow)){
+			arrow.setCustomRounded(false, true, false, false);
+			placeholder.setCustomRounded(true, false, false, false);
+		}
 		for (SButton s : buttonList) {
 			if (e.getSource().equals(s)) {
 				placeholder.setText(s.getName());
@@ -137,6 +142,7 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 				revalidate();
 			}
 		}
+		repaint();
 	}
 
 	public String getSelectedItem() {
