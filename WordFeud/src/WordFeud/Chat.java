@@ -40,4 +40,8 @@ public class Chat implements Runnable {
 		}		
 	}
 	
+	public void closeThread(){
+		t.interrupt();
+	}
+	
 }
