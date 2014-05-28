@@ -11,28 +11,23 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 import Utility.AScrollPane;
 import Utility.DBCommunicator;
 import Utility.SButton;
-import Utility.STextArea;
 import WordFeud.Chat;
 import WordFeud.Game;
-import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
 public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 
-	private STextArea 	printArea;
-	private JTextArea 	typeArea;
+	private JTextArea 	typeArea, printArea;
 	private SButton		send;
 	private Game		game;
 	private GUI			gui;
-	private AScrollPane	scrollTypePanel;
+	private AScrollPane	scrollTypePanel, scrollPrintPanel;
 	private Chat 		chat;
 	
 	public ChatPanel(GUI gui, Game game){
@@ -42,14 +37,17 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		this.game = game;
 		this.gui = gui;
 			
-		printArea = new STextArea(220, 350);	
+		printArea = new JTextArea();	
 		printArea.setEditable(false);
+		printArea.setWrapStyleWord(true);
+		printArea.setLineWrap(true);
 		
 		typeArea= new JTextArea();
 		typeArea.addKeyListener(this);
 		typeArea.setWrapStyleWord(true);
 		typeArea.setLineWrap(true);
 		
+		scrollPrintPanel = new AScrollPane(220, 350, printArea, false, true);
 		
 		scrollTypePanel = new AScrollPane(160, 90, typeArea, false, true);
 		scrollTypePanel.setPreferredSize(new Dimension(160,90));
@@ -65,7 +63,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		c.gridy = 0;
 		c.gridwidth = 2;
 		c.insets = new Insets(5, 0, 5, 0);
-		this.add(printArea, c);
+		this.add(scrollPrintPanel, c);
 		c.gridy++;
 		c.gridwidth = 1;
 		this.add(scrollTypePanel, c);
@@ -76,16 +74,26 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
+		if(!typeArea.getText().trim().isEmpty()){
+		DBCommunicator.sendMsg(typeArea.getText().trim(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
 		typeArea.setText("");
+		}
+		else{
+			System.out.println("geen tekst");
+		}
 	}
 	
 	public void keyPressed(KeyEvent e)
 	{
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+			if(!typeArea.getText().trim().isEmpty()){
 			e.consume();
-			DBCommunicator.sendMsg(typeArea.getText(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
+			DBCommunicator.sendMsg(typeArea.getText().trim(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
 			typeArea.setText("");
+			}
+			else{
+				System.out.println("geen tekst");
+			}
 		 }
 	}
 
@@ -97,7 +105,6 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		printArea.setText("");
 		for(String e : chat){
 			printArea.setText(printArea.getText() + e);
-			//System.out.println(e);
 		}
 	}
 }

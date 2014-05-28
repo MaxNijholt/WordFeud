@@ -83,11 +83,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 			for (int x = 1; x < 16; x++) {
 
 				if (tiles.get(x + "," + y).getGameStone() != null) {
-					System.out.println(tiles.get(x + "," + y).getGameStone()
-							.getTurn());
-					System.out.println(turn);
 					if (tiles.get(x + "," + y).getGameStone().getTurn() <= turn) {
-						System.out.println("steen gelegd op " + x + "," + y);
 						Tile tile = tiles.get(x + "," + y);
 						field.add(tile);
 						tile.setPickablity(false);
@@ -153,19 +149,13 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 			if (turn != spectate.getLastTurn()) {
 				turn++;
 				tiles = spectate.getMyField().getTiles();
-				System.out.println(turn);
 
 				xPos = bp.getPreferredSize().width + 20;
 				yPos = 50;
 				for (int y = 1; y < 16; y++) {
 					for (int x = 1; x < 16; x++) {
 						if (tiles.get(x + "," + y).getGameStone() != null) {
-							System.out.println(tiles.get(x + "," + y)
-									.getGameStone().getTurn());
-							System.out.println(turn);
 							if (tiles.get(x + "," + y).getGameStone().getTurn() <= turn) {
-								System.out.println("steen gelegd op " + x + ","
-										+ y);
 								Tile tile = tiles.get(x + "," + y);
 								field.add(tile);
 								tile.setPickablity(false);
@@ -191,22 +181,16 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 			}
 		}
 		if (e.getSource().equals(previous)) {
-			if (turn != 3) {
+			if (turn >= 3) {
 				turn--;
 				tiles = spectate.getMyField().getTiles();
-				System.out.println(turn);
 
 				xPos = bp.getPreferredSize().width + 20;
 				yPos = 50;
 				for (int y = 1; y < 16; y++) {
 					for (int x = 1; x < 16; x++) {
 						if (tiles.get(x + "," + y).getGameStone() != null) {
-							System.out.println(tiles.get(x + "," + y)
-									.getGameStone().getTurn());
-							System.out.println(turn);
 							if (tiles.get(x + "," + y).getGameStone().getTurn() <= turn) {
-								System.out.println("steen gelegd op " + x + ","
-										+ y);
 								Tile tile = tiles.get(x + "," + y);
 								field.add(tile);
 								tile.setPickablity(false);

@@ -54,7 +54,7 @@ public class Game {
 	 */
 	public int layGameStone(GameStone gamestone, String location){
 		myField.layGameStone(gamestone, location);
-	
+		System.out.println(gamestone.getID());
 		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
 		return points;
 	}
@@ -98,47 +98,34 @@ public class Game {
 		
 		for(Entry<String, GameStone> word : newWords.entrySet()){
 			String key = word.getKey();
-			char[] charKey = key.toCharArray();
+			//char[] charKey = key.toCharArray();
 			boolean doneX = false;
 			int x = 0;
 			int y = 0;
 			
-			for(char letter : charKey){
-				if(letter != ','){
-					if(!doneX){
-						if(x == 0){
-							x = (int) letter;
-						}
-						else{
-							x = ((int) letter) + 10;
-						}
-					}
-					else{
-						if(y == 0){
-							y = (int) letter;
-						}
-						else{
-							y = ((int) letter) + 10;
-						}
-					}
-				}
-				else{
-					doneX = true;
-				}
-			}
+			String[] cords = key.split(",");
+			x = Integer.parseInt(cords[0]);
+			y = Integer.parseInt(cords[1]);
+			
 			
 			int stoneID = word.getValue().getID();
+			System.out.println(stoneID);
 			String character = DBCommunicator.requestData("SELECT letterType_karakter FROM letter WHERE id = " + stoneID + " AND spel_id = " + id);
+			System.out.println(character);
 			if(!character.equals("?")){
 				DBCommunicator.writeData("INSERT INTO gelegdeletter (letter_id, spel_id, beurt_id, tegel_x, tegel_y, tegel_bord_naam, blancoletterkarakter)"
-						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', NULL");
+						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', NULL)");
 			}
 			else{
 				DBCommunicator.writeData("INSERT INTO gelegdeletter (letter_id, spel_id, beurt_id, tegel_x, tegel_y, tegel_bord_naam, blancoletterkarakter)"
-						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', " + word.getValue().getLetter());
+						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', " + word.getValue().getLetter() + ")");
 			}
 			
-			gameStones.remove(stoneID);
+			for(int e = 0; e < gameStones.size(); e++){
+				if(gameStones.get(e) == stoneID){
+					gameStones.remove(e);
+				}
+			}
 			
 			int potSize = DBCommunicator.requestInt("SELECT COUNT(letter_id) FROM pot WHERE spel_id = " + id);
 			if(potSize != 0){

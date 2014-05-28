@@ -131,6 +131,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 			{
 				if (currentGameStones.get(i) != null)
 				{
+					System.out.println(currentGameStones.get(i).getID());
 					tile.setGameStone(currentGameStones.get(i));
 					tile.getGameStone().setHand(true);
 
