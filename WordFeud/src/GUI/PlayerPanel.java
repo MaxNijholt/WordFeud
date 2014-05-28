@@ -30,7 +30,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 
 	public PlayerPanel(final GUI gui){
 		this.gui = gui;
-		this.mp = new MenuPanel(gui, new LoginPanel(gui));
+		this.mp = new MenuPanel(gui, "LoginPanel");
 		this.mp.getBackButton().addActionListener(this);
 		
 		gui.setLoadingCursor(true);
