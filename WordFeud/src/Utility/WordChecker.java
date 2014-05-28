@@ -211,8 +211,9 @@ public class WordChecker {
 	{
 		HashMap<String, Tile> field = playBoard;
 		boolean connections = false;
+		boolean looseStone = false;
 		int connectionsWithBoard = 0;
-		boolean connectionsWithSelf = true;
+		int connectionsWithSelf = 0;
 		String xx = "";
 		String yy = "";
 		ArrayList<String> coordinate = new ArrayList<>();
@@ -382,10 +383,14 @@ public class WordChecker {
 							{
 								connectionsWithBoard++;
 							}
-							if (!topSelf && !downSelf && !leftSelf
-									&& !rightSelf)
+							if (topSelf || downSelf || leftSelf || rightSelf)
 							{
-								connectionsWithSelf = false;
+								connectionsWithSelf++;
+							}
+							if (!(top || down || left || right)
+									&& (topSelf || downSelf || leftSelf || rightSelf))
+							{
+								looseStone = true;
 							}
 						}
 						else
@@ -474,7 +479,12 @@ public class WordChecker {
 								if (!topSelf && !downSelf && !leftSelf
 										&& !rightSelf)
 								{
-									connectionsWithSelf = false;
+									connectionsWithSelf++;
+								}
+								if (!(top || down || left || right)
+										&& (topSelf || downSelf || leftSelf || rightSelf))
+								{
+									looseStone = true;
 								}
 							}
 						}
@@ -560,7 +570,12 @@ public class WordChecker {
 							if (!topSelf && !downSelf && !leftSelf
 									&& !rightSelf)
 							{
-								connectionsWithSelf = false;
+								connectionsWithSelf++;
+							}
+							if (!(top || down || left || right)
+									&& (topSelf || downSelf || leftSelf || rightSelf))
+							{
+								looseStone = true;
 							}
 						}
 						else
@@ -688,15 +703,16 @@ public class WordChecker {
 			}
 
 		}
-		if (connectionsWithBoard > 1)
-		{
-			connections = true;
-		}
-		if (connectionsWithBoard > 0 && connectionsWithSelf == true)
+
+		if (connectionsWithBoard > 0 && connectionsWithSelf < 0)
 		{
 			connections = true;
 		}
 		if (connectionsWithBoard == 0 && !firstTurn)
+		{
+			connections = false;
+		}
+		if (looseStone)
 		{
 			connections = false;
 		}
