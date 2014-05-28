@@ -26,8 +26,7 @@ import WordFeud.GameStone;
 import WordFeud.Tile;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements Runnable, MouseListener,
-		MouseMotionListener, ActionListener {
+public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener {
 
 	private SButton pass, swap, resign, play, shuffle;
 	private ChatPanel cp;
@@ -66,6 +65,11 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 		play.addActionListener(this);
 		shuffle.addActionListener(this);
 
+		ArrayList<SButton> buttons = mp.getAllButtons();
+		for(SButton s:buttons) {
+			s.addActionListener(this);
+		}
+		
 		// MenuPanel thread not stopping glitch fix:
 		mp.getBackButton().addActionListener(this);
 
@@ -145,6 +149,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 
 	public void run()
 	{
+		System.out.println("[GAMEPANEL] Game_Thread has started");
 		while (running)
 		{
 			repaint();
@@ -157,6 +162,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 				e.printStackTrace();
 			}
 		}
+		System.out.println("[GAMEPANEL] Game_Thread has stoppped");
 	}
 
 	public void paintComponent(Graphics g)
@@ -271,8 +277,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener,
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource().equals(mp.getBackButton()))
-		{
+		if (e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
+			cp.getChat().closeThread();
 			running = false;
 		}
 		if (e.getSource().equals(shuffle))

@@ -107,4 +107,6 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 			printArea.setText(printArea.getText() + e);
 		}
 	}
+	
+	public Chat getChat() {return chat;}
 }

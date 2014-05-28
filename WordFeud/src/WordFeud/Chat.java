@@ -5,7 +5,7 @@ import Utility.DBCommunicator;
 
 public class Chat implements Runnable {
 	
-	private final boolean chat = true;
+	private boolean chat = true;
 	private int gameID;
 	private ChatPanel chatPanel;
 	private Thread t;
@@ -28,7 +28,7 @@ public class Chat implements Runnable {
 	@Override
 	public void run()
 	{
-		System.out.println("Thread has started");
+		System.out.println("[CHATPANEL] Chat_Thread has started");
 		while(chat){
 			try{
 				chatPanel.setChatText(DBCommunicator.getChat(gameID));
@@ -37,11 +37,12 @@ public class Chat implements Runnable {
 			catch(InterruptedException e){
 				e.printStackTrace();
 			}			
-		}		
+		}	
+		System.out.println("[CHATPANEL] Chat_Thread has stopped");
 	}
 	
 	public void closeThread(){
-		t.interrupt();
+		chat = false;
 	}
 	
 }
