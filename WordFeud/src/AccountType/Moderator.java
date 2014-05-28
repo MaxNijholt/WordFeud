@@ -10,7 +10,7 @@ import Utility.DBCommunicator;
  */
 
 public class Moderator{
-	private ArrayList<String> pendingWords;
+	private ArrayList<String> pendingWords = new ArrayList<String>();
 
 	/**
 	 * Gets unapproved words out of a list from the Database
@@ -18,12 +18,8 @@ public class Moderator{
 	 * @return a list of pending words
 	 */
 	public ArrayList<String> getNotAprovedWords() {
-
-		pendingWords = DBCommunicator
-				.requestMoreData("SELECT * FROM woordenboek where status = 'Pending'");
-
+		pendingWords = DBCommunicator.requestMoreData("SELECT woord FROM woordenboek WHERE status='Pending'");
 		return pendingWords;
-
 	}
 
 	/**
@@ -39,7 +35,7 @@ public class Moderator{
 	}
 	
 	public boolean tryAddWord(String word){
-		if (DBCommunicator.requestData("Select * FROM woordenboek where woord = '" + word + "'") == null){
+		if (DBCommunicator.requestData("SELECT * FROM woordenboek where woord = '" + word + "'") == null){
 			return true;
 		}
 		else return false;

@@ -54,7 +54,7 @@ public class SplashText implements Runnable {
 			"Woah!", "Wow!", "Yaay!", "Water proof!", "Superfragilisticexpialidocious!",
 			"This message will be to small for you to see, am i right?", "Try it!", "this.addBeer(new Beer());",
 			"Random Splashtexts ftw", "if(this.beer.isEmpty()){newBeer();}", "Colormatic!", "$W@G", "OverPowered",
-			"Might contain peanuts"
+			"Might contain peanuts", "max.getBeer();"
 		};
 		
 		String text	 	= texts[new Random().nextInt(texts.length)];
