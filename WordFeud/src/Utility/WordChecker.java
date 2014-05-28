@@ -372,9 +372,10 @@ public class WordChecker {
 							{
 								connectionsWithBoard++;
 							}
-							if (!topSelf && !downSelf && !leftSelf && !rightSelf)
+							if (!topSelf && !downSelf && !leftSelf
+									&& !rightSelf)
 							{
-								connectionsWithSelf=false;
+								connectionsWithSelf = false;
 							}
 						}
 						else
@@ -402,9 +403,10 @@ public class WordChecker {
 								int x = xCheckerNumbers[0];
 								int y = yCheckerNumbers[myValue];
 								y--;
-								if ((field.get(x + "," + y) != null && field.get(
-										x + "," + y).getGameStone() != null)
-										&& !playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
 									top = true;
 								}
@@ -415,9 +417,10 @@ public class WordChecker {
 
 								y++;
 								y++;
-								if ((field.get(x + "," + y) != null && field.get(
-										x + "," + y).getGameStone() != null)
-										&& !playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
 									down = true;
 								}
@@ -428,9 +431,10 @@ public class WordChecker {
 
 								y--;
 								x--;
-								if ((field.get(x + "," + y) != null && field.get(
-										x + "," + y).getGameStone() != null)
-										&& !playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
 									left = true;
 								}
@@ -441,9 +445,10 @@ public class WordChecker {
 
 								x++;
 								x++;
-								if ((field.get(x + "," + y) != null && field.get(
-										x + "," + y).getGameStone() != null)
-										&& !playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
 									right = true;
 								}
@@ -456,9 +461,10 @@ public class WordChecker {
 								{
 									connectionsWithBoard++;
 								}
-								if (!topSelf && !downSelf && !leftSelf && !rightSelf)
+								if (!topSelf && !downSelf && !leftSelf
+										&& !rightSelf)
 								{
-									connectionsWithSelf=false;
+									connectionsWithSelf = false;
 								}
 							}
 						}
@@ -541,9 +547,10 @@ public class WordChecker {
 							{
 								connectionsWithBoard++;
 							}
-							if (!topSelf && !downSelf && !leftSelf && !rightSelf)
+							if (!topSelf && !downSelf && !leftSelf
+									&& !rightSelf)
 							{
-								connectionsWithSelf=false;
+								connectionsWithSelf = false;
 							}
 						}
 						else
@@ -671,7 +678,11 @@ public class WordChecker {
 			}
 
 		}
-		if (connectionsWithBoard > 0&& connectionsWithSelf==true)
+		if (connectionsWithBoard > 1)
+		{
+			connections = true;
+		}
+		if (connectionsWithBoard > 0 && connectionsWithSelf == true)
 		{
 			connections = true;
 		}
