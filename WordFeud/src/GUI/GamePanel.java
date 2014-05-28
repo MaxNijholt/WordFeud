@@ -39,6 +39,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private Thread thread = new Thread(this);
 	private ArrayList<Tile> hand = new ArrayList<Tile>();
 	private ArrayList<Tile> field = new ArrayList<Tile>();
+	private ArrayList<GameStone> stones = new ArrayList<GameStone>();
 	private int mouseX, mouseY, turnScore=0;
 
 	public GamePanel(GUI gui) {
@@ -137,6 +138,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				{
 					System.out.println(currentGameStones.get(i).getID());
 					tile.setGameStone(currentGameStones.get(i));
+					stones.add(currentGameStones.get(i));
 					tile.getGameStone().setHand(true);
 
 				}
@@ -293,18 +295,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 				}
 			}
-			ArrayList<GameStone> stones = new ArrayList<GameStone>();
-			for(Tile t:hand) {
-				if(t.getGameStone() != null) {
-					stones.add(t.getGameStone());
-				}
-				t.setGameStone(null);
-			}
 			Collections.shuffle(stones);
 			for(int i = 0; i < hand.size(); i++) {
-				if(stones.get(i) != null) {
-					hand.get(i).setGameStone(stones.get(i));
-				}
+				hand.get(i).setGameStone(stones.get(i));
 			}
 			currentGameStone = null;
 		}
