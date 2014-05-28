@@ -117,7 +117,8 @@ public class WordChecker {
 		{
 			if (DBCommunicator
 					.requestData("SELECT woord FROM woordenboek where woord='"
-							+ wordForCheck + "'") == null)
+							+ wordForCheck
+							+ "' and status = 'Accepted' AND letterset_code = 'EN'") == null)
 			{
 
 				deniedWords.add(wordForCheck);
@@ -297,63 +298,50 @@ public class WordChecker {
 
 						if ((myValue + 1) <= xCheckerNumbers.length)
 						{
-							top = true;
-							down = true;
-							left = true;
-							right = true;
-							int x = Integer.parseInt(xx.substring(0, 1));
-							int y = Integer.parseInt(yy.substring(
-									(yy.length() - 2), (yy.length() - 1)));
+							top = false;
+							down = false;
+							left = false;
+							right = false;
+							int x = xCheckerNumbers[myValue];
+							int y = yCheckerNumbers[0];
 							y--;
-							if ((field.get(x + "," + y) == null || field.get(
-									x + "," + y).getGameStone() == null)
-									|| playd.keySet().contains(x + "," + y))
+							if ((field.get(x + "," + y) != null && field.get(
+									x + "," + y).getGameStone() != null)
+									&& !playd.keySet().contains(x + "," + y))
 							{
-								top = false;
+								top = true;
 							}
-							else
-							{
-								connectionsWithBoard++;
-							}
+
 							y++;
 							y++;
-							if ((field.get(x + "," + y) == null || field.get(
-									x + "," + y).getGameStone() == null)
-									|| playd.keySet().contains(x + "," + y))
+							if ((field.get(x + "," + y) != null && field.get(
+									x + "," + y).getGameStone() != null)
+									&& !playd.keySet().contains(x + "," + y))
 							{
-								down = false;
+								down = true;
 							}
 							else
+
+								y--;
+							if ((field.get(x + "," + y) != null && field.get(
+									x + "," + y).getGameStone() != null)
+									&& !playd.keySet().contains(x + "," + y))
 							{
-								connectionsWithBoard++;
+								left = true;
 							}
-							y--;
-							x--;
-							if ((field.get(x + "," + y) == null || field.get(
-									x + "," + y).getGameStone() == null)
-									|| playd.keySet().contains(x + "," + y))
-							{
-								left = false;
-							}
-							else
-							{
-								connectionsWithBoard++;
-							}
+
 							x++;
 							x++;
-							if ((field.get(x + "," + y) == null || field.get(
-									x + "," + y).getGameStone() == null)
-									|| playd.keySet().contains(x + "," + y))
+							if ((field.get(x + "," + y) != null && field.get(
+									x + "," + y).getGameStone() != null)
+									&& !playd.keySet().contains(x + "," + y))
 							{
-								right = false;
+								right = true;
 							}
-							else
+
+							if (top || down || left || right)
 							{
 								connectionsWithBoard++;
-							}
-							if (!top && !down && !left && !right)
-							{
-								connections = false;
 							}
 						}
 						else
@@ -369,63 +357,54 @@ public class WordChecker {
 								{
 									connectionsWithBoard++;
 								}
-								top = true;
-								down = true;
-								left = true;
-								right = true;
-								int x = Integer.parseInt(xx.substring(0, 1));
-								int y = Integer.parseInt(yy.substring(
-										(yy.length() - 2), (yy.length() - 1)));
+								top = false;
+								down = false;
+								left = false;
+								right = false;
+								int x = xCheckerNumbers[0];
+								int y = yCheckerNumbers[myValue];
 								y--;
-								if ((field.get(x + "," + y) == null || field
-										.get(x + "," + y).getGameStone() == null)
-										|| playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
-									top = false;
+									top = true;
 								}
-								else
-								{
-									connectionsWithBoard++;
-								}
+
 								y++;
 								y++;
-								if ((field.get(x + "," + y) == null || field
-										.get(x + "," + y).getGameStone() == null)
-										|| playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
-									down = false;
+									down = true;
 								}
 								else
+
+									y--;
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
-									connectionsWithBoard++;
+									left = true;
 								}
-								y--;
-								x--;
-								if ((field.get(x + "," + y) == null || field
-										.get(x + "," + y).getGameStone() == null)
-										|| playd.keySet().contains(x + "," + y))
-								{
-									left = false;
-								}
-								else
-								{
-									connectionsWithBoard++;
-								}
+
 								x++;
 								x++;
-								if ((field.get(x + "," + y) == null || field
-										.get(x + "," + y).getGameStone() == null)
-										|| playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
-									right = false;
+									right = true;
 								}
-								else
+
+								if (top || down || left || right)
 								{
 									connectionsWithBoard++;
-								}
-								if (!top && !down && !left && !right)
-								{
-									connections = false;
 								}
 							}
 						}
@@ -446,9 +425,8 @@ public class WordChecker {
 							down = false;
 							left = false;
 							right = false;
-							int x = Integer.parseInt(xx.substring(0, 1));
-							int y = Integer.parseInt(yy.substring(
-									(yy.length() - 2), (yy.length() - 1)));
+							int x = xCheckerNumbers[0];
+							int y = yCheckerNumbers[myValue];
 							y--;
 							if ((field.get(x + "," + y) != null && field.get(
 									x + "," + y).getGameStone() != null)
@@ -502,63 +480,54 @@ public class WordChecker {
 								{
 									connectionsWithBoard++;
 								}
-								top = true;
-								down = true;
-								left = true;
-								right = true;
-								int x = Integer.parseInt(xx.substring(0, 1));
-								int y = Integer.parseInt(yy.substring(
-										(yy.length() - 2), (yy.length() - 1)));
+								top = false;
+								down = false;
+								left = false;
+								right = false;
+								int x = xCheckerNumbers[0];
+								int y = yCheckerNumbers[myValue];
 								y--;
-								if ((field.get(x + "," + y) == null || field
-										.get(x + "," + y).getGameStone() == null)
-										|| playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
-									top = false;
+									top = true;
 								}
-								else
-								{
-									connectionsWithBoard++;
-								}
+
 								y++;
 								y++;
-								if ((field.get(x + "," + y) == null || field
-										.get(x + "," + y).getGameStone() == null)
-										|| playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
-									down = false;
+									down = true;
 								}
 								else
+
+									y--;
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
-									connectionsWithBoard++;
+									left = true;
 								}
-								y--;
-								x--;
-								if ((field.get(x + "," + y) == null || field
-										.get(x + "," + y).getGameStone() == null)
-										|| playd.keySet().contains(x + "," + y))
-								{
-									left = false;
-								}
-								else
-								{
-									connectionsWithBoard++;
-								}
+
 								x++;
 								x++;
-								if ((field.get(x + "," + y) == null || field
-										.get(x + "," + y).getGameStone() == null)
-										|| playd.keySet().contains(x + "," + y))
+								if ((field.get(x + "," + y) != null && field
+										.get(x + "," + y).getGameStone() != null)
+										&& !playd.keySet()
+												.contains(x + "," + y))
 								{
-									right = false;
+									right = true;
 								}
-								else
+
+								if (top || down || left || right)
 								{
 									connectionsWithBoard++;
-								}
-								if (!top && !down && !left && !right)
-								{
-									connections = false;
 								}
 							}
 						}
@@ -572,8 +541,8 @@ public class WordChecker {
 			down = true;
 			left = true;
 			right = true;
-			int x = Integer.parseInt(xx.substring(0, 1));
-			int y = Integer.parseInt(yy.substring(0, 1));
+			int x = xCheckerNumbers[0];
+			int y = yCheckerNumbers[0];
 			y--;
 			if (field.get(x + "," + y) == null
 					|| field.get(x + "," + y).getGameStone() == null)
@@ -622,6 +591,10 @@ public class WordChecker {
 				connections = false;
 			}
 
+		}
+		if (connectionsWithBoard > 0)
+		{
+			connections = true;
 		}
 		if (connectionsWithBoard == 0 && !firstTurn)
 		{
