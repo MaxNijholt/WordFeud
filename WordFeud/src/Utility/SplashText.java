@@ -48,13 +48,14 @@ public class SplashText implements Runnable {
 		colors 		= new Color[11];
 		texts		= new String[] 
 		{	
-			"Heumeuuuu","This is awesome", "So cool", "Really nice!", "45% bug free!", "Awesome", "LOL!",
+			"Heumeuuuu","This is awesome", "So cool", "Really nice!", "51% bug free!", "Awesome", "LOL!",
 			"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
 			"Deja vu!", "Deja vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
 			"Woah!", "Wow!", "Yaay!", "Water proof!", "Superfragilisticexpialidocious!",
 			"This message will be to small for you to see, am i right?", "Try it!", "this.addBeer(new Beer());",
 			"Random Splashtexts ftw", "if(this.beer.isEmpty()){newBeer();}", "Colormatic!", "$W@G", "OverPowered",
-			"Might contain peanuts", "max.getBeer();"
+			"Might contain peanuts", "max.getBeer();", "NullCounter!", "WC", "Software Engineering != cool",
+			"a2 + b2 = c2", "Threaderdethread", "Why do Java programmers wear glasses, because they don't C#"
 		};
 		
 		String text	 	= texts[new Random().nextInt(texts.length)];

@@ -280,8 +280,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
-			cp.getChat().closeThread();
-			running = false;
+			turnOffThreads();
 		}
 		if (e.getSource().equals(shuffle))
 		{
@@ -303,23 +302,26 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		}
 		if (e.getSource().equals(swap))
 		{
-
+			turnOffThreads();
 			gui.switchPanel(new GamePanel(gui));
 		}
 		if (e.getSource().equals(play))
 		{
 			System.out.println(gui.playWord());
+			turnOffThreads();
 			gui.switchPanel(new GamePanel(gui));
 		}
 		if (e.getSource().equals(resign))
 		{
 			game.resign();
+			turnOffThreads();
 			gui.switchPanel(new GamePanel(gui));
 		}
 		if (e.getSource().equals(pass))
 		{
 			System.out.println("pass");
 			gui.pass();
+			turnOffThreads();
 			gui.switchPanel(new GamePanel(gui));
 		}
 	}
@@ -341,5 +343,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void setTurnScore(int turnScore)
 	{
 		this.turnScore = turnScore;
+	}
+	
+	public void turnOffThreads() {
+		cp.getChat().closeThread();
+		running = false;
 	}
 }
