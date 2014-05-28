@@ -108,7 +108,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 			yPos += 33;
 		}
 
-		ArrayList<GameStone> currentGameStones = spectate.getHand(turn);
+		ArrayList<GameStone> currentGameStones = spectate.getHand(turn - 1);
 
 		for (int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
@@ -146,7 +146,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 					(t.getYPos() * 33) + 580, null);
 		}
 		for (Tile t : opponentHand) {
-			g2d.drawImage(t.getImage(), (t.getXPos() * 33) + (gui.getWidth() - 180),
+			g2d.drawImage(t.getImage(), ((t.getXPos() * 33) + (8 * 33)) + 180,
 					(t.getYPos() * 33) + 580, null);
 		}
 		g2d.dispose();
@@ -187,7 +187,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 					yPos += 33;
 				}
 
-				ArrayList<GameStone> currentGameStones = spectate.getHand(turn);
+				ArrayList<GameStone> currentGameStones = spectate.getHand(turn - 1);
 
 				for (int i = 0; i < 7; i++) {
 					Tile tile = new Tile(i + 1, -1);
@@ -197,6 +197,18 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 						}
 					}
 					hand.add(tile);
+				}
+				
+				ArrayList<GameStone> opponentGameStones = spectate.getHand(turn);
+
+				for (int i = 0; i < 7; i++) {
+					Tile tile = new Tile(i + 1, -1);
+					if (i < opponentGameStones.size()) {
+						if (opponentGameStones.get(i) != null) {
+							tile.setGameStone(opponentGameStones.get(i));
+						}
+					}
+					opponentHand.add(tile);
 				}
 
 				repaint();
@@ -236,7 +248,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 					yPos += 33;
 				}
 
-				ArrayList<GameStone> currentGameStones = spectate.getHand(turn);
+				ArrayList<GameStone> currentGameStones = spectate.getHand(turn - 1);
 
 				for (int i = 0; i < 7; i++) {
 					Tile tile = new Tile(i + 1, -1);
@@ -246,6 +258,18 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 						}
 					}
 					hand.add(tile);
+				}
+				
+				ArrayList<GameStone> opponentGameStones = spectate.getHand(turn);
+
+				for (int i = 0; i < 7; i++) {
+					Tile tile = new Tile(i + 1, -1);
+					if (i < opponentGameStones.size()) {
+						if (opponentGameStones.get(i) != null) {
+							tile.setGameStone(opponentGameStones.get(i));
+						}
+					}
+					opponentHand.add(tile);
 				}
 
 				repaint();
