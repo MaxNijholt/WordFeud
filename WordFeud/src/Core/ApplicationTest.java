@@ -7,9 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ApplicationTest {
-
+	Application app;
+	
 	@Before
 	public void setUp() throws Exception {
+		app = new Application();
 	}
 
 	@After
@@ -18,7 +20,7 @@ public class ApplicationTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		
 	}
 
 }

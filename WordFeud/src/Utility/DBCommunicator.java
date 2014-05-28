@@ -307,7 +307,7 @@ public class DBCommunicator {
 		ResultSet 	res;
 		try {
 				stm = con.createStatement();
-				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id, beurt_id FROM gelegdeletter WHERE spel_id='" + gameID + "'");
+				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id, beurt_id, blancoletterkarakter FROM gelegdeletter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
 					if(!gameStones.isEmpty()){
 						if(gameStones.get(1).getID()==-1){
@@ -318,6 +318,9 @@ public class DBCommunicator {
 						if(res.getInt(3)==gs.getID()){
 							hmap.get(res.getString(1)+","+res.getString(2)).setGameStone(gs);
 							hmap.get(res.getString(1)+","+res.getString(2)).getGameStone().setTurn(res.getInt(4));
+						}
+						if(res.getInt(3)==gs.getID() && gs.getLetter()=='?'){
+							gs.setLetter(res.getString(5));
 						}
 					}
 				}
