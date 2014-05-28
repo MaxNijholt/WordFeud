@@ -26,9 +26,9 @@ import Utility.STextField;
 @SuppressWarnings("serial")
 public class CompetitionCreatePanel extends JPanel implements ActionListener {
 
-	private STextField 			name, player;
+	private STextField 			name, max;
 	private SComboBox 			addPlayers;
-	private SLabel 				title, nameLabel, playerLabel, addLabel, addedLabel;
+	private SLabel 				title, nameLabel, maxLabel, addLabel, addedLabel;
 	private AScrollPane			scroller;
 	private ArrayList<SLabel>	addedPlayers;
 	private SButton 			create, back, add;
@@ -48,7 +48,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		
 		title 			= new SLabel("New competition", SLabel.LEFT, new Font("Arial", Font.BOLD, 50));
 		nameLabel		= new SLabel("Competition name", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
-		playerLabel		= new SLabel("Maximum players", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
+		maxLabel		= new SLabel("Maximum players", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
 		addLabel		= new SLabel("Add player", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
 		addedLabel		= new SLabel("Added players", SLabel.LEFT, 220, 40);
 		
@@ -57,7 +57,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		add 			= new SButton("Add", SButton.GREY, 110, 40);
 		
 		name 			= new STextField("Competition name", 220, 40);
-		player 			= new STextField("Maximum players (2 up to 24)", 220, 40);
+		max	 			= new STextField("Maximum players (24)", 220, 40);
 		// To fill the challenger box
 				ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account ORDER BY naam ASC");
 				String[] players = new String[allPlayers.size()];
@@ -73,6 +73,9 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		scroller 		= new AScrollPane(100, 100, scrollPane, false, true);
 		for(int i = 0; i < 20; i++) {
 			SButton l = new SButton("Sla" + i, SButton.WHITE);
+			l.setPreferredSize(new Dimension(220, 40));
+			l.setMaximumSize(new Dimension(220, 40));
+			l.setMinimumSize(new Dimension(220, 40));
 			l.setCustomRounded(false, false, false, false);
 			l.setTextColor(Color.BLACK);
 			l.addActionListener(this);
@@ -102,9 +105,9 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		buttonPanel.add(add, c);
 		c.gridx = 0;
 		c.gridy++;
-		buttonPanel.add(playerLabel, c);
+		buttonPanel.add(maxLabel, c);
 		c.gridy++;
-		buttonPanel.add(player, c);
+		buttonPanel.add(max, c);
 		c.gridy++;
 		buttonPanel.add(create, c);
 		c.gridy++;

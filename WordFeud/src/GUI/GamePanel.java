@@ -28,14 +28,14 @@ import WordFeud.Tile;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener {
 
-	private SButton pass, swap, resign, play, shuffle;
-	private ChatPanel cp;
-	private MenuPanel mp;
+	private SButton 			pass, swap, resign, play, shuffle;
+	private ChatPanel 			cp;
+	private MenuPanel 			mp;
+	private Game 				game;
+	private GUI 				gui;
+	private GameStone 			currentGameStone;
+	private boolean 			running = true;
 	private JLabel score=new JLabel();
-	private Game game;
-	private GUI gui;
-	private GameStone currentGameStone;
-	private boolean running = true;
 	private Thread thread = new Thread(this);
 	private ArrayList<Tile> hand = new ArrayList<Tile>();
 	private ArrayList<Tile> field = new ArrayList<Tile>();
@@ -188,54 +188,26 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		g2d.dispose();
 	}
 
-	public void mouseClicked(MouseEvent e)
-	{
-	}
-
-	public void mouseEntered(MouseEvent e)
-	{
-	}
-
-	public void mouseExited(MouseEvent e)
-	{
-	}
-
-	public void mouseReleased(MouseEvent e)
-	{
-	}
-
-	public void mousePressed(MouseEvent e)
-	{
-		if (e.getButton() == MouseEvent.BUTTON1)
-		{
-			for (Tile t : field)
-			{
-				if ((e.getX() >= (t.getXPos() * 33) + 180)
-						&& (e.getX() <= (t.getXPos() * 33) + 180 + 32)
-						&& (e.getY() >= (t.getYPos() * 33) + 10)
-						&& (e.getY() <= (t.getYPos() * 33) + 10 + 32))
-				{
-					if (currentGameStone == null)
-					{
-						if (t.getPickablity())
-						{
+	public void mouseClicked(MouseEvent e) 	{}
+	public void mouseEntered(MouseEvent e) 	{}
+	public void mouseExited(MouseEvent e)	{}
+	public void mouseReleased(MouseEvent e)	{}
+	
+	public void mousePressed(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			for (Tile t : field) {
+				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
+					if (currentGameStone == null) {
+						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
-							t.setPickablity(false);
-							score.setText("Your turn score would be: "
-									+ gui.layGameStone(currentGameStone,
-											(t.getXPos() + "," + t.getYPos())));
-
+							score.setText("Your turn score would be: " + gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							t.setGameStone(null);
 						}
-					}
-					else
-					{
-						if (t.getGameStone() == null)
-						{
+					} 
+					else {
+						if(t.getGameStone() == null) {
 							t.setGameStone(currentGameStone);
-							score.setText("Your turn score would be: "
-									+ gui.layGameStone(currentGameStone,
-											(t.getXPos() + "," + t.getYPos())));
+							score.setText("Your turn score would be: " + gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							t.setPickablity(true);
 							currentGameStone = null;
 						}
