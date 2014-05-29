@@ -201,16 +201,18 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
-							t.setGameStone(null);
 							score.setText("Your turn score would be: " + gui.removeGameStone(t.getXPos() + "," + t.getYPos()));
+							
+							t.setGameStone(null);
 						}
 					}
 					else {
 						if(t.getGameStone() == null) {
 							t.setGameStone(currentGameStone);
 							t.setPickablity(true);
-							currentGameStone = null;
 							score.setText("Your turn score would be: " + gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
+							
+							currentGameStone = null;
 						}
 					}
 				}
