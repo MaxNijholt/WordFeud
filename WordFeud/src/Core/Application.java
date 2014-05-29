@@ -66,16 +66,7 @@ public class Application {
 								+ " VALUES(" + (DBCommunicator.requestInt("SELECT id FROM spel ORDER BY id DESC") + 1) + ", " + selectedCompetition.getID() + ", 'Request', '" + currentAccount.getUsername() + "', '" + player2 + "', CURRENT_TIMESTAMP(), 'Unknown', '" + visible + "' , 'Standard', 'EN');");
 	}
 	
-	public boolean getHaveGameWith(String opponent, int compID){
-		int gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + currentAccount.getUsername() + "' AND account_naam_tegenstander = '" + opponent + "' AND reaktie_type = 'Accepted'");
-		if(gameID == 0){
-			gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + opponent + "' AND account_naam_tegenstander = '" + currentAccount.getUsername() + "' AND reaktie_type = 'Accepted'");
-			if(gameID == 0){
-				return false;
-			}
-		}
-		return true;
-	}
+	
 	
 	/**
 	 * create the new competition
@@ -437,6 +428,96 @@ public class Application {
 		return compInts;
 	}
 	
+	public boolean getHaveGameWith(String opponent, int compID){
+		int gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + currentAccount.getUsername() + "' AND account_naam_tegenstander = '" + opponent + "' AND reaktie_type = 'Accepted' AND toestand_type = 'Playing'");
+		if(gameID == 0){
+			gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + opponent + "' AND account_naam_tegenstander = '" + currentAccount.getUsername() + "' AND reaktie_type = 'Accepted' AND toestand_type = 'Playing'");
+			if(gameID == 0){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public int getAmountGames(String player, int compID){
+		int amount = DBCommunicator.requestInt("SELECT COUNT(id) FROM spel WHERE competitie_id = " + compID + " AND (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "')");
+		return amount;
+	}
+	
+	public ArrayList<Integer> getAllGames(String player, int compID, boolean finished){
+		ArrayList<Integer> allGames = new ArrayList<Integer>();
+		boolean done = false;
+		String restQuery = "";
+		while(!done){
+			int gameID = 0;
+			if(!finished){
+				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') " + restQuery);
+			}
+			else{
+				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') AND (toestand_type = 'Finished' OR toestand_type = 'Resigned') " + restQuery);
+			}
+			if(gameID != 0){
+				allGames.add(gameID);
+				restQuery = restQuery + " AND id <> " + gameID;
+			}
+			else{
+				done = true;
+			}
+		}
+		return allGames;
+	}
+	
+	public int getTotalPoints(String player, int compID){
+		ArrayList<Integer> allGames = getAllGames(player, compID, false);
+		int amount = 0;
+		for(int id: allGames){
+			amount += DBCommunicator.requestInt("SELECT totaalscore FROM score WHERE account_naam = '" + player + "' AND spel_id = " + id);
+		}
+		
+		return amount;
+	}
+	
+	public int getAveragePoints(String player, int compID){
+		int pointsTotal = getTotalPoints(player, compID);
+		int gamesTotal = getAmountGames(player, compID);
+		
+		int average = pointsTotal/gamesTotal;
+		return average;
+	}
+	
+	public int getGamesWon(String player, int compID){
+		ArrayList<Integer> allGames = getAllGames(player, compID, true);
+		int numberWon = 0;
+		for(int id: allGames){
+			String winner = DBCommunicator.requestData("SELECT account_naam FROM score WHERE spel_id = " + id + " ORDER BY totaalscore DESC");
+			
+			if(winner.equals(player)){
+				numberWon++;
+			}
+		}
+		return numberWon;
+	}
+	
+	public int getGamesLost(String player, int compID){
+		ArrayList<Integer> allGames = getAllGames(player, compID, true);
+		int numberWon = 0;
+		for(int id: allGames){
+			String winner = DBCommunicator.requestData("SELECT account_naam FROM score WHERE spel_id = " + id + " ORDER BY totaalscore ASC");
+			if(winner.equals(player)){
+				numberWon++;
+			}
+		}
+		return numberWon;
+	}
+	
+	public double getWinLose(String player, int compID){
+		int won = getGamesWon(player,compID);
+		int lost = getGamesLost(player,compID);
+		
+		double ratio = won/lost;
+		return ratio;
+	}
+	
 	
 	
 	
@@ -540,6 +621,25 @@ public class Application {
 	public int getLastTurnScore(int gameID){
 		int turnScore = DBCommunicator.requestInt("SELECT score FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
 		return turnScore;
+	}
+	
+	/**
+	 * return a boolean if a competition has ended
+	 * @return
+	 */
+	public boolean getTimeEnd(int compID){
+		int comp = DBCommunicator.requestInt("SELECT id FROM competitie WHERE einde <= CURRENT_TIMESTAMP() AND id = " + compID);
+		if(comp == 0){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	public String getEndDate(int compID){
+		String date = DBCommunicator.requestData("SELECT einde FROM competitie WHERE id = " + compID);
+		return date;
 	}
 	
 	/**
