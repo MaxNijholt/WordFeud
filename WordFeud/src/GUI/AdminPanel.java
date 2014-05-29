@@ -253,12 +253,13 @@ public class AdminPanel extends JPanel {
 				if (username.getText().contains(safe[i]) || String.valueOf(password.getPassword()).contains(safe[i])) allowed = false;
 			}
 			if (allowed && 
-				DBCommunicator .requestData("SELECT naam FROM account WHERE naam = '" + username.getText() + "'") == null && 
+				DBCommunicator.requestData("SELECT naam FROM account WHERE naam = '" + username.getText() + "'") == null && 
 				String.valueOf(password.getPassword()).equals( String.valueOf(passwordValidate.getPassword())) &&
-				!String.valueOf(password.getPassword()).isEmpty() && !(String.valueOf(password.getPassword()) .length() < 1)) {
+				!String.valueOf(password.getPassword()).isEmpty() && 
+				!(String.valueOf(password.getPassword()).length() < 1)) {
 					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username.getText() + "', '" + String.valueOf(password.getPassword()) + "')");
 					DBCommunicator .writeData("INSERT INTO accountrol(account_naam, rol_type) VALUES('" + username.getText() + "', 'Player')");
-				}
+			}
 		}
 	}
 

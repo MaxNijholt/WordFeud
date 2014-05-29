@@ -115,15 +115,8 @@ public class GameCreatePanel extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(create)) {
-			System.out.println("Create a game in the database!");
-		}
-		if(e.getSource().equals(cancel)) {
-			gui.switchPanel(new LoginPanel(gui));
-		}
-		if(e.getSource().equals(random)) {
-			System.out.println("Random!!!!!!");
-		}
+		if(e.getSource().equals(create)) System.out.println("[GameCreatePanel]: Create a game in the database!"); 
+		if(e.getSource().equals(cancel)) gui.switchPanel(new LoginPanel(gui));
+		if(e.getSource().equals(random)) System.out.println("[GameCreatePanel]: Random!!!!!!");
 	}
-	
 }
