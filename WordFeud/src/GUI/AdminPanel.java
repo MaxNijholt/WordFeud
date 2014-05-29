@@ -129,19 +129,11 @@ public class AdminPanel extends JPanel {
 
 		this.playerLookupBox.getField().addKeyListener(new KeyListener() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				update();
-			}
-
+			public void keyTyped(KeyEvent e) { update(); }
 			@Override
-			public void keyPressed(KeyEvent e) {
-				update();
-			}
-
+			public void keyPressed(KeyEvent e) { update(); }
 			@Override
-			public void keyReleased(KeyEvent e) {
-				update();
-			}
+			public void keyReleased(KeyEvent e) { update(); }
 		});
 		this.add(wrapper, BorderLayout.CENTER);
 		gui.setLoadingCursor(false);
@@ -149,36 +141,17 @@ public class AdminPanel extends JPanel {
 
 	class ActionAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (!(playerLookupBox.getSelectedItem().equals("") || playerLookupBox
-					.getSelectedItem().equals(null))) {
-				if (e.getSource().equals(grantAdmin)) {
-					admin.addPrivilege(playerLookupBox.getSelectedItem(),
-							"Administrator");
-				}
-				if (e.getSource().equals(grantMod)) {
-					admin.addPrivilege(playerLookupBox.getSelectedItem(),
-							"Moderator");
-				}
-				if (e.getSource().equals(revokeMod)) {
-					admin.removePrivilege(playerLookupBox.getSelectedItem(),
-							"Moderator");
-				}
-				if (e.getSource().equals(revokeAdmin)) {
-					admin.removePrivilege(playerLookupBox.getSelectedItem(),
-							"Administrator");
-				}
-				if (e.getSource().equals(revokePlayer)) {
-					admin.removePrivilege(playerLookupBox.getSelectedItem(),
-							"Player");
-				}
-				if (e.getSource().equals(grantPlayer)) {
-					admin.addPrivilege(playerLookupBox.getSelectedItem(),
-							"Player");
-				}
+			if (!(playerLookupBox.getSelectedItem().equals("") || playerLookupBox.getSelectedItem().equals(null))) {
+				if (e.getSource().equals(grantAdmin)) admin.addPrivilege(playerLookupBox.getSelectedItem(),"Administrator");
+				if (e.getSource().equals(grantMod)) admin.addPrivilege(playerLookupBox.getSelectedItem(),"Moderator");
+				if (e.getSource().equals(revokeMod)) admin.removePrivilege(playerLookupBox.getSelectedItem(),"Moderator");
+				if (e.getSource().equals(revokeAdmin)) admin.removePrivilege(playerLookupBox.getSelectedItem(),"Administrator");
+				if (e.getSource().equals(revokePlayer)) admin.removePrivilege(playerLookupBox.getSelectedItem(),"Player");
+				if (e.getSource().equals(grantPlayer)) admin.addPrivilege(playerLookupBox.getSelectedItem(),"Player");
 				if (e.getSource().equals(editPlayer)) {
 					editPlayerFrame = new JFrame();
-					editPlayerPanel = new SettingsPanel(gui, new Account(
-							playerLookupBox.getSelectedItem()), editPlayerFrame);
+					editPlayerPanel = new SettingsPanel(gui, new Account(playerLookupBox.getSelectedItem()), editPlayerFrame);
+					
 					editPlayerFrame.setResizable(false);
 					editPlayerFrame.setTitle(title);
 					editPlayerFrame.setContentPane(editPlayerPanel);
@@ -187,8 +160,7 @@ public class AdminPanel extends JPanel {
 					editPlayerFrame.pack();
 					editPlayerFrame.setLocationRelativeTo(null);
 					editPlayerFrame.setVisible(true);
-				}
-
+				} 
 				update();
 			}
 			if (e.getSource().equals(newPlayer)) {
@@ -197,16 +169,14 @@ public class AdminPanel extends JPanel {
 
 				username = new STextField("Username", 220, 40);
 				password = new SPasswordField("Password", 220, 40);
-				passwordValidate = new SPasswordField("Confirm Password", 220,
-						40);
+				passwordValidate = new SPasswordField("Confirm Password", 220, 40);
 				register = new SButton("Register", SButton.GREY, 220, 40);
 				back = new SButton("Back", SButton.GREY, 220, 40);
 
 				newPlayerFrame.setResizable(false);
 				newPlayerFrame.setTitle(title);
 				newPlayerFrame.setContentPane(newPlayerPanel);
-				newPlayerFrame.setIconImage(Loader.ICON);
-				// newPlayerFrame.add(newPlayerPanel);
+				newPlayerFrame.setIconImage(Loader.ICON); 
 
 				newPlayerPanel.setLayout(new GridBagLayout());
 				newPlayerPanel.setPreferredSize(new Dimension(300, 300));
@@ -227,61 +197,45 @@ public class AdminPanel extends JPanel {
 				newPlayerPanel.add(back, c);
 
 				username.addActionListener(new ActionListener() {
-
 					@Override
 					public void actionPerformed(ActionEvent action) {
-						if (action.getSource().equals(username)) {
-							password.requestFocusInWindow();
-						}
-
+						if (action.getSource().equals(username)) password.requestFocusInWindow();
 					}
 				});
 
 				password.addActionListener(new ActionListener() {
-
 					@Override
 					public void actionPerformed(ActionEvent action) {
-						if (action.getSource().equals(password)) {
-							passwordValidate.requestFocusInWindow();
-						}
-
+						if (action.getSource().equals(password)) passwordValidate.requestFocusInWindow();
 					}
 				});
 
 				passwordValidate.addActionListener(new ActionListener() {
-
 					@Override
 					public void actionPerformed(ActionEvent action) {
-						if (action.getSource().equals(passwordValidate)) {
-							registerPlayer();
-						}
-
+						if (action.getSource().equals(passwordValidate)) registerPlayer();
 					}
 				});
 
 				register.addActionListener(new ActionListener() {
-
 					@Override
 					public void actionPerformed(ActionEvent action) {
 						if (action.getSource().equals(register)) {
 							registerPlayer();
 							newPlayerFrame.dispose();
 						}
-
 					}
 				});
 
-				back.addActionListener(new ActionListener() {
-
+				back.addActionListener(new ActionListener() { 
 					@Override
 					public void actionPerformed(ActionEvent action) {
 						if (action.getSource().equals(back)) {
 							newPlayerFrame.dispose();
-						}
-
+						} 
 					}
-				});
-
+				}); 
+				
 				newPlayerFrame.pack();
 				newPlayerFrame.setLocationRelativeTo(null);
 				newPlayerFrame.setVisible(true);
@@ -292,44 +246,19 @@ public class AdminPanel extends JPanel {
 		private void registerPlayer() {
 			boolean allowed = true;
 			for (int i = 0; i < username.getText().length(); i++) {
-				if (Character.isWhitespace(username.getText().charAt(i))) {
-					allowed = false;
-				}
-
+				if (Character.isWhitespace(username.getText().charAt(i))) allowed = false;
 			}
 			String[] safe = new String[] { "\"", "\'" };
 			for (int i = 0; i < safe.length; i++) {
-				if (username.getText().contains(safe[i])
-						|| String.valueOf(password.getPassword()).contains(
-								safe[i])) {
-					allowed = false;
-				}
-
+				if (username.getText().contains(safe[i]) || String.valueOf(password.getPassword()).contains(safe[i])) allowed = false;
 			}
-			if (allowed) {
-				if (DBCommunicator
-						.requestData("SELECT naam FROM account WHERE naam = '"
-								+ username.getText() + "'") == null) {
-					if (String.valueOf(password.getPassword()).equals(
-							String.valueOf(passwordValidate.getPassword()))) {
-						if (!String.valueOf(password.getPassword()).isEmpty()
-								&& !(String.valueOf(password.getPassword())
-										.length() < 1)) {
-							DBCommunicator
-									.writeData("INSERT INTO account(naam, wachtwoord) VALUES('"
-											+ username.getText()
-											+ "', '"
-											+ String.valueOf(password
-													.getPassword()) + "')");
-							DBCommunicator
-									.writeData("INSERT INTO accountrol(account_naam, rol_type) VALUES('"
-											+ username.getText()
-											+ "', 'Player')");
-						}
-					}
+			if (allowed && 
+				DBCommunicator .requestData("SELECT naam FROM account WHERE naam = '" + username.getText() + "'") == null && 
+				String.valueOf(password.getPassword()).equals( String.valueOf(passwordValidate.getPassword())) &&
+				!String.valueOf(password.getPassword()).isEmpty() && !(String.valueOf(password.getPassword()) .length() < 1)) {
+					DBCommunicator.writeData("INSERT INTO account(naam, wachtwoord) VALUES('" + username.getText() + "', '" + String.valueOf(password.getPassword()) + "')");
+					DBCommunicator .writeData("INSERT INTO accountrol(account_naam, rol_type) VALUES('" + username.getText() + "', 'Player')");
 				}
-
-			}
 		}
 	}
 

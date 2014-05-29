@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import Utility.DBCommunicator;
 
 public class Account {
-	protected String username;
-	private Moderator mod = null;
-	private Player player = null;
-	private Administrator admin = null;
-	private ArrayList<String> rights;
+	protected 	String 				username;
+	private 	Moderator 			mod 		= null;
+	private 	Player 				player	 	= null;
+	private 	Administrator 		admin 		= null;
+	private 	ArrayList<String> 	rights;
 
 	public Account(String username) {
 		this.username = username;
@@ -26,9 +26,9 @@ public class Account {
 	}
 
 	public void update() {
-		this.player = null;
-		this.admin = null;
-		this.mod = null;
+		this.player 	= null;
+		this.admin 		= null;
+		this.mod 		= null;
 		rights = this.getUserRights(username);
 		if (this.isAdministrator()) {
 			admin = new Administrator();
@@ -59,18 +59,14 @@ public class Account {
 	}
 
 	public ArrayList<String> getUserRights(String player) {
-		ArrayList<String> data = DBCommunicator
-				.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='"
-						+ player + "'");
+		ArrayList<String> data = DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='" + player + "'");
 		return data;
 	}
 
 	public boolean isModerator() {
 		Boolean bool = false;
 		for (String right : rights) {
-			if (right.equals("Moderator")) {
-				bool = true;
-			}
+			if (right.equals("Moderator")) bool = true;
 		}
 		return bool;
 	}
@@ -78,9 +74,7 @@ public class Account {
 	public boolean isAdministrator() {
 		Boolean bool = false;
 		for (String right : rights) {
-			if (right.equals("Administrator")) {
-				bool = true;
-			}
+			if (right.equals("Administrator")) bool = true;
 		}
 		return bool;
 	}
@@ -88,9 +82,7 @@ public class Account {
 	public boolean isPlayer() {
 		Boolean bool = false;
 		for (String right : rights) {
-			if (right.equals("Player")) {
-				bool = true;
-			}
+			if (right.equals("Player")) bool = true;
 		}
 		return bool;
 	}

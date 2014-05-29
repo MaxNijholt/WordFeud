@@ -23,12 +23,18 @@ import WordFeud.Competition;
 @SuppressWarnings("serial")
 public class CompetitionPanel extends Panel {
 	
-	private AScrollPane currentScrollPane, finishedScrollPane, comps, joinableScrollPane;
-	private JPanel currentCompPanel, finishedCompPanel, competitions, joinableCompPanel;
-	private MenuPanel menu;
-	private SButton create;
-	private Color bg = new Color(94, 94, 94);
-	private GUI gui;
+	private AScrollPane 		currentScrollPane, 
+								finishedScrollPane, 
+								comps, 
+								joinableScrollPane;
+	private JPanel 				currentCompPanel, 
+								finishedCompPanel, 
+								competitions, 
+								joinableCompPanel;
+	private MenuPanel 			menu;
+	private SButton 			create;
+	private Color 				bg = new Color(94, 94, 94);
+	private GUI 				gui;
 	private ArrayList<Integer> compInts;
 	
 	public CompetitionPanel(final GUI gui){
@@ -81,13 +87,6 @@ public class CompetitionPanel extends Panel {
 				currentCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
-		
-		
-
-
-		
-
-		
 		compInts = gui.getApplication().getFinishedCompetitions();
 		if(compInts.size() != 0){
 
@@ -98,38 +97,20 @@ public class CompetitionPanel extends Panel {
 			}
 		}
 		
-		
-
-		
-		
-
-		
 		compInts = gui.getApplication().getAllCompetitions();
 		ArrayList<Integer> activeInts = gui.getApplication().getPlayingCompetitions();
-			int x = 0;
-			while(x < activeInts.size()){
-				if(compInts.contains(activeInts.get(x))){
-					compInts.remove(activeInts.get(x));
-
-				}					x++;
-			}
-			
-		
+		int x = 0;
+		while(x < activeInts.size()){
+			if(compInts.contains(activeInts.get(x))) compInts.remove(activeInts.get(x));
+			x++;
+		}
 		if(compInts.size() != 0){
-
 			joinableCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			for(int e : compInts){
 				joinableCompPanel.add(paintComp(e, "Joinable"));
 				joinableCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
-		
-		
-
-		
-		
-		
-		
 		competitions.setLayout(new BoxLayout(competitions, BoxLayout.Y_AXIS));
 		competitions.setBackground(bg);
 		
@@ -144,7 +125,6 @@ public class CompetitionPanel extends Panel {
 		
 		this.add(menu, BorderLayout.NORTH);
 		this.add(comps, BorderLayout.CENTER);
-		
 	}
 	
 	
@@ -182,10 +162,10 @@ public class CompetitionPanel extends Panel {
 
 		//for a game newly requested. option to accept or reject
 		if(compType.equals("Invited")){
-			SButton accept 	= new SButton("accept", SButton.GREY, 220, 40);
-			SButton deny 	= new SButton("deny", SButton.GREY, 220, 40);
-			JPanel opponent = new JPanel();
-			JPanel play 	= new JPanel();
+			SButton 	accept 		= new SButton("accept", SButton.GREY, 220, 40);
+			SButton 	deny 		= new SButton("deny", SButton.GREY, 220, 40);
+			JPanel 		opponent 	= new JPanel();
+			JPanel 		play 		= new JPanel();
 			
 			opponent.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			play.add(new SLabel("wants to play a game with you", SLabel.CENTER, new Font("Arial", Font.PLAIN, 20)));
@@ -230,9 +210,9 @@ public class CompetitionPanel extends Panel {
 		
 		//for a game that is playing. option to select
 		else if(compType.equals("Active")){
-			JPanel owner 	= new JPanel();
-			JPanel description 	= new JPanel();
-			SButton select 		= new SButton("Select", SButton.GREY, 220, 40);
+			JPanel 	owner 			= new JPanel();
+			JPanel 	description 	= new JPanel();
+			SButton select 			= new SButton("Select", SButton.GREY, 220, 40);
 			
 			owner.add(new SLabel(gui.getCompetitionOwner(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
@@ -270,9 +250,9 @@ public class CompetitionPanel extends Panel {
 		}
 		//for a game that has finished. option to watch/spectate
 		else if(compType.equals("Finished")){
-			JPanel owner		= new JPanel();
-			JPanel description 	= new JPanel();
-			SButton spectate 	= new SButton("Spectate", SButton.GREY, 220, 40);
+			JPanel 	owner			= new JPanel();
+			JPanel 	description 	= new JPanel();
+			SButton spectate 		= new SButton("Spectate", SButton.GREY, 220, 40);
 			
 			owner.add(new SLabel(gui.getCompetitionOwner(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
@@ -305,10 +285,10 @@ public class CompetitionPanel extends Panel {
 		}
 		//for a game that has been requested. no options
 		else if(compType.equals("Joinable")){
-			JPanel owner 	= new JPanel();
-			JPanel description 		= new JPanel();
-			SButton join 	= new SButton("Join", SButton.GREY, 220, 40);
-			SButton spectate 	= new SButton("Spectate", SButton.GREY, 220, 40);
+			JPanel 	owner 			= new JPanel();
+			JPanel 	description 	= new JPanel();
+			SButton join 			= new SButton("Join", SButton.GREY, 220, 40);
+			SButton spectate 		= new SButton("Spectate", SButton.GREY, 220, 40);
 			
 			owner.add(new SLabel(gui.getCompetitionOwner(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
@@ -331,28 +311,22 @@ public class CompetitionPanel extends Panel {
 			panel.add(join, c);
 			c.gridy++;
 			panel.add(spectate, c);
-				
-				join.addActionListener(new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						gui.getApplication().setSelectedCompetition(new Competition(compID));
-						Competition comp = gui.getApplication().getSelectedCompetition();		
-
-						comp.addPlayer(gui.getApplication().getCurrentAccount());
-						gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
-						
-					}
-				});
-				spectate.addActionListener(new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						gui.seeComps(compID, "CompetitionPanel");
-					}
-				});
-			
+			join.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					gui.getApplication().setSelectedCompetition(new Competition(compID));
+					Competition comp = gui.getApplication().getSelectedCompetition();		
+					comp.addPlayer(gui.getApplication().getCurrentAccount());
+					gui.switchPanel(new CompetitionPlayersPanel(gui, compID));		
+				}
+			});
+			spectate.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					gui.seeComps(compID, "CompetitionPanel");
+				}
+			});
 		}
 		return panel;
 	}
-	
-	
 }

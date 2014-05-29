@@ -24,11 +24,11 @@ import javax.swing.JPanel;
 
 public class Application {
 	
-	private Game selectedGame;
-	private Competition selectedCompetition;	
-	private Account currentAccount;
-	private GUI myGui;
-	private Loader loader;
+	private 	Game 			selectedGame;
+	private 	Competition 	selectedCompetition;	
+	private 	Account 		currentAccount;
+	private 	GUI 			myGui;
+	private 	Loader 			loader;
 
 
 	/**
@@ -234,66 +234,48 @@ public class Application {
 	 * @return
 	 */
 	public ArrayList<Integer> getPlayingGames(Boolean myTurn) {
-		ArrayList<Integer> gameInts = new ArrayList<Integer>();
-		ArrayList<Integer> turnInts = new ArrayList<Integer>();
-		String player = currentAccount.getUsername();
-		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing'";
-		Boolean searching = true;
+		ArrayList<Integer> 	gameInts 	= new ArrayList<Integer>();
+		ArrayList<Integer> 	turnInts 	= new ArrayList<Integer>();
+		String 				player		= currentAccount.getUsername();
+		String 				query 		= "SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing'";
+		Boolean 			searching 	= true;
 		
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
-
-			if(gameID == 0){
-				searching = false;
-			}
+			if(gameID == 0) searching = false;
 			else{
 				query += " AND id <> " + gameID;
 				gameInts.add(gameID);
 			}
 		}
-		
 		for(int e : gameInts){
 			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
-			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
-				turnInts.add(e);
-			}
-			else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
-				turnInts.add(e);
-			}
+			if((name.equals(currentAccount.getUsername()) && (!myTurn))) turnInts.add(e);
+			else if((!name.equals(currentAccount.getUsername()) && (myTurn))) turnInts.add(e);
 		}
-		
 		return turnInts;
 	}
 
 	public ArrayList<Integer> getPlayingGames(Boolean myTurn, int compID) {
-		ArrayList<Integer> gameInts = new ArrayList<Integer>();
-		ArrayList<Integer> turnInts = new ArrayList<Integer>();
-		String player = currentAccount.getUsername();
-		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing' AND competitie_id = '" + compID +"'";
-		Boolean searching = true;
+		ArrayList<Integer> 		gameInts 	= new ArrayList<Integer>();
+		ArrayList<Integer> 		turnInts 	= new ArrayList<Integer>();
+		String 					player 		= currentAccount.getUsername();
+		String 					query 		= "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Playing' AND competitie_id = '" + compID +"'";
+		Boolean 				searching 	= true;
 		
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
-
-			if(gameID == 0){
-				searching = false;
-			}
+			if(gameID == 0) searching = false;
 			else{
 				query += " AND id <> " + gameID;
 				gameInts.add(gameID);
 			}
 		}
-		
 		for(int e : gameInts){
 			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
-			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
-				turnInts.add(e);
-			}
-			else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
-				turnInts.add(e);
-			}
+			if((name.equals(currentAccount.getUsername()) && (!myTurn))) turnInts.add(e);
+			else if((!name.equals(currentAccount.getUsername()) && (myTurn))) turnInts.add(e);
 		}
-		
 		return turnInts;
 	}
 
@@ -305,27 +287,18 @@ public class Application {
 	 * @return
 	 */
 	public ArrayList<Integer> getRequestedGames(boolean myRequest, boolean denied) {
-		ArrayList<Integer> gameInts = new ArrayList<Integer>();
-		String player = currentAccount.getUsername();
-		String query = "";
-		if(denied){
-			query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Request' AND reaktie_type = 'Rejected'";
-		}
+		ArrayList<Integer> 		gameInts 	= new ArrayList<Integer>();
+		String 					player 		= currentAccount.getUsername();
+		String 					query 		= "";
+		if(denied) query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND toestand_type = 'Request' AND reaktie_type = 'Rejected'";
 		else{
-			if(myRequest){
-				query = "SELECT id FROM spel WHERE account_naam_uitdager = '"+ player + "' AND toestand_type = 'Request' AND reaktie_type = 'Unknown'";
-			}
-			else{
-				query = "SELECT id FROM spel WHERE account_naam_tegenstander = '"+ player + "' AND toestand_type = 'Request' AND reaktie_type = 'unknown'";
-			}
+			if(myRequest) query = "SELECT id FROM spel WHERE account_naam_uitdager = '"+ player + "' AND toestand_type = 'Request' AND reaktie_type = 'Unknown'";
+			else query = "SELECT id FROM spel WHERE account_naam_tegenstander = '"+ player + "' AND toestand_type = 'Request' AND reaktie_type = 'unknown'";
 		}
 		Boolean searching = true;
-		
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
-			if(gameID == 0){
-				searching = false;
-			}
+			if(gameID == 0) searching = false;
 			else{
 				query += " AND id <> " + gameID;
 				gameInts.add(gameID);
@@ -342,10 +315,7 @@ public class Application {
 		
 		while(searching){
 			int gameID = DBCommunicator.requestInt(query);
-
-			if(gameID == 0){
-				searching = false;
-			}
+			if(gameID == 0) searching = false; 
 			else{
 				query += " AND id <> " + gameID;
 				gameInts.add(gameID);
@@ -355,104 +325,67 @@ public class Application {
 	}
 	
 	public ArrayList<Integer> getPlayingCompetitions(){
-		ArrayList<Integer> compInts = new ArrayList<Integer>();
-		String player = currentAccount.getUsername();
-
-		Calendar rightNow = Calendar.getInstance();
-		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
-		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam = '" + player + "'" + " AND einde > '" + now + "%'";
-		boolean searching = true;
+		ArrayList<Integer> 		compInts 	= new ArrayList<Integer>();
+		String 					player 		= currentAccount.getUsername();
+		Calendar 				rightNow 	= Calendar.getInstance();
+		String 					now 		= rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
+		String 					query 		= "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE account_naam = '" + player + "'" + " AND einde > '" + now + "%'";
+		boolean 				searching 	= true;
 		
 		while(searching){
 			int compID = DBCommunicator.requestInt(query);
-			if(compID == 0){
-				
-				
-				searching = false;
-			}
-				else{
-						query += " AND competitie_id <> " + compID;
-						compInts.add(compID);
-					
-
+			if(compID == 0) searching = false;
+			else{
+				query += " AND competitie_id <> " + compID;
+				compInts.add(compID);
 			}
 		}
-		
-		
 		return compInts;
 	}
 	
 	public ArrayList<Integer> getFinishedCompetitions(){
-		ArrayList<Integer> compInts = new ArrayList<Integer>();
-		String player = currentAccount.getUsername();
-
-		Calendar rightNow = Calendar.getInstance();
-		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
-		String query = "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE einde < '" + now + "%'";
-		boolean searching = true;
-		
+		ArrayList<Integer> 		compInts 	= new ArrayList<Integer>();
+		Calendar 				rightNow 	= Calendar.getInstance();
+		String 					now 		= rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
+		String 					query 		= "SELECT competitie_id FROM deelnemer LEFT JOIN competitie ON deelnemer.competitie_id = competitie.id WHERE einde < '" + now + "%'";
+		boolean 				searching 	= true;
 		while(searching){
 			int compID = DBCommunicator.requestInt(query);
-			if(compID == 0){
-				
-				
-				searching = false;
-			}
-				else{
-						query += " AND competitie_id <> " + compID;
-						compInts.add(compID);
-					
-
+			if(compID == 0)searching = false; 
+			else{
+				query += " AND competitie_id <> " + compID;
+				compInts.add(compID);
 			}
 		}
-		
-		
 		return compInts;
 	}
 
 	
 	public ArrayList<Integer> getAllCompetitions(){
-		ArrayList<Integer> compInts = new ArrayList<Integer>();
-
-		Calendar rightNow = Calendar.getInstance();
-		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
-		String query = "SELECT DISTINCT id FROM competitie WHERE einde > '"+ now + "'";
-		boolean searching = true;
-		
+		ArrayList<Integer> 		compInts 		= new ArrayList<Integer>();
+		Calendar 				rightNow 		= Calendar.getInstance();
+		String 					now 			= rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
+		String 					query 			= "SELECT DISTINCT id FROM competitie WHERE einde > '"+ now + "'";
+		boolean 				searching 		= true;
 		while(searching){
 			int compID = DBCommunicator.requestInt(query);
-			if(compID == 0){
-				
-				
-				searching = false;
+			if(compID == 0) searching = false; 
+			else{
+				query += " AND id <> " + compID;
+				compInts.add(compID);	
 			}
-				else{
-							query += " AND id <> " + compID;
-							compInts.add(compID);	
-							}
-
-						}
-		
-		
+		}
 		return compInts;
 	}
 	
-	
-	
-	
 	public ArrayList<Integer> getSpectatableCompetitions() {
-		ArrayList<Integer> compInts = new ArrayList<Integer>();
-		
-		String endQuery = "";
-		String query = "SELECT id FROM competitie WHERE id <> 0 " + endQuery;
-		Boolean searching = true;
-		
+		ArrayList<Integer> 		compInts 	= new ArrayList<Integer>();
+		String 					endQuery 	= "";
+		String 					query 		= "SELECT id FROM competitie WHERE id <> 0 " + endQuery;
+		Boolean 				searching 	= true;
 		while(searching){
 			int compID = DBCommunicator.requestInt(query);
-
-			if(compID == 0){
-				searching = false;
-			}
+			if(compID == 0) searching = false; 
 			else{
 				query += " AND id <> " + compID;
 				compInts.add(compID);
@@ -465,98 +398,72 @@ public class Application {
 	 * get a the opponents name from the db
 	 */
 	public String getOpponentName(int gameID){
-		
 		String name = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
-		if(name.equals(currentAccount.getUsername())){
-			name = DBCommunicator.requestData("SELECT account_naam_tegenstander FROM spel WHERE id = " + gameID);
-		}
-		
+		if(name.equals(currentAccount.getUsername())) name = DBCommunicator.requestData("SELECT account_naam_tegenstander FROM spel WHERE id = " + gameID);
 		return name;
 	}
 	
 	public String getCompetitionOwner(int compID){
-		String ownerName = DBCommunicator.requestData("SELECT account_naam_eigenaar FROM competitie WHERE id = " + compID);
-		return ownerName;
+		return DBCommunicator.requestData("SELECT account_naam_eigenaar FROM competitie WHERE id = " + compID);
 	}
 	
 	public String getCompetitionDescription(int compID){
-		String description = DBCommunicator.requestData("SELECT omschrijving FROM competitie WHERE id = " + compID);
-		return description;
+		return DBCommunicator.requestData("SELECT omschrijving FROM competitie WHERE id = " + compID);
 	}
 	
 	public ArrayList<String> getGamePlayers(int gameID){
-		ArrayList<String> players = new ArrayList<String>();
+		ArrayList<String> 	players 	= new ArrayList<String>();
 		players.add(DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID));
 		players.add(DBCommunicator.requestData("SELECT account_naam_tegenstander FROM spel WHERE id = " + gameID));
 		return players;
 	}
 	
 	public ArrayList<String> getCompetitionPlayers(int compID){
-		ArrayList<String> players = new ArrayList<String>();
-		String rankingQuery = "SELECT account_naam FROM ranking WHERE competitie_id = " + compID;
-		String restQuery = "SELECT account_naam FROM deelnemer WHERE competitie_id = " + compID;
-		boolean done = false;
-		
+		ArrayList<String> 	players 		= new ArrayList<String>();
+		String 				rankingQuery 	= "SELECT account_naam FROM ranking WHERE competitie_id = " + compID;
+		String 				restQuery 		= "SELECT account_naam FROM deelnemer WHERE competitie_id = " + compID;
+		boolean 			done			= false;
 		while(!done){
 			String name = DBCommunicator.requestData(rankingQuery);
-			if(name == null){
-				done = true;
-			}
+			if(name == null) done = true;
 			else{
 				players.add(name);
 				rankingQuery += " AND account_naam <> '" + name + "'";
 				restQuery += " AND account_naam <> '" + name + "'";
 			}
 		}
-		
 		done = false;
 		while(!done){
 			String name = DBCommunicator.requestData(restQuery);
-			if(name == null){
-				done = true;
-			}
+			if(name == null) done = true; 
 			else{
 				players.add(name);
 				restQuery += " AND account_naam <> '" + name + "'";
 			}
 		}
-		
 		return players;
 	}
 	
 	public String getPlayerRanking(int compID, String player){
-		String ranking = DBCommunicator.requestData("SELECT bayesian_rating FROM ranking WHERE competitie_id = " + compID + " AND account_naam = '" + player + "'");
-		return ranking;
+		return DBCommunicator.requestData("SELECT bayesian_rating FROM ranking WHERE competitie_id = " + compID + " AND account_naam = '" + player + "'");
 	}
 	
 	/**
 	 * get the last turns information
 	 */
 	public String getLastTurnType(int gameID){
-		String turnType = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
-		return turnType;
+		return DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
 	}
 	
 	public int getLastTurnScore(int gameID){
-		int turnScore = DBCommunicator.requestInt("SELECT score FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
-		return turnScore;
-	}
-	
-	/**
-	 * get all account names form the db
-	 * return all accounts the have a name LIKE the given string
-	 * -------------------------------------------------
-	 */
-	public Account[] searchPlayer(String partialname){
-		return null;
+		return DBCommunicator.requestInt("SELECT score FROM beurt WHERE spel_id = " + gameID + " ORDER BY id desc");
 	}
 	
 	/**
 	 * call the game to play a word
 	 */
 	public ArrayList<String> playWord(){
-		ArrayList<String> words = selectedGame.playWord();
-		return words;
+		return selectedGame.playWord();
 	}
 	
 	/**
