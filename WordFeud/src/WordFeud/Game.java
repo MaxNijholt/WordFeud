@@ -36,9 +36,8 @@ public class Game {
 		stoneChars = new HashMap<Integer, Character>();
 		
 		opponent = DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
-		if(opponent.equals(app.getCurrentAccount().getUsername())){
+		if(opponent.equals(app.getCurrentAccount().getUsername()))
 			opponent = DBCommunicator.requestData("SELECT account_naam_tegenstander FROM spel WHERE id = " + gameID);
-		}
 		
 		this.setGameStones();
 		this.setStoneLetters();
@@ -410,11 +409,8 @@ public class Game {
 	
 	public boolean getfirstWord(){
 		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND aktie_type = 'Word' ORDER BY id ASC");
-		if(turn == 0){
-			return true;
-		}
-		else{
-			return false;
-		}
+		if(turn == 0) return true;
+		else return false;
+		
 	}
 }
