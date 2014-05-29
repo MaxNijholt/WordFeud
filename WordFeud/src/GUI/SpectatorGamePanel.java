@@ -21,15 +21,20 @@ import WordFeud.Tile;
 @SuppressWarnings("serial")
 public class SpectatorGamePanel extends JPanel implements ActionListener {
 
-	private SButton next, previous, back;
-	private Spectator spectate;
-	private MenuPanel mp;
-	private JPanel bp;
-	private GUI gui;
-	private int gameID, turn, xPos, yPos;
-	private ArrayList<Tile> hand = new ArrayList<Tile>();
-	private ArrayList<Tile> opponentHand = new ArrayList<Tile>();
-	private ArrayList<Tile> field = new ArrayList<Tile>();
+	private SButton 			next, 
+								previous, 
+								back;
+	private Spectator 			spectate;
+	private MenuPanel 			mp;
+	private JPanel 				bp;
+	private GUI 				gui;
+	private int 				gameID, 
+								turn, 
+								xPos, 
+								yPos;
+	private ArrayList<Tile> 	hand 			= new ArrayList<Tile>();
+	private ArrayList<Tile> 	opponentHand 	= new ArrayList<Tile>();
+	private ArrayList<Tile> 	field 			= new ArrayList<Tile>();
 	private HashMap<String, Tile> tiles;
 
 	public SpectatorGamePanel(GUI gui, int gameID) {
@@ -112,11 +117,8 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 
 		for (int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
-			if (i < currentGameStones.size()) {
-				if (currentGameStones.get(i) != null) {
-					tile.setGameStone(currentGameStones.get(i));
-				}
-			}
+			if (i < currentGameStones.size() && currentGameStones.get(i) != null) 
+				tile.setGameStone(currentGameStones.get(i));
 			hand.add(tile);
 		}
 		
@@ -124,11 +126,8 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 
 		for (int i = 0; i < 7; i++) {
 			Tile tile = new Tile(i + 1, -1);
-			if (i < opponentGameStones.size()) {
-				if (opponentGameStones.get(i) != null) {
-					tile.setGameStone(opponentGameStones.get(i));
-				}
-			}
+			if (i < opponentGameStones.size() && opponentGameStones.get(i) != null)
+				tile.setGameStone(opponentGameStones.get(i));
 			opponentHand.add(tile);
 		}
 
@@ -252,11 +251,8 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 
 				for (int i = 0; i < 7; i++) {
 					Tile tile = new Tile(i + 1, -1);
-					if (i < currentGameStones.size()) {
-						if (currentGameStones.get(i) != null) {
-							tile.setGameStone(currentGameStones.get(i));
-						}
-					}
+					if (i < currentGameStones.size() && currentGameStones.get(i) != null) 
+						tile.setGameStone(currentGameStones.get(i));
 					hand.add(tile);
 				}
 				
@@ -264,22 +260,14 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 
 				for (int i = 0; i < 7; i++) {
 					Tile tile = new Tile(i + 1, -1);
-					if (i < opponentGameStones.size()) {
-						if (opponentGameStones.get(i) != null) {
-							tile.setGameStone(opponentGameStones.get(i));
-						}
-					}
+					if (i < opponentGameStones.size() && opponentGameStones.get(i) != null) 
+						tile.setGameStone(opponentGameStones.get(i));
 					opponentHand.add(tile);
 				}
-
 				repaint();
 			}
-
 		}
-		if (e.getSource().equals(back)) {
+		if (e.getSource().equals(back)) 
 			gui.switchPanel(new SpectatorPanel(gui, spectate.getCompID(gameID)));
-		}
-
 	}
-
 }

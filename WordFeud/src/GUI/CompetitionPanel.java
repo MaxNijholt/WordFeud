@@ -21,7 +21,7 @@ import Utility.SLabel;
 import WordFeud.Competition;
 
 @SuppressWarnings("serial")
-public class CompetitionPanel extends Panel {
+public class CompetitionPanel extends JPanel {
 	
 	private AScrollPane 		currentScrollPane, 
 								finishedScrollPane, 

@@ -124,9 +124,9 @@ public class SettingsPanel extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			if(gui.getApplication().getCurrentAccount().getUsername().equals(user.getUsername())){
 				if (e.getSource().equals(save)) {
-					if(passwordfield.getText().equals(passwordControle.getText())){
-						if(passChange) gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
-					} else {
+					if(passwordfield.getText().equals(passwordControle.getText()) && passChange)
+						gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
+					else {
 						String s =  "Passwords do not match!";
 						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
 					}
@@ -135,18 +135,14 @@ public class SettingsPanel extends JPanel{
 			} else{
 				if(e.getSource().equals(save)){
 					if(passwordfield.getText().equals(passwordControle.getText())){
-						System.out.println(passwordfield.getText());
-						if(!passwordfield.getText().equals("")){
-							if(passChange) gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
-						}
+						if(!passwordfield.getText().equals("") && passChange)
+							gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
 					} else {
 						String s =  "Passwords do not match!";
 						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
 					}
-					System.out.println(userfield.getText());
-					if(!userfield.getText().equals("")){
-						if(userChange) gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
-					}
+					if(!userfield.getText().equals("") && userChange) 
+						gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
 					frame.dispose();
 				}
 			}

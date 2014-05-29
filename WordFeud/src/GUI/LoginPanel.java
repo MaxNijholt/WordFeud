@@ -77,9 +77,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 
 		for(int i = 0; i < letters.length(); i++) {
 			GameStone s = new GameStone(-1, letters.charAt(i));
-			if(DBCommunicator.checkConnection() != null) {
+			if(DBCommunicator.checkConnection() != null)
 				s = new GameStone(Integer.parseInt(Loader.TILEVALUES.get(String.valueOf(letters.charAt(i)))), letters.charAt(i));
-			}
 			s.setFonts(new Font("Arial", Font.BOLD, 55), new Font("Arial", Font.PLAIN, 20));
 			s.setDimension(80, 80);
 			title.add(new SLabel(s.getImage(), 80, 80));
@@ -142,18 +141,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 			sp.setRunning(false);
 			return;
 		}
-		if(text != null) {
-			popup.show(username, username.getWidth() + 10, 0, popup.getTextDimension(text).width + 10, popup.getTextDimension(text).height, text, SButton.RED);
-/*			Graphics2D g2d = (Graphics2D)this.getGraphics();
-			FontMetrics fm = this.getFontMetrics(new Font("Arial", Font.BOLD, 16));
-			g2d.setFont(new Font("Arial", Font.BOLD, 16));
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			g2d.setColor(Color.RED);
-			g2d.fillRoundRect(10, 10, 335, 30, 10, 10);
-			g2d.setColor(Color.WHITE);
-			g2d.drawString(text, (350 / 2) - (fm.stringWidth(text) / 2), (0 + (50+1-0) / 2) - ((fm.getAscent() + fm.getDescent()) / 2) + fm.getAscent());*/
-		}
+		if(text != null) popup.show(username, username.getWidth() + 10, 0, popup.getTextDimension(text).width + 10, popup.getTextDimension(text).height, text, SButton.RED);
 	}
 
 	/**

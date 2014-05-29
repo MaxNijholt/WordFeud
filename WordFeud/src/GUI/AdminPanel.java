@@ -142,12 +142,12 @@ public class AdminPanel extends JPanel {
 	class ActionAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (!(playerLookupBox.getSelectedItem().equals("") || playerLookupBox.getSelectedItem().equals(null))) {
-				if (e.getSource().equals(grantAdmin)) admin.addPrivilege(playerLookupBox.getSelectedItem(),"Administrator");
-				if (e.getSource().equals(grantMod)) admin.addPrivilege(playerLookupBox.getSelectedItem(),"Moderator");
-				if (e.getSource().equals(revokeMod)) admin.removePrivilege(playerLookupBox.getSelectedItem(),"Moderator");
-				if (e.getSource().equals(revokeAdmin)) admin.removePrivilege(playerLookupBox.getSelectedItem(),"Administrator");
+				if (e.getSource().equals(grantAdmin)) 	admin.addPrivilege(playerLookupBox.getSelectedItem(),"Administrator");
+				if (e.getSource().equals(grantMod)) 	admin.addPrivilege(playerLookupBox.getSelectedItem(),"Moderator");
+				if (e.getSource().equals(revokeMod)) 	admin.removePrivilege(playerLookupBox.getSelectedItem(),"Moderator");
+				if (e.getSource().equals(revokeAdmin)) 	admin.removePrivilege(playerLookupBox.getSelectedItem(),"Administrator");
 				if (e.getSource().equals(revokePlayer)) admin.removePrivilege(playerLookupBox.getSelectedItem(),"Player");
-				if (e.getSource().equals(grantPlayer)) admin.addPrivilege(playerLookupBox.getSelectedItem(),"Player");
+				if (e.getSource().equals(grantPlayer)) 	admin.addPrivilege(playerLookupBox.getSelectedItem(),"Player");
 				if (e.getSource().equals(editPlayer)) {
 					editPlayerFrame = new JFrame();
 					editPlayerPanel = new SettingsPanel(gui, new Account(playerLookupBox.getSelectedItem()), editPlayerFrame);

@@ -25,23 +25,20 @@ import Utility.SLabel;
 @SuppressWarnings("serial")
 public class SpectatorPanel extends JPanel {
 
-	private AScrollPane scrollPane;
-	private AScrollPane playerScrollPane;
-	private JPanel playerContent;
-	private JPanel gameContent;
-	private GUI gui;
-	private MenuPanel mp;
-	private int compID;
-	private SButton back;
+	private AScrollPane 	scrollPane,
+							playerScrollPane;
+	private JPanel 			playerContent;
+	private JPanel 			gameContent;
+	private GUI 			gui;
+	private MenuPanel 		mp;
+	private int 			compID;
+	private SButton 		back;
 
 	public SpectatorPanel(GUI myGui, int compID){
 		this.gui = myGui;
-		if(gui.getApplication().getCurrentAccount() == null){
+		if(gui.getApplication().getCurrentAccount() == null)
 			back = new SButton("Back", SButton.GREY, 220, 40);
-		}
-		else{
-			this.mp = new MenuPanel(gui, null);
-		}
+		else this.mp = new MenuPanel(gui, null);
 		
 		gui.setLoadingCursor(true);
 		this.compID = compID;
@@ -62,11 +59,6 @@ public class SpectatorPanel extends JPanel {
 		
 		//create the scrollpane as container for the playercontent
 		playerScrollPane 		= 	new AScrollPane(400, 550, playerContent, false, true);
-//		playerScrollPane.setBorder(null);
-//		playerScrollPane.setPreferredSize(new Dimension(400, 550));
-//		playerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		playerScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-//		playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(playerScrollPane);
 		
 		//create the gameContent panel here go all the games
@@ -77,11 +69,6 @@ public class SpectatorPanel extends JPanel {
 
 		//create the scrollpane as container for the gameContent
 		scrollPane 		= 	new AScrollPane(500, 550, gameContent, false, true);
-//		scrollPane.setBorder(null);
-//		scrollPane.setPreferredSize(new Dimension(500, 550));
-//		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-//		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(scrollPane);
 		
 		//get all the players in the competition
@@ -115,9 +102,7 @@ public class SpectatorPanel extends JPanel {
 			});
 			this.add(back, BorderLayout.NORTH);
 		}
-		else{
-			this.add(mp, BorderLayout.NORTH);
-		}
+		else this.add(mp, BorderLayout.NORTH);
 		this.add(allPanel, BorderLayout.CENTER);
 		gui.setLoadingCursor(false);
 	}

@@ -21,7 +21,14 @@ public class MenuPanel extends JPanel implements ActionListener {
 	// Instance variables
 	private GUI 						gui;
 	private SComboBox					switcher;
-	private SButton						settings, stats, player, admin, mod, spectator, logout, back;
+	private SButton						settings, 
+										stats, 
+										player, 
+										admin, 
+										mod, 
+										spectator, 
+										logout, 
+										back;
 	private ArrayList<SButton>			allButtons;
 	private String 						backPanel;
 
@@ -146,7 +153,6 @@ public class MenuPanel extends JPanel implements ActionListener {
 			if(name.equals("AdminPanel")) 					{gui.switchPanel(new AdminPanel(gui));}
 			if(name.equals("CompetitionCreatePanel")) 		{gui.switchPanel(new CompetitionCreatePanel(gui));}
 			if(name.equals("CompetitionPanel")) 			{gui.switchPanel(new CompetitionPanel(gui));}
-			if(name.equals("GameCreatePanel")) 				{gui.switchPanel(new GameCreatePanel(gui));}
 			if(name.equals("GamePanel")) 					{gui.switchPanel(new GamePanel(gui));}
 			if(name.equals("LoginPanel")) 					{gui.switchPanel(new LoginPanel(gui));}
 			if(name.equals("ModeratorPanel")) 				{gui.switchPanel(new ModeratorPanel(gui));}
