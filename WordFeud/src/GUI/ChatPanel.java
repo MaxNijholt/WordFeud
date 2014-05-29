@@ -27,7 +27,8 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 	private SButton		send;
 	private Game		game;
 	private GUI			gui;
-	private AScrollPane	scrollTypePanel, scrollPrintPanel;
+	private AScrollPane	scrollTypePanel,
+						scrollPrintPanel;
 	private Chat 		chat;
 	
 	public ChatPanel(GUI gui, Game game){
@@ -42,7 +43,7 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 		printArea.setWrapStyleWord(true);
 		printArea.setLineWrap(true);
 		
-		typeArea= new JTextArea();
+		typeArea = new JTextArea();
 		typeArea.addKeyListener(this);
 		typeArea.setWrapStyleWord(true);
 		typeArea.setLineWrap(true);
@@ -75,25 +76,20 @@ public class ChatPanel extends JPanel implements ActionListener, KeyListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(!typeArea.getText().trim().isEmpty()){
-		DBCommunicator.sendMsg(typeArea.getText().trim(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
-		typeArea.setText("");
-		}
-		else{
-			System.out.println("geen tekst");
-		}
-	}
-	
-	public void keyPressed(KeyEvent e)
-	{
-		if(e.getKeyCode() == KeyEvent.VK_ENTER){
-			if(!typeArea.getText().trim().isEmpty()){
-			e.consume();
 			DBCommunicator.sendMsg(typeArea.getText().trim(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
 			typeArea.setText("");
+		}
+		else System.out.println("[ChatPanel]: No text");
+	}
+	
+	public void keyPressed(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+			if(!typeArea.getText().trim().isEmpty()){
+				e.consume();
+				DBCommunicator.sendMsg(typeArea.getText().trim(), game.getID(), gui.getApplication().getCurrentAccount().getUsername());
+				typeArea.setText("");
 			}
-			else{
-				System.out.println("geen tekst");
-			}
+			else System.out.println("[ChatPanel]: No text");
 		 }
 	}
 

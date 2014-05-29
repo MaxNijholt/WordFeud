@@ -10,7 +10,6 @@ import Utility.DBCommunicator;
  */
 
 public class Moderator{
-	private ArrayList<String> pendingWords = new ArrayList<String>();
 
 	/**
 	 * Gets unapproved words out of a list from the Database
@@ -18,8 +17,7 @@ public class Moderator{
 	 * @return a list of pending words
 	 */
 	public ArrayList<String> getNotAprovedWords() {
-		pendingWords = DBCommunicator.requestMoreData("SELECT woord FROM woordenboek WHERE status='Pending'");
-		return pendingWords;
+		return DBCommunicator.requestMoreData("SELECT woord FROM woordenboek WHERE status='Pending'");
 	}
 
 	/**
@@ -28,19 +26,12 @@ public class Moderator{
 	 * @param word
 	 */
 	public void addWord(String word) {
-			DBCommunicator
-					.writeData("INSERT  INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES("
-							+ "'" + word + "'" + ",'EN','Accepted')");
-			
+			DBCommunicator.writeData("INSERT  INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES(" + "'" + word + "'" + ",'EN','Accepted')");
 	}
 	
 	public boolean tryAddWord(String word){
-		if (DBCommunicator.requestData("SELECT * FROM woordenboek where woord = '" + word + "'") == null){
-			return true;
-		}
+		if (DBCommunicator.requestData("SELECT * FROM woordenboek where woord = '" + word + "'") == null) return true;
 		else return false;
-			
-		
 	}
 
 	/**
@@ -49,9 +40,7 @@ public class Moderator{
 	 * @param word
 	 */
 	public void aproveWord(String word) {
-		DBCommunicator
-				.writeData("UPDATE woordenboek set status='Accepted' where woord = "
-						+ "'" + word + "'");
+		DBCommunicator.writeData("UPDATE woordenboek set status='Accepted' where woord = " + "'" + word + "'");
 
 	}
 
@@ -61,9 +50,6 @@ public class Moderator{
 	 * @param word
 	 */
 	public void denyWord(String word) {
-		DBCommunicator
-				.writeData("UPDATE woordenboek set status='Denied' where woord = "
-						+ "'" + word + "'");
-
+		DBCommunicator.writeData("UPDATE woordenboek set status='Denied' where woord = "+ "'" + word + "'");
 	}
 }

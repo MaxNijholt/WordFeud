@@ -22,16 +22,15 @@ import Utility.SLabel;
 
 @SuppressWarnings("serial")
 public class ModeratorPanel extends JPanel {
-	private GUI mygui;
-	private SLabel selectWord;
-	private ArrayList<String> posibleWords = new ArrayList<String>();
-	private MenuPanel mp;
-	private JPanel allPanel;
-//	private SComboBox wordList;
-	private JComboBox<String> wordList = new JComboBox<String>();
-	private SButton acceptWord = new SButton("Accept word", SButton.GREY),
-			rejectWord = new SButton("Reject word", SButton.GREY),
-			addNewWord = new SButton("Add new word", SButton.GREY);
+	private GUI 				mygui;
+	private SLabel 				selectWord;
+	private ArrayList<String> 	posibleWords 	= new ArrayList<String>();
+	private MenuPanel 			mp;
+	private JPanel 				allPanel;
+	private JComboBox<String> 	wordList 		= new JComboBox<String>();
+	private SButton 			acceptWord 		= new SButton("Accept word", SButton.GREY),
+								rejectWord 		= new SButton("Reject word", SButton.GREY),
+								addNewWord 		= new SButton("Add new word", SButton.GREY);
 
 	public ModeratorPanel(GUI gui) {
 		mygui = gui;
@@ -48,46 +47,26 @@ public class ModeratorPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.setBackground(new Color(94,94,94));
 		posibleWords = mygui.getApplication().getCurrentAccount().getMod().getNotAprovedWords();
-		wordList = new JComboBox();
-//		posibleWords = mygui.getApplication().getCurrentAccount().getMod().getNotAprovedWords();
-
+		wordList = new JComboBox<String>();
 		for (String merge : posibleWords) {
 			wordList.addItem(merge);
 		}
-		
-
-		// actionlisteners==================================================
 		addNewWord.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String wordTooAdd = JOptionPane.showInputDialog(
 						"What word would you like to add?", null);
 				if (wordTooAdd != null) {
 					wordTooAdd.toLowerCase();
-
 					if (wordTooAdd.equals("")) {
-						JOptionPane.showMessageDialog(null, "No word added",
-								"Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "No word added", "Error", JOptionPane.ERROR_MESSAGE);
 					} else {
-						if (mygui.getApplication().getCurrentAccount().getMod()
-								.tryAddWord(wordTooAdd) == true) {
-
-							mygui.getApplication().getCurrentAccount().getMod()
-									.addWord(wordTooAdd);
-
-							JOptionPane.showMessageDialog(null, wordTooAdd
-									+ " added", "Succes",
-									JOptionPane.INFORMATION_MESSAGE);
-							posibleWords = mygui.getApplication()
-									.getCurrentAccount().getMod()
-									.getNotAprovedWords();
-
+						if (mygui.getApplication().getCurrentAccount().getMod().tryAddWord(wordTooAdd) == true) {
+							mygui.getApplication().getCurrentAccount().getMod().addWord(wordTooAdd);
+							JOptionPane.showMessageDialog(null, wordTooAdd	+ " added", "Succes", JOptionPane.INFORMATION_MESSAGE);
+							posibleWords = mygui.getApplication() .getCurrentAccount().getMod() .getNotAprovedWords();
 						} else {
-							JOptionPane.showMessageDialog(null, wordTooAdd
-									+ " already in Database", "Error",
-									JOptionPane.INFORMATION_MESSAGE);
-
+							JOptionPane.showMessageDialog(null, wordTooAdd + " already in Database", "Error", JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
 				}
@@ -99,14 +78,9 @@ public class ModeratorPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String accept = (String) wordList.getSelectedItem();
-
-				mygui.getApplication().getCurrentAccount().getMod()
-						.aproveWord(accept);
-				JOptionPane.showMessageDialog(null, "Word aproved and added",
-						"Succes", JOptionPane.INFORMATION_MESSAGE);
-				posibleWords = mygui.getApplication().getCurrentAccount()
-						.getMod().getNotAprovedWords();
-
+				mygui.getApplication().getCurrentAccount().getMod() .aproveWord(accept);
+				JOptionPane.showMessageDialog(null, "Word aproved and added", "Succes", JOptionPane.INFORMATION_MESSAGE);
+				posibleWords = mygui.getApplication().getCurrentAccount() .getMod().getNotAprovedWords();
 				wordList.removeAllItems();
 				for (String merge : posibleWords) {
 					wordList.addItem(merge);
@@ -119,22 +93,15 @@ public class ModeratorPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String remove = (String) wordList.getSelectedItem();
-				mygui.getApplication().getCurrentAccount().getMod()
-						.denyWord(remove);
-
-				JOptionPane.showMessageDialog(null, "Word rejected", "Succes",
-						JOptionPane.ERROR_MESSAGE);
-				posibleWords = mygui.getApplication().getCurrentAccount()
-						.getMod().getNotAprovedWords();
-
+				mygui.getApplication().getCurrentAccount().getMod() .denyWord(remove);
+				JOptionPane.showMessageDialog(null, "Word rejected", "Succes", JOptionPane.ERROR_MESSAGE);
+				posibleWords = mygui.getApplication().getCurrentAccount() .getMod().getNotAprovedWords();
 				wordList.removeAllItems();
 				for (String merge : posibleWords) {
 					wordList.addItem(merge);
 				}
-
 			}
 		});
-		// ======================================================================
 
 		this.selectWord = new SLabel("Select word: ", 0);
 		// Adding components on the right locations

@@ -3,7 +3,7 @@ package Core;
 public class Main {
 
 	@SuppressWarnings("unused")
-	private Application application;
+	private 	Application 	application;
 
 	public static void main(String[] args) {
 		Main program = new Main();

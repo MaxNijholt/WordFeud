@@ -22,11 +22,12 @@ import Utility.SLabel;
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel implements ActionListener {
 
-	private AScrollPane scrollPane;
-	private JPanel gameContent;
-	private SButton competition, refresh;
-	private GUI gui;
-	private MenuPanel mp;
+	private AScrollPane 	scrollPane;
+	private JPanel 			gameContent;
+	private SButton 		competition, 
+							refresh;
+	private GUI 			gui;
+	private MenuPanel 		mp;
 
 	public PlayerPanel(final GUI gui){
 		this.gui = gui;

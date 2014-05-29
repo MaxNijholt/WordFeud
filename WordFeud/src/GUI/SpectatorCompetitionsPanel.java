@@ -23,21 +23,18 @@ import Utility.SLabel;
 @SuppressWarnings("serial")
 public class SpectatorCompetitionsPanel extends JPanel{
 
-	private AScrollPane scrollPane;
-	private JPanel gameContent;
-	private GUI gui;
-	private MenuPanel mp;
-	private SButton back;
+	private AScrollPane 	scrollPane;
+	private JPanel 			gameContent;
+	private GUI 			gui;
+	private MenuPanel 		mp;
+	private SButton 		back;
 
 	public SpectatorCompetitionsPanel(GUI myGui) {
 		
 		this.gui = myGui;
-		if(myGui.getApplication().getCurrentAccount() == null){
-			back = new SButton("Back", SButton.GREY, 220, 40);
-		}
-		else{
-			this.mp = new MenuPanel(gui, null);
-		}
+		if(myGui.getApplication().getCurrentAccount() == null) back = new SButton("Back", SButton.GREY, 220, 40);
+		else this.mp = new MenuPanel(gui, null);
+		
 		gui.setLoadingCursor(true);
 		
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));

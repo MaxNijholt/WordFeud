@@ -14,10 +14,10 @@ import WordFeud.GameStone;
 @SuppressWarnings("serial")
 public class GUI extends JFrame{
 
-	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 600;
-	public static final String TITLE = "Wordfeud";
-	private Application app;
+	public static final int 		WIDTH = 1000;
+	public static final int 		HEIGHT = 600;
+	public static final String 		TITLE = "Wordfeud";
+	private 			Application app;
 	
 	public GUI(Application app){
 		this.app = app;
@@ -32,64 +32,51 @@ public class GUI extends JFrame{
 	}
 	
 	public ArrayList<String> playWord(){
-		ArrayList<String> words = app.playWord();
-		return words;
+		return app.playWord();
 	}
 	
 	public int layGameStone(GameStone gamestone, String location){
-		int points = app.layGameStone(gamestone, location);
-		return points;	
+		return app.layGameStone(gamestone, location);
 	}
 	
-	public void switchPanel(JPanel panel){
+	public void switchPanel(JPanel jpanel){
 		this.getContentPane().removeAll();
-		this.setContentPane(panel);
+		this.setContentPane(jpanel);
 		this.revalidate();
 	}
 	
 	public void setLoadingCursor(boolean loading){
-		if(loading){
-			this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		}
-		else{
-			this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		}
+		if(loading) this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
+		else this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 	
-	public void pass(){
-		app.pass();
-	}
+	public void pass(){ app.pass(); }
 	
 	public void shuffle(){
-		
+		System.out.println("the method shuffle is called but has no code. [GUI]");
 	}
 	
 	public void swapGameStones(){
-		
+		System.out.println("the method swapGameStones is called but has no code. [GUI]");
 	}
 	
 	public ArrayList<Integer> getFinishedGames(boolean resigned){
-		ArrayList<Integer> gameInts = app.getFinishedGames(resigned);
-		return gameInts;
+		return app.getFinishedGames(resigned);
 	}
 	
 	public ArrayList<Integer> getPlayingGames(boolean myTurn){
-		ArrayList<Integer> gameInts = app.getPlayingGames(myTurn);
-		return gameInts;
+		return app.getPlayingGames(myTurn);
 	}
 	
 	public ArrayList<Integer> getPlayingGames(boolean myTurn, int compID){
-		ArrayList<Integer> gameInts = app.getPlayingGames(myTurn, compID);
-		return gameInts;
+		return app.getPlayingGames(myTurn, compID);
 	}
 	
 	public ArrayList<Integer> getRequestedGames(boolean myRequest, boolean denied){
-		ArrayList<Integer> gameInts = app.getRequestedGames(myRequest, denied);
-		return gameInts;
+		return app.getRequestedGames(myRequest, denied);
 	}
 	
 	public String getOpponentName(int gameID){
-		
 		return app.getOpponentName(gameID);
 	}
 	
@@ -110,18 +97,15 @@ public class GUI extends JFrame{
 	}
 	
 	public String getLastTurntype(int gameID) {
-		String turnType = app.getLastTurnType(gameID);
-		return turnType;
+		return app.getLastTurnType(gameID);
 	}
 
 	public int getLastTurnScore(int gameID) {
-		int turnScore = app.getLastTurnScore(gameID);
-		return turnScore;
+		return app.getLastTurnScore(gameID);
 	}
 
 	public void logout() {
 		app.logout();
-		
 	}
 	
 	public void selectGame(int gameID) {
@@ -146,33 +130,27 @@ public class GUI extends JFrame{
 	}
 
 	public ArrayList<Integer> getSpectatableGames(int compID) {
-		ArrayList<Integer> gameInts = app.getSpectatableGames(compID);
-		return gameInts;
+		return app.getSpectatableGames(compID);
 	}
 
 	public ArrayList<Integer> getSpectatableCompetitions() {
-		ArrayList<Integer> compInts = app.getSpectatableCompetitions();
-		return compInts;
+		return app.getSpectatableCompetitions();
 	}
 	
 	public String getCompetitionOwner(int compID){
-		String owner =app.getCompetitionOwner(compID);
-		return owner;
+		return app.getCompetitionOwner(compID);
 	}
 	
 	public String getCompetitionDescription(int compID){
-		String description = app.getCompetitionDescription(compID);
-		return description;
+		return app.getCompetitionDescription(compID);
 	}
 	
 	public ArrayList<String> getGamePlayers(int gameID){
-		ArrayList<String> players = app.getGamePlayers(gameID);
-		return players;
+		return app.getGamePlayers(gameID);
 	}
 	
 	public ArrayList<String> getCompetitionPlayers(int compID){
-		ArrayList<String> players = app.getCompetitionPlayers(compID);
-		return players;
+		return app.getCompetitionPlayers(compID);
 	}
 	
 	public String getPlayerRanking(int compID, String player){
@@ -181,8 +159,7 @@ public class GUI extends JFrame{
 	}
 	
 	public boolean getHaveGameWith(String opponent, int compID){
-		boolean doHave = app.getHaveGameWith(opponent, compID);
-		return doHave;
+		return app.getHaveGameWith(opponent, compID);
 	}
 	
 	public void newGame(String player, boolean visibility){
@@ -194,8 +171,7 @@ public class GUI extends JFrame{
 	}
 
 	public int removeGameStone(String location) {
-		int points = app.removeGameStone(location);
-		return points;
+		return app.removeGameStone(location);
 	}
 	
 	public void resign(){
