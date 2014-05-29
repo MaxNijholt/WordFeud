@@ -40,17 +40,20 @@ public class SettingsPanel extends JPanel{
 	private SPopupMenu		pop = new SPopupMenu();
 	private JFrame 			frame;
 	private boolean			passChange = false,
-							userChange= false;
+							userChange= false,
+							showmenu;
 
 	public SettingsPanel(GUI gui, Account user){
 		this.gui = gui;
 		this.user = user;
+		this.showmenu = true;
 		init();
 	}
 	public SettingsPanel(GUI gui, Account user, JFrame frame){
 		this.gui = gui;
 		this.user = user;
 		this.frame = frame;
+		this.showmenu = false;
 		init();
 	}
 	
@@ -77,7 +80,7 @@ public class SettingsPanel extends JPanel{
 		this.username			= new SLabel("New username:", 0);
 
 		this.userfield			= new STextField(user.getUsername(), 120, 30);
-		this.save				= new SButton("Save", SButton.GREY);
+		this.save				= new SButton("Save or Cancel", SButton.GREY);
 		this.save.addActionListener(aa);
 
 
@@ -101,8 +104,7 @@ public class SettingsPanel extends JPanel{
 		c.gridy++;
 		allPanel.add(save, c);
 		gui.setLoadingCursor(false);
-		
-		this.add(mp, BorderLayout.NORTH);
+		if(this.showmenu) this.add(mp, BorderLayout.NORTH);
 		this.add(allPanel, BorderLayout.CENTER);
 		
 		userfield.getDocument().addDocumentListener(new DocumentListener() {
