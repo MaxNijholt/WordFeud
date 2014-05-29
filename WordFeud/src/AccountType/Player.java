@@ -1,6 +1,9 @@
 package AccountType;
 
+public class Player {
+	Account account;
 
-public class Player extends Account {
-
+	public Player(Account account) {
+		this.account = account;
+	}
 }
