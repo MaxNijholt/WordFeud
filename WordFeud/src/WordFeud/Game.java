@@ -71,7 +71,7 @@ public class Game {
 	 * let the wordchecker check if it is correct
 	 */
 	public ArrayList<String> playWord(){
-		myField.getNewWords();
+		System.out.println(myField.getNewWords());
 		ArrayList<String> words =  myWC.checkWords(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getNewWords(), myField.getTiles(), getfirstWord());
 		System.out.println(words);
 		if(words.size() == 0){

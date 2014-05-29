@@ -290,6 +290,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				{
 					if (field.get(i).getGameStone().getHand())
 					{
+						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
 						field.get(i).setGameStone(null);
 					}
 				}
