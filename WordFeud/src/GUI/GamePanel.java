@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -15,12 +16,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
+import Utility.SLabel;
 import WordFeud.Game;
 import WordFeud.GameStone;
 import WordFeud.Tile;
@@ -275,6 +279,47 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			for(int i = 0; i < hand.size(); i++) {
 				hand.get(i).setGameStone(stones.get(i));
 			}
+			final JFrame swapFrame 	= new JFrame();
+			JPanel swapPanel	= new JPanel();
+			swapPanel.setLayout(null);
+			swapPanel.setPreferredSize(new Dimension(20 + (stones.size() * stones.get(0).getImage().getWidth()), 60 + stones.get(0).getImage().getHeight()));
+			swapFrame.setResizable(false);
+			swapFrame.setTitle(GUI.TITLE);
+			swapFrame.setContentPane(swapPanel);
+			
+			SButton swap 	= new SButton("Swap", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
+			swap.setBounds(10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
+			
+			SButton cancel 	= new SButton("Cancel", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
+			cancel.setBounds(swapPanel.getPreferredSize().width - cancel.getPreferredSize().width - 10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
+			cancel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					swapFrame.dispose();
+				}
+			});
+			
+			MouseAdapter ma = new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+					for(int i = 0; i < stones.size(); i++) {
+						
+					}
+				}
+			};
+			
+			swapPanel.setBackground(getBackground());
+			swapFrame.setIconImage(Loader.ICON);
+			
+			for(int i = 0; i < stones.size(); i++) {
+				SLabel s = new SLabel(stones.get(i).getImage(), stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
+				s.setBounds(10 + (i * stones.get(i).getImage().getWidth()), 10, stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
+				swapPanel.add(s);
+			}
+			swapPanel.add(swap);
+			swapPanel.add(cancel);
+			
+			swapFrame.pack();
+			swapFrame.setLocationRelativeTo(null);
+			swapFrame.setVisible(true);
 		}
 		
 		// Play
