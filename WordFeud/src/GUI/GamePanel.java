@@ -324,7 +324,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		
 		// Play
 		if(e.getSource().equals(play)) {
-			System.out.println(gui.playWord());			
+			System.out.println(gui.playWord());
 			for(int i = 0; i < field.size(); i++) {
 				if(field.get(i).getGameStone() != null) {
 					if(field.get(i).getGameStone().getHand()) {
