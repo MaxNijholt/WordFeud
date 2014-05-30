@@ -468,12 +468,7 @@ public class Application {
 	}
 	
 	public int getTotalPoints(String player, int compID){
-		ArrayList<Integer> allGames = getAllGames(player, compID, false);
-		int amount = 0;
-		for(int id: allGames){
-			amount += DBCommunicator.requestInt("SELECT totaalscore FROM score WHERE account_naam = '" + player + "' AND spel_id = " + id);
-		}
-		
+		int amount = DBCommunicator.requestInt("SELECT SUM(score) FROM beurt INNER JOIN spel ON beurt.spel_id = spel.id WHERE competitie_id = " + compID + " AND beurt.account_naam = '" + player + "'");
 		return amount;
 	}
 	
@@ -510,16 +505,21 @@ public class Application {
 		return numberWon;
 	}
 	
-	public double getWinLose(String player, int compID){
-		int won = getGamesWon(player,compID);
-		int lost = getGamesLost(player,compID);
+	public String getWinLose(String player, int compID){
+		double won = getGamesWon(player,compID);
+		double lost = getGamesLost(player,compID);
+		double ratio = 0.00000;
+		if(won != 0 && lost != 0){
+			ratio = won/lost;
+		}
+		else if(lost == 0){
+			ratio = won;
+		}
 		
-		double ratio = won/lost;
-		return ratio;
-	}
-	
-	
-	
+		String ratioS = ratio + "";
+		ratioS = ratioS.substring(0, 4);
+		return ratioS;
+	}	
 	
 	public ArrayList<Integer> getSpectatableCompetitions() {
 		ArrayList<Integer> compInts = new ArrayList<Integer>();

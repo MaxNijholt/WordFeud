@@ -23,7 +23,6 @@ public class Game {
 	
 	/**
 	 * construct the game
-	 * -------------------------------------------------
 	 */
 	public Game(int gameID, Application app){
 		this.app = app;
@@ -255,12 +254,19 @@ public class Game {
 	public void resign(){
 		int turn = DBCommunicator.requestInt("SELECT id FROM beurt WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "' ORDER BY id DESC");
 		turn += 2;
-		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES(" + turn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', 0, 'Resign')");
+		int totalScore = DBCommunicator.requestInt("SELECT totaalscore FROM score WHERE spel_id = " + id + " AND account_naam = '" + app.getCurrentAccount().getUsername() + "'");
+		totalScore = totalScore * -1;
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES(" + turn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', " + totalScore +", 'Resign')");
 		for(int e : gameStones){
 			DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + e + ", " + turn + ")");
 		}
 		DBCommunicator.writeData("UPDATE spel SET toestand_type = 'Resigned' WHERE id = " + id );
-		endGame(false);
+		
+		int opTurn = turn + 1;
+		int myTurn = opTurn + 1;
+		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES "
+				+ "(" + opTurn + ", " + id + ", '" + opponent + "', 0, 'End'),"
+				+ "(" + myTurn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', 0, 'End')");
 	}
 	
 	/**
