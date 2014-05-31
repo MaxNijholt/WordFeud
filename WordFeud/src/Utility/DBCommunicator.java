@@ -25,20 +25,38 @@ public class DBCommunicator {
 	private static final String DB_URL		=	"jdbc:mysql://databases.aii.avans.nl:3306/mnijholt_db2";
 	private static final String DB_USERNAME	=	"mnijholt";
 	private static final String DB_PASSWORD	=	"42IN04SOi";
+	private static final String DB_URL2		=	"jdbc:mysql://databases.aii.avans.nl:3306/2014_soprj4_wordfeud";
+	private static final String DB_USERNAME2=	"42IN04SOI";
+	private static final String DB_PASSWORD2=	"9G87t3W65t";
 
 	private static Connection con;
+	private final static boolean database = true;
 
 	public static final void getConnection() {
-		try {
-			Class.forName(CLASS_NAME);
-			con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-			System.out.println("A connection has been established with " + DB_URL);
-		} 
-		catch (SQLException e) {
-			System.out.println("SQLException: It was not possible to create a connection with " + DB_URL);
-		} 
-		catch (ClassNotFoundException e) {
-			System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
+		if(database){
+			try {
+				Class.forName(CLASS_NAME);
+				con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+				System.out.println("A connection has been established with " + DB_URL);
+			} 
+			catch (SQLException e) {
+				System.out.println("SQLException: It was not possible to create a connection with " + DB_URL);
+			} 
+			catch (ClassNotFoundException e) {
+				System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
+			}
+		}else{
+			try {
+				Class.forName(CLASS_NAME);
+				con = DriverManager.getConnection(DB_URL2, DB_USERNAME2, DB_PASSWORD2);
+				System.out.println("A connection has been established with " + DB_URL2);
+			} 
+			catch (SQLException e) {
+				System.out.println("SQLException: It was not possible to create a connection with " + DB_URL2);
+			} 
+			catch (ClassNotFoundException e) {
+				System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
+			}
 		}
 	}
 	
