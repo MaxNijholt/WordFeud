@@ -30,6 +30,7 @@ public class Competition {
 		this.min = mini;
 		this.max = maxi;
 		this.owner = competitionOwner;
+		this.id = id;
 		DBCommunicator.writeData("INSERT INTO competitie (id, account_naam_eigenaar, start, einde, omschrijving, minimum_aantal_deelnemers, maximum_aantal_deelnemers) VALUES(" + this.id + ", '" + competitionOwner +"',  CURRENT_TIMESTAMP(), '" + endDate + "' , '" + description + "' , " + mini + "," + maxi + ");");
 	}
 	

@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 
 import Utility.AScrollPane;
 import Utility.DBCommunicator;
+import Utility.MComboBox;
 import Utility.SButton;
 import Utility.SComboBox;
 import Utility.SLabel;
@@ -26,9 +28,9 @@ import Utility.STextField;
 @SuppressWarnings("serial")
 public class CompetitionCreatePanel extends JPanel implements ActionListener {
 
-	private STextField 			name, player;
+	private STextField 			name, player, endDate, year, day, month;;
 	private SComboBox 			addPlayers;
-	private SLabel 				nameLabel, playerLabel, addLabel, addedLabel;
+	private SLabel 				nameLabel, playerLabel, endDateLabel, addedLabel;
 	private AScrollPane			scroller;
 	private ArrayList<SLabel>	addedPlayers;
 	private SButton 			create, back, add;
@@ -36,6 +38,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	private GUI 				gui;
 	private JPanel scrollPane;
 	private MenuPanel mp;
+	private Calendar calendar;
 	
 	public CompetitionCreatePanel(GUI gui) {
 		this.gui = gui;
@@ -50,7 +53,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 //		title 			= new SLabel("New competition", SLabel.LEFT, new Font("Arial", Font.BOLD, 50));
 		nameLabel		= new SLabel("Competition name", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
 		playerLabel		= new SLabel("Maximum players", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
-		addLabel		= new SLabel("Add player", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
+		endDateLabel	= new SLabel("End date", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
 		addedLabel		= new SLabel("Added players", SLabel.LEFT, 220, 40);
 		
 		create 			= new SButton("Create", SButton.GREY, 220, 40);
@@ -59,8 +62,22 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		
 		name 			= new STextField("Competition name", 220, 40);
 		player 			= new STextField("Maximum players (2 up to 24)", 220, 40);
+		endDate 		= new STextField("YYYY-MM-DD", 220, 40);
+		year  			= new STextField("YYYY", 70, 40);
+		month  			= new STextField("MM", 70, 40);
+		day  			= new STextField("DD", 70, 40);
 		
 		mp				= new MenuPanel(gui, "CompetitionPanel");
+		
+//		String[] years = { "2014", "2015", "2016" };
+//		year = new MComboBox(70, 40, years);
+//		
+//		String[] days = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+//		day = new MComboBox(70, 40, days);
+//		
+//		String[] months = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" };
+//		month = new MComboBox(70, 40, months);
+		
 		// To fill the challenger box
 				ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account ORDER BY naam ASC");
 				String[] players = new String[allPlayers.size()];
@@ -100,10 +117,17 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		c.gridx++;
 		c.gridy = 0;
 		buttonPanel.add(playerLabel, c);
+		c.gridx++;
+		buttonPanel.add(endDateLabel, c);
+		c.gridx--;
 		c.gridy++;
 		buttonPanel.add(player, c);
 		c.gridx++;
-//		buttonPanel.add(add, c);
+		buttonPanel.add(year, c);
+		c.gridx++;
+		buttonPanel.add(month, c);
+		c.gridx++;
+		buttonPanel.add(day, c);
 		c.gridx = 0;
 		c.gridy++;
 //		buttonPanel.add(playerLabel, c);
@@ -111,8 +135,6 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 //		buttonPanel.add(player, c);
 		c.gridy++;
 		buttonPanel.add(create, c);
-		c.gridx++;
-		buttonPanel.add(add, c);
 //		buttonPanel.add(back, c);
 		
 //		JPanel titlePanel = new JPanel();
@@ -128,22 +150,67 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 			addPanel.add(addedPlayers.get(i));
 		}
 		
-		addedPanel = new JPanel();
-		addedPanel.setBackground(getBackground());
-		addedPanel.setLayout(new BorderLayout());
-		addedPanel.add(addedLabel, BorderLayout.NORTH);
-		addedPanel.add(scroller, BorderLayout.CENTER);
-		addedPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+//		addedPanel = new JPanel();
+//		addedPanel.setBackground(getBackground());
+//		addedPanel.setLayout(new BorderLayout());
+//		addedPanel.add(addedLabel, BorderLayout.NORTH);
+//		addedPanel.add(scroller, BorderLayout.CENTER);
+//		addedPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 		
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBackground(getBackground());
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.add(mp, BorderLayout.NORTH);
 		mainPanel.add(buttonPanel, BorderLayout.WEST);
-		mainPanel.add(addedPanel, BorderLayout.EAST);
+//		mainPanel.add(addedPanel, BorderLayout.EAST);
 		
 		this.add(mainPanel);
 		gui.setLoadingCursor(false);
+	}
+	
+	public int getInt(String text){
+		Integer i;
+		i = Integer.parseInt(text);
+		return i;
+	}
+	
+	public int getDaysOfMonth(int month){
+		if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+			return 31;
+		}
+		
+		if(month == 4 || month == 6 || month == 9 || month == 11){
+			return 30;
+		}
+		
+		if(month == 2){
+			return 28;
+		}
+		
+		else{
+			return 0;
+		}
+		
+
+	}
+	
+	
+	public boolean getMonth(int year, int month, int day){
+		Calendar calendar = Calendar.getInstance();
+		
+		if(year > calendar.get(1)){
+			return true;
+		}
+		
+		if(year == calendar.get(1) && month > (calendar.get(2) + 1)){
+			return true;
+		}
+		
+		if(year == calendar.get(1) && month == (calendar.get(2) + 1) && day > calendar.get(5)){
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -151,8 +218,25 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 			gui.switchPanel(new CompetitionPanel(gui));
 		}
 		
-		if(e.getSource().equals(add)){
-			gui.switchPanel(new AddPlayersPanel(gui));
+		if(e.getSource().equals(create)){
+			
+			if(!name.getText().isEmpty() && !player.getText().isEmpty() && getInt(player.getText()) > 1 && !year.getText().isEmpty() 
+					&& !month.getText().isEmpty() && !day.getText().isEmpty() && getInt(player.getText()) < 24
+					&& getMonth(getInt(year.getText()), getInt(month.getText()), getInt(day.getText())) == true){
+				
+				if(getInt(day.getText()) <= getDaysOfMonth(getInt(month.getText())) && getInt(day.getText()) > 0){
+					String endDate = year.getText() + "-" + month.getText() + "-" + day.getText();
+				gui.getApplication().addCompetition((endDate + " 00:00:00"), name.getText(), 1, getInt(player.getText()));
+				gui.getApplication().getSelectedCompetition().addPlayer(gui.getApplication().getCurrentAccount().getUsername());	
+				}			
+				else{
+					System.out.println("Please check if you filled in all fields correctly");
+				}
+			}
+			else{
+				System.out.println("Please check if you filled in all fields correctly");
+			}	
+			
 		}
 		
 		if(e.getSource().equals(add)) {
