@@ -98,8 +98,6 @@ public class Game {
 		
 		for(Entry<String, GameStone> word : newWords.entrySet()){
 			String key = word.getKey();
-			//char[] charKey = key.toCharArray();
-			boolean doneX = false;
 			int x = 0;
 			int y = 0;
 			

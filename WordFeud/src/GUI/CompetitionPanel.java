@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Utility.AScrollPane;
@@ -23,10 +24,7 @@ import WordFeud.Competition;
 @SuppressWarnings("serial")
 public class CompetitionPanel extends JPanel {
 	
-	private AScrollPane 		currentScrollPane, 
-								finishedScrollPane, 
-								comps, 
-								joinableScrollPane;
+	private AScrollPane 		comps;
 	private JPanel 				currentCompPanel, 
 								finishedCompPanel, 
 								competitions, 
@@ -114,14 +112,14 @@ public class CompetitionPanel extends JPanel {
 		competitions.setLayout(new BoxLayout(competitions, BoxLayout.Y_AXIS));
 		competitions.setBackground(bg);
 		
-		currentScrollPane = new AScrollPane(currentCompPanel.getWidth(), currentCompPanel.getHeight(), currentCompPanel, false, true);
+//		currentScrollPane = new AScrollPane(currentCompPanel.getWidth(), currentCompPanel.getHeight(), currentCompPanel, false, true);
 		comps = new AScrollPane(competitions.getWidth(), competitions.getHeight(), competitions, false, true);
-		finishedScrollPane = new AScrollPane(finishedCompPanel.getWidth(), finishedCompPanel.getHeight(), finishedCompPanel, false, true);
-		joinableScrollPane = new AScrollPane(joinableCompPanel.getWidth(), joinableCompPanel.getHeight(), joinableCompPanel, false, true);
+//		finishedScrollPane = new AScrollPane(finishedCompPanel.getWidth(), finishedCompPanel.getHeight(), finishedCompPanel, false, true);
+//		joinableScrollPane = new AScrollPane(joinableCompPanel.getWidth(), joinableCompPanel.getHeight(), joinableCompPanel, false, true);
 		
-		competitions.add(currentScrollPane);
-		competitions.add(joinableScrollPane);		
-		competitions.add(finishedScrollPane);
+		competitions.add(currentCompPanel);
+		competitions.add(joinableCompPanel);
+		competitions.add(finishedCompPanel);
 		
 		this.add(menu, BorderLayout.NORTH);
 		this.add(comps, BorderLayout.CENTER);
@@ -314,10 +312,13 @@ public class CompetitionPanel extends JPanel {
 			join.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().setSelectedCompetition(new Competition(compID));
-					Competition comp = gui.getApplication().getSelectedCompetition();		
-					comp.addPlayer(gui.getApplication().getCurrentAccount());
-					gui.switchPanel(new CompetitionPlayersPanel(gui, compID));		
+					if(gui.getApplication().getJoinable(compID)){
+						gui.getApplication().addPlayer(gui.getApplication().getCurrentAccount().getUsername(), compID);
+						gui.getApplication().selectCompetition(compID);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "You can't join this competition anymore", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			});
 			spectate.addActionListener(new ActionListener(){

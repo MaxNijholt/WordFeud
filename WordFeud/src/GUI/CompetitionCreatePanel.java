@@ -69,15 +69,6 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		
 		mp				= new MenuPanel(gui, "CompetitionPanel");
 		
-//		String[] years = { "2014", "2015", "2016" };
-//		year = new MComboBox(70, 40, years);
-//		
-//		String[] days = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
-//		day = new MComboBox(70, 40, days);
-//		
-//		String[] months = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" };
-//		month = new MComboBox(70, 40, months);
-		
 		// To fill the challenger box
 				ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account ORDER BY naam ASC");
 				String[] players = new String[allPlayers.size()];
@@ -170,8 +161,15 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	
 	public int getInt(String text){
 		Integer i;
-		i = Integer.parseInt(text);
-		return i;
+		if(text.matches("[0-9]+")){
+			i = Integer.parseInt(text);
+			return i;		
+		}
+		else{
+			return 0;
+		}
+
+
 	}
 	
 	public int getDaysOfMonth(int month){
@@ -197,7 +195,6 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	
 	public boolean getMonth(int year, int month, int day){
 		Calendar calendar = Calendar.getInstance();
-		
 		if(year > calendar.get(1)){
 			return true;
 		}
@@ -228,6 +225,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 					String endDate = year.getText() + "-" + month.getText() + "-" + day.getText();
 				gui.getApplication().addCompetition((endDate + " 00:00:00"), name.getText(), 1, getInt(player.getText()));
 				gui.getApplication().getSelectedCompetition().addPlayer(gui.getApplication().getCurrentAccount().getUsername());	
+				gui.switchPanel(new CompetitionPanel(gui));
 				}			
 				else{
 					System.out.println("Please check if you filled in all fields correctly");
