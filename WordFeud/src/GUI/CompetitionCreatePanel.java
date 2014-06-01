@@ -228,6 +228,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 					String endDate = year.getText() + "-" + month.getText() + "-" + day.getText();
 				gui.getApplication().addCompetition((endDate + " 00:00:00"), name.getText(), 1, getInt(player.getText()));
 				gui.getApplication().getSelectedCompetition().addPlayer(gui.getApplication().getCurrentAccount().getUsername());	
+				gui.switchPanel(new CompetitionPanel(gui));
 				}			
 				else{
 					System.out.println("Please check if you filled in all fields correctly");
