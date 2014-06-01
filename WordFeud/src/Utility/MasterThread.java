@@ -4,9 +4,19 @@ import java.util.Observable;
 
 public class MasterThread extends Observable implements Runnable {
 
+	private static MasterThread instance;
 	private static Thread t;
 
-	public MasterThread() {
+	public static MasterThread getInstance(){
+		if(instance!=null)
+			return instance;
+		else{
+			instance = new MasterThread();
+			return instance;
+		}
+	}
+	
+	protected MasterThread() {
 		 t = new Thread(this);
 	}
 

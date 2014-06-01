@@ -15,8 +15,9 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,6 +25,7 @@ import javax.swing.JPanel;
 
 import Utility.DBCommunicator;
 import Utility.Loader;
+import Utility.MasterThread;
 import Utility.SButton;
 import Utility.SLabel;
 import WordFeud.Game;
@@ -34,7 +36,7 @@ import WordFeud.Tile;
  * @author Stan van Heumen
  */
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener {
+public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener, Observer {
 
 	// Instance Variables
 	private SButton 						pass, swap, resign, play, shuffle;
@@ -52,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	
 	private JLabel 	score		= new JLabel();
 	private int 	turnScore	= 0;
+	private MasterThread mt;
 	
 	/**
 	 * Constructor parameters: Gui gui<br>
@@ -59,6 +62,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	 * The GamePanel has got 2 grids (GameGrid and HandGrid)
 	 */
 	public GamePanel(GUI gui) {
+		mt = mt.getInstance();
+		mt.addObserver(this);
 		init(gui);
 
 		// InfopPanel -- MAY BE DELETED LATER --
@@ -396,4 +401,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	// Setters
 	public void setTurnScore(int t) 	{turnScore = t;}
 	public void turnOffThreads() 		{cp.getChat().closeThread(); running = false;}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		System.out.println("[GamePanel] revalidate");
+		revalidate();
+	}
 }

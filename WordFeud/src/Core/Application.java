@@ -13,6 +13,7 @@ import GUI.SpectatorGamePanel;
 import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
 import Utility.Loader;
+import Utility.MasterThread;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
@@ -20,7 +21,6 @@ import WordFeud.GameStone;
 import java.util.Calendar;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 
 public class Application {
@@ -30,6 +30,7 @@ public class Application {
 	private Account currentAccount;
 	private GUI myGui;
 	private Loader loader;
+	private MasterThread mt;
 
 
 	/**
@@ -41,6 +42,8 @@ public class Application {
 		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
+		mt = mt.getInstance();
+		mt.startThread();
 	}
 	
 	
