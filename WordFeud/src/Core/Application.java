@@ -19,6 +19,7 @@ import WordFeud.GameStone;
 
 import java.util.Calendar;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
@@ -85,9 +86,11 @@ public class Application {
 	}
 	
 	public void selectGame(int gameID) {
-		Game newGame = new Game(gameID, this);
-		selectedGame = newGame;
-		myGui.switchPanel(new GamePanel(myGui));
+		if(doInitializeGame(gameID)){
+			Game newGame = new Game(gameID, this);
+			selectedGame = newGame;
+			myGui.switchPanel(new GamePanel(myGui));
+		}
 	}
 	
 	public void spectateCompetition(int compID) {
@@ -126,9 +129,6 @@ public class Application {
 		String opponent = this.getOpponentName(gameID);
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
 				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
-		
-		this.createGameLetters(gameID);
-		this.createGameHands(gameID);
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
 	
@@ -137,10 +137,25 @@ public class Application {
 		String opponent = this.getOpponentName(gameID);
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
 				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
-		
-		this.createGameLetters(gameID);
-		this.createGameHands(gameID);
 		myGui.switchPanel(new CompetitionPlayersPanel(myGui, compID));
+	}
+	
+	public boolean doInitializeGame(int gameID){
+		int letter = DBCommunicator.requestInt("SELECT id FROM letter WHERE spel_id = " + gameID);
+		if(letter == 0){
+			if(getMyTurn(gameID)){
+				createGameLetters(gameID);
+				createGameHands(gameID);
+				return true;
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Opponent has not initialzed this game yet!", "Error", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+		}
+		else{
+			return true;
+		}		
 	}
 	
 	/**
@@ -218,6 +233,34 @@ public class Application {
 		return gameInts;
 	}
 	
+	/**
+	 * get all the games that have finished (finished or resigned) and return their integers
+	 * @param activeType
+	 */
+	public ArrayList<Integer> getFinishedGames(boolean resigned, int compID) {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String resign = "Finished";
+		if(resigned){
+			resign = "Resigned";
+		}
+		String query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND competitie_id = " + compID +" AND toestand_type = '" + resign + "'";
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		return gameInts;
+	}
+
+
 	/**
 	 * get all games that are still playing (my turn or opponents turn) and return their integers
 	 * @param activeType
@@ -325,6 +368,42 @@ public class Application {
 		return gameInts;
 	}
 	
+	/**
+	 * get all requested games (currentAccount or opponents request) (denied or unknown) and return their integers
+	 * @param myRequest
+	 * @param denied
+	 * @return
+	 */
+	public ArrayList<Integer> getRequestedGames(boolean myRequest, boolean denied, int compID) {
+		ArrayList<Integer> gameInts = new ArrayList<Integer>();
+		String player = currentAccount.getUsername();
+		String query = "";
+		if(denied){
+			query = "SELECT id FROM spel WHERE (account_naam_uitdager = '"+ player + "' OR account_naam_tegenstander = '"+ player + "') AND competitie_id = " + compID +" AND toestand_type = 'Request' AND reaktie_type = 'Rejected'";
+		}
+		else{
+			if(myRequest){
+				query = "SELECT id FROM spel WHERE account_naam_uitdager = '"+ player + "' AND competitie_id = " + compID +" AND toestand_type = 'Request' AND reaktie_type = 'Unknown'";
+			}
+			else{
+				query = "SELECT id FROM spel WHERE account_naam_tegenstander = '"+ player + "' AND competitie_id = " + compID +" AND toestand_type = 'Request' AND reaktie_type = 'unknown'";
+			}
+		}
+		Boolean searching = true;
+		
+		while(searching){
+			int gameID = DBCommunicator.requestInt(query);
+			if(gameID == 0){
+				searching = false;
+			}
+			else{
+				query += " AND id <> " + gameID;
+				gameInts.add(gameID);
+			}
+		}
+		return gameInts;
+	}
+	
 	public ArrayList<Integer> getSpectatableGames(int compID) {
 		ArrayList<Integer> gameInts = new ArrayList<Integer>();
 		
@@ -375,7 +454,6 @@ public class Application {
 	
 	public ArrayList<Integer> getFinishedCompetitions(){
 		ArrayList<Integer> compInts = new ArrayList<Integer>();
-		String player = currentAccount.getUsername();
 
 		Calendar rightNow = Calendar.getInstance();
 		String now = rightNow.get(1) + "-" + (rightNow.get(2) + 1) + "-" + rightNow.get(5);
@@ -517,7 +595,12 @@ public class Application {
 		}
 		
 		String ratioS = ratio + "";
-		ratioS = ratioS.substring(0, 4);
+		try{
+			ratioS = ratioS.substring(0, 4);
+		}
+		catch(StringIndexOutOfBoundsException e){
+			ratioS = "0,0";
+		}
 		return ratioS;
 	}	
 	
@@ -642,13 +725,40 @@ public class Application {
 		return date;
 	}
 	
-	/**
-	 * get all account names form the db
-	 * return all accounts the have a name LIKE the given string
-	 * -------------------------------------------------
-	 */
-	public Account[] searchPlayer(String partialname){
-		return null;
+	public void addPlayer(String player, int compID){
+		DBCommunicator.writeData("INSERT INTO deelnemer SET account_naam='" + player + "', competitie_id='"+ compID + "'");
+	}
+	
+	public boolean getMyTurn(int gameID){
+		String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + gameID + " ORDER BY id DESC");
+		if(name.equals(currentAccount.getUsername())){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	public boolean getJoinable(int compID){
+		int current = DBCommunicator.requestInt("SELECT COUNT(account_naam) FROM deelnemer WHERE competitie_id = " + compID);
+		int max = DBCommunicator.requestInt("SELECT maximum_aantal_deelnemers FROM competitie WHERE id = " + compID);
+		
+		if(current < max){
+			if(getTimeEnd(compID)){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public String getWinner(int gameID){
+		
+		return "";
 	}
 	
 	/**

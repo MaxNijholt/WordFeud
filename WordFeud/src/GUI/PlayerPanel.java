@@ -299,18 +299,18 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		//for a game that has finished. option to watch/spectate
 		else if(gameType.equals("Finished")){
 			JPanel opponent		= new JPanel();
-			JPanel lastTurn 	= new JPanel();
+			JPanel winner 	= new JPanel();
 			SButton spectate 	= new SButton("Spectate", SButton.GREY, 220, 40);
 			
 			opponent.add(new SLabel(gui.getOpponentName(gameID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
-			lastTurn.add(new SLabel(gui.getLastTurntype(gameID) + " " + gui.getLastTurnScore(gameID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
+			winner.add(new SLabel(gui.getApplication().getWinner(gameID) + " has won", SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
 			
 			opponent.setMinimumSize(new Dimension(200,30));
-			lastTurn.setMinimumSize(new Dimension(200,30));
+			winner.setMinimumSize(new Dimension(200,30));
 			spectate.setMinimumSize(spectate.getPreferredSize());
 			
 			opponent.setBackground(panel.getBackground());
-			lastTurn.setBackground(panel.getBackground());
+			winner.setBackground(panel.getBackground());
 			
 			c.gridx = 0;
 			c.gridy = 0;
@@ -322,7 +322,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			c.gridheight = 1;
 			c.gridx = 0;
 			c.gridy++;
-			panel.add(lastTurn, c);
+			panel.add(winner, c);
 			
 			spectate.addActionListener(new ActionListener(){
 				@Override

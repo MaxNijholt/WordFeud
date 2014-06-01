@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Utility.AScrollPane;
@@ -314,10 +315,13 @@ public class CompetitionPanel extends JPanel {
 			join.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().setSelectedCompetition(new Competition(compID));
-					Competition comp = gui.getApplication().getSelectedCompetition();		
-					comp.addPlayer(gui.getApplication().getCurrentAccount());
-					gui.switchPanel(new CompetitionPlayersPanel(gui, compID));		
+					if(gui.getApplication().getJoinable(compID)){
+						gui.getApplication().addPlayer(gui.getApplication().getCurrentAccount().getUsername(), compID);
+						gui.getApplication().selectCompetition(compID);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "You can't join this competition anymore", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			});
 			spectate.addActionListener(new ActionListener(){

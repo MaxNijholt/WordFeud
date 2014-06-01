@@ -97,7 +97,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 		ArrayList<Integer> gameInts;
 		// currentAccounts new requested games
-		gameInts = gui.getRequestedGames(false, false);
+		gameInts = gui.getApplication().getRequestedGames(false, false, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("New request", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -111,7 +111,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
 
 		// games that are still playing
-		gameInts = gui.getPlayingGames(true);
+		gameInts = gui.getPlayingGames(true, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Your Turn", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -121,7 +121,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		gameInts = gui.getPlayingGames(false);
+		gameInts = gui.getPlayingGames(false, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Opponents turn", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -135,7 +135,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
 		// games that are finished
 
-		gameInts = gui.getFinishedGames(false);
+		gameInts = gui.getApplication().getFinishedGames(false, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Finished", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -145,7 +145,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		gameInts = gui.getFinishedGames(true);
+		gameInts = gui.getApplication().getFinishedGames(true, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Resigned", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -159,7 +159,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
 		// games that currentPlayer requested
 
-		gameInts = gui.getRequestedGames(true, false);
+		gameInts = gui.getApplication().getRequestedGames(true, false, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Waiting", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -169,7 +169,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		gameInts = gui.getRequestedGames(true, true);
+		gameInts = gui.getApplication().getRequestedGames(true, true);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Denied", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));

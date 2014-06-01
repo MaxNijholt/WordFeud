@@ -19,6 +19,7 @@ import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Utility.DBCommunicator;
@@ -268,89 +269,111 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		
 		// Swap
 		if(e.getSource().equals(swap)) {
-			for(int i = 0; i < field.size(); i++) {
-				if(field.get(i).getGameStone() != null) {
-					if(field.get(i).getGameStone().getHand()) {
-						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
-						field.get(i).setGameStone(null);
+			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
+				for(int i = 0; i < field.size(); i++) {
+					if(field.get(i).getGameStone() != null) {
+						if(field.get(i).getGameStone().getHand()) {
+							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+							field.get(i).setGameStone(null);
+						}
 					}
 				}
-			}
-			for(int i = 0; i < hand.size(); i++) {
-				hand.get(i).setGameStone(stones.get(i));
-			}
-			final JFrame swapFrame 	= new JFrame();
-			JPanel swapPanel	= new JPanel();
-			swapPanel.setLayout(null);
-			swapPanel.setPreferredSize(new Dimension(20 + (stones.size() * stones.get(0).getImage().getWidth()), 60 + stones.get(0).getImage().getHeight()));
-			swapFrame.setResizable(false);
-			swapFrame.setTitle(GUI.TITLE);
-			swapFrame.setContentPane(swapPanel);
 			
-			SButton swap 	= new SButton("Swap", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
-			swap.setBounds(10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
-			
-			SButton cancel 	= new SButton("Cancel", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
-			cancel.setBounds(swapPanel.getPreferredSize().width - cancel.getPreferredSize().width - 10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
-			cancel.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					swapFrame.dispose();
+				for(int i = 0; i < hand.size(); i++) {
+					hand.get(i).setGameStone(stones.get(i));
 				}
-			});
-			
-			MouseAdapter ma = new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
-					for(int i = 0; i < stones.size(); i++) {
+				final JFrame swapFrame 	= new JFrame();
+				JPanel swapPanel	= new JPanel();
+				swapPanel.setLayout(null);
+				swapPanel.setPreferredSize(new Dimension(20 + (stones.size() * stones.get(0).getImage().getWidth()), 60 + stones.get(0).getImage().getHeight()));
+				swapFrame.setResizable(false);
+				swapFrame.setTitle(GUI.TITLE);
+				swapFrame.setContentPane(swapPanel);
+				
+				SButton swap 	= new SButton("Swap", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
+				swap.setBounds(10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
+				
+				SButton cancel 	= new SButton("Cancel", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
+				cancel.setBounds(swapPanel.getPreferredSize().width - cancel.getPreferredSize().width - 10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
+				cancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						swapFrame.dispose();
+					}
+				});
+				
+				MouseAdapter ma = new MouseAdapter() {
+					public void mousePressed(MouseEvent e) {
+						for(int i = 0; i < stones.size(); i++) {
 						
+						}
 					}
+				};
+			
+				swapPanel.setBackground(getBackground());
+				swapFrame.setIconImage(Loader.ICON);
+			
+				for(int i = 0; i < stones.size(); i++) {
+					SLabel s = new SLabel(stones.get(i).getImage(), stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
+					s.setBounds(10 + (i * stones.get(i).getImage().getWidth()), 10, stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
+					swapPanel.add(s);
 				}
-			};
+				swapPanel.add(swap);
+				swapPanel.add(cancel);
 			
-			swapPanel.setBackground(getBackground());
-			swapFrame.setIconImage(Loader.ICON);
-			
-			for(int i = 0; i < stones.size(); i++) {
-				SLabel s = new SLabel(stones.get(i).getImage(), stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
-				s.setBounds(10 + (i * stones.get(i).getImage().getWidth()), 10, stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
-				swapPanel.add(s);
+				swapFrame.pack();
+				swapFrame.setLocationRelativeTo(null);
+				swapFrame.setVisible(true);
 			}
-			swapPanel.add(swap);
-			swapPanel.add(cancel);
-			
-			swapFrame.pack();
-			swapFrame.setLocationRelativeTo(null);
-			swapFrame.setVisible(true);
+			else{
+				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		
 		// Play
 		if(e.getSource().equals(play)) {
-			System.out.println(gui.playWord());
-			for(int i = 0; i < field.size(); i++) {
-				if(field.get(i).getGameStone() != null) {
-					if(field.get(i).getGameStone().getHand()) {
-						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
-						field.get(i).setGameStone(null);
+			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
+				System.out.println(gui.playWord());
+				for(int i = 0; i < field.size(); i++) {
+					if(field.get(i).getGameStone() != null) {
+						if(field.get(i).getGameStone().getHand()) {
+							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+							field.get(i).setGameStone(null);
+						}
 					}
 				}
+				for(int i = 0; i < hand.size(); i++) {
+					hand.get(i).setGameStone(stones.get(i));
+				}
+				currentGameStone = null;
+				gui.switchPanel(new GamePanel(gui));
 			}
-			for(int i = 0; i < hand.size(); i++) {
-				hand.get(i).setGameStone(stones.get(i));
+			else{
+				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			currentGameStone = null;
 		}
 		
 		// Resign
 		if(e.getSource().equals(resign)) {
-			turnOffThreads();
-			game.resign();
-			gui.switchPanel(new GamePanel(gui));
+			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
+				turnOffThreads();
+				game.resign();
+				gui.switchPanel(new GamePanel(gui));
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		
 		// Pass
 		if(e.getSource().equals(pass)) {
-			turnOffThreads();
-			gui.pass();
-			gui.switchPanel(new GamePanel(gui));
+			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
+				turnOffThreads();
+				gui.pass();
+				gui.switchPanel(new GamePanel(gui));
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	
