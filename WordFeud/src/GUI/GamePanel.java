@@ -54,7 +54,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	
 	private JLabel 	score		= new JLabel();
 	private int 	turnScore	= 0;
-	private MasterThread mt;
+//	private MasterThread mt;
 	
 	/**
 	 * Constructor parameters: Gui gui<br>
@@ -62,8 +62,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	 * The GamePanel has got 2 grids (GameGrid and HandGrid)
 	 */
 	public GamePanel(GUI gui) {
-		mt = mt.getInstance();
-		mt.addObserver(this);
+//		mt = mt.getInstance();
+//		mt.addObserver(this);
 		init(gui);
 
 		// InfopPanel -- MAY BE DELETED LATER --
@@ -429,7 +429,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("[GamePanel] revalidate");
-		revalidate();
+		System.out.println("[GamePanel] update revalidate");
+//		revalidate();
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Observer;
 
 import javax.swing.JPanel;
 
@@ -31,6 +32,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 										back;
 	private ArrayList<SButton>			allButtons;
 	private String 						backPanel;
+	private Observer					currentPanel;
 
 	/**
 	 * Constructor parameters: Gui g, JPanel bp<br>
@@ -162,6 +164,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 			if(name.equals("SpectatorCompetitionsPanel")) 	{gui.switchPanel(new SpectatorCompetitionsPanel(gui));}
 			if(name.equals("SpectatorPanel")) 				{gui.switchPanel(new SpectatorPanel(gui, gui.getApplication().getSelectedCompetition().getID()));}
 			if(name.equals("StatisticsPanel"))				{gui.switchPanel(new StatisticsPanel(gui));}
+			
 		}
 		switcher.getPopop().setVisible(false);
 	}
