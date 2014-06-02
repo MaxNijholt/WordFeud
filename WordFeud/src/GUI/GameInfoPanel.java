@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import Utility.AScrollPane;
 
+@SuppressWarnings("serial")
 public class GameInfoPanel extends JPanel {
 	private JLabel score = new JLabel();
 	private int turnScore = 0;
@@ -24,32 +25,22 @@ public class GameInfoPanel extends JPanel {
 		score.setBackground(Color.GREEN);
 		score.setFont(new Font("Arial", Font.BOLD, 14));
 		this.add(score);
-
-		AScrollPane scoreBar = new AScrollPane(this.getPreferredSize().width,
-				this.getPreferredSize().height, this, false, true);
-		add(scoreBar);
-		scoreBar.setBounds(10, 320, this.getPreferredSize().width,
-				this.getPreferredSize().height);
-
 	}
 
-	public void updateInfo(ArrayList<String> denied, int scoreTurn)
+	public void updateInfo(int scoreTurn)
 	{
 		this.turnScore = scoreTurn;
 		score.setText("Your turn score will be: " + turnScore);
-		if (denied.size() != 0)
-		{
-			for (String deleter : denied)
-			{
-				JLabel addDeniedWord = new JLabel();
-				addDeniedWord.setOpaque(true);
-				addDeniedWord.setBackground(Color.RED);
-				addDeniedWord.setFont(new Font("Arial", Font.BOLD, 14));
-				addDeniedWord.setText(deleter);
-				this.add(addDeniedWord);
-			}
 
-		}
+		/*
+		 * if (denied.size() != 0) { for (String deleter : denied) { JLabel
+		 * addDeniedWord = new JLabel(); addDeniedWord.setOpaque(true);
+		 * addDeniedWord.setBackground(Color.RED); addDeniedWord.setFont(new
+		 * Font("Arial", Font.BOLD, 14)); addDeniedWord.setText(deleter);
+		 * this.add(addDeniedWord); }
+		 * 
+		 * }
+		 */
 
 	}
 
