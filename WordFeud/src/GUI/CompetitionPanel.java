@@ -237,6 +237,7 @@ public class CompetitionPanel extends JPanel {
 			description.setPreferredSize(new Dimension(200,40));
 			description.setMaximumSize(new Dimension(200,40));
 			select.setMinimumSize(select.getPreferredSize());
+			select.setMaximumSize(select.getPreferredSize());
 			
 			owner.setBackground(panel.getBackground());
 			description.setBackground(panel.getBackground());
@@ -271,8 +272,11 @@ public class CompetitionPanel extends JPanel {
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
 			
 			owner.setMinimumSize(new Dimension(200,30));
+			owner.setMaximumSize(new Dimension(200,30));
 			description.setMinimumSize(new Dimension(200,30));
+			description.setMaximumSize(new Dimension(200,30));
 			spectate.setMinimumSize(spectate.getPreferredSize());
+			spectate.setMaximumSize(spectate.getPreferredSize());
 			
 			owner.setBackground(panel.getBackground());
 			description.setBackground(panel.getBackground());
@@ -307,8 +311,11 @@ public class CompetitionPanel extends JPanel {
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
 			
 			owner.setMinimumSize(new Dimension(200,30));
+			owner.setMaximumSize(new Dimension(200,30));
 			description.setMinimumSize(new Dimension(200,30));
+			description.setMaximumSize(new Dimension(200,30));
 			join.setMinimumSize(join.getPreferredSize());
+			join.setMaximumSize(join.getPreferredSize());
 			
 			owner.setBackground(panel.getBackground());
 			description.setBackground(panel.getBackground());
