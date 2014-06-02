@@ -30,7 +30,7 @@ public class DBCommunicator {
 	private static final String DB_PASSWORD2=	"9G87t3W65t";
 
 	private static Connection con;
-	private final static boolean database = true;
+	private final static boolean database = false;
 
 	public static final void getConnection() {
 		if(database){

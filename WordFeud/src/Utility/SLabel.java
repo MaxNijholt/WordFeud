@@ -171,5 +171,6 @@ public class SLabel extends JLabel {
 
 	// Getters
 	public String getName() {return text;}
+	public Color getBackgroundColor() {return background;}
 
 }
