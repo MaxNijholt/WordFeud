@@ -291,11 +291,13 @@ public class Application {
 		
 		for(int e : gameInts){
 			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
-			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
-				turnInts.add(e);
-			}
-			else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
-				turnInts.add(e);
+			if(name != null){
+				if((name.equals(currentAccount.getUsername()) && (!myTurn))){
+					turnInts.add(e);
+				}
+				else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
+					turnInts.add(e);
+				}
 			}
 		}
 		
@@ -778,8 +780,15 @@ public class Application {
 	}
 	
 	public String getWinner(int gameID){
-		
-		return "";
+		String resign = DBCommunicator.requestData("SELECT toestand_type FROM spel WHERE id = " + gameID + " AND toestand_type = 'Resigned'");
+		if(resign != null){
+			String naam = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + gameID + " AND account_naam <> (SELECT account_naam FROM beurt WHERE spel_id = "+ gameID + " AND aktie_type = 'Resign')");
+			return naam;
+		}
+		else{
+			String naam = DBCommunicator.requestData("SELECT account_naam FROM score WHERE spel_id = " + gameID + " ORDER BY totaalscore DESC");
+			return naam;
+		}
 	}
 	
 	/**
