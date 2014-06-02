@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 
 import Utility.DBCommunicator;
 import Utility.Loader;
-import Utility.MasterThread;
 import Utility.SButton;
 import Utility.SLabel;
 import WordFeud.Game;
@@ -52,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private ArrayList<GameStone> 			stones;
 	private int 							mouseX, mouseY;
 	private JFrame 							questionFrame;
+	private SLabel 							turn;
 	
 	private JLabel 	score		= new JLabel();
 	private int 	turnScore	= 0;
@@ -77,9 +77,18 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		infoPanel.setPreferredSize(new Dimension(180, 215));
 		infoPanel.setBackground(new Color(33, 36, 40));
 		infoPanel.add(score);
-
+			
+		turn = new SLabel("", SLabel.CENTER);
+		if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())) {
+			turn.setName("It's your turn");
+		}
+		else {
+			turn.setName("It is your opponents turn");
+		}
+		
 		add(mp);
 		mp.setBounds(0, 0, mp.getPreferredSize().width, mp.getPreferredSize().height);
+		mp.add(turn);
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
 		add(infoPanel);
@@ -382,7 +391,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		// Play
 		if(e.getSource().equals(play)) {
 			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
-				System.out.println(gui.playWord());
+				ArrayList<String> word = gui.playWord();
+				System.out.println(word);
 				for(int i = 0; i < field.size(); i++) {
 					if(field.get(i).getGameStone() != null) {
 						if(field.get(i).getGameStone().getHand()) {
@@ -395,7 +405,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					hand.get(i).setGameStone(stones.get(i));
 				}
 				currentGameStone = null;
-				gui.switchPanel(new GamePanel(gui));
+				if(word == null) gui.switchPanel(new PlayerPanel(gui));
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
