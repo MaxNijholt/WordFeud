@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private ArrayList<Tile> 				hand, field;
 	private ArrayList<GameStone> 			stones;
 	private int 							mouseX, mouseY;
+	private JFrame 							questionFrame;
 	
 	private JLabel 	score		= new JLabel();
 	private int 	turnScore	= 0;
@@ -218,27 +219,28 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 					else {
 						if(t.getGameStone() == null) {
-							if(currentGameStone.getValue() == 0) {
+							if(currentGameStone.getLetter() == '?') {
 								// Check for the question mark (?)
-								JFrame swapFrame 	= new JFrame();
+								questionFrame 	= new JFrame();
 								JPanel swapPanel	= new JPanel();
 								swapPanel.setLayout(new GridLayout(6, 5));
-								swapFrame.setResizable(false);
-								swapFrame.setTitle(GUI.TITLE);
-								swapFrame.setContentPane(swapPanel);
-								
+								questionFrame.setResizable(false);
+								questionFrame.setTitle(GUI.TITLE);
+								questionFrame.setContentPane(swapPanel);
+
 								for(char i = 'A'; i <= 'Z'; i++) {
 									SButton s = new SButton(Character.toString(i), SButton.WHITE, 50, 50);
+									s.addActionListener(this);
 									s.setColors(Color.WHITE, new Color(230, 230, 230), new Color(200, 200, 200));
 									s.setTextColor(Color.BLACK);
 									swapPanel.add(s);
 								}
-								swapFrame.pack();
-								swapFrame.setLocationRelativeTo(null);
-								swapFrame.setVisible(true);
+								questionFrame.pack();
+								questionFrame.setLocationRelativeTo(null);
+								questionFrame.setVisible(true);
 								
-								//TODO: Make it so that the question mark stone changes its value to the chosen stone!
-								//TODO: Set that gameStone to that tile!
+								t.setGameStone(currentGameStone);
+								t.setPickablity(true);
 							}
 							else {
 								t.setGameStone(currentGameStone);
@@ -275,6 +277,19 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 
 	// Action event
 	public void actionPerformed(ActionEvent e) {
+		for(char i = 'A'; i <= 'Z'; i++) {
+			if(e.getActionCommand().equals(Character.toString(i))) {
+				for(Tile t:field) {
+					if(t.getGameStone() != null) {
+						if(t.getGameStone().getLetter() == '?') {
+							t.getGameStone().setLetter(Character.toString(i));
+							questionFrame.dispose();
+						}
+					}
+				}
+			}
+		}
+		
 		// Fix for thread staying on
 		if(e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
 			turnOffThreads();
