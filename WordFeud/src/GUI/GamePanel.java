@@ -274,6 +274,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 					else {
 						if(t.getGameStone() == null) {
+							if(currentGameStone.getValue() == 0) {
+								currentGameStone.setLetter("?");
+							}
 							t.setGameStone(currentGameStone);
 							currentGameStone = null;
 						}
@@ -358,6 +361,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(swapStones.size() >= 1) {
 							game.swapGameStones(swapStones);
 							swapFrame.dispose();
+							gui.switchPanel(new GamePanel(gui));
 						}
 					}
 				});
@@ -470,7 +474,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
 				turnOffThreads();
 				game.resign();
-				gui.switchPanel(new GamePanel(gui));
+				gui.switchPanel(new PlayerPanel(gui));
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
