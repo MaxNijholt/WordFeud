@@ -521,7 +521,7 @@ public class Application {
 	}
 	
 	public int getAmountGames(String player, int compID){
-		int amount = DBCommunicator.requestInt("SELECT COUNT(id) FROM spel WHERE competitie_id = " + compID + " AND (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "')");
+		int amount = DBCommunicator.requestInt("SELECT COUNT(id) FROM spel WHERE competitie_id = " + compID + " AND (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') AND reaktie_type = 'Accepted'");
 		return amount;
 	}
 	
@@ -553,12 +553,27 @@ public class Application {
 		return amount;
 	}
 	
-	public int getAveragePoints(String player, int compID){
+	public String getAveragePoints(String player, int compID){
 		int pointsTotal = getTotalPoints(player, compID);
 		int gamesTotal = getAmountGames(player, compID);
+		int average = 0;
 		
-		int average = pointsTotal/gamesTotal;
-		return average;
+		if(pointsTotal != 0  && gamesTotal != 0){
+			average = pointsTotal/gamesTotal;
+		}
+		else if(gamesTotal == 0){
+			average = pointsTotal;
+		}
+		
+		String ratioS = average + "";
+		try{
+			ratioS = ratioS.substring(0, 4);
+		}
+		catch(StringIndexOutOfBoundsException e){
+			ratioS = "0,0";
+		}
+		
+		return ratioS;
 	}
 	
 	public int getGamesWon(String player, int compID){

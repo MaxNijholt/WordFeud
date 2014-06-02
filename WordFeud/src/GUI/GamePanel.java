@@ -267,7 +267,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			}
 			Collections.shuffle(stones);
 			for(int i = 0; i < hand.size(); i++) {
-				hand.get(i).setGameStone(stones.get(i));
+				try{
+					hand.get(i).setGameStone(stones.get(i));
+				}
+				catch(IndexOutOfBoundsException a){
+					
+				}
 			}
 			currentGameStone = null;
 		}
