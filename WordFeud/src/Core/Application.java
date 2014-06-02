@@ -30,7 +30,7 @@ public class Application {
 	private Account currentAccount;
 	private GUI myGui;
 	private Loader loader;
-	private MasterThread mt;
+//	private MasterThread mt;
 
 
 	/**
@@ -42,8 +42,8 @@ public class Application {
 		loader = new Loader();
 		loader.loadAllImages();
 		myGui = new GUI(this);
-		mt = mt.getInstance();
-		mt.startThread();
+//		mt = mt.getInstance();
+//		mt.startThread();
 	}
 	
 	
