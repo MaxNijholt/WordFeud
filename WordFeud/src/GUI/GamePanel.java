@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -220,7 +222,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
-							score.setText("Your turn score would be: " + gui.removeGameStone(t.getXPos() + "," + t.getYPos()));
+							score.setText("Your turn score would be: " + gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
 							
 							t.setGameStone(null);
 						}
@@ -243,6 +245,15 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 									s.setTextColor(Color.BLACK);
 									swapPanel.add(s);
 								}
+								questionFrame.addWindowListener(new WindowAdapter() {
+						            //
+						            // Invoked when a window is de-activated.
+						            //
+						            public void windowDeactivated(WindowEvent e) {
+						                questionFrame.dispose();
+						            }
+						 
+						        });
 								questionFrame.pack();
 								questionFrame.setLocationRelativeTo(null);
 								questionFrame.setVisible(true);
@@ -308,7 +319,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			for (int i = 0; i < field.size(); i++) {
 				if (field.get(i).getGameStone() != null) {
 					if (field.get(i).getGameStone().getHand()) {
-						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), true);
 						field.get(i).setGameStone(null);
 					}
 				}
@@ -331,7 +342,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				for(int i = 0; i < field.size(); i++) {
 					if(field.get(i).getGameStone() != null) {
 						if(field.get(i).getGameStone().getHand()) {
-							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), true);
 							field.get(i).setGameStone(null);
 						}
 					}
@@ -438,13 +449,18 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				for(int i = 0; i < field.size(); i++) {
 					if(field.get(i).getGameStone() != null) {
 						if(field.get(i).getGameStone().getHand()) {
-							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), false);
 							field.get(i).setGameStone(null);
 						}
 					}
 				}
 				for(int i = 0; i < hand.size(); i++) {
-					hand.get(i).setGameStone(stones.get(i));
+					try{
+						hand.get(i).setGameStone(stones.get(i));
+					}
+					catch(IndexOutOfBoundsException a){
+						
+					}
 				}
 				currentGameStone = null;
 				if(word == null) gui.switchPanel(new PlayerPanel(gui));

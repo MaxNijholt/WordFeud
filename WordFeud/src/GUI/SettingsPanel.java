@@ -8,6 +8,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,7 +43,7 @@ public class SettingsPanel extends JPanel{
 	private MenuPanel 		mp;
 	private ActionAdapter 	aa = new ActionAdapter();
 	private SPopupMenu		pop = new SPopupMenu();
-	private JFrame 			frame;
+	private JFrame 			frame = null;
 	private boolean			passChange = false,
 							userChange= false,
 							showmenu;
@@ -49,18 +54,31 @@ public class SettingsPanel extends JPanel{
 		this.showmenu = true;
 		init();
 	}
-	public SettingsPanel(GUI gui, Account user, JFrame frame){
+	public SettingsPanel(GUI gui, Account user, final JFrame frame){
 		this.gui = gui;
 		this.user = user;
 		this.frame = frame;
 		this.showmenu = false;
+		this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.frame.setResizable(false);
+		this.frame.requestFocus();
+		this.frame.addWindowListener(new WindowAdapter() {
+            //
+            // Invoked when a window is de-activated.
+            //
+            public void windowDeactivated(WindowEvent e) {
+                frame.dispose();
+            }
+ 
+        });
 		init();
 	}
 	
 	private void init(){
 		gui.setLoadingCursor(true);
-		
 		mp = new MenuPanel(gui, "LoginPanel");
+		
+		this.setFocusable(true);
 		
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -149,4 +167,11 @@ public class SettingsPanel extends JPanel{
 			
 		}
 	}
+	public void windowGainedFocus(WindowEvent e){}
+    public void windowLostFocus(WindowEvent e)
+    {
+        requestFocusInWindow();
+        if(frame!=null)
+        frame.dispose();
+    }
 }
