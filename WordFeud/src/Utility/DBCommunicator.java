@@ -30,7 +30,7 @@ public class DBCommunicator {
 	private static final String DB_PASSWORD2=	"9G87t3W65t";
 
 	private static Connection con;
-	private final static boolean database = true;
+	private final static boolean database = false;
 
 	public static final void getConnection() {
 		if(database){
@@ -335,6 +335,7 @@ public class DBCommunicator {
 					for(GameStone gs : gameStones){
 						if(res.getInt(3)==gs.getID()){
 							hmap.get(res.getString(1)+","+res.getString(2)).setGameStone(gs);
+							hmap.get(res.getString(1)+","+res.getString(2)).setBonusUsed(true);
 							hmap.get(res.getString(1)+","+res.getString(2)).getGameStone().setTurn(res.getInt(4));
 						}
 						if(res.getInt(3)==gs.getID() && gs.getLetter()=='?'){

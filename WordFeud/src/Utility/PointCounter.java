@@ -345,4 +345,69 @@ public class PointCounter {
 
 	}
 
+	public void deactivateBonusses(ArrayList<String> wordsForCount,
+			HashMap<String, Tile> playBoard, int stonesPlayed)
+	{
+
+		HashMap<String, Tile> field = playBoard;
+		int x = 0;
+		int y = 0;
+		String[] cords = null;
+		String[] cordsSplit = null;
+		String[] cordsSplit2 = null;
+		int t = 0;
+		for (String wordcor : wordsForCount)
+		{
+			ArrayList<String> bonusToDeactivate = new ArrayList<>();
+			cords = wordcor.split("_");
+			cordsSplit = cords[0].split(",");
+			cordsSplit2 = cords[1].split(",");
+			x = Integer.parseInt(cordsSplit[0]);
+			y = Integer.parseInt(cordsSplit[1]);
+			if (cordsSplit[0].equals(cordsSplit2[0]))
+			{
+				while (t <= (Integer.parseInt(cordsSplit2[1]) - Integer
+						.parseInt(cordsSplit[1])))
+				{
+
+					if (field.get(x + "," + y).getBonus() != null)
+					{
+						bonusToDeactivate.add(x + "," + y);
+					}
+
+					y++;
+					t++;
+
+				}
+				t = 0;
+
+			}
+			else
+			{
+				while (t <= (Integer.parseInt(cordsSplit2[0]) - Integer
+						.parseInt(cordsSplit[0])))
+				{
+
+					if (field.get(x + "," + y).getBonus() != null)
+					{
+						bonusToDeactivate.add(x + "," + y);
+					}
+
+					x++;
+					t++;
+
+				}
+				t = 0;
+
+			}
+
+		}
+		
+		for (String deleter : wordsForCount)
+		{
+			//deactivate bonusses
+		}
+
+	}
+
 }
