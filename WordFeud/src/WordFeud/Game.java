@@ -110,8 +110,9 @@ public class Game {
 		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES (" +  turn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', " + points + ", 'Word')");
 		
 		HashMap<String, GameStone> newWords = myField.getNewWords();
-		
+		System.out.println(newWords);
 		for(Entry<String, GameStone> word : newWords.entrySet()){
+			System.out.println(word.getKey());
 			String key = word.getKey();
 			int x = 0;
 			int y = 0;
