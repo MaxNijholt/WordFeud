@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.Cursor;
 import java.util.ArrayList;
+import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,6 +10,7 @@ import javax.swing.JPanel;
 import AccountType.Account;
 import Core.Application;
 import Utility.Loader;
+import Utility.MasterThread;
 import WordFeud.GameStone;
 
 @SuppressWarnings("serial")
@@ -40,6 +42,12 @@ public class GUI extends JFrame{
 	}
 	
 	public void switchPanel(JPanel jpanel){
+		this.getContentPane().removeAll();
+		this.setContentPane(jpanel);
+		this.revalidate();
+	}
+	public void switchPanel(JPanel jpanel, Observer currentPanel){
+		MasterThread.getInstance().deleteObserver(currentPanel);
 		this.getContentPane().removeAll();
 		this.setContentPane(jpanel);
 		this.revalidate();

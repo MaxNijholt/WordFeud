@@ -40,10 +40,10 @@ public class DBCommunicator {
 				System.out.println("A connection has been established with " + DB_URL);
 			} 
 			catch (SQLException e) {
-				System.out.println("SQLException: It was not possible to create a connection with " + DB_URL);
+				System.err.println("SQLException: It was not possible to create a connection with " + DB_URL);
 			} 
 			catch (ClassNotFoundException e) {
-				System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
+				System.err.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
 			}
 		}else{
 			try {
@@ -52,10 +52,10 @@ public class DBCommunicator {
 				System.out.println("A connection has been established with " + DB_URL2);
 			} 
 			catch (SQLException e) {
-				System.out.println("SQLException: It was not possible to create a connection with " + DB_URL2);
+				System.err.println("SQLException: It was not possible to create a connection with " + DB_URL2);
 			} 
 			catch (ClassNotFoundException e) {
-				System.out.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
+				System.err.println("ClassNotFoundException: " + CLASS_NAME + "was not found");
 			}
 		}
 	}
@@ -69,7 +69,7 @@ public class DBCommunicator {
 	 * Example: "select name from account;"</br>
 	 * This will return the first record in the Database.
 	 */
-	public static String requestData(String query) {
+	public synchronized static String requestData(String query) {
 		PreparedStatement	stm;
 		ResultSet 			res;
 		String				result = null;
@@ -97,7 +97,7 @@ public class DBCommunicator {
 	 * Example: "select name from account;"</br>
 	 * This will return all records in the Database.
 	 */
-	public static ArrayList<String> requestMoreData(String query) {
+	public synchronized  static ArrayList<String> requestMoreData(String query) {
 		Statement	stm;
 		ResultSet 	res;
 		ArrayList<String>		result = new ArrayList<String>();
@@ -123,7 +123,7 @@ public class DBCommunicator {
 	 * Example: "INSERT INTO account(naam, wachtwoord) VALUES('test', '123')"</br>
 	 * This method adds the query to the Database.
 	 */
-	public static void writeData(String query) {
+	public synchronized static void writeData(String query) {
 		PreparedStatement	stm;
 
 		try {
@@ -136,7 +136,7 @@ public class DBCommunicator {
 		}
 	}
 
-	public static void writeNamePassword(String name, String password) {
+	public synchronized static void writeNamePassword(String name, String password) {
 		PreparedStatement	stm;
 
 		try {
@@ -149,7 +149,7 @@ public class DBCommunicator {
 		}
 	}
 
-	public static int requestInt(String query) {
+	public synchronized static int requestInt(String query) {
 		Statement	stm;
 		ResultSet 	res;
 		int		result = 0;
@@ -175,7 +175,7 @@ public class DBCommunicator {
 	 * @return hashmap within a hashmap
 	 * For an example how this works see Utility/Loader.java
 	 */
-	public static HashMap<Character , HashMap<Integer, Integer>> requestLetters(String letterSetCode){
+	public synchronized static HashMap<Character , HashMap<Integer, Integer>> requestLetters(String letterSetCode){
 		Statement	stm;
 		ResultSet 	res;
 		HashMap<Character , HashMap<Integer, Integer>> result = new HashMap<Character , HashMap<Integer, Integer>>();
@@ -201,7 +201,7 @@ public class DBCommunicator {
 	 * @param "Standard"
 	 * @return HashMap<String (Location), String (Bonus)> including the right bonuses and empty locations.
 	 */
-	public static HashMap<String, String> requestTilesMap(String boardType){
+	public synchronized static HashMap<String, String> requestTilesMap(String boardType){
 		Statement	stm;
 		ResultSet 	res;
 		HashMap<String, String> result = new HashMap<String, String>();
@@ -236,7 +236,7 @@ public class DBCommunicator {
 	 * @param "int gameID, ArrayList<GameStone>"
 	 * @return HashMap<String (Location), String (Bonus)> including the right bonuses and empty locations.
 	 */
-	public static void generateStoneIDs(int gameID, ArrayList<GameStone> gameStones){
+	public synchronized static void generateStoneIDs(int gameID, ArrayList<GameStone> gameStones){
 		PreparedStatement	stm;
 		try {
 			int id = 1;
@@ -258,7 +258,7 @@ public class DBCommunicator {
 	 * @param "int gameID, ArrayList<GameStone>"
 	 * @return HashMap<String (Location), String (Bonus)> including the right bonuses and empty locations.
 	 */
-	public static ArrayList<GameStone> getGeneratedStoneIDs(int gameID, ArrayList<GameStone> gameStones){
+	public synchronized static ArrayList<GameStone> getGeneratedStoneIDs(int gameID, ArrayList<GameStone> gameStones){
 		Statement	stm;
 		ResultSet 	res;
 		try {
@@ -289,7 +289,7 @@ public class DBCommunicator {
 	 * @author Max
 	 * Method to get the gameStones that a player has in his hands.
 	 */
-	public static ArrayList<GameStone> getHandLetters(int gameID, int turn, ArrayList<GameStone> gameStones){
+	public synchronized static ArrayList<GameStone> getHandLetters(int gameID, int turn, ArrayList<GameStone> gameStones){
 		ArrayList<GameStone> hand = new ArrayList<GameStone>();
 		gameStones = getGeneratedStoneIDs(gameID, gameStones);
 		if(gameStones.get(0)!=null && gameStones.get(1).getID()==-1){
@@ -320,7 +320,7 @@ public class DBCommunicator {
 	 * @param HashMap with initialized tiles, ArrayList with initialized gameStones, int gameID for the right game.
 	 * @return HashMap with tiles containing the right gamestones.
 	 */
-	public static HashMap<String, Tile> updateTilesWithStones(HashMap<String, Tile> hmap, ArrayList<GameStone> gameStones, int gameID) {
+	public synchronized static HashMap<String, Tile> updateTilesWithStones(HashMap<String, Tile> hmap, ArrayList<GameStone> gameStones, int gameID) {
 		Statement	stm;
 		ResultSet 	res;
 		try {
@@ -353,7 +353,7 @@ public class DBCommunicator {
 	 * @author Stan van Heumen
 	 * @param String "Message", int gameID, String username whom sent the msg
 	 */
-	public static void sendMsg(String message, int gameID, String username) {
+	public synchronized static void sendMsg(String message, int gameID, String username) {
 		PreparedStatement stm;
 		try {
 			String query = "INSERT INTO chatregel (account_naam, spel_id, tijdstip, bericht) VALUES (?,?,?,?)";
@@ -371,7 +371,7 @@ public class DBCommunicator {
 		}
 	}
 	
-	public static ArrayList<String> getChat(int gameid){
+	public synchronized static ArrayList<String> getChat(int gameid){
 		ArrayList<String> result = new ArrayList<String>();
 		Statement	stm;
 		ResultSet 	res;
