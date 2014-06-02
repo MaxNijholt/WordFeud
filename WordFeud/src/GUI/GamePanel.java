@@ -8,10 +8,11 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private ArrayList<Tile> 				hand, field;
 	private ArrayList<GameStone> 			stones;
 	private int 							mouseX, mouseY;
-	private JFrame 							questionFrame;
+	private JFrame 							questionFrame, swapFrame;
 	private SLabel 							turn;
 	
 	private JLabel 	score		= new JLabel();
@@ -244,6 +245,15 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 									s.setTextColor(Color.BLACK);
 									swapPanel.add(s);
 								}
+								questionFrame.addWindowListener(new WindowAdapter() {
+						            //
+						            // Invoked when a window is de-activated.
+						            //
+						            public void windowDeactivated(WindowEvent e) {
+						                questionFrame.dispose();
+						            }
+						 
+						        });
 								questionFrame.pack();
 								questionFrame.setLocationRelativeTo(null);
 								questionFrame.setVisible(true);
@@ -337,11 +347,13 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						}
 					}
 				}
-			
+				
 				for(int i = 0; i < hand.size(); i++) {
-					hand.get(i).setGameStone(stones.get(i));
+					try{hand.get(i).setGameStone(stones.get(i));}
+					catch(IndexOutOfBoundsException a){}
 				}
-				final JFrame swapFrame 	= new JFrame();
+				final ArrayList<Integer> swapStones = new ArrayList<Integer>();
+				swapFrame 			= new JFrame();
 				JPanel swapPanel	= new JPanel();
 				swapPanel.setLayout(null);
 				swapPanel.setPreferredSize(new Dimension(20 + (stones.size() * stones.get(0).getImage().getWidth()), 60 + stones.get(0).getImage().getHeight()));
@@ -351,6 +363,13 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				
 				SButton swap 	= new SButton("Swap", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
 				swap.setBounds(10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
+				swap.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// Swap
+						game.swapGameStones(swapStones);
+						swapFrame.dispose();
+					}
+				});
 				
 				SButton cancel 	= new SButton("Cancel", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
 				cancel.setBounds(swapPanel.getPreferredSize().width - cancel.getPreferredSize().width - 10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
@@ -359,23 +378,57 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						swapFrame.dispose();
 					}
 				});
-				
-				MouseAdapter ma = new MouseAdapter() {
-					public void mousePressed(MouseEvent e) {
-						for(int i = 0; i < stones.size(); i++) {
-						
-						}
-					}
-				};
 			
 				swapPanel.setBackground(getBackground());
 				swapFrame.setIconImage(Loader.ICON);
 			
 				for(int i = 0; i < stones.size(); i++) {
-					SLabel s = new SLabel(stones.get(i).getImage(), stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
-					s.setBounds(10 + (i * stones.get(i).getImage().getWidth()), 10, stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
+					final SLabel s = new SLabel(Character.toString(stones.get(i).getLetter()), SLabel.CENTER, 32, 32);
+					s.setBounds(10 + (i * 32), 10, 32, 32);
+					s.setName(Character.toString(stones.get(i).getLetter()));
+					s.drawBackground(true);
+					s.changeTextColor(Color.BLACK, Color.WHITE);
+					s.addMouseListener(new MouseListener() {
+						public void mouseClicked(MouseEvent e) 	{
+							if(s.getBackgroundColor().equals(Color.WHITE)) {
+								s.changeTextColor(Color.BLACK, Color.YELLOW);
+								for(GameStone gs:stones) {
+									if(Character.toString(gs.getLetter()).equals(s.getName())) {
+										if(!swapStones.contains(gs.getID())) {
+											swapStones.add(gs.getID());
+											break;
+										}
+									}
+								}
+							}
+							else {
+								s.changeTextColor(Color.BLACK, Color.WHITE);
+								for(GameStone gs:stones) {
+									if(Character.toString(gs.getLetter()).equals(s.getName())) {
+										for(Integer i:swapStones) {
+											if(i.intValue() == gs.getID()) {
+												swapStones.remove(i);
+											}
+										}
+									}
+								}
+							}
+							String total = "";
+							for(int i = 0; i < swapStones.size(); i++) {
+								total += swapStones.get(i) + ":";
+							}
+							System.out.println(total);
+							s.repaint();
+						}
+						public void mouseEntered(MouseEvent e) 	{}
+						public void mouseExited(MouseEvent e) 	{}
+						public void mousePressed(MouseEvent e) 	{}
+						public void mouseReleased(MouseEvent e) {}
+					});
 					swapPanel.add(s);
 				}
+				
+				
 				swapPanel.add(swap);
 				swapPanel.add(cancel);
 			
