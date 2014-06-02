@@ -111,6 +111,8 @@ public class Game {
 		
 		HashMap<String, GameStone> newWords = myField.getNewWords();
 		System.out.println(newWords);
+		ArrayList<Integer> addedInts = new ArrayList<Integer>();
+		
 		for(Entry<String, GameStone> word : newWords.entrySet()){
 			System.out.println(word.getKey());
 			String key = word.getKey();
@@ -137,28 +139,45 @@ public class Game {
 			
 			for(int e = 0; e < gameStones.size(); e++){
 				if(gameStones.get(e) == stoneID){
-					gameStones.remove(e);
-				}
-			}
-			
-			int potSize = DBCommunicator.requestInt("SELECT COUNT(letter_id) FROM pot WHERE spel_id = " + id);
-			if(potSize != 0){
-				boolean added = false;
-				while(!added){
-					int letterID = (int) (Math.random() * 105);
-					String randCharacter = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + id + " AND letter_id = " + letterID);
-					if(randCharacter != null){
-						gameStones.add(letterID);
-						added = true;
+					
+					int potSize = DBCommunicator.requestInt("SELECT COUNT(letter_id) FROM pot WHERE spel_id = " + id);
+					if(potSize != 0){
+						boolean added = false;
+						while(!added){
+							int letterID = (int) (Math.random() * 105);
+							String randCharacter = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + id + " AND letter_id = " + letterID);
+							if(randCharacter != null){
+								gameStones.set(e,letterID);
+								DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + letterID + ", " + turn + ")");
+								addedInts.add(letterID);
+								added = true;
+							}
+						}
+					}
+					else{
+						emptyPot = true;
+						gameStones.remove(e);
+						break;
 					}
 				}
 			}
-			else{
-				emptyPot = true;
+		}
+		
+		ArrayList<Integer> nonAddedInts = new ArrayList<Integer>();
+		for(int e : gameStones){
+			nonAddedInts.add(e);
+		}
+		
+		for(int a : addedInts){
+			for(int e = 0; e < nonAddedInts.size(); e++){
+				if(a == nonAddedInts.get(e)){
+					nonAddedInts.remove(e);
+					break;
+				}
 			}
 		}
 		
-		for(int e : gameStones){
+		for(int e : nonAddedInts){
 			DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + e + ", " + turn + ")");
 		}
 		

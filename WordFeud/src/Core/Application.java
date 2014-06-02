@@ -291,11 +291,13 @@ public class Application {
 		
 		for(int e : gameInts){
 			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
-			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
-				turnInts.add(e);
-			}
-			else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
-				turnInts.add(e);
+			if(name != null){
+				if((name.equals(currentAccount.getUsername()) && (!myTurn))){
+					turnInts.add(e);
+				}
+				else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
+					turnInts.add(e);
+				}
 			}
 		}
 		
