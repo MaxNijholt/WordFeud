@@ -2,13 +2,11 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -21,10 +19,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Utility.AScrollPane;
 import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
@@ -52,11 +50,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private ArrayList<Tile> 				hand, field;
 	private ArrayList<GameStone> 			stones;
 	private int 							mouseX, mouseY;
-	private JFrame 							questionFrame;
+	private JFrame 							questionFrame, swapFrame;
 	private SLabel 							turn;
-	
-	private JLabel 	score		= new JLabel();
-	private int 	turnScore	= 0;
+	private GameInfoPanel					gip=new GameInfoPanel();
 //	private MasterThread mt;
 	
 	/**
@@ -69,16 +65,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 //		mt.addObserver(this);
 		init(gui);
 
-		// InfopPanel -- MAY BE DELETED LATER --
-		score.setText("Your turn score will be: 0");
-		score.setOpaque(true);
-		score.setBackground(Color.GREEN);
-		score.setFont(new Font("Arial", Font.BOLD, 10));
-		JPanel infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayout(5, 1, 0, 10));
-		infoPanel.setPreferredSize(new Dimension(180, 215));
-		infoPanel.setBackground(new Color(33, 36, 40));
-		infoPanel.add(score);
 			
 		turn = new SLabel("", SLabel.CENTER);
 		if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())) {
@@ -87,14 +73,17 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		else {
 			turn.setName("It is your opponents turn");
 		}
+		//infopanel
+		AScrollPane scoreBar = new AScrollPane(gip.getPreferredSize().width,
+				gip.getPreferredSize().height, gip, false, true);
 		
 		add(mp);
 		mp.setBounds(0, 0, mp.getPreferredSize().width, mp.getPreferredSize().height);
 		mp.add(turn);
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
-		add(infoPanel);
-		infoPanel.setBounds(10, 320, infoPanel.getPreferredSize().width, infoPanel.getPreferredSize().height);
+		add(scoreBar);
+		scoreBar.setBounds(10, 320, gip.getPreferredSize().width, gip.getPreferredSize().height);
 		add(cp);
 		cp.setBounds(GUI.WIDTH - cp.getPreferredSize().width - 10, 10, cp.getPreferredSize().width, cp.getPreferredSize().height);
 	}
@@ -223,8 +212,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
-							score.setText("Your turn score would be: " + gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
-							
+							gip.updateInfo(gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
 							t.setGameStone(null);
 						}
 					}
@@ -266,7 +254,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 								t.setGameStone(currentGameStone);
 								t.setPickablity(true);
 							}
-							score.setText("Your turn score would be: " + gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
+							gip.updateInfo( gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							
 							currentGameStone = null;
 						}
@@ -286,6 +274,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 					else {
 						if(t.getGameStone() == null) {
+							if(currentGameStone.getValue() == 0) {
+								currentGameStone.setLetter("?");
+							}
 							t.setGameStone(currentGameStone);
 							currentGameStone = null;
 						}
@@ -348,11 +339,13 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						}
 					}
 				}
-			
+				
 				for(int i = 0; i < hand.size(); i++) {
-					hand.get(i).setGameStone(stones.get(i));
+					try{hand.get(i).setGameStone(stones.get(i));}
+					catch(IndexOutOfBoundsException a){}
 				}
-				final JFrame swapFrame 	= new JFrame();
+				final ArrayList<Integer> swapStones = new ArrayList<Integer>();
+				swapFrame 			= new JFrame();
 				JPanel swapPanel	= new JPanel();
 				swapPanel.setLayout(null);
 				swapPanel.setPreferredSize(new Dimension(20 + (stones.size() * stones.get(0).getImage().getWidth()), 60 + stones.get(0).getImage().getHeight()));
@@ -362,6 +355,16 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				
 				SButton swap 	= new SButton("Swap", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
 				swap.setBounds(10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
+				swap.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// Swap
+						if(swapStones.size() >= 1) {
+							game.swapGameStones(swapStones);
+							swapFrame.dispose();
+							gui.switchPanel(new GamePanel(gui));
+						}
+					}
+				});
 				
 				SButton cancel 	= new SButton("Cancel", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
 				cancel.setBounds(swapPanel.getPreferredSize().width - cancel.getPreferredSize().width - 10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
@@ -370,23 +373,61 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						swapFrame.dispose();
 					}
 				});
-				
-				MouseAdapter ma = new MouseAdapter() {
-					public void mousePressed(MouseEvent e) {
-						for(int i = 0; i < stones.size(); i++) {
-						
-						}
-					}
-				};
 			
 				swapPanel.setBackground(getBackground());
 				swapFrame.setIconImage(Loader.ICON);
 			
 				for(int i = 0; i < stones.size(); i++) {
-					SLabel s = new SLabel(stones.get(i).getImage(), stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
-					s.setBounds(10 + (i * stones.get(i).getImage().getWidth()), 10, stones.get(i).getImage().getWidth(), stones.get(i).getImage().getHeight());
+					final SLabel s = new SLabel(Character.toString(stones.get(i).getLetter()), SLabel.CENTER, 32, 32);
+					s.setBounds(10 + (i * 32), 10, 32, 32);
+					s.setName(Character.toString(stones.get(i).getLetter()));
+					s.drawBackground(true);
+					s.changeTextColor(Color.BLACK, Color.WHITE);
+					s.addMouseListener(new MouseListener() {
+						public void mouseClicked(MouseEvent e) 	{
+							if(s.getBackgroundColor().equals(Color.WHITE)) {
+								s.changeTextColor(Color.BLACK, Color.YELLOW);
+								for(GameStone gs:stones) {
+									if(Character.toString(gs.getLetter()).equals(s.getName())) {
+										if(!swapStones.contains(gs.getID())) {
+											swapStones.add(gs.getID());
+											break;
+										}
+									}
+								}
+							}
+							else {
+								s.changeTextColor(Color.BLACK, Color.WHITE);
+								for(GameStone gs:stones) {
+									if(Character.toString(gs.getLetter()).equals(s.getName())) {
+										ArrayList<Integer> copyStones = new ArrayList<Integer>();
+										for(Integer i:swapStones) {
+											copyStones.add(i);
+										}
+										for(Integer i:copyStones) {
+											if(i == gs.getID()) {
+												swapStones.remove(i);
+											}
+										}
+									}
+								}
+							}
+							String total = "";
+							for(int i = 0; i < swapStones.size(); i++) {
+								total += swapStones.get(i) + ":";
+							}
+							System.out.println(total);
+							s.repaint();
+						}
+						public void mouseEntered(MouseEvent e) 	{}
+						public void mouseExited(MouseEvent e) 	{}
+						public void mousePressed(MouseEvent e) 	{}
+						public void mouseReleased(MouseEvent e) {}
+					});
 					swapPanel.add(s);
 				}
+				
+				
 				swapPanel.add(swap);
 				swapPanel.add(cancel);
 			
@@ -433,7 +474,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
 				turnOffThreads();
 				game.resign();
-				gui.switchPanel(new GamePanel(gui));
+				gui.switchPanel(new PlayerPanel(gui));
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -466,11 +507,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseDragged(MouseEvent e)	{}
 
-	// Getter
-	public int getTurnScore() 			{return turnScore;}
-	
 	// Setters
-	public void setTurnScore(int t) 	{turnScore = t;}
 	public void turnOffThreads() 		{cp.getChat().closeThread(); running = false;}
 
 	@Override
