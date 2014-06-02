@@ -292,7 +292,7 @@ public class WordChecker {
 					{
 						if (myValue + 1 < yCheckerNumbers.length)
 						{
-							if (xCheckerNumbers[myValue + 1] != xCheckerNumbers[myValue] + 1)
+							if (yCheckerNumbers[myValue + 1] != yCheckerNumbers[myValue] + 1)
 							{
 								firstTurnChecker = false;
 							}
