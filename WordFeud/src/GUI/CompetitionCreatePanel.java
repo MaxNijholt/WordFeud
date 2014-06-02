@@ -6,19 +6,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import Utility.DBCommunicator;
 import Utility.SButton;
-import Utility.SComboBox;
 import Utility.SLabel;
 import Utility.SPopupMenu;
 import Utility.STextField;
@@ -27,11 +23,9 @@ import Utility.STextField;
 public class CompetitionCreatePanel extends JPanel implements ActionListener {
 
 	private STextField 			name, player, year, day, month;;
-	private SComboBox 			addPlayers;
 	private SLabel 				nameLabel, playerLabel, endDateLabel;
 	private SButton 			create;
 	private GUI 				gui;
-	private JPanel scrollPane;
 	private MenuPanel mp;
 	private GridBagConstraints c;
 	
@@ -44,40 +38,19 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		this.setBackground(new Color(94, 94, 94));
 		
 		
-		nameLabel		= new SLabel("Competition name", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
-		playerLabel		= new SLabel("Maximum players", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
-		endDateLabel	= new SLabel("End date", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 220, 20);
+		nameLabel		= new SLabel("Competition name", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 210, 20);
+		playerLabel		= new SLabel("Maximum players", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 210, 20);
+		endDateLabel	= new SLabel("End date", SLabel.LEFT, new Font("Arial", Font.PLAIN, 15), 210, 20);
 		
-		create 			= new SButton("Create", SButton.GREY, 220, 40);
+		create 			= new SButton("Create", SButton.GREY, 210, 40);
 		
-		name 			= new STextField("Competition name", 220, 40);
-		player 			= new STextField("Maximum players (up to 24)", 220, 40);
+		name 			= new STextField("Competition name", 210, 40);
+		player 			= new STextField("Maximum players (up to 24)", 210, 40);
 		year  			= new STextField("YYYY", 70, 40);
 		month  			= new STextField("MM", 70, 40);
 		day  			= new STextField("DD", 70, 40);
 		
 		mp				= new MenuPanel(gui, "CompetitionPanel");
-		
-		// To fill the challenger box
-				ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account ORDER BY naam ASC");
-				String[] players = new String[allPlayers.size()];
-				for(int i = 0; i < allPlayers.size(); i++) {players[i] = allPlayers.get(i);}
-				// Creating the challenger box
-		addPlayers		= new SComboBox(220, 40, players);
-		addPlayers.setPlaceholder("Playername");
-		
-		scrollPane = new JPanel();
-		scrollPane.setLayout(new GridLayout(0, 1));
-		scrollPane.setBackground(getBackground());
-
-		for(int i = 0; i < 20; i++) {
-			SButton l = new SButton("Sla" + i, SButton.WHITE);
-			l.setCustomRounded(false, false, false, false);
-			l.setTextColor(Color.BLACK);
-			l.addActionListener(this);
-			scrollPane.add(l);
-		}
-		
 		
 		create.addActionListener(this);
 		
@@ -87,29 +60,30 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.insets = new Insets(0, 15, 5, 0);
+		c.insets = new Insets(0, 15, 5, 0);	
 		buttonPanel.add(nameLabel, c);
 		c.gridy++;
 		buttonPanel.add(name, c);
-		c.gridx++;
 		c.gridy = 0;
-		buttonPanel.add(playerLabel, c);
 		c.gridx++;
-		buttonPanel.add(endDateLabel, c);
-		c.gridx--;
+		buttonPanel.add(playerLabel, c);
 		c.gridy++;
 		buttonPanel.add(player, c);
-		c.gridx++;
-		buttonPanel.add(year, c);
-		c.gridx++;
-		buttonPanel.add(month, c);
-		c.gridx++;
-		buttonPanel.add(day, c);
 		c.gridx = 0;
 		c.gridy++;
-		c.gridy++;
-		c.gridy++;
 		buttonPanel.add(create, c);
+		
+		JPanel date = new JPanel();
+		date.add(year);
+		date.add(month);
+		date.add(day);
+		
+		c.gridy = 0;
+		c.gridx = 2;
+		buttonPanel.add(endDateLabel, c);
+		c.gridy++;
+		buttonPanel.add(date, c);
+		date.setBackground(new Color(94, 94, 94));
 		
 		
 		JPanel mainPanel = new JPanel();
@@ -175,7 +149,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	
 	public void showError(){
 		SPopupMenu error = new SPopupMenu();
-		error.show(create, 230, 0, 500, 40, "Please fill in all fields correctly", Color.red);
+		error.show(create, (create.getWidth() + 15), 0, 210, 40, "Fill in all fields correctly", Color.red);
 	}
 	
 	public void actionPerformed(ActionEvent e) {	
@@ -192,12 +166,10 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 				gui.switchPanel(new CompetitionPanel(gui));
 				}			
 				else{
-					System.out.println("nope");
 					showError();
 				}
 			}
 			else{
-				System.out.println("nope");
 				showError();
 			}	
 			
