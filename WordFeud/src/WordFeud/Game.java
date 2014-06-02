@@ -116,7 +116,7 @@ public class Game {
 			}
 			else{
 				DBCommunicator.writeData("INSERT INTO gelegdeletter (letter_id, spel_id, beurt_id, tegel_x, tegel_y, tegel_bord_naam, blancoletterkarakter)"
-						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', " + word.getValue().getLetter() + ")");
+						+ " VALUES(" + stoneID + ", " + id + ", " + turn + ", " + x + ", " + y + ", 'Standard', '" + word.getValue().getLetter() + "')");
 			}
 			
 			for(int e = 0; e < gameStones.size(); e++){
