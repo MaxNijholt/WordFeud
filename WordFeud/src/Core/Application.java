@@ -791,6 +791,16 @@ public class Application {
 		}
 	}
 	
+	public boolean getEnd(int gameID){
+		String action = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + gameID + " ORDER BY id DESC");
+		if(action.equals("End")){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	/**
 	 * call the game to play a word
 	 */

@@ -361,7 +361,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(swapStones.size() >= 1) {
 							game.swapGameStones(swapStones);
 							swapFrame.dispose();
-							gui.switchPanel(new GamePanel(gui));
+							turnOffThreads();
+							gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
 						}
 					}
 				});
@@ -468,7 +469,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					
 					if(word == null) {
 						turnOffThreads();
-						gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+						if(gui.getApplication().getEnd(gui.getApplication().getSelectedGame().getID())){
+							gui.getApplication().spectateGame(gui.getApplication().getSelectedGame().getID());
+						}
+						else{
+							gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+						}
 					}
 				}
 				else{
@@ -486,7 +492,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
 				turnOffThreads();
 				game.resign();
-				gui.switchPanel(new PlayerPanel(gui));
+				gui.getApplication().spectateGame(gui.getApplication().getSelectedGame().getID());
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -498,7 +504,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
 				turnOffThreads();
 				gui.pass();
-				gui.switchPanel(new GamePanel(gui));
+				if(gui.getApplication().getEnd(gui.getApplication().getSelectedGame().getID())){
+					gui.getApplication().spectateGame(gui.getApplication().getSelectedGame().getID());
+				}
+				else{
+					gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+				}
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
