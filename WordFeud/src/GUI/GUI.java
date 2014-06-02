@@ -178,8 +178,8 @@ public class GUI extends JFrame{
 		app.seeComps(compID, panel);
 	}
 
-	public int removeGameStone(String location) {
-		return app.removeGameStone(location);
+	public int removeGameStone(String location, boolean check) {
+		return app.removeGameStone(location, check);
 	}
 	
 	public void resign(){

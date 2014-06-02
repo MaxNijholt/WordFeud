@@ -113,8 +113,8 @@ public class Application {
 		return retrievedPoints;
 	}
 	
-	public int removeGameStone(String location){
-		int points = selectedGame.removeGameStone(location);
+	public int removeGameStone(String location, boolean check){
+		int points = selectedGame.removeGameStone(location, check);
 		return points;
 	}
 	

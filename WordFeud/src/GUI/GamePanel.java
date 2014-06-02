@@ -39,6 +39,7 @@ import WordFeud.Tile;
 public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener, Observer {
 
 	// Instance Variables
+	private static ArrayList<String>		deniedWords;
 	private SButton 						pass, swap, resign, play, shuffle;
 	private ChatPanel 						cp;
 	private MenuPanel 						mp;
@@ -212,7 +213,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
-							score.setText("Your turn score would be: " + gui.removeGameStone(t.getXPos() + "," + t.getYPos()));
+							score.setText("Your turn score would be: " + gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
 							
 							t.setGameStone(null);
 						}
@@ -300,7 +301,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			for (int i = 0; i < field.size(); i++) {
 				if (field.get(i).getGameStone() != null) {
 					if (field.get(i).getGameStone().getHand()) {
-						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), true);
 						field.get(i).setGameStone(null);
 					}
 				}
@@ -323,7 +324,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				for(int i = 0; i < field.size(); i++) {
 					if(field.get(i).getGameStone() != null) {
 						if(field.get(i).getGameStone().getHand()) {
-							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), true);
 							field.get(i).setGameStone(null);
 						}
 					}
@@ -382,11 +383,11 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		// Play
 		if(e.getSource().equals(play)) {
 			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
-				System.out.println(gui.playWord());
+				deniedWords = gui.playWord();
 				for(int i = 0; i < field.size(); i++) {
 					if(field.get(i).getGameStone() != null) {
 						if(field.get(i).getGameStone().getHand()) {
-							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), false);
 							field.get(i).setGameStone(null);
 						}
 					}
