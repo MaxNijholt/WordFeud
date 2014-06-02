@@ -58,10 +58,14 @@ public class Game {
 		return points;
 	}
 	
-	public int removeGameStone(String location){
+	public int removeGameStone(String location, boolean check){
 		myField.removeGameStone(location);
-		int points = myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
-		return points;
+		if(check){
+			return myPC.count(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getTiles(), myField.getNewWords().size());
+		}
+		else{
+			return 0;
+		}
 	}
 	
 	/**
@@ -70,11 +74,22 @@ public class Game {
 	 */
 	public ArrayList<String> playWord(){
 		System.out.println(myField.getNewWords());
-		ArrayList<String> words =  myWC.checkWords(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getNewWords(), myField.getTiles(), getfirstWord());
+		ArrayList<String> words;
+		if(myField.getNewWords().size() != 0){
+			 words =  myWC.checkWords(myPC.createWords(myField.getTiles(), myField.getNewWords()), myField.getNewWords(), myField.getTiles(), getfirstWord());
+		}
+		else{
+			words = new ArrayList<String>();
+			words.add("You have not placed any stones");
+			return words;
+		}
 		System.out.println(words);
+		
 		if(words.size() == 0){
+			
 			playDB();
 			return null;
+			
 		}
 		else{
 			myField.updateField(id);
