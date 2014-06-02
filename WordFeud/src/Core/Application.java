@@ -537,10 +537,10 @@ public class Application {
 		while(!done){
 			int gameID = 0;
 			if(!finished){
-				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') " + restQuery);
+				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') AND competitie_id =" + compID + restQuery);
 			}
 			else{
-				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') AND (toestand_type = 'Finished' OR toestand_type = 'Resigned') " + restQuery);
+				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') AND (toestand_type = 'Finished' OR toestand_type = 'Resigned') AND competitie_id =" + compID + restQuery);
 			}
 			if(gameID != 0){
 				allGames.add(gameID);
