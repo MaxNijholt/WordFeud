@@ -2,7 +2,6 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -24,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Utility.AScrollPane;
 import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private int 							mouseX, mouseY;
 	private JFrame 							questionFrame, swapFrame;
 	private SLabel 							turn;
-	
+	private GameInfoPanel					gip=new GameInfoPanel();
 	private JLabel 	score		= new JLabel();
 	private int 	turnScore	= 0;
 //	private MasterThread mt;
@@ -68,16 +68,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 //		mt.addObserver(this);
 		init(gui);
 
-		// InfopPanel -- MAY BE DELETED LATER --
-		score.setText("Your turn score will be: 0");
-		score.setOpaque(true);
-		score.setBackground(Color.GREEN);
-		score.setFont(new Font("Arial", Font.BOLD, 10));
-		JPanel infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayout(5, 1, 0, 10));
-		infoPanel.setPreferredSize(new Dimension(180, 215));
-		infoPanel.setBackground(new Color(33, 36, 40));
-		infoPanel.add(score);
 			
 		turn = new SLabel("", SLabel.CENTER);
 		if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())) {
@@ -86,14 +76,17 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		else {
 			turn.setName("It is your opponents turn");
 		}
+		//infopanel
+		AScrollPane scoreBar = new AScrollPane(gip.getPreferredSize().width,
+				gip.getPreferredSize().height, gip, false, true);
 		
 		add(mp);
 		mp.setBounds(0, 0, mp.getPreferredSize().width, mp.getPreferredSize().height);
 		mp.add(turn);
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
-		add(infoPanel);
-		infoPanel.setBounds(10, 320, infoPanel.getPreferredSize().width, infoPanel.getPreferredSize().height);
+		add(scoreBar);
+		scoreBar.setBounds(10, 320, gip.getPreferredSize().width, gip.getPreferredSize().height);
 		add(cp);
 		cp.setBounds(GUI.WIDTH - cp.getPreferredSize().width - 10, 10, cp.getPreferredSize().width, cp.getPreferredSize().height);
 	}
@@ -222,8 +215,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
-							score.setText("Your turn score would be: " + gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
-							
+							gip.updateInfo(gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
 							t.setGameStone(null);
 						}
 					}
@@ -265,7 +257,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 								t.setGameStone(currentGameStone);
 								t.setPickablity(true);
 							}
-							score.setText("Your turn score would be: " + gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
+							gip.updateInfo( gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							
 							currentGameStone = null;
 						}
