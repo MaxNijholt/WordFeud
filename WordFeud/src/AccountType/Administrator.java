@@ -13,12 +13,12 @@ public class Administrator{
 	}
 	
 	public void removePrivilege(String player, String right){
+		if(this.getUserRights(player).size()>1)
 		DBCommunicator.writeData("DELETE FROM accountrol WHERE account_naam='" + player + "' AND rol_type='" + right + "'");
 	}
 	
 	public ArrayList<String> getUserRights(String player) {
-		ArrayList<String> data = DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='" + player + "'");
-		return data;
+		return DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='" + player + "'");
 	}
 	
 	public void changeUsername(Account account, String newName) {
