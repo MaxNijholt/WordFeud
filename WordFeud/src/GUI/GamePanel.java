@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -179,7 +178,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	}
 
 	/**
-	 * Overriden paintComponent method from JComponent
+	 * Overridden paintComponent method from JComponent
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -198,7 +197,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	
 	// Mouse Event
 	public void mousePressed(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
+		if(e.getButton() == MouseEvent.BUTTON1) {
 			// Check for board grid
 			for(Tile t:field) {
 				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
@@ -213,8 +212,32 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 					else {
 						if(t.getGameStone() == null) {
-							t.setGameStone(currentGameStone);
-							t.setPickablity(true);
+							if(currentGameStone.getValue() == 0) {
+								// Check for the question mark (?)
+								JFrame swapFrame 	= new JFrame();
+								JPanel swapPanel	= new JPanel();
+								swapPanel.setLayout(new GridLayout(6, 5));
+								swapFrame.setResizable(false);
+								swapFrame.setTitle(GUI.TITLE);
+								swapFrame.setContentPane(swapPanel);
+								
+								for(char i = 'A'; i <= 'Z'; i++) {
+									SButton s = new SButton(Character.toString(i), SButton.WHITE, 50, 50);
+									s.setColors(Color.WHITE, new Color(230, 230, 230), new Color(200, 200, 200));
+									s.setTextColor(Color.BLACK);
+									swapPanel.add(s);
+								}
+								swapFrame.pack();
+								swapFrame.setLocationRelativeTo(null);
+								swapFrame.setVisible(true);
+								
+								//TODO: Make it so that the question mark stone changes its value to the chosen stone!
+								//TODO: Set that gameStone to that tile!
+							}
+							else {
+								t.setGameStone(currentGameStone);
+								t.setPickablity(true);
+							}
 							score.setText("Your turn score would be: " + gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							
 							currentGameStone = null;
@@ -228,6 +251,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
 					if(currentGameStone == null) {
 						if (t.getPickablity()) {
+
 							currentGameStone = t.getGameStone();
 							t.setGameStone(null);
 						}
