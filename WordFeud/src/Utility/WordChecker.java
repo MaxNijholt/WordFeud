@@ -567,8 +567,7 @@ public class WordChecker {
 							{
 								connectionsWithBoard++;
 							}
-							if (topSelf || downSelf || leftSelf
-									|| rightSelf)
+							if (topSelf || downSelf || leftSelf || rightSelf)
 							{
 								connectionsWithSelf++;
 							}
@@ -701,6 +700,7 @@ public class WordChecker {
 			{
 				connections = false;
 			}
+			connectionsWithSelf++;
 
 		}
 
