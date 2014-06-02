@@ -2,8 +2,6 @@ package Utility;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,7 +22,6 @@ public class Loader {
 	public static BufferedImage				DL_TILE;
 	public static BufferedImage				DW_TILE;
 	public static BufferedImage 			GAMESTONE;
-	
 	
 	public static HashMap<String, String>	TILEVALUES;
 
