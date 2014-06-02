@@ -20,6 +20,7 @@ import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.SComboBox;
 import Utility.SLabel;
+import Utility.SPopupMenu;
 import Utility.STextField;
 
 @SuppressWarnings("serial")
@@ -175,11 +176,8 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	}
 	
 	public void showError(){
-		SLabel error = new SLabel("Please check if you filled in all fields correctly", SLabel.LEFT);
-		error.setBackground(Color.red);
-		c.gridx++;
-		buttonPanel.add(error, c);
-		revalidate();
+		SPopupMenu error = new SPopupMenu();
+		error.show(create, 230, 0, 500, 40, "Please fill in all fields correctly", Color.red);
 	}
 	
 	public void actionPerformed(ActionEvent e) {	
