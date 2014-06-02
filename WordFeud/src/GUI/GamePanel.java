@@ -443,26 +443,38 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		// Play
 		if(e.getSource().equals(play)) {
 			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
-				ArrayList<String> word = gui.playWord();
-				System.out.println(word);
-				for(int i = 0; i < field.size(); i++) {
-					if(field.get(i).getGameStone() != null) {
-						if(field.get(i).getGameStone().getHand()) {
-							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), false);
-							field.get(i).setGameStone(null);
+				System.out.println(turn.getName());
+				System.out.println("pleh");
+				if(!turn.getName().equals("It is your opponents turn")){
+					ArrayList<String> word = gui.playWord();
+					System.out.println(word);
+					for(int i = 0; i < field.size(); i++) {
+						if(field.get(i).getGameStone() != null) {
+							if(field.get(i).getGameStone().getHand()) {
+								game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), false);
+								field.get(i).setGameStone(null);
+							}
 						}
 					}
-				}
-				for(int i = 0; i < hand.size(); i++) {
-					try{
-						hand.get(i).setGameStone(stones.get(i));
+					for(int i = 0; i < hand.size(); i++) {
+						try{
+							hand.get(i).setGameStone(stones.get(i));
+						}
+						catch(IndexOutOfBoundsException a){
+							
+						}
 					}
-					catch(IndexOutOfBoundsException a){
-						
+					currentGameStone = null;
+					
+					if(word == null) {
+						turnOffThreads();
+						gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
 					}
 				}
-				currentGameStone = null;
-				if(word == null) gui.switchPanel(new PlayerPanel(gui));
+				else{
+					turnOffThreads();
+					gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+				}
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
