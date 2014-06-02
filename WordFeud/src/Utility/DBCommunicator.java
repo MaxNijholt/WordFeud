@@ -74,6 +74,7 @@ public class DBCommunicator {
 		ResultSet 			res;
 		String				result = null;
 		try {
+			if(checkConnection() == null) {getConnection();}
 			stm = con.prepareStatement(query);
 			res = stm.executeQuery(query + " limit 1;");
 
@@ -102,6 +103,7 @@ public class DBCommunicator {
 		ResultSet 	res;
 		ArrayList<String>		result = new ArrayList<String>();
 		try {
+			if(checkConnection() == null) {getConnection();}
 			stm = con.createStatement();
 			res = stm.executeQuery(query);
 
@@ -127,6 +129,7 @@ public class DBCommunicator {
 		PreparedStatement	stm;
 
 		try {
+			if(checkConnection() == null) {getConnection();}
 			stm = con.prepareStatement(query);
 			stm.executeUpdate();
 			stm.close();
@@ -180,6 +183,7 @@ public class DBCommunicator {
 		ResultSet 	res;
 		HashMap<Character , HashMap<Integer, Integer>> result = new HashMap<Character , HashMap<Integer, Integer>>();
 		try {
+			if(checkConnection() == null) {getConnection();}
 			stm = con.createStatement();
 			res = stm.executeQuery("SELECT waarde, karakter, aantal FROM lettertype WHERE letterset_code='"+ letterSetCode.toUpperCase() +"'");
 			while(res.next()) {
@@ -206,6 +210,7 @@ public class DBCommunicator {
 		ResultSet 	res;
 		HashMap<String, String> result = new HashMap<String, String>();
 		try {
+			if(checkConnection() == null) {getConnection();}
 			stm = con.createStatement();
 			res = stm.executeQuery("SELECT tegeltype_soort, x, y FROM tegel WHERE bord_naam='"+ boardType +"'");
 			while(res.next()) {
@@ -243,6 +248,7 @@ public class DBCommunicator {
 			for(GameStone gs : gameStones){
 				gs.setID(id);
 				id++;
+				if(checkConnection() == null) {getConnection();}
 				stm = con.prepareStatement("INSERT INTO letter (id, spel_id, lettertype_letterset_code, lettertype_karakter) VALUES('" + gs.getID() + "','" + gameID + "','" + gs.getLetterSet() + "', '" + gs.getLetter() + "')");
 				stm.executeUpdate();
 				stm.close();
@@ -262,6 +268,7 @@ public class DBCommunicator {
 		Statement	stm;
 		ResultSet 	res;
 		try {
+			if(checkConnection() == null) {getConnection();}
 				stm = con.createStatement();
 				res = stm.executeQuery("SELECT id, lettertype_karakter FROM letter WHERE spel_id='" + gameID + "'");
 				ArrayList<Integer> leftoverIDs =  new ArrayList<Integer>();
@@ -299,6 +306,7 @@ public class DBCommunicator {
 		Statement	stm;
 		ResultSet 	res;
 		try {
+			if(checkConnection() == null) {getConnection();}
 				stm = con.createStatement();
 				res = stm.executeQuery("SELECT letter_id FROM letterbakjeletter WHERE spel_id='"+gameID+"' AND beurt_id='" + turn +"'");
 				while(res.next()){
@@ -324,6 +332,7 @@ public class DBCommunicator {
 		Statement	stm;
 		ResultSet 	res;
 		try {
+			if(checkConnection() == null) {getConnection();}
 				stm = con.createStatement();
 				res = stm.executeQuery("SELECT tegel_x, tegel_y, letter_id, beurt_id, blancoletterkarakter FROM gelegdeletter WHERE spel_id='" + gameID + "'");
 				while(res.next()) {
@@ -357,6 +366,7 @@ public class DBCommunicator {
 	public synchronized static void sendMsg(String message, int gameID, String username) {
 		PreparedStatement stm;
 		try {
+			if(checkConnection() == null) {getConnection();}
 			String query = "INSERT INTO chatregel (account_naam, spel_id, tijdstip, bericht) VALUES (?,?,?,?)";
 			stm = con.prepareStatement(query);
 			stm.setString(1, username);
@@ -377,6 +387,7 @@ public class DBCommunicator {
 		Statement	stm;
 		ResultSet 	res;
 		try {
+			if(checkConnection() == null) {getConnection();}
 			stm = con.createStatement();
 			res = stm.executeQuery("SELECT account_naam, bericht FROM chatregel WHERE spel_id = '" + gameid + "' ORDER BY tijdstip ASC;");
 			while(res.next()) {
