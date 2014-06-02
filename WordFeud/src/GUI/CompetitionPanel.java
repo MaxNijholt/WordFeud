@@ -28,9 +28,11 @@ public class CompetitionPanel extends JPanel {
 	private JPanel 				currentCompPanel, 
 								finishedCompPanel, 
 								competitions, 
-								joinableCompPanel;
+								joinableCompPanel,
+								allPanel;
 	private MenuPanel 			menu;
-	private SButton 			create;
+	private SButton 			create,
+								refresh;
 	private Color 				bg = new Color(94, 94, 94);
 	private GUI 				gui;
 	private ArrayList<Integer> compInts;
@@ -39,8 +41,10 @@ public class CompetitionPanel extends JPanel {
 		this.gui = gui;
 		this.setBackground(bg);
 		this.setLayout(new BorderLayout());
+		
 		menu = new MenuPanel(gui, "PlayerPanel");
 		create = new SButton("Create new competition", SButton.GREY);
+		refresh = new SButton("Refresh", SButton.T_GREY, 2000, 60);	
 		
 		create.addActionListener(new ActionListener() {
 			
@@ -51,13 +55,24 @@ public class CompetitionPanel extends JPanel {
 			}
 		});
 		
+		refresh.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				gui.switchPanel(new CompetitionPanel(gui));
+			}
+			
+		});
+		
+		
 		menu.add(create);
 		
 
-		currentCompPanel = new JPanel();	
+		currentCompPanel  = new JPanel();	
 		finishedCompPanel = new JPanel();
 		joinableCompPanel = new JPanel();
-		competitions = new JPanel();
+		competitions      = new JPanel();
+		allPanel		  = new JPanel();
 		
 
 		currentCompPanel.setLayout(new BoxLayout(currentCompPanel, BoxLayout.Y_AXIS));
@@ -109,20 +124,20 @@ public class CompetitionPanel extends JPanel {
 				joinableCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
-		competitions.setLayout(new BoxLayout(competitions, BoxLayout.Y_AXIS));
+		competitions.setLayout(new BoxLayout(competitions, BoxLayout.PAGE_AXIS));
 		competitions.setBackground(bg);
-		
-//		currentScrollPane = new AScrollPane(currentCompPanel.getWidth(), currentCompPanel.getHeight(), currentCompPanel, false, true);
+		allPanel.add(refresh);	
+
 		comps = new AScrollPane(competitions.getWidth(), competitions.getHeight(), competitions, false, true);
-//		finishedScrollPane = new AScrollPane(finishedCompPanel.getWidth(), finishedCompPanel.getHeight(), finishedCompPanel, false, true);
-//		joinableScrollPane = new AScrollPane(joinableCompPanel.getWidth(), joinableCompPanel.getHeight(), joinableCompPanel, false, true);
-		
+		allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.PAGE_AXIS));
+		allPanel.setBackground(new Color(94,94,94));
+		allPanel.add(comps);
 		competitions.add(currentCompPanel);
 		competitions.add(joinableCompPanel);
 		competitions.add(finishedCompPanel);
-		
+
 		this.add(menu, BorderLayout.NORTH);
-		this.add(comps, BorderLayout.CENTER);
+		this.add(allPanel, BorderLayout.CENTER);
 	}
 	
 	

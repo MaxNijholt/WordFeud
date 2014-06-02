@@ -26,7 +26,7 @@ public class DBCommunicator {
 	private static final String DB_USERNAME	=	"mnijholt";
 	private static final String DB_PASSWORD	=	"42IN04SOi";
 	private static final String DB_URL2		=	"jdbc:mysql://databases.aii.avans.nl:3306/2014_soprj4_wordfeud";
-	private static final String DB_USERNAME2=	"42IN04SOI";
+	private static final String DB_USERNAME2=	"42IN04SOi";
 	private static final String DB_PASSWORD2=	"9G87t3W65t";
 
 	private static Connection con;
