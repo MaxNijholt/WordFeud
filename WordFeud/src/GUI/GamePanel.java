@@ -358,8 +358,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				swap.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						// Swap
-						game.swapGameStones(swapStones);
-						swapFrame.dispose();
+						if(swapStones.size() >= 1) {
+							game.swapGameStones(swapStones);
+							swapFrame.dispose();
+						}
 					}
 				});
 				
@@ -397,8 +399,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 								s.changeTextColor(Color.BLACK, Color.WHITE);
 								for(GameStone gs:stones) {
 									if(Character.toString(gs.getLetter()).equals(s.getName())) {
+										ArrayList<Integer> copyStones = new ArrayList<Integer>();
 										for(Integer i:swapStones) {
-											if(i.intValue() == gs.getID()) {
+											copyStones.add(i);
+										}
+										for(Integer i:copyStones) {
+											if(i == gs.getID()) {
 												swapStones.remove(i);
 											}
 										}
