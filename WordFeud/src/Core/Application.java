@@ -483,6 +483,8 @@ public class Application {
 	}
 
 	
+	
+	
 	public ArrayList<Integer> getAllCompetitions(){
 		ArrayList<Integer> compInts = new ArrayList<Integer>();
 
@@ -499,12 +501,13 @@ public class Application {
 				searching = false;
 			}
 				else{
-							query += " AND id <> " + compID;
-							compInts.add(compID);	
-							}
-
-						}
-		
+					query += " AND id <> " + compID;
+					if(getJoinable(compID)){
+						compInts.add(compID);		
+					}
+				}
+			}
+	
 		
 		return compInts;
 	}
