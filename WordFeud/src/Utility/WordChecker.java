@@ -704,6 +704,10 @@ public class WordChecker {
 
 		}
 
+		if (connectionsWithBoard > 1)
+		{
+			connections = true;
+		}
 		if (connectionsWithBoard > 0 && connectionsWithSelf > 0)
 		{
 			connections = true;
