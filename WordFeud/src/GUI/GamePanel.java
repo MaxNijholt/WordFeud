@@ -402,7 +402,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 				}
 				for(int i = 0; i < hand.size(); i++) {
-					hand.get(i).setGameStone(stones.get(i));
+					try{
+						hand.get(i).setGameStone(stones.get(i));
+					}
+					catch(IndexOutOfBoundsException a){
+						
+					}
 				}
 				currentGameStone = null;
 				if(word == null) gui.switchPanel(new PlayerPanel(gui));
