@@ -1,5 +1,6 @@
 package WordFeud;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -145,12 +146,23 @@ public class Game {
 						boolean added = false;
 						while(!added){
 							int letterID = (int) (Math.random() * 105);
+							System.out.println(letterID);
 							String randCharacter = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + id + " AND letter_id = " + letterID);
 							if(randCharacter != null){
-								gameStones.set(e,letterID);
-								DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + letterID + ", " + turn + ")");
-								addedInts.add(letterID);
-								added = true;
+								boolean inStones = false;
+								for(int a = 0; a < gameStones.size(); a++){
+									System.out.println(gameStones.get(a));
+									if(gameStones.get(a) == letterID){
+										inStones = true;
+									}
+								}
+								if(!inStones){
+									gameStones.set(e,letterID);
+									System.out.println("PLACE "+ id +" "+ letterID +" "+ turn);
+									DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + letterID + ", " + turn + ")");
+									addedInts.add(letterID);
+									added = true;
+								}
 							}
 						}
 					}
@@ -178,15 +190,17 @@ public class Game {
 		}
 		
 		for(int e : nonAddedInts){
+			System.out.println("PLACE "+ id +" "+ e +" "+ turn);
 			DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + e + ", " + turn + ")");
 		}
-		
-		this.setStoneLetters();
-		this.fillStoneChars();
-		
+				
 		if(emptyPot && (gameStones.size() == 0)){
 			DBCommunicator.writeData("UPDATE spel SET toestand_type = 'Finished' WHERE id = " + id );
 			endGame(true);
+		}
+		else{
+			this.setStoneLetters();
+			this.fillStoneChars();
 		}
 	}
 	
@@ -225,7 +239,7 @@ public class Game {
 			int myTurn = opTurn + 1;
 			int opValue = totalValue * -1;
 			DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type) VALUES "
-					+ "(" + opTurn + ", " + id + ", '" + opponent + "', " + opValue + ", 'End')"
+					+ "(" + opTurn + ", " + id + ", '" + opponent + "', " + opValue + ", 'End'),"
 					+ "(" + myTurn + ", " + id + ", '" + app.getCurrentAccount().getUsername() + "', " + totalValue + ", 'End')");
 		}
 		else{
@@ -319,12 +333,19 @@ public class Game {
 				
 				String character = DBCommunicator.requestData("SELECT karakter FROM pot WHERE spel_id = " + id + " AND letter_id = " + letterID);
 				if(character != null){
-					swapped = true;
-					
+					boolean inStones = false;
 					for(int e = 0; e < gameStones.size(); e++){
-						if(gameStones.get(e) == stoneID){
-							gameStones.set(e, letterID);
-							break;
+						if(gameStones.get(e) == letterID){
+							inStones = true;
+						}
+					}
+					if(!inStones){
+						for(int e = 0; e < gameStones.size(); e++){
+							if(gameStones.get(e) == stoneID){
+								swapped = true;
+								gameStones.set(e, letterID);
+								break;
+							}
 						}
 					}
 				}
@@ -332,6 +353,7 @@ public class Game {
 		}
 		for(int stoneID : gameStones){
 			if(stoneID != 0){
+				System.out.println("PLACE " + id + " " + stoneID + " " + turn);
 				DBCommunicator.writeData("INSERT INTO letterbakjeletter (spel_id, letter_id, beurt_id) VALUES (" + id + ", " + stoneID + ", " + turn + ")");
 			}
 		}

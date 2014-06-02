@@ -820,8 +820,13 @@ public class Application {
 	/**
 	 *tell game to swapGameStones
 	 */
-	public void swapGameStones(ArrayList<Integer> stoneIDs){
-		selectedGame.swapGameStones(stoneIDs);
+	public boolean swapGameStones(ArrayList<Integer> stoneIDs){
+		int potSize = DBCommunicator.requestInt("SELECT COUNT(*) FROM pot WHERE spel_id = " + selectedGame.getID());
+		if(potSize >= 7){
+			selectedGame.swapGameStones(stoneIDs);
+			return true;
+		}
+		else{return false;}
 	}
 	
 	/**

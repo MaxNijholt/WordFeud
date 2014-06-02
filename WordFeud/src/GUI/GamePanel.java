@@ -359,10 +359,16 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					public void actionPerformed(ActionEvent e) {
 						// Swap
 						if(swapStones.size() >= 1) {
-							game.swapGameStones(swapStones);
-							swapFrame.dispose();
-							turnOffThreads();
-							gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+							boolean swapped = gui.getApplication().swapGameStones(swapStones);
+							if(swapped){
+								swapFrame.dispose();
+								turnOffThreads();
+								gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+							}
+							else{
+								swapFrame.dispose();
+								JOptionPane.showMessageDialog(null, "There are not enough stones left", "Error", JOptionPane.ERROR_MESSAGE);
+							}
 						}
 					}
 				});
