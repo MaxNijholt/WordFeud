@@ -33,7 +33,6 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 	private GUI 				gui;
 	private JPanel scrollPane;
 	private MenuPanel mp;
-	private JPanel buttonPanel;
 	private GridBagConstraints c;
 	
 	public CompetitionCreatePanel(GUI gui) {
@@ -58,7 +57,6 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		day  			= new STextField("DD", 70, 40);
 		
 		mp				= new MenuPanel(gui, "CompetitionPanel");
-		buttonPanel		= new JPanel();
 		
 		// To fill the challenger box
 				ArrayList<String> allPlayers = DBCommunicator.requestMoreData("SELECT naam FROM account ORDER BY naam ASC");
