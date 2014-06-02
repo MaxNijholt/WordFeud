@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -244,6 +246,15 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 									s.setTextColor(Color.BLACK);
 									swapPanel.add(s);
 								}
+								questionFrame.addWindowListener(new WindowAdapter() {
+						            //
+						            // Invoked when a window is de-activated.
+						            //
+						            public void windowDeactivated(WindowEvent e) {
+						                questionFrame.dispose();
+						            }
+						 
+						        });
 								questionFrame.pack();
 								questionFrame.setLocationRelativeTo(null);
 								questionFrame.setVisible(true);

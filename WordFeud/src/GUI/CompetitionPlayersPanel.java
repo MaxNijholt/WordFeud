@@ -11,6 +11,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.Box;
@@ -18,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import Utility.AScrollPane;
 import Utility.Loader;
 import Utility.SButton;
@@ -246,8 +249,17 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 				public void actionPerformed(ActionEvent arg0) {
 					final JFrame playerFrame = new JFrame();
 					JPanel playerPanel = new JPanel();
-					
+
 					playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.PAGE_AXIS));
+					playerFrame.addWindowListener(new WindowAdapter() {
+			            //
+			            // Invoked when a window is de-activated.
+			            //
+			            public void windowDeactivated(WindowEvent e) {
+			            	playerFrame.dispose();
+			            }
+			 
+			        });
 					
 					playerFrame.setResizable(false);
 					playerFrame.setTitle(name);
@@ -383,6 +395,15 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 						final JFrame newGameFrame = new JFrame();
 						JPanel newGamePanel = new JPanel();
 						
+						newGameFrame.addWindowListener(new WindowAdapter() {
+				            //
+				            // Invoked when a window is de-activated.
+				            //
+				            public void windowDeactivated(WindowEvent e) {
+				            	newGameFrame.dispose();
+				            }
+				 
+				        });
 						newGameFrame.setResizable(false);
 						newGameFrame.setTitle("Challenge");
 						newGameFrame.setUndecorated(true);
