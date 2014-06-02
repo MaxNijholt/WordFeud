@@ -19,7 +19,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -54,8 +53,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private JFrame 							questionFrame, swapFrame;
 	private SLabel 							turn;
 	private GameInfoPanel					gip=new GameInfoPanel();
-	private JLabel 	score		= new JLabel();
-	private int 	turnScore	= 0;
 //	private MasterThread mt;
 	
 	/**
@@ -506,11 +503,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseDragged(MouseEvent e)	{}
 
-	// Getter
-	public int getTurnScore() 			{return turnScore;}
-	
 	// Setters
-	public void setTurnScore(int t) 	{turnScore = t;}
 	public void turnOffThreads() 		{cp.getChat().closeThread(); running = false;}
 
 	@Override
