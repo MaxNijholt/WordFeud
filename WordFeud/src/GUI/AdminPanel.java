@@ -76,6 +76,9 @@ public class AdminPanel extends JPanel {
 		if (gui.getApplication().getCurrentAccount().getPlayer() != null) {
 			mp = new MenuPanel(gui, "PlayerPanel");
 			this.add(mp, BorderLayout.NORTH);
+		} else {
+			mp = new MenuPanel(gui, "LoginPanel");
+			this.add(mp, BorderLayout.NORTH);
 		}
 
 		wrapper = new JPanel();
