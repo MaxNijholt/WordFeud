@@ -9,8 +9,13 @@ import Utility.Loader;
 public class Tile {
 	
 	// Instance variables
-	private int 		xPos, yPos, width, height, turn;
-	private boolean 	bonusUsed, pickablity;
+	private int 		xPos, 
+						yPos, 
+						width, 
+						height, 
+						turn;
+	private boolean 	bonusUsed, 
+						pickablity;
 	private String 		bonus;
 	private GameStone 	gameStone;
 
@@ -43,6 +48,8 @@ public class Tile {
 	public Tile(int x, int y, GameStone stone){
 		init(x, y);
 		gameStone = stone;
+		if(stone!=null)
+		this.setBonusUsed(true);
 	}
 	
 	/**
@@ -62,7 +69,7 @@ public class Tile {
 	// Getters	
 	public int getXPos() 			{return xPos;}
 	public int getYPos() 			{return yPos;}
-	public boolean getBonusUsed() 	{return bonusUsed;}
+	public boolean isBonusUsed() 	{return bonusUsed;}
 	public boolean getPickablity() 	{return pickablity;}
 	public String getBonus() 		{return bonus;}
 	public GameStone getGameStone() {return gameStone;}
