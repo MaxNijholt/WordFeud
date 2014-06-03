@@ -478,6 +478,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 					for(int i = 0; i < hand.size(); i++) {
 						try{
+							if(stones.get(i).getValue() == 0) {stones.get(i).setLetter("?");}
 							hand.get(i).setGameStone(stones.get(i));
 						}
 						catch(IndexOutOfBoundsException a){
