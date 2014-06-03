@@ -814,6 +814,13 @@ public class Application {
 		return DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
 	}
 	
+	public int[] getGameScores(){
+		int[] scores = new int[2];
+		scores[0] = DBCommunicator.requestInt("SELECT totaalscore FROM score WHERE spel_id = " + selectedGame.getID() + " AND account_naam = '" + currentAccount.getUsername() + "'");
+		scores[1] = DBCommunicator.requestInt("SELECT totaalscore FROM score WHERE spel_id = " + selectedGame.getID() + " AND account_naam = '" + selectedGame.getOpponent() + "'");
+		return scores;
+	}
+	
 	/**
 	 * call the game to play a word
 	 */
