@@ -65,32 +65,49 @@ public class Spectator {
 		return handStones;
 	}
 
-	public String turnText(int gameID, int turn){
+	public String turnText(int gameID, int turn) {
 
-		String playerName = DBCommunicator.requestData("SELECT account_naam FROM beurt where spel_id = '" + gameID + "' and id = '" + turn + "'");
-		
-		if(DBCommunicator.requestData("SELECT aktie_type FROM beurt where spel_id = '" + gameID + "' and id = '" + turn + "'").equals("Swap")){
-			
-			turnText = playerName + " Swapped";
-		}	else if(turn == 2){
+		String playerName = DBCommunicator
+				.requestData("SELECT account_naam FROM beurt where spel_id = '"
+						+ gameID + "' and id = '" + turn + "'");
+
+		if (DBCommunicator.requestData(
+				"SELECT aktie_type FROM beurt where spel_id = '" + gameID
+						+ "' and id = '" + turn + "'").equals("Swap")) {
+
+			turnText = playerName + " has swapped";
+		} else if (DBCommunicator.requestData(
+				"SELECT aktie_type FROM beurt where spel_id = '" + gameID
+						+ "' and id = '" + turn + "'").equals("Pass")) {
+
+			turnText = playerName + " has passed";
+		} else if (turn == 2) {
 			turnText = "First turn";
-		}	else{
-			String playedWord = DBCommunicator.requestData("SELECT woorddeel FROM gelegd where spel_id = '" + gameID + "' and beurt_id = '" + turn + "'");
-			int points = DBCommunicator.requestInt("SELECT score FROM beurt where spel_id = '" + gameID + "' and id = '" + turn + "'");
-	
+		} else {
+			String playedWord = DBCommunicator
+					.requestData("SELECT woorddeel FROM gelegd where spel_id = '"
+							+ gameID + "' and beurt_id = '" + turn + "'");
+			int points = DBCommunicator
+					.requestInt("SELECT score FROM beurt where spel_id = '"
+							+ gameID + "' and id = '" + turn + "'");
+
 			playedWord = playedWord.replaceAll(",", "");
-			
-			
-			turnText = playerName + " played: " + playedWord + " for: " + points + " points";
+
+			turnText = playerName + " played: " + playedWord + " for: "
+					+ points + " points";
 		}
 		System.out.println(turnText);
 		return turnText;
 	}
-	
-	public String[] players(int gameID, int turn){
+
+	public String[] players(int gameID, int turn) {
 		String[] players = new String[2];
-		players[0] = DBCommunicator.requestData("SELECT account_naam FROM beurt where spel_id = '" + gameID + "' and id = '" + turn + "'");
-		players[1] = DBCommunicator.requestData("SELECT account_naam FROM beurt where spel_id = '" + gameID + "' and id = '" + (turn -1) + "'");
+		players[0] = DBCommunicator
+				.requestData("SELECT account_naam FROM beurt where spel_id = '"
+						+ gameID + "' and id = '" + turn + "'");
+		players[1] = DBCommunicator
+				.requestData("SELECT account_naam FROM beurt where spel_id = '"
+						+ gameID + "' and id = '" + (turn - 1) + "'");
 		return players;
 	}
 }
