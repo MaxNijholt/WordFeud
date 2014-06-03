@@ -568,9 +568,9 @@ public class Application {
 	}
 	
 	public String getAveragePoints(String player, int compID){
-		int pointsTotal = getTotalPoints(player, compID);
-		int gamesTotal = getAmountGames(player, compID);
-		int average = 0;
+		double pointsTotal = getTotalPoints(player, compID);
+		double gamesTotal = getAmountGames(player, compID);
+		double average = 0;
 		
 		if(pointsTotal != 0  && gamesTotal != 0){
 			average = pointsTotal/gamesTotal;
@@ -628,7 +628,7 @@ public class Application {
 		
 		String ratioS = ratio + "";
 		try{
-			ratioS = ratioS.substring(0, 4);
+			ratioS = ratioS.substring(0, 3);
 		}
 		catch(StringIndexOutOfBoundsException e){
 			ratioS = "0,0";
