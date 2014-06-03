@@ -525,14 +525,13 @@ public class Application {
 	}
 	
 	public boolean getHaveGameWith(String opponent, int compID){
-		int gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + currentAccount.getUsername() + "' AND account_naam_tegenstander = '" + opponent + "' AND reaktie_type = 'Accepted' AND toestand_type = 'Playing'");
+		int gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = 2 AND ((account_naam_uitdager = '" + currentAccount.getUsername() + "' AND account_naam_tegenstander = '" + opponent + "') OR (account_naam_uitdager = '" + opponent + "' AND account_naam_tegenstander = '"+ currentAccount.getUsername() +"')) AND ((reaktie_type = 'Accepted' AND toestand_type = 'Playing') OR (reaktie_type = 'Unknown' AND toestand_type = 'Request'))");
 		if(gameID == 0){
-			gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE competitie_id = " + compID + " AND account_naam_uitdager = '" + opponent + "' AND account_naam_tegenstander = '" + currentAccount.getUsername() + "' AND reaktie_type = 'Accepted' AND toestand_type = 'Playing'");
-			if(gameID == 0){
-				return false;
-			}
+			return false;
 		}
-		return true;
+		else{
+			return true;
+		}
 	}
 	
 	public int getAmountGames(String player, int compID){
