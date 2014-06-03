@@ -3,10 +3,16 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Utility.AScrollPane;
+import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.SLabel;
 
@@ -45,32 +51,85 @@ public class GameInfoPanel extends JPanel {
 		{
 			for (String deleter : deniedWords)
 			{
+				String name = "Request for aproval";
 				y = y + 50;
-				SLabel addDeniedWord = new SLabel(deleter, SLabel.CENTER,90,40);
-				SButton request = new SButton("Request for aproval",
-						SButton.GREEN, 90, 40);
+
+				SLabel addDeniedWord = new SLabel(deleter, SLabel.CENTER, 90,
+						40);
+				final SButton request = new SButton(name, SButton.GREEN, 90, 40);
+
+				final String word = deleter;
+				if (!request.getName().equals("Requested"))
+				{
+
+					request.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent arg0)
+						{
+							if (DBCommunicator
+									.requestData("SELECT * FROM woordenboek where woord = '"
+											+ word + "'") == null)
+							{
+								DBCommunicator
+										.writeData("INSERT  INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES("
+												+ "'"
+												+ word
+												+ "'"
+												+ ",'EN','Pending')");
+
+							}
+							else
+							{
+								DBCommunicator
+										.writeData("INSERT  INTO `woordenboek`(`woord`,`letterset_code`,`status`) VALUES("
+												+ "'"
+												+ word
+												+ "'"
+												+ ",'EN','Pending')");
+
+							}
+							request.setName("Requested");
+						}
+
+					});
+				}
+				if (DBCommunicator
+						.requestData("SELECT woord FROM woordenboek where status='Pending' and woord='"
+								+ deleter + "'") != null)
+				{
+					request.setName("Requested");
+					request.setColor(SButton.RED);
+				}
 				addDeniedWord.setOpaque(true);
 				addDeniedWord.changeTextColor(Color.WHITE, SButton.RED);
 				addDeniedWord.drawBackground(true);
-				addDeniedWord.setCustomRounded(false, false, false, false);
+				addDeniedWord.setCustomRounded(true, false, true, false);
+				request.setCustomRounded(false, true, false, true);
+
 				this.add(addDeniedWord);
 				addDeniedWord.setBounds(x, y, 90, 40);
 				x = 80;
 				this.add(request);
 				request.setBounds(x, y, 90, 40);
 
-
-
-
-				
 				request.setFont(new Font("Arial", Font.BOLD, 8));
-				request.setRounded(false);
 
-				x=0;
+				x = 0;
 			}
 
 		}
+		else
+		{
 
+		}
+
+	}
+
+	public void emptyPanel()
+	{
+		this.removeAll();
+		this.add(score);
 	}
 
 }
