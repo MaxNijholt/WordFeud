@@ -169,5 +169,6 @@ public class MenuPanel extends JPanel implements ActionListener {
 	// Getters
 	public ArrayList<SButton> getAllButtons() 	{return allButtons;}
 	public SButton getBackButton() 				{return back;}
+	public String getBackString()				{return backPanel;}
 	
 }

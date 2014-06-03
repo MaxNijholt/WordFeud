@@ -68,13 +68,13 @@ public class SpectatorCompetitionsPanel extends JPanel{
 		}
 			
 		if(back != null){
+			add(back, BorderLayout.NORTH);
 			back.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					gui.switchPanel(new LoginPanel(gui));
 				}
 			});
-			this.add(back, BorderLayout.NORTH);
 		}
 		else{
 			this.add(mp, BorderLayout.NORTH);

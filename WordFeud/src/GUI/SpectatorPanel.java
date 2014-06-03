@@ -41,7 +41,7 @@ public class SpectatorPanel extends JPanel {
 		this.gui = myGui;
 		if(gui.getApplication().getCurrentAccount() == null)
 			back = new SButton("Back", SButton.GREY, 220, 40);
-		else this.mp = new MenuPanel(gui, null);
+		else this.mp = new MenuPanel(gui, "SpectatorCompetitionsPanel");
 		
 		gui.setLoadingCursor(true);
 		this.compID = compID;
