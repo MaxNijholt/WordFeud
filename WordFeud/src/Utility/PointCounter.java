@@ -403,7 +403,7 @@ public class PointCounter {
 
 		}
 		
-		for (String deleter : wordsForCount)
+		for (@SuppressWarnings("unused") String deleter : wordsForCount)
 		{
 			//deactivate bonusses
 		}
