@@ -89,26 +89,26 @@ public class PointCounter {
 									+ (field.get(x + "," + y).getGameStone()
 											.getValue());
 						}
-						if (field.get(x + "," + y).getBonus().equals("DL") && field.get(x + "," + y).isBonusUsed())
+						if (field.get(x + "," + y).getBonus().equals("DL") && !field.get(x + "," + y).isBonusUsed())
 						{
 							wordScore = wordScore
 									+ (field.get(x + "," + y).getGameStone()
 											.getValue() * 2);
 						}
-						if (field.get(x + "," + y).getBonus().equals("TL") && field.get(x + "," + y).isBonusUsed())
+						if (field.get(x + "," + y).getBonus().equals("TL") && !field.get(x + "," + y).isBonusUsed())
 						{
 							wordScore = wordScore
 									+ (field.get(x + "," + y).getGameStone()
 											.getValue() * 3);
 						}
-						if (field.get(x + "," + y).getBonus().equals("DW") && field.get(x + "," + y).isBonusUsed())
+						if (field.get(x + "," + y).getBonus().equals("DW") && !field.get(x + "," + y).isBonusUsed())
 						{
 							wordScore = wordScore
 									+ field.get(x + "," + y).getGameStone()
 											.getValue();
 							wordMultiplier = wordMultiplier * 2;
 						}
-						if (field.get(x + "," + y).getBonus().equals("TW") && field.get(x + "," + y).isBonusUsed())
+						if (field.get(x + "," + y).getBonus().equals("TW") && !field.get(x + "," + y).isBonusUsed())
 						{
 							wordScore = wordScore
 									+ field.get(x + "," + y).getGameStone()
@@ -145,26 +145,26 @@ public class PointCounter {
 									+ (field.get(x + "," + y).getGameStone()
 											.getValue());
 						}
-						if (field.get(x + "," + y).getBonus().equals("DL") && field.get(x + "," + y).isBonusUsed())
+						if (field.get(x + "," + y).getBonus().equals("DL") && !field.get(x + "," + y).isBonusUsed())
 						{
 							wordScore = wordScore
 									+ (field.get(x + "," + y).getGameStone()
 											.getValue() * 2);
 						}
-						if (field.get(x + "," + y).getBonus().equals("TL") && field.get(x + "," + y).isBonusUsed())
+						if (field.get(x + "," + y).getBonus().equals("TL") && !field.get(x + "," + y).isBonusUsed())
 						{
 							wordScore = wordScore
 									+ (field.get(x + "," + y).getGameStone()
 											.getValue() * 3);
 						}
-						if (field.get(x + "," + y).getBonus().equals("DW") && field.get(x + "," + y).isBonusUsed())
+						if (field.get(x + "," + y).getBonus().equals("DW") && !field.get(x + "," + y).isBonusUsed())
 						{
 							wordMultiplier = wordMultiplier * 2;
 							wordScore = wordScore
 									+ (field.get(x + "," + y).getGameStone()
 											.getValue());
 						}
-						if (field.get(x + "," + y).getBonus().equals("TW") && field.get(x + "," + y).isBonusUsed())
+						if (field.get(x + "," + y).getBonus().equals("TW") && !field.get(x + "," + y).isBonusUsed())
 						{
 							wordMultiplier = wordMultiplier * 3;
 							wordScore = wordScore
