@@ -83,7 +83,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
 		add(scoreBar);
-		scoreBar.setBounds(10, 320, gip.getPreferredSize().width, gip.getPreferredSize().height);
+		scoreBar.setBounds(10, 320, 195, 315);
 		add(cp);
 		cp.setBounds(GUI.WIDTH - cp.getPreferredSize().width - 10, 10, cp.getPreferredSize().width, cp.getPreferredSize().height);
 	}
@@ -469,7 +469,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				System.out.println("pleh");
 				if(!turn.getName().equals("It is your opponents turn")){
 					ArrayList<String> word = gui.playWord();
-					System.out.println(word);
+					gip.deniedReqeust(word);
 					for(int i = 0; i < field.size(); i++) {
 						if(field.get(i).getGameStone() != null) {
 							if(field.get(i).getGameStone().getHand()) {
