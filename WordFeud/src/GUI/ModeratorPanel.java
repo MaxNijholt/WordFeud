@@ -14,22 +14,25 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Utility.MComboBox;
 import Utility.SButton;
 import Utility.SLabel;
 
 @SuppressWarnings("serial")
 public class ModeratorPanel extends JPanel {
 	private GUI 				mygui;
-	private SLabel 				selectWord;
+	private SLabel 				selectWord, searchWord;
 	private ArrayList<String> 	posibleWords 	= new ArrayList<String>();
 	private MenuPanel 			mp;
 	private JPanel 				allPanel;
 	private JComboBox<String> 	wordList 		= new JComboBox<String>();
 	private SButton 			acceptWord 		= new SButton("Accept word", SButton.GREY),
 								rejectWord 		= new SButton("Reject word", SButton.GREY),
-								addNewWord 		= new SButton("Add new word", SButton.GREY);
+								addNewWord 		= new SButton("Add new word", SButton.GREY),
+								denyWord 		= new SButton("Remove word", SButton.GREY);
+	private MComboBox			removeWord		= new MComboBox(150, 25, null, this);
 
-	public ModeratorPanel(GUI gui) {
+	public ModeratorPanel(final GUI gui) {
 		mygui = gui;
 		mygui.setLoadingCursor(true);
 		this.mp = new MenuPanel(gui, "LoginPanel");
@@ -48,6 +51,12 @@ public class ModeratorPanel extends JPanel {
 		for (String merge : posibleWords) {
 			wordList.addItem(merge);
 		}
+		denyWord.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gui.getApplication().getCurrentAccount().getMod().denyWord(removeWord.getSelectedItem());
+			}
+		});
 		addNewWord.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -101,6 +110,7 @@ public class ModeratorPanel extends JPanel {
 		});
 
 		this.selectWord = new SLabel("Select word: ", 0);
+		this.searchWord = new SLabel("Search word: ", 0);
 		// Adding components on the right locations
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 1;
@@ -114,6 +124,11 @@ public class ModeratorPanel extends JPanel {
 		c.gridy++;
 		c.gridx = c.gridx + 3;
 		allPanel.add(this.addNewWord, c);
+		c.gridy++;
+		c.gridx = c.gridx - 3;
+		allPanel.add(this.searchWord,c);
+		allPanel.add(this.removeWord,c);
+		allPanel.add(this.denyWord,c);
 
 		mygui.setLoadingCursor(false);
 		this.add(mp, BorderLayout.NORTH);
