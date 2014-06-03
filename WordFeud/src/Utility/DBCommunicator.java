@@ -348,7 +348,7 @@ public class DBCommunicator {
 							hmap.get(res.getString(1)+","+res.getString(2)).getGameStone().setTurn(res.getInt(4));
 						}
 						if(res.getInt(3)==gs.getID() && gs.getLetter()=='?'){
-							gs.setLetter(res.getString(5));
+							gs.setLetter(res.getString(5).toUpperCase());
 						}
 					}
 				}
