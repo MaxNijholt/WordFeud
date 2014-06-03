@@ -30,7 +30,7 @@ public class GameInfoPanel extends JPanel {
 		score.setFont(new Font("Arial", Font.BOLD, 10));
 		score.setSize(new Dimension(100, 30));
 		score.setCustomRounded(true, true, true, true);
-		vs.setName("you : "+yourScore+"_vs_ opponent : "+opponentScore+"");
+		vs.setName("you : "+yourScore+"  opponent : "+opponentScore+"");
 		vs.setOpaque(true);
 		vs.drawBackground(true);
 		vs.changeTextColor(SButton.WHITE, SButton.CYAN);
@@ -52,7 +52,7 @@ public class GameInfoPanel extends JPanel {
 		this.yourScore=playerScores[0];
 		this.opponentScore=playerScores[1];
 		score.setName("Turn score : " + turnScore);
-		vs.setName("you : "+yourScore+"_vs_ opponent : "+opponentScore+"");
+		vs.setName("you : "+yourScore+" opponent : "+opponentScore+"");
 	}
 
 	public void deniedReqeust(ArrayList<String> deniedWords)
@@ -77,7 +77,7 @@ public class GameInfoPanel extends JPanel {
 				}
 				else
 				{
-					String name = "Request for aproval";
+					String name = "Request";
 					y = y + 50;
 
 					SLabel addDeniedWord = new SLabel(deleter, SLabel.CENTER,
