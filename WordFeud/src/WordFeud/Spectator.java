@@ -1,9 +1,7 @@
 package WordFeud;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import GUI.SpectatorInfoPanel;
 import Utility.DBCommunicator;
 import Utility.Loader;
 
