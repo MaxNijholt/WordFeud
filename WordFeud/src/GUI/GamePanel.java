@@ -314,7 +314,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		}
 		
 		if(e.getSource().equals(refresh)) {
-			gui.switchPanel(new GamePanel(gui));
+			gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
 		}
 		
 		// Shuffle
