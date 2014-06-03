@@ -47,7 +47,7 @@ public class GameInfoPanel extends JPanel {
 		int x = 0;
 		int y = 0;
 
-		if (deniedWords.size() != 0)
+		if (deniedWords!=null &&deniedWords.size() != 0)
 		{
 			for (String deleter : deniedWords)
 			{
