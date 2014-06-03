@@ -52,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private int 							mouseX, mouseY;
 	private JFrame 							questionFrame, swapFrame;
 	private SLabel 							turn;
-	private GameInfoPanel					gip=new GameInfoPanel(this);
+	private GameInfoPanel					gip;
 //	private MasterThread mt;
 	
 	/**
@@ -113,6 +113,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		stones 			= new ArrayList<GameStone>();
 		mp				= new MenuPanel(gui, "PlayerPanel");
 		cp 				= new ChatPanel(gui, game);
+		gip				= new GameInfoPanel(this);
 		
 		mp.setPreferredSize(new Dimension(GUI.WIDTH, 30));
 		cp.setPreferredSize(new Dimension(250, GUI.HEIGHT));
@@ -570,6 +571,6 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 //		revalidate();
 	}
 	public int[] getGameScores(){
-		return gui.getApplication().getSelectedGame().getGameScores();
+		return gui.getApplication().getGameScores();
 	}
 }
