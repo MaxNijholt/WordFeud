@@ -212,6 +212,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
+							gip.emptyPanel();
 							gip.updateInfo(gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
 							t.setGameStone(null);
 						}
@@ -254,6 +255,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 								t.setGameStone(currentGameStone);
 								t.setPickablity(true);
 							}
+							gip.emptyPanel();
 							gip.updateInfo( gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							
 							currentGameStone = null;
