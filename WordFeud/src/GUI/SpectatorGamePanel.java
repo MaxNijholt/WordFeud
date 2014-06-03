@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-import Utility.Loader;
 import Utility.SButton;
 import WordFeud.GameStone;
 import WordFeud.Spectator;
@@ -28,6 +27,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 	private MenuPanel 			mp;
 	private JPanel 				bp;
 	private GUI 				gui;
+	private SpectatorInfoPanel	sip;
 	private int 				gameID, 
 								turn, 
 								xPos, 
@@ -54,6 +54,8 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		this.requestFocus();
 		next = new SButton("Next turn", SButton.CYAN, 150, 40);
 		previous = new SButton("Previous turn", SButton.RED, 150, 40);
+		sip = new SpectatorInfoPanel(gui, gameID, spectate);
+		sip.setPreferredSize(new Dimension(250, GUI.HEIGHT));
 
 		next.addActionListener(this);
 		previous.addActionListener(this);
@@ -64,6 +66,9 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 		bp.setOpaque(false);
 		bp.add(next);
 		bp.add(previous);
+		
+		add(sip);
+		sip.setBounds(GUI.WIDTH - sip.getPreferredSize().width - 10, 10, sip.getPreferredSize().width, sip.getPreferredSize().height);
 
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width,
@@ -130,6 +135,8 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 				tile.setGameStone(opponentGameStones.get(i));
 			opponentHand.add(tile);
 		}
+		
+		sip.updateText(turn);
 
 	}
 
@@ -209,7 +216,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 					}
 					opponentHand.add(tile);
 				}
-
+				sip.updateText(turn);
 				repaint();
 			}
 		}
@@ -264,6 +271,7 @@ public class SpectatorGamePanel extends JPanel implements ActionListener {
 						tile.setGameStone(opponentGameStones.get(i));
 					opponentHand.add(tile);
 				}
+				sip.updateText(turn);
 				repaint();
 			}
 		}
