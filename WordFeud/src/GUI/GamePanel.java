@@ -414,15 +414,19 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 							}
 							else {
 								s.changeTextColor(Color.BLACK, Color.WHITE);
+								ArrayList<Integer> copyStones = new ArrayList<Integer>();
+								for(Integer i:swapStones) {
+									copyStones.add(i);
+								}
+								boolean gameStoneFound = false;
 								for(GameStone gs:stones) {
-									if(Character.toString(gs.getLetter()).equals(s.getName())) {
-										ArrayList<Integer> copyStones = new ArrayList<Integer>();
-										for(Integer i:swapStones) {
-											copyStones.add(i);
-										}
+									if(Character.toString(gs.getLetter()).equals(s.getName()) && !gameStoneFound) {
 										for(Integer i:copyStones) {
 											if(i == gs.getID()) {
 												swapStones.remove(i);
+												gameStoneFound = true;
+												System.out.println("You removed a gameStone");
+												break;
 											}
 										}
 									}
