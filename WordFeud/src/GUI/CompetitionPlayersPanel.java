@@ -11,6 +11,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.Box;
@@ -18,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import Utility.AScrollPane;
 import Utility.Loader;
 import Utility.SButton;
@@ -28,8 +31,8 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 	private int compID;
 	private AScrollPane scrollPane;
-	private JPanel gameContent;
-	private JPanel playerContent;
+	private JPanel gameContent, playerContent;
+	private SButton compName;
 	private AScrollPane playerScrollPane;
 	private GUI gui;
 	private MenuPanel mp;
@@ -39,6 +42,19 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		this.mp = new MenuPanel(gui, "CompetitionPanel");
 		this.compID = compID;
 
+		if(gui.getApplication().getTimeEnd(compID)){
+			compName = new SButton(gui.getApplication().getCompetitionDescription(compID) + "   Enddate has passed", SButton.GREY);
+			compName.setTextColor(SButton.RED);
+		}
+		else{
+			String endDate =  gui.getApplication().getEndDate(compID);
+			endDate = endDate.substring(0, 10);
+			compName = new SButton(gui.getApplication().getCompetitionDescription(compID) + "   Enddate: " + endDate, SButton.GREY);
+		}
+		
+		compName.setFont(new Font("Arial", Font.BOLD, 20));
+		mp.add(compName);
+		
 		gui.setLoadingCursor(true);
 
 		this.setPreferredSize(new Dimension(GUI.WIDTH, GUI.HEIGHT));
@@ -48,6 +64,8 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		JPanel allPanel = new JPanel();
 		allPanel.setLayout(new FlowLayout());
 		allPanel.setBackground(new Color(94, 94, 94));
+		
+		
 
 		// create the playercontent panel, here go all the players
 		playerContent = new JPanel();
@@ -82,7 +100,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 		ArrayList<Integer> gameInts;
 		// currentAccounts new requested games
-		gameInts = gui.getRequestedGames(false, false);
+		gameInts = gui.getApplication().getRequestedGames(false, false, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("New request", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -96,7 +114,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
 
 		// games that are still playing
-		gameInts = gui.getPlayingGames(true);
+		gameInts = gui.getPlayingGames(true, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Your Turn", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -106,7 +124,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		gameInts = gui.getPlayingGames(false);
+		gameInts = gui.getPlayingGames(false, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Opponents turn", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -120,7 +138,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
 		// games that are finished
 
-		gameInts = gui.getFinishedGames(false);
+		gameInts = gui.getApplication().getFinishedGames(false, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Finished", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -130,7 +148,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		gameInts = gui.getFinishedGames(true);
+		gameInts = gui.getApplication().getFinishedGames(true, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Resigned", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -144,7 +162,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
 		// games that currentPlayer requested
 
-		gameInts = gui.getRequestedGames(true, false);
+		gameInts = gui.getApplication().getRequestedGames(true, false, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Waiting", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -154,7 +172,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		gameInts = gui.getRequestedGames(true, true);
+		gameInts = gui.getApplication().getRequestedGames(true, true);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Denied", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
@@ -200,7 +218,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 	
 	private JPanel paintPlayer(final String name, int nr) {
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		panel.setMinimumSize(new Dimension(450,40));
 		panel.setPreferredSize(new Dimension(450,40));
 		panel.setMaximumSize(new Dimension(450,40));
@@ -209,20 +227,111 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		JPanel nrPanel	=	new JPanel();
-		JPanel nameP 	= 	new JPanel();
+		SButton nameP;
 		JPanel score	=	new JPanel();
 		SButton challenge = new SButton("challenge", SButton.GREY, 100, 35);
 		Component rigidArea = null;
 		
 		if(name == null){
 			nrPanel.add(new SLabel("nr", SLabel.LEFT, new Font("Arial", Font.BOLD, 20)));
-			nameP.add(new SLabel("Name", SLabel.LEFT, new Font("Arial", Font.BOLD, 20)));
-			score.add(new SLabel("Score", SLabel.LEFT, new Font("Arial", Font.BOLD, 20)));
+			nameP = new SButton("Name", new Color(84,84,84));
+			nameP.setFont(new Font("Arial", Font.BOLD, 20));
+			score.add(new SLabel("Bayesian", SLabel.LEFT, new Font("Arial", Font.BOLD, 20)));
 			rigidArea = Box.createRigidArea(new Dimension(100,35));
 		}
 		else{
 			nrPanel.add(new SLabel("" + (nr + 1), SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
-			nameP.add(new SLabel(name, SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+			nameP = new SButton(name, new Color(84,84,84));
+			nameP.setFont(new Font("Arial", Font.ITALIC, 20));
+			
+			nameP.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					final JFrame playerFrame = new JFrame();
+					JPanel playerPanel = new JPanel();
+
+					playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.PAGE_AXIS));
+					playerFrame.addWindowListener(new WindowAdapter() {
+			            //
+			            // Invoked when a window is de-activated.
+			            //
+			            public void windowDeactivated(WindowEvent e) {
+			            	playerFrame.dispose();
+			            }
+			 
+			        });
+					
+					playerFrame.setResizable(false);
+					playerFrame.setTitle(name);
+					playerFrame.setAlwaysOnTop(true);
+					playerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					
+					JPanel competition	= new JPanel();
+					JPanel numberGames	= new JPanel();
+					JPanel pointAmount	= new JPanel();
+					JPanel averagePoints = new JPanel();
+					JPanel gamesWon		= new JPanel();
+					JPanel gamesLost	= new JPanel();
+					JPanel kD			= new JPanel();
+					JPanel bayesian		= new JPanel();
+					
+					competition.add(new SLabel("Competition : " + gui.getApplication().getCompetitionDescription(compID),SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+					numberGames.add(new SLabel("Games		:	" + gui.getApplication().getAmountGames(name, compID),SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+					pointAmount.add(new SLabel("Total points		:	" + gui.getApplication().getTotalPoints(name, compID),SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+					averagePoints.add(new SLabel("Average points per game :	" + gui.getApplication().getAveragePoints(name, compID),SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+					gamesWon.add(new SLabel("Games won		:	" + gui.getApplication().getGamesWon(name, compID),SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+					gamesLost.add(new SLabel("Games	lost	:	" + gui.getApplication().getGamesLost(name, compID),SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+					kD.add(new SLabel("W/L		:	" + gui.getApplication().getWinLose(name, compID),SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+					
+					String ranking = gui.getPlayerRanking(compID, name);
+					if(ranking != null){
+						ranking = ranking.substring(0, 4);
+					}
+					else{
+						ranking = 0 + "";
+					}
+					bayesian.add(new SLabel("Bayesian score	:	" + ranking ,SLabel.LEFT, new Font("Arial", Font.PLAIN, 20)));
+					
+					competition.setBackground(panel.getBackground());
+					numberGames.setBackground(panel.getBackground());
+					pointAmount.setBackground(panel.getBackground());	
+					averagePoints.setBackground(panel.getBackground());
+					gamesWon.setBackground(panel.getBackground());		
+					gamesLost.setBackground(panel.getBackground());	
+					kD.setBackground(panel.getBackground());		
+					bayesian.setBackground(panel.getBackground());	
+					playerPanel.setBackground(panel.getBackground());
+					
+					playerPanel.add(competition);
+					playerPanel.add(numberGames);
+					playerPanel.add(pointAmount);
+					playerPanel.add(averagePoints);
+					playerPanel.add(gamesWon);
+					playerPanel.add(gamesLost);
+					playerPanel.add(kD);
+					playerPanel.add(bayesian);
+					
+					SButton oK = new SButton("OK", SButton.GREY);
+					oK.setMinimumSize(new Dimension(100,30));
+					oK.setPreferredSize(new Dimension(100,30));
+					oK.setMaximumSize(new Dimension(100,30));
+					
+					playerPanel.add(oK);
+					oK.addActionListener(new ActionListener(){
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							playerFrame.dispose();
+						}
+					});
+					
+					playerFrame.setContentPane(playerPanel);
+					playerFrame.pack();
+					playerFrame.setLocationRelativeTo(null);
+					playerFrame.setVisible(true);
+					playerFrame.setIconImage(Loader.ICON);
+				}
+			});
+			
 			String ranking = gui.getPlayerRanking(compID, name);
 			if(ranking != null){
 				ranking = ranking.substring(0, 4);
@@ -246,6 +355,9 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 		nrPanel.setBackground(panel.getBackground());
 		nameP.setBackground(panel.getBackground());
 		score.setBackground(panel.getBackground());
+		
+		nameP.setOpaque(true);
+		nameP.setRounded(false);
 		
 		c.gridx = 0;
 		c.gridy = 0;
@@ -273,52 +385,66 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				boolean doHaveGame = gui.getHaveGameWith(name, compID);
-				if(doHaveGame){
-					JOptionPane.showMessageDialog(null, "You already have a game with " + name, "Error", JOptionPane.ERROR_MESSAGE);
+				boolean timeEnd = gui.getApplication().getTimeEnd(compID);
+				if(!timeEnd){
+					boolean doHaveGame = gui.getHaveGameWith(name, compID);
+					if(doHaveGame){
+						JOptionPane.showMessageDialog(null, "You already have a active game with " + name, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else{
+						final JFrame newGameFrame = new JFrame();
+						JPanel newGamePanel = new JPanel();
+						
+						newGameFrame.addWindowListener(new WindowAdapter() {
+				            //
+				            // Invoked when a window is de-activated.
+				            //
+				            public void windowDeactivated(WindowEvent e) {
+				            	newGameFrame.dispose();
+				            }
+				 
+				        });
+						newGameFrame.setResizable(false);
+						newGameFrame.setTitle("Challenge");
+						newGameFrame.setUndecorated(true);
+						newGameFrame.setAlwaysOnTop(true);
+						
+						SButton open 	= new SButton("Open", SButton.GREY, 100, 35);
+						SButton closed 	= new SButton("Private", SButton.GREY, 100, 35);
+						newGamePanel.add(open);
+						newGamePanel.add(closed);
+					
+						open.addActionListener(new ActionListener(){
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								gui.newGame(name, true);
+								gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
+								newGameFrame.dispose();
+							}
+						});
+					
+						closed.addActionListener(new ActionListener(){
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								gui.newGame(name, false);
+								gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
+								newGameFrame.dispose();
+							}
+						});
+					
+						newGameFrame.setContentPane(newGamePanel);
+						newGameFrame.pack();
+						newGameFrame.setLocationRelativeTo(null);
+						newGameFrame.setVisible(true);
+						newGameFrame.setIconImage(Loader.ICON);
+					}
 				}
 				else{
-					final JFrame newGameFrame = new JFrame();
-					JPanel newGamePanel = new JPanel();
-					
-					newGameFrame.setResizable(false);
-					newGameFrame.setTitle("Challenge");
-					newGameFrame.setUndecorated(true);
-					newGameFrame.setAlwaysOnTop(true);
-					
-					SButton open 	= new SButton("Open", SButton.GREY, 100, 35);
-					SButton closed 	= new SButton("Private", SButton.GREY, 100, 35);
-					newGamePanel.add(open);
-					newGamePanel.add(closed);
-					
-					open.addActionListener(new ActionListener(){
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							gui.newGame(name, true);
-							gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
-							newGameFrame.dispose();
-						}
-					});
-					
-					closed.addActionListener(new ActionListener(){
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							gui.newGame(name, false);
-							gui.switchPanel(new CompetitionPlayersPanel(gui, compID));
-							newGameFrame.dispose();
-						}
-					});
-					
-					newGameFrame.setContentPane(newGamePanel);
-					newGameFrame.pack();
-					newGameFrame.setLocationRelativeTo(null);
-					newGameFrame.setVisible(true);
-					newGameFrame.setIconImage(Loader.ICON);
+					JOptionPane.showMessageDialog(null, "The enddate had passed!", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
-			
 		});
 		
 		return panel;
@@ -451,15 +577,22 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 					"Arial", Font.PLAIN, 25)));
 
 			opponent.setMinimumSize(new Dimension(200, 30));
+			opponent.setPreferredSize(new Dimension(200, 30));
+			opponent.setMaximumSize(new Dimension(200, 30));
 			lastTurn.setMinimumSize(new Dimension(200, 30));
-			spectate.setMinimumSize(spectate.getPreferredSize());
+			lastTurn.setPreferredSize(new Dimension(200, 30));
+			lastTurn.setMaximumSize(new Dimension(200, 30));
+			spectate.setMinimumSize(new Dimension(100,40));
+			spectate.setPreferredSize(new Dimension(100,40));
+			spectate.setMaximumSize(new Dimension(100,40));
+			
 
 			opponent.setBackground(panel.getBackground());
 			lastTurn.setBackground(panel.getBackground());
 
 			c.gridx = 0;
 			c.gridy = 0;
-			c.insets = new Insets(0, 50, 0, 0);
+			c.insets = new Insets(0, 25, 0, 0);
 			panel.add(opponent, c);
 			c.gridx++;
 			c.gridheight = 2;
@@ -487,7 +620,11 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 					Font.PLAIN, 25)));
 
 			opponent.setMinimumSize(new Dimension(200, 30));
+			opponent.setPreferredSize(new Dimension(200, 30));
+			opponent.setMaximumSize(new Dimension(200, 30));
 			type.setMinimumSize(new Dimension(200, 30));
+			type.setPreferredSize(new Dimension(200, 30));
+			type.setMaximumSize(new Dimension(200, 30));
 
 			opponent.setBackground(panel.getBackground());
 			type.setBackground(panel.getBackground());
@@ -503,7 +640,5 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 }

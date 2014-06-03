@@ -141,7 +141,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 			sp.setRunning(false);
 			return;
 		}
-		if(text != null) popup.show(username, username.getWidth() + 10, 0, popup.getTextDimension(text).width + 10, popup.getTextDimension(text).height, text, SButton.RED);
+		if(text != null) popup.show(username, username.getWidth() + 10, 0, 260, popup.getTextDimension(text).height, text, SButton.RED);
 	}
 
 	/**

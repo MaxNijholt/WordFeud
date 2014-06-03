@@ -31,7 +31,6 @@ public class MenuPanel extends JPanel implements ActionListener {
 										back;
 	private ArrayList<SButton>			allButtons;
 	private String 						backPanel;
-
 	/**
 	 * Constructor parameters: Gui g, JPanel bp<br>
 	 * This constructor creates a MenuPanel that you can use for switching between panels<br>
@@ -162,6 +161,7 @@ public class MenuPanel extends JPanel implements ActionListener {
 			if(name.equals("SpectatorCompetitionsPanel")) 	{gui.switchPanel(new SpectatorCompetitionsPanel(gui));}
 			if(name.equals("SpectatorPanel")) 				{gui.switchPanel(new SpectatorPanel(gui, gui.getApplication().getSelectedCompetition().getID()));}
 			if(name.equals("StatisticsPanel"))				{gui.switchPanel(new StatisticsPanel(gui));}
+			
 		}
 		switcher.getPopop().setVisible(false);
 	}

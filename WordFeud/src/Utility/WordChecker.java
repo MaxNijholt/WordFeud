@@ -37,13 +37,13 @@ public class WordChecker {
 			else
 			{
 				deniedWords
-						.add("played stones have no connection with the field stones");
+						.add("Error");
 			}
 
 		}
 		else
 		{
-			deniedWords.add("incorrect played stones");
+			deniedWords.add("Error");
 		}
 
 		return deniedWords;
@@ -292,7 +292,7 @@ public class WordChecker {
 					{
 						if (myValue + 1 < yCheckerNumbers.length)
 						{
-							if (xCheckerNumbers[myValue + 1] != xCheckerNumbers[myValue] + 1)
+							if (yCheckerNumbers[myValue + 1] != yCheckerNumbers[myValue] + 1)
 							{
 								firstTurnChecker = false;
 							}
@@ -567,8 +567,7 @@ public class WordChecker {
 							{
 								connectionsWithBoard++;
 							}
-							if (topSelf || downSelf || leftSelf
-									|| rightSelf)
+							if (topSelf || downSelf || leftSelf || rightSelf)
 							{
 								connectionsWithSelf++;
 							}
@@ -701,9 +700,14 @@ public class WordChecker {
 			{
 				connections = false;
 			}
+			connectionsWithSelf++;
 
 		}
 
+		if (connectionsWithBoard > 1)
+		{
+			connections = true;
+		}
 		if (connectionsWithBoard > 0 && connectionsWithSelf > 0)
 		{
 			connections = true;

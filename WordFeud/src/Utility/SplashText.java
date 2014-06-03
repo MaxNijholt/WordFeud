@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -23,7 +25,7 @@ public class SplashText implements Runnable {
 	private JPanel				panel;
 	private int					x, y, width, height;
 	private boolean				running;
-	private Color[] 			colors;
+	private ArrayList<Color>	ca 			= new ArrayList<Color>();
 	
 	// Color constants : TEXT
 	public static final Color	PRE1_T 		= new Color(255, 255, 0);		// Yellow
@@ -45,17 +47,17 @@ public class SplashText implements Runnable {
 		x			= xPos;
 		y			= yPos;
 		thread 		= new Thread(this);
-		colors 		= new Color[11];
 		texts		= new String[] 
 		{	
 			"Heumeuuuu","This is awesome", "So cool", "Really nice!", "51% bug free!", "Awesome", "LOL!",
 			"It's a game!", "Wordfeud", "ITSMA so cool!", "UMadBrah?", ".party();", "Check it out!",
 			"Deja vu!", "Deja vu!", "Finger-licking!", "GOTY!", "Mmmph, mmph!", "Pretty!", "Fancy!",
-			"Woah!", "Wow!", "Yaay!", "Water proof!", "Superfragilisticexpialidocious!",
+			"Woah!", "Wow!", "Yaay!", "Colormatic!", "Water proof!", "Superfragilisticexpialidocious!",
 			"This message will be to small for you to see, am i right?", "Try it!", "this.addBeer(new Beer());",
-			"Random Splashtexts ftw", "if(this.beer.isEmpty()){newBeer();}", "Colormatic!", "$W@G", "OverPowered",
+			"Random Splashtexts ftw", "if(this.beer.isEmpty()){newBeer();}", "$W@G", "OverPowered",
 			"Might contain peanuts", "max.getBeer();", "NullCounter!", "WC", "Software Engineering != cool",
-			"a2 + b2 = c2", "Threaderdethread", "Why do Java programmers wear glasses, because they don't C#"
+			"a2 + b2 = c2", "Threaderdethread", "Why do Java programmers wear glasses, because they don't C#",
+			"Splashtexts, splashtexts everywhere"
 		};
 		
 		String text	 	= texts[new Random().nextInt(texts.length)];
@@ -95,17 +97,25 @@ public class SplashText implements Runnable {
 		Graphics2D imageGraphics 	= (Graphics2D)image.getGraphics();
 		FontMetrics fm	 			= imageGraphics.getFontMetrics(font);
 		
-		colors[0] 	= Color.blue;
-		colors[1] 	= Color.green;
-		colors[2] 	= Color.cyan;
-		colors[3] 	= Color.red;
-		colors[4] 	= Color.pink;
-		colors[5] 	= Color.yellow;
-		colors[6] 	= Color.gray;
-		colors[7] 	= Color.darkGray;
-		colors[8] 	= Color.MAGENTA;
-		colors[9] 	= Color.blue;
-		colors[10] = Color.green;
+		ca.removeAll(ca);
+		ca.add(Color.blue);
+		ca.add(Color.green);
+		ca.add(Color.cyan);
+		ca.add(Color.red);
+		ca.add(Color.pink);
+		ca.add(Color.yellow);
+		ca.add(Color.gray);
+		ca.add(Color.darkGray);
+		ca.add(Color.MAGENTA);
+		ca.add(Color.blue);
+		ca.add(Color.green);
+		Collections.shuffle(ca);
+		Color[] colors = new Color[ca.size()];
+		int y = 0;
+		for(Color c :  ca){
+			colors[y] = c;
+			y++;
+		}
 		
 		imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		imageGraphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);

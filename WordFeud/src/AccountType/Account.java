@@ -59,8 +59,7 @@ public class Account {
 	}
 
 	public ArrayList<String> getUserRights(String player) {
-		ArrayList<String> data = DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='" + player + "'");
-		return data;
+		return DBCommunicator.requestMoreData("SELECT rol_type FROM accountrol WHERE account_naam='" + player + "'");
 	}
 
 	public boolean isModerator() {

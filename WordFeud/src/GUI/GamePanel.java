@@ -2,7 +2,6 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -11,16 +10,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
-import javax.swing.JLabel;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Utility.AScrollPane;
 import Utility.DBCommunicator;
 import Utility.Loader;
 import Utility.SButton;
+import Utility.SLabel;
 import WordFeud.Game;
 import WordFeud.GameStone;
 import WordFeud.Tile;
@@ -29,10 +35,10 @@ import WordFeud.Tile;
  * @author Stan van Heumen
  */
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener {
+public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener, Observer {
 
 	// Instance Variables
-	private SButton 						pass, swap, resign, play, shuffle;
+	private SButton 						pass, swap, resign, play, shuffle, refresh;
 	private ChatPanel 						cp;
 	private MenuPanel 						mp;
 	private JPanel							bp;
@@ -44,9 +50,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private ArrayList<Tile> 				hand, field;
 	private ArrayList<GameStone> 			stones;
 	private int 							mouseX, mouseY;
-	
-	private JLabel 	score		= new JLabel();
-	private int 	turnScore	= 0;
+	private JFrame 							questionFrame, swapFrame;
+	private SLabel 							turn;
+	private GameInfoPanel					gip=new GameInfoPanel();
+//	private MasterThread mt;
 	
 	/**
 	 * Constructor parameters: Gui gui<br>
@@ -54,27 +61,34 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	 * The GamePanel has got 2 grids (GameGrid and HandGrid)
 	 */
 	public GamePanel(GUI gui) {
+//		mt = mt.getInstance();
+//		mt.addObserver(this);
 		init(gui);
 
-		// InfopPanel -- MAY BE DELETED LATER --
-		score.setText("Your turn score will be: 0");
-		score.setOpaque(true);
-		score.setBackground(Color.GREEN);
-		score.setFont(new Font("Arial", Font.BOLD, 10));
-		JPanel infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayout(5, 1, 0, 10));
-		infoPanel.setPreferredSize(new Dimension(180, 215));
-		infoPanel.setBackground(new Color(33, 36, 40));
-		infoPanel.add(score);
-
+			
+		turn = new SLabel("", SLabel.CENTER);
+		if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())) {
+			turn.setName("It's your turn");
+		}
+		else {
+			turn.setName("It is your opponents turn");
+		}
+		//infopanel
+		AScrollPane scoreBar = new AScrollPane(gip.getPreferredSize().width,
+				gip.getPreferredSize().height, gip, false, true);
+		
 		add(mp);
 		mp.setBounds(0, 0, mp.getPreferredSize().width, mp.getPreferredSize().height);
+		mp.add(turn);
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
-		add(infoPanel);
-		infoPanel.setBounds(10, 320, infoPanel.getPreferredSize().width, infoPanel.getPreferredSize().height);
+		add(scoreBar);
+		scoreBar.setBounds(10, 320, 195, 315);
 		add(cp);
 		cp.setBounds(GUI.WIDTH - cp.getPreferredSize().width - 10, 10, cp.getPreferredSize().width, cp.getPreferredSize().height);
+	
+		add(refresh);
+		refresh.setBounds(GUI.WIDTH - cp.getPreferredSize().width  + 5, 38, cp.getPreferredSize().width - 30, 40);
 	}
 	
 	/**
@@ -109,12 +123,14 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		resign 			= new SButton("Resign", SButton.RED, 150, 40);
 		play 			= new SButton("Play", SButton.GREEN, 150, 40);
 		shuffle 		= new SButton("Shuffle", SButton.PURPLE, 150, 40);
+		refresh 		= new SButton("Refresh", SButton.PINK, 150, 40);
 		
 		pass.addActionListener(this);
 		swap.addActionListener(this);
 		resign.addActionListener(this);
 		play.addActionListener(this);
 		shuffle.addActionListener(this);
+		refresh.addActionListener(this);
 		
 		ArrayList<SButton> buttons = mp.getAllButtons();
 		for(SButton s:buttons) {s.addActionListener(this);}
@@ -174,7 +190,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	}
 
 	/**
-	 * Overriden paintComponent method from JComponent
+	 * Overridden paintComponent method from JComponent
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -193,7 +209,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	
 	// Mouse Event
 	public void mousePressed(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
+		if(e.getButton() == MouseEvent.BUTTON1) {
 			// Check for board grid
 			for(Tile t:field) {
 				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 10) && (e.getY() <= (t.getYPos() * 33) + 10 + 32)) {
@@ -201,16 +217,51 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
-							score.setText("Your turn score would be: " + gui.removeGameStone(t.getXPos() + "," + t.getYPos()));
-							
+							gip.emptyPanel();
+							gip.updateInfo(gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
 							t.setGameStone(null);
 						}
 					}
 					else {
 						if(t.getGameStone() == null) {
-							t.setGameStone(currentGameStone);
-							t.setPickablity(true);
-							score.setText("Your turn score would be: " + gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
+							if(currentGameStone.getLetter() == '?') {
+								// Check for the question mark (?)
+								questionFrame 	= new JFrame();
+								JPanel swapPanel	= new JPanel();
+								swapPanel.setLayout(new GridLayout(6, 5));
+								questionFrame.setResizable(false);
+								questionFrame.setTitle(GUI.TITLE);
+								questionFrame.setContentPane(swapPanel);
+
+								for(char i = 'A'; i <= 'Z'; i++) {
+									SButton s = new SButton(Character.toString(i), SButton.WHITE, 50, 50);
+									s.addActionListener(this);
+									s.setColors(Color.WHITE, new Color(230, 230, 230), new Color(200, 200, 200));
+									s.setTextColor(Color.BLACK);
+									swapPanel.add(s);
+								}
+								questionFrame.addWindowListener(new WindowAdapter() {
+						            //
+						            // Invoked when a window is de-activated.
+						            //
+						            public void windowDeactivated(WindowEvent e) {
+						                questionFrame.dispose();
+						            }
+						 
+						        });
+								questionFrame.pack();
+								questionFrame.setLocationRelativeTo(null);
+								questionFrame.setVisible(true);
+								
+								t.setGameStone(currentGameStone);
+								t.setPickablity(true);
+							}
+							else {
+								t.setGameStone(currentGameStone);
+								t.setPickablity(true);
+							}
+							gip.emptyPanel();
+							gip.updateInfo( gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							
 							currentGameStone = null;
 						}
@@ -223,12 +274,16 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				if((e.getX() >= (t.getXPos() * 33) + 180) && (e.getX() <= (t.getXPos() * 33) + 180 + 32) && (e.getY() >= (t.getYPos() * 33) + 580) && (e.getY() <= (t.getYPos() * 33) + 580 + 32)) {
 					if(currentGameStone == null) {
 						if (t.getPickablity()) {
+
 							currentGameStone = t.getGameStone();
 							t.setGameStone(null);
 						}
 					}
 					else {
 						if(t.getGameStone() == null) {
+							if(currentGameStone.getValue() == 0) {
+								currentGameStone.setLetter("?");
+							}
 							t.setGameStone(currentGameStone);
 							currentGameStone = null;
 						}
@@ -240,9 +295,26 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 
 	// Action event
 	public void actionPerformed(ActionEvent e) {
+		for(char i = 'A'; i <= 'Z'; i++) {
+			if(e.getActionCommand().equals(Character.toString(i))) {
+				for(Tile t:field) {
+					if(t.getGameStone() != null) {
+						if(t.getGameStone().getLetter() == '?') {
+							t.getGameStone().setLetter(Character.toString(i));
+							questionFrame.dispose();
+						}
+					}
+				}
+			}
+		}
+		
 		// Fix for thread staying on
-		if(e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
+		if(e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("Refresh") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
 			turnOffThreads();
+		}
+		
+		if(e.getSource().equals(refresh)) {
+			gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
 		}
 		
 		// Shuffle
@@ -250,62 +322,229 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 			for (int i = 0; i < field.size(); i++) {
 				if (field.get(i).getGameStone() != null) {
 					if (field.get(i).getGameStone().getHand()) {
-						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
+						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), true);
 						field.get(i).setGameStone(null);
 					}
 				}
 			}
 			Collections.shuffle(stones);
 			for(int i = 0; i < hand.size(); i++) {
-				hand.get(i).setGameStone(stones.get(i));
+				try{
+					hand.get(i).setGameStone(stones.get(i));
+				}
+				catch(IndexOutOfBoundsException a){
+					
+				}
 			}
 			currentGameStone = null;
 		}
 		
 		// Swap
 		if(e.getSource().equals(swap)) {
-			for(int i = 0; i < field.size(); i++) {
-				if(field.get(i).getGameStone() != null) {
-					if(field.get(i).getGameStone().getHand()) {
-						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
-						field.get(i).setGameStone(null);
+			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
+				for(int i = 0; i < field.size(); i++) {
+					if(field.get(i).getGameStone() != null) {
+						if(field.get(i).getGameStone().getHand()) {
+							game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), true);
+							field.get(i).setGameStone(null);
+						}
 					}
 				}
+				
+				for(int i = 0; i < hand.size(); i++) {
+					try{hand.get(i).setGameStone(stones.get(i));}
+					catch(IndexOutOfBoundsException a){}
+				}
+				final ArrayList<Integer> swapStones = new ArrayList<Integer>();
+				swapFrame 			= new JFrame();
+				JPanel swapPanel	= new JPanel();
+				swapFrame.addWindowListener(new WindowAdapter() {
+		            //
+		            // Invoked when a window is de-activated.
+		            //
+		            public void windowDeactivated(WindowEvent e) {
+		            	swapFrame.dispose();
+		            }
+		 
+		        });
+				swapPanel.setLayout(null);
+				swapPanel.setPreferredSize(new Dimension(20 + (stones.size() * stones.get(0).getImage().getWidth()), 60 + stones.get(0).getImage().getHeight()));
+				swapFrame.setResizable(false);
+				swapFrame.setTitle(GUI.TITLE);
+				swapFrame.setContentPane(swapPanel);
+				
+				SButton swap 	= new SButton("Swap", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
+				swap.setBounds(10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
+				swap.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// Swap
+						if(swapStones.size() >= 1) {
+							boolean swapped = gui.getApplication().swapGameStones(swapStones);
+							if(swapped){
+								swapFrame.dispose();
+								turnOffThreads();
+								gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+							}
+							else{
+								swapFrame.dispose();
+								JOptionPane.showMessageDialog(null, "There are not enough stones left", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						}
+					}
+				});
+				
+				SButton cancel 	= new SButton("Cancel", SButton.GREY, (swapPanel.getPreferredSize().width / 2) - 15, 30);
+				cancel.setBounds(swapPanel.getPreferredSize().width - cancel.getPreferredSize().width - 10, stones.get(0).getImage().getHeight() + 20, swap.getPreferredSize().width, swap.getPreferredSize().height);
+				cancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						swapFrame.dispose();
+					}
+				});
+			
+				swapPanel.setBackground(getBackground());
+				swapFrame.setIconImage(Loader.ICON);
+			
+				for(int i = 0; i < stones.size(); i++) {
+					final SLabel s = new SLabel(Character.toString(stones.get(i).getLetter()), SLabel.CENTER, 32, 32);
+					s.setBounds(10 + (i * 32), 10, 32, 32);
+					s.setName(Character.toString(stones.get(i).getLetter()));
+					s.drawBackground(true);
+					s.changeTextColor(Color.BLACK, Color.WHITE);
+					s.addMouseListener(new MouseListener() {
+						public void mouseClicked(MouseEvent e) 	{
+							if(s.getBackgroundColor().equals(Color.WHITE)) {
+								s.changeTextColor(Color.BLACK, Color.YELLOW);
+								for(GameStone gs:stones) {
+									if(Character.toString(gs.getLetter()).equals(s.getName())) {
+										if(!swapStones.contains(gs.getID())) {
+											swapStones.add(gs.getID());
+											break;
+										}
+									}
+								}
+							}
+							else {
+								s.changeTextColor(Color.BLACK, Color.WHITE);
+								ArrayList<Integer> copyStones = new ArrayList<Integer>();
+								for(Integer i:swapStones) {
+									copyStones.add(i);
+								}
+								boolean gameStoneFound = false;
+								for(GameStone gs:stones) {
+									if(Character.toString(gs.getLetter()).equals(s.getName()) && !gameStoneFound) {
+										for(Integer i:copyStones) {
+											if(i == gs.getID()) {
+												swapStones.remove(i);
+												gameStoneFound = true;
+												System.out.println("You removed a gameStone");
+												break;
+											}
+										}
+									}
+								}
+							}
+							String total = "";
+							for(int i = 0; i < swapStones.size(); i++) {
+								total += swapStones.get(i) + ":";
+							}
+							System.out.println(total);
+							s.repaint();
+						}
+						public void mouseEntered(MouseEvent e) 	{}
+						public void mouseExited(MouseEvent e) 	{}
+						public void mousePressed(MouseEvent e) 	{}
+						public void mouseReleased(MouseEvent e) {}
+					});
+					swapPanel.add(s);
+				}
+				
+				
+				swapPanel.add(swap);
+				swapPanel.add(cancel);
+			
+				swapFrame.pack();
+				swapFrame.setLocationRelativeTo(null);
+				swapFrame.setVisible(true);
 			}
-			for(int i = 0; i < hand.size(); i++) {
-				hand.get(i).setGameStone(stones.get(i));
+			else{
+				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		
 		// Play
 		if(e.getSource().equals(play)) {
-			System.out.println(gui.playWord());			
-			for(int i = 0; i < field.size(); i++) {
-				if(field.get(i).getGameStone() != null) {
-					if(field.get(i).getGameStone().getHand()) {
-						game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos());
-						field.get(i).setGameStone(null);
+			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
+				System.out.println(turn.getName());
+				System.out.println("pleh");
+				if(!turn.getName().equals("It is your opponents turn")){
+					ArrayList<String> word = gui.playWord();
+					gip.deniedReqeust(word);
+					for(int i = 0; i < field.size(); i++) {
+						if(field.get(i).getGameStone() != null) {
+							if(field.get(i).getGameStone().getHand()) {
+								game.removeGameStone(field.get(i).getXPos() + "," + field.get(i).getYPos(), false);
+								field.get(i).setGameStone(null);
+							}
+						}
+					}
+					for(int i = 0; i < hand.size(); i++) {
+						try{
+							if(stones.get(i).getValue() == 0) {stones.get(i).setLetter("?");}
+							hand.get(i).setGameStone(stones.get(i));
+						}
+						catch(IndexOutOfBoundsException a){
+							
+						}
+					}
+					currentGameStone = null;
+					
+					if(word == null) {
+						turnOffThreads();
+						if(gui.getApplication().getEnd(gui.getApplication().getSelectedGame().getID())){
+							gui.getApplication().spectateGame(gui.getApplication().getSelectedGame().getID());
+						}
+						else{
+							gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+						}
 					}
 				}
+				else{
+					turnOffThreads();
+					gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+				}
 			}
-			for(int i = 0; i < hand.size(); i++) {
-				hand.get(i).setGameStone(stones.get(i));
+			else{
+				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			currentGameStone = null;
 		}
 		
 		// Resign
 		if(e.getSource().equals(resign)) {
-			turnOffThreads();
-			game.resign();
-			gui.switchPanel(new GamePanel(gui));
+			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
+				turnOffThreads();
+				game.resign();
+				gui.getApplication().spectateGame(gui.getApplication().getSelectedGame().getID());
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		
 		// Pass
 		if(e.getSource().equals(pass)) {
-			turnOffThreads();
-			gui.pass();
-			gui.switchPanel(new GamePanel(gui));
+			if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())){
+				turnOffThreads();
+				gui.pass();
+				if(gui.getApplication().getEnd(gui.getApplication().getSelectedGame().getID())){
+					gui.getApplication().spectateGame(gui.getApplication().getSelectedGame().getID());
+				}
+				else{
+					gui.getApplication().selectGame(gui.getApplication().getSelectedGame().getID());
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "It is not your turn!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	
@@ -322,10 +561,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseDragged(MouseEvent e)	{}
 
-	// Getter
-	public int getTurnScore() 			{return turnScore;}
-	
 	// Setters
-	public void setTurnScore(int t) 	{turnScore = t;}
 	public void turnOffThreads() 		{cp.getChat().closeThread(); running = false;}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		System.out.println("[GamePanel] update revalidate");
+//		revalidate();
+	}
 }

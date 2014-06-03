@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Utility.AScrollPane;
@@ -23,16 +24,15 @@ import WordFeud.Competition;
 @SuppressWarnings("serial")
 public class CompetitionPanel extends JPanel {
 	
-	private AScrollPane 		currentScrollPane, 
-								finishedScrollPane, 
-								comps, 
-								joinableScrollPane;
+	private AScrollPane 		comps;
 	private JPanel 				currentCompPanel, 
 								finishedCompPanel, 
 								competitions, 
-								joinableCompPanel;
+								joinableCompPanel,
+								allPanel;
 	private MenuPanel 			menu;
-	private SButton 			create;
+	private SButton 			create,
+								refresh;
 	private Color 				bg = new Color(94, 94, 94);
 	private GUI 				gui;
 	private ArrayList<Integer> compInts;
@@ -41,8 +41,10 @@ public class CompetitionPanel extends JPanel {
 		this.gui = gui;
 		this.setBackground(bg);
 		this.setLayout(new BorderLayout());
+		
 		menu = new MenuPanel(gui, "PlayerPanel");
 		create = new SButton("Create new competition", SButton.GREY);
+		refresh = new SButton("Refresh", SButton.T_GREY, 2000, 60);	
 		
 		create.addActionListener(new ActionListener() {
 			
@@ -53,13 +55,24 @@ public class CompetitionPanel extends JPanel {
 			}
 		});
 		
+		refresh.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				gui.switchPanel(new CompetitionPanel(gui));
+			}
+			
+		});
+		
+		
 		menu.add(create);
 		
 
-		currentCompPanel = new JPanel();	
+		currentCompPanel  = new JPanel();	
 		finishedCompPanel = new JPanel();
 		joinableCompPanel = new JPanel();
-		competitions = new JPanel();
+		competitions      = new JPanel();
+		allPanel		  = new JPanel();
 		
 
 		currentCompPanel.setLayout(new BoxLayout(currentCompPanel, BoxLayout.Y_AXIS));
@@ -111,20 +124,20 @@ public class CompetitionPanel extends JPanel {
 				joinableCompPanel.add(Box.createRigidArea(new Dimension(500,10)));
 			}
 		}
-		competitions.setLayout(new BoxLayout(competitions, BoxLayout.Y_AXIS));
+		competitions.setLayout(new BoxLayout(competitions, BoxLayout.PAGE_AXIS));
 		competitions.setBackground(bg);
-		
-		currentScrollPane = new AScrollPane(currentCompPanel.getWidth(), currentCompPanel.getHeight(), currentCompPanel, false, true);
+		allPanel.add(refresh);	
+
 		comps = new AScrollPane(competitions.getWidth(), competitions.getHeight(), competitions, false, true);
-		finishedScrollPane = new AScrollPane(finishedCompPanel.getWidth(), finishedCompPanel.getHeight(), finishedCompPanel, false, true);
-		joinableScrollPane = new AScrollPane(joinableCompPanel.getWidth(), joinableCompPanel.getHeight(), joinableCompPanel, false, true);
-		
-		competitions.add(currentScrollPane);
-		competitions.add(joinableScrollPane);		
-		competitions.add(finishedScrollPane);
-		
+		allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.PAGE_AXIS));
+		allPanel.setBackground(new Color(94,94,94));
+		allPanel.add(comps);
+		competitions.add(currentCompPanel);
+		competitions.add(joinableCompPanel);
+		competitions.add(finishedCompPanel);
+
 		this.add(menu, BorderLayout.NORTH);
-		this.add(comps, BorderLayout.CENTER);
+		this.add(allPanel, BorderLayout.CENTER);
 	}
 	
 	
@@ -224,6 +237,7 @@ public class CompetitionPanel extends JPanel {
 			description.setPreferredSize(new Dimension(200,40));
 			description.setMaximumSize(new Dimension(200,40));
 			select.setMinimumSize(select.getPreferredSize());
+			select.setMaximumSize(select.getPreferredSize());
 			
 			owner.setBackground(panel.getBackground());
 			description.setBackground(panel.getBackground());
@@ -258,8 +272,11 @@ public class CompetitionPanel extends JPanel {
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
 			
 			owner.setMinimumSize(new Dimension(200,30));
+			owner.setMaximumSize(new Dimension(200,30));
 			description.setMinimumSize(new Dimension(200,30));
+			description.setMaximumSize(new Dimension(200,30));
 			spectate.setMinimumSize(spectate.getPreferredSize());
+			spectate.setMaximumSize(spectate.getPreferredSize());
 			
 			owner.setBackground(panel.getBackground());
 			description.setBackground(panel.getBackground());
@@ -294,8 +311,11 @@ public class CompetitionPanel extends JPanel {
 			description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
 			
 			owner.setMinimumSize(new Dimension(200,30));
+			owner.setMaximumSize(new Dimension(200,30));
 			description.setMinimumSize(new Dimension(200,30));
+			description.setMaximumSize(new Dimension(200,30));
 			join.setMinimumSize(join.getPreferredSize());
+			join.setMaximumSize(join.getPreferredSize());
 			
 			owner.setBackground(panel.getBackground());
 			description.setBackground(panel.getBackground());
@@ -314,10 +334,13 @@ public class CompetitionPanel extends JPanel {
 			join.addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					gui.getApplication().setSelectedCompetition(new Competition(compID));
-					Competition comp = gui.getApplication().getSelectedCompetition();		
-					comp.addPlayer(gui.getApplication().getCurrentAccount());
-					gui.switchPanel(new CompetitionPlayersPanel(gui, compID));		
+					if(gui.getApplication().getJoinable(compID)){
+						gui.getApplication().addPlayer(gui.getApplication().getCurrentAccount().getUsername(), compID);
+						gui.getApplication().selectCompetition(compID);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "You can't join this competition anymore", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			});
 			spectate.addActionListener(new ActionListener(){
