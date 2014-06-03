@@ -1,6 +1,9 @@
 package Core;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import javax.swing.JOptionPane;
 
 import AccountType.Account;
 import GUI.CompetitionPanel;
@@ -13,14 +16,9 @@ import GUI.SpectatorGamePanel;
 import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
 import Utility.Loader;
-import Utility.MasterThread;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
-
-import java.util.Calendar;
-
-import javax.swing.JOptionPane;
 
 
 public class Application {

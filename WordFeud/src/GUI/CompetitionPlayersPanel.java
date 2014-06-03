@@ -264,7 +264,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 					playerFrame.setResizable(false);
 					playerFrame.setTitle(name);
 					playerFrame.setAlwaysOnTop(true);
-					playerFrame.setDefaultCloseOperation(playerFrame.DISPOSE_ON_CLOSE);
+					playerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					
 					JPanel competition	= new JPanel();
 					JPanel numberGames	= new JPanel();

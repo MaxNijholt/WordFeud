@@ -38,7 +38,7 @@ import WordFeud.Tile;
 public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener, Observer {
 
 	// Instance Variables
-	private SButton 						pass, swap, resign, play, shuffle;
+	private SButton 						pass, swap, resign, play, shuffle, refresh;
 	private ChatPanel 						cp;
 	private MenuPanel 						mp;
 	private JPanel							bp;
@@ -83,9 +83,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
 		add(scoreBar);
-		scoreBar.setBounds(10, 320, gip.getPreferredSize().width, gip.getPreferredSize().height);
+		scoreBar.setBounds(10, 320, 195, 315);
 		add(cp);
 		cp.setBounds(GUI.WIDTH - cp.getPreferredSize().width - 10, 10, cp.getPreferredSize().width, cp.getPreferredSize().height);
+	
+		add(refresh);
+		refresh.setBounds(GUI.WIDTH - cp.getPreferredSize().width  + 5, 38, cp.getPreferredSize().width - 30, 40);
 	}
 	
 	/**
@@ -120,12 +123,14 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		resign 			= new SButton("Resign", SButton.RED, 150, 40);
 		play 			= new SButton("Play", SButton.GREEN, 150, 40);
 		shuffle 		= new SButton("Shuffle", SButton.PURPLE, 150, 40);
+		refresh 		= new SButton("Refresh", SButton.PINK, 150, 40);
 		
 		pass.addActionListener(this);
 		swap.addActionListener(this);
 		resign.addActionListener(this);
 		play.addActionListener(this);
 		shuffle.addActionListener(this);
+		refresh.addActionListener(this);
 		
 		ArrayList<SButton> buttons = mp.getAllButtons();
 		for(SButton s:buttons) {s.addActionListener(this);}
@@ -212,6 +217,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 						if(t.getPickablity()) {
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
+							gip.emptyPanel();
 							gip.updateInfo(gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
 							t.setGameStone(null);
 						}
@@ -254,6 +260,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 								t.setGameStone(currentGameStone);
 								t.setPickablity(true);
 							}
+							gip.emptyPanel();
 							gip.updateInfo( gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
 							
 							currentGameStone = null;
@@ -302,8 +309,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		}
 		
 		// Fix for thread staying on
-		if(e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
+		if(e.getActionCommand().equals("Your settings") || e.getActionCommand().equals("User stats") || e.getActionCommand().equals("Refresh") || e.getActionCommand().equals("> Player") || e.getActionCommand().equals("> Administrator") || e.getActionCommand().equals("> Moderator") || e.getActionCommand().equals("> Spectator") || e.getActionCommand().equals("Log Out") || e.getActionCommand().equals("Back")) {
 			turnOffThreads();
+		}
+		
+		if(e.getSource().equals(refresh)) {
+			gui.switchPanel(new GamePanel(gui));
 		}
 		
 		// Shuffle
@@ -347,6 +358,15 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				final ArrayList<Integer> swapStones = new ArrayList<Integer>();
 				swapFrame 			= new JFrame();
 				JPanel swapPanel	= new JPanel();
+				swapFrame.addWindowListener(new WindowAdapter() {
+		            //
+		            // Invoked when a window is de-activated.
+		            //
+		            public void windowDeactivated(WindowEvent e) {
+		            	swapFrame.dispose();
+		            }
+		 
+		        });
 				swapPanel.setLayout(null);
 				swapPanel.setPreferredSize(new Dimension(20 + (stones.size() * stones.get(0).getImage().getWidth()), 60 + stones.get(0).getImage().getHeight()));
 				swapFrame.setResizable(false);
@@ -405,15 +425,19 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 							}
 							else {
 								s.changeTextColor(Color.BLACK, Color.WHITE);
+								ArrayList<Integer> copyStones = new ArrayList<Integer>();
+								for(Integer i:swapStones) {
+									copyStones.add(i);
+								}
+								boolean gameStoneFound = false;
 								for(GameStone gs:stones) {
-									if(Character.toString(gs.getLetter()).equals(s.getName())) {
-										ArrayList<Integer> copyStones = new ArrayList<Integer>();
-										for(Integer i:swapStones) {
-											copyStones.add(i);
-										}
+									if(Character.toString(gs.getLetter()).equals(s.getName()) && !gameStoneFound) {
 										for(Integer i:copyStones) {
 											if(i == gs.getID()) {
 												swapStones.remove(i);
+												gameStoneFound = true;
+												System.out.println("You removed a gameStone");
+												break;
 											}
 										}
 									}
@@ -454,7 +478,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				System.out.println("pleh");
 				if(!turn.getName().equals("It is your opponents turn")){
 					ArrayList<String> word = gui.playWord();
-					System.out.println(word);
+					gip.deniedReqeust(word);
 					for(int i = 0; i < field.size(); i++) {
 						if(field.get(i).getGameStone() != null) {
 							if(field.get(i).getGameStone().getHand()) {
@@ -465,6 +489,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 					}
 					for(int i = 0; i < hand.size(); i++) {
 						try{
+							if(stones.get(i).getValue() == 0) {stones.get(i).setLetter("?");}
 							hand.get(i).setGameStone(stones.get(i));
 						}
 						catch(IndexOutOfBoundsException a){

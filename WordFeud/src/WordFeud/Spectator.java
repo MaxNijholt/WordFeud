@@ -10,7 +10,9 @@ public class Spectator {
 	private Field myField;
 	private int myGameID, lastTurn, turn;
 	private String letters;
+	@SuppressWarnings("unused")
 	private ArrayList<Integer> gameStones;
+	@SuppressWarnings("unused")
 	private HashMap<Integer, Character> stoneChars;
 	private ArrayList<GameStone> handStones;
 	
