@@ -347,6 +347,15 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				final ArrayList<Integer> swapStones = new ArrayList<Integer>();
 				swapFrame 			= new JFrame();
 				JPanel swapPanel	= new JPanel();
+				swapFrame.addWindowListener(new WindowAdapter() {
+		            //
+		            // Invoked when a window is de-activated.
+		            //
+		            public void windowDeactivated(WindowEvent e) {
+		            	swapFrame.dispose();
+		            }
+		 
+		        });
 				swapPanel.setLayout(null);
 				swapPanel.setPreferredSize(new Dimension(20 + (stones.size() * stones.get(0).getImage().getWidth()), 60 + stones.get(0).getImage().getHeight()));
 				swapFrame.setResizable(false);
