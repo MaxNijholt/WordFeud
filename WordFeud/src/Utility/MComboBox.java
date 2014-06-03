@@ -19,6 +19,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 
 import GUI.AdminPanel;
+import GUI.ModeratorPanel;
 
 @SuppressWarnings("serial")
 public class MComboBox extends JPanel implements ActionListener, ObjectChangeListener {
@@ -29,7 +30,7 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 	private ArrayList<SButton> buttonList;
 	private JPanel adpa;
 
-	public MComboBox(int width, int height, String[] items, AdminPanel ap) {
+	public MComboBox(int width, int height, String[] items, final JPanel ap) {
 		// Default Component stuff
 		this.setPreferredSize(new Dimension(width, height));
 		this.setBackground(new Color(255, 255, 255, 0));
@@ -59,7 +60,10 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 				addItem(items[i]);
 			}
 		} else {
-			this.placeholder = new STextField("Name");
+			if(ap instanceof AdminPanel)
+				this.placeholder = new STextField("Name");
+			if(ap instanceof ModeratorPanel)
+				this.placeholder = new STextField("Word");
 			this.placeholder.setEditable(true);
 			this.placeholder.setCustomRounded(true, false, true, false);
 		}
@@ -82,14 +86,21 @@ public class MComboBox extends JPanel implements ActionListener, ObjectChangeLis
 			@Override
 			public void keyReleased(KeyEvent e) {
 				buttonList = new ArrayList<SButton>();
-				pop.removeAll();
+				if(ap instanceof AdminPanel){
+					pop.removeAll();
 					ArrayList<String> data = null;
-					data = DBCommunicator
-							.requestMoreData("SELECT naam FROM account WHERE naam LIKE '"
-									+ placeholder.getText() + "%'");
+					data = DBCommunicator.requestMoreData("SELECT naam FROM account WHERE naam LIKE '"+ placeholder.getText() + "%'");
 					for (String pl : data) {
 						addItem(pl);
 					}
+				}else if(ap instanceof ModeratorPanel){
+					pop.removeAll();
+					ArrayList<String> data = null;
+					data = DBCommunicator.requestMoreData("SELECT woord FROM woordenboek WHERE woord LIKE '"+ placeholder.getText() + "%'");
+					for (String pl : data) {
+						addItem(pl);
+					}
+				}
 			}});
 	}
 

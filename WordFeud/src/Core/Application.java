@@ -1,6 +1,9 @@
 package Core;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import javax.swing.JOptionPane;
 
 import AccountType.Account;
 import GUI.CompetitionPanel;
@@ -13,14 +16,9 @@ import GUI.SpectatorGamePanel;
 import GUI.SpectatorPanel;
 import Utility.DBCommunicator;
 import Utility.Loader;
-import Utility.MasterThread;
 import WordFeud.Competition;
 import WordFeud.Game;
 import WordFeud.GameStone;
-
-import java.util.Calendar;
-
-import javax.swing.JOptionPane;
 
 
 public class Application {
@@ -291,11 +289,13 @@ public class Application {
 		
 		for(int e : gameInts){
 			String name = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + e + " ORDER BY id DESC");
-			if((name.equals(currentAccount.getUsername()) && (!myTurn))){
-				turnInts.add(e);
-			}
-			else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
-				turnInts.add(e);
+			if(name != null){
+				if((name.equals(currentAccount.getUsername()) && (!myTurn))){
+					turnInts.add(e);
+				}
+				else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
+					turnInts.add(e);
+				}
 			}
 		}
 		
@@ -535,10 +535,10 @@ public class Application {
 		while(!done){
 			int gameID = 0;
 			if(!finished){
-				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') " + restQuery);
+				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') AND competitie_id =" + compID + restQuery);
 			}
 			else{
-				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') AND (toestand_type = 'Finished' OR toestand_type = 'Resigned') " + restQuery);
+				gameID = DBCommunicator.requestInt("SELECT id FROM spel WHERE (account_naam_uitdager = '" + player + "' OR account_naam_tegenstander = '" + player + "') AND (toestand_type = 'Finished' OR toestand_type = 'Resigned') AND competitie_id =" + compID + restQuery);
 			}
 			if(gameID != 0){
 				allGames.add(gameID);
@@ -778,8 +778,25 @@ public class Application {
 	}
 	
 	public String getWinner(int gameID){
-		
-		return "";
+		String resign = DBCommunicator.requestData("SELECT toestand_type FROM spel WHERE id = " + gameID + " AND toestand_type = 'Resigned'");
+		if(resign != null){
+			String naam = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + gameID + " AND account_naam <> (SELECT account_naam FROM beurt WHERE spel_id = "+ gameID + " AND aktie_type = 'Resign')");
+			return naam;
+		}
+		else{
+			String naam = DBCommunicator.requestData("SELECT account_naam FROM score WHERE spel_id = " + gameID + " ORDER BY totaalscore DESC");
+			return naam;
+		}
+	}
+	
+	public boolean getEnd(int gameID){
+		String action = DBCommunicator.requestData("SELECT aktie_type FROM beurt WHERE spel_id = " + gameID + " ORDER BY id DESC");
+		if(action.equals("End")){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	/**
@@ -801,8 +818,13 @@ public class Application {
 	/**
 	 *tell game to swapGameStones
 	 */
-	public void swapGameStones(ArrayList<Integer> stoneIDs){
-		selectedGame.swapGameStones(stoneIDs);
+	public boolean swapGameStones(ArrayList<Integer> stoneIDs){
+		int potSize = DBCommunicator.requestInt("SELECT COUNT(*) FROM pot WHERE spel_id = " + selectedGame.getID());
+		if(potSize >= 7){
+			selectedGame.swapGameStones(stoneIDs);
+			return true;
+		}
+		else{return false;}
 	}
 	
 	/**
