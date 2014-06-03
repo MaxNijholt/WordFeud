@@ -127,25 +127,21 @@ public class Application {
 	 */
 	public void acceptGame(int gameID){
 		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', moment_reaktie = CURRENT_TIMESTAMP(), toestand_type = 'Playing' WHERE id = " + gameID);
-		String opponent = this.getOpponentName(gameID);
-		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
-				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
 		myGui.switchPanel(new PlayerPanel(myGui));
 	}
 	
 	public void acceptGame(int gameID, int compID){
 		DBCommunicator.writeData("UPDATE spel SET reaktie_type = 'Accepted', moment_reaktie = CURRENT_TIMESTAMP(), toestand_type = 'Playing' WHERE id = " + gameID);
-		String opponent = this.getOpponentName(gameID);
-		DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
-				+ "VALUES (1, " + gameID + ", '" + opponent + "', 0, 'Begin'), (2, " + gameID + ", '"+ currentAccount.getUsername() +"', 0, 'Begin')");
 		myGui.switchPanel(new CompetitionPlayersPanel(myGui, compID));
 	}
 	
 	public boolean doInitializeGame(int gameID){
 		int letter = DBCommunicator.requestInt("SELECT id FROM letter WHERE spel_id = " + gameID);
 		if(letter == 0){
-			if(getMyTurn(gameID)){
+			if(getChallenger(gameID).equals(currentAccount.getUsername())){
 				createGameLetters(gameID);
+				DBCommunicator.writeData("INSERT INTO beurt (id, spel_id, account_naam, score, aktie_type)"
+						+ "VALUES (1, " + gameID + ", '" + currentAccount.getUsername() + "', 0, 'Begin'), (2, " + gameID + ", '"+ getOpponentName(gameID) +"', 0, 'Begin')");
 				createGameHands(gameID);
 				return true;
 			}
@@ -157,6 +153,17 @@ public class Application {
 		else{
 			return true;
 		}		
+	}
+	
+	public boolean getInitializedGame(int gameID){
+		int letter = DBCommunicator.requestInt("SELECT id FROM letter WHERE spel_id = " + gameID);
+		if(letter == 0){
+			return false;
+		}
+		else{
+			return true;
+		}
+		
 	}
 	
 	/**
@@ -294,6 +301,11 @@ public class Application {
 					turnInts.add(e);
 				}
 				else if((!name.equals(currentAccount.getUsername()) && (myTurn))){
+					turnInts.add(e);
+				}
+			}
+			if(name == null){
+				if(!getInitializedGame(e)){
 					turnInts.add(e);
 				}
 			}
@@ -780,7 +792,7 @@ public class Application {
 	public String getWinner(int gameID){
 		String resign = DBCommunicator.requestData("SELECT toestand_type FROM spel WHERE id = " + gameID + " AND toestand_type = 'Resigned'");
 		if(resign != null){
-			String naam = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + gameID + " AND account_naam <> (SELECT account_naam FROM beurt WHERE spel_id = "+ gameID + " AND aktie_type = 'Resign')");
+			String naam = DBCommunicator.requestData("SELECT account_naam FROM beurt WHERE spel_id = " + gameID + " AND account_naam <> (SELECT account_naam FROM beurt WHERE spel_id = "+ gameID + " AND aktie_type = 'Resign' LIMIT 1)");
 			return naam;
 		}
 		else{
@@ -797,6 +809,10 @@ public class Application {
 		else{
 			return false;
 		}
+	}
+	
+	public String getChallenger(int gameID){
+		return DBCommunicator.requestData("SELECT account_naam_uitdager FROM spel WHERE id = " + gameID);
 	}
 	
 	/**
