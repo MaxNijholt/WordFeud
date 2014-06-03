@@ -15,15 +15,18 @@ import Utility.SLabel;
 public class GameInfoPanel extends JPanel {
 	private SLabel score = new SLabel("", SLabel.CENTER, 200, 40);
 	private SLabel vs = new SLabel("", SLabel.CENTER, 200, 40);
+	private GamePanel gameP;
 	private int turnScore = 0;
 	private int yourScore = 0;
 	private int opponentScore = 0;
+	private int potSize = 0;
 
 	public GameInfoPanel(GamePanel gamepanel) {
+		gameP = gamepanel;
 		this.setPreferredSize(new Dimension(195, 315));
 		this.setBackground(new Color(23, 26, 30));
 		this.updateInfo(0, gamepanel.getGameScores());
-		score.setName("Turn score : " + turnScore);
+		score.setName("Pot : "+gameP.getApp().getPotSize(gameP.getApp().getSelectedGame().getID())+" Turn score : " + turnScore);
 		score.setOpaque(true);
 		score.drawBackground(true);
 		score.changeTextColor(SButton.WHITE, SButton.GREEN);
@@ -51,7 +54,7 @@ public class GameInfoPanel extends JPanel {
 		this.turnScore = scoreTurn;
 		this.yourScore=playerScores[0];
 		this.opponentScore=playerScores[1];
-		score.setName("Turn score : " + turnScore);
+		score.setName("Pot : "+gameP.getApp().getPotSize(gameP.getApp().getSelectedGame().getID())+" Turn score : " + turnScore);
 		vs.setName("you : "+yourScore+" opponent : "+opponentScore+"");
 	}
 

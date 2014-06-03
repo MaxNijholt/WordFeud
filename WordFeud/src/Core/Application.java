@@ -845,6 +845,10 @@ public class Application {
 		return scores;
 	}
 	
+	public int getPotSize(int gameID){
+		return DBCommunicator.requestInt("SELECT COUNT(*) FROM pot WHERE spel_id = " + gameID);
+	}
+	
 	/**
 	 * call the game to play a word
 	 */

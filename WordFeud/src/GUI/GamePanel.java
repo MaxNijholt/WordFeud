@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Core.Application;
 import Utility.AScrollPane;
 import Utility.DBCommunicator;
 import Utility.Loader;
@@ -570,6 +571,11 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		System.out.println("[GamePanel] update revalidate");
 //		revalidate();
 	}
+	
+	public Application getApp(){
+		return gui.getApplication();
+	}
+	
 	public int[] getGameScores(){
 		return gui.getApplication().getGameScores();
 	}
