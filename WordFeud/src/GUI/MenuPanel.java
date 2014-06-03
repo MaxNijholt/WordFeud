@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Observer;
 
 import javax.swing.JPanel;
 
@@ -32,8 +31,6 @@ public class MenuPanel extends JPanel implements ActionListener {
 										back;
 	private ArrayList<SButton>			allButtons;
 	private String 						backPanel;
-	private Observer					currentPanel;
-
 	/**
 	 * Constructor parameters: Gui g, JPanel bp<br>
 	 * This constructor creates a MenuPanel that you can use for switching between panels<br>

@@ -3,13 +3,10 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Utility.AScrollPane;
 import Utility.SButton;
 import Utility.SLabel;
 
