@@ -67,7 +67,7 @@ public class StatisticsPanel extends JPanel {
 
 		centerPanel.setLayout(new GridLayout(4,1));
 		centerPanel.setBackground(new Color(94, 94, 94));
-		centerPanel.setBounds(GUI.WIDTH / 2 - 100, GUI.HEIGHT / 2 + 100 - 145, 300, 200);
+		centerPanel.setBounds(GUI.WIDTH / 2 - 150, GUI.HEIGHT / 2 + 100 - 145, 300, 200);
 
 		centerPanel.add(playerName);
 		centerPanel.add(playerNameView);

@@ -14,11 +14,13 @@ import WordFeud.Spectator;
 public class SpectatorInfoPanel extends JPanel {
 
 	private JTextArea printArea;
-	private String text;
+	private String text, scoreText;
 	private int gameID;
 	private GUI gui;
 	private AScrollPane scrollPrintPanel;
 	private Spectator spectate;
+	private int[] scores;
+	private String[] players;
 
 	public SpectatorInfoPanel(GUI gui, int gameID, Spectator spectate) {
 		this.setLayout(new GridBagLayout());
@@ -42,11 +44,17 @@ public class SpectatorInfoPanel extends JPanel {
 		c.insets = new Insets(5, 0, 5, 0);
 		this.add(scrollPrintPanel, c);
 	}
-	
-	public void updateText(int turn){
+
+	public void updateText(int turn) {
 		String newText;
 		newText = spectate.turnText(gameID, turn);
-		text = newText + "\n" + text;
+		players = spectate.players(gameID, turn);
+		scores = gui.getApplication().getSpectateScores(gameID, players[0],
+				turn);
+		scoreText = players[0] + " has: " + scores[0] + " points \n"
+				+ players[1] + " has: " + scores[1] + " points \n";
+
+		text = newText + "\n" + scoreText + "\n" + text;
 		printArea.setText(text);
 	}
 

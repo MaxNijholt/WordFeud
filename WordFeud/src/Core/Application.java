@@ -821,6 +821,13 @@ public class Application {
 		return scores;
 	}
 	
+	public int[] getSpectateScores(int gameID, String player, int turn){
+		int[] scores = new int[2];
+		scores[0] = DBCommunicator.requestInt("SELECT SUM(score) FROM beurt WHERE spel_id = "+gameID+" AND id <= "+turn+" AND account_naam = '"+player+"'");
+		scores[1] = DBCommunicator.requestInt("SELECT SUM(score) FROM beurt WHERE spel_id = "+gameID+" AND id <= "+turn+" AND account_naam <> '"+player+"'");
+		return scores;
+	}
+	
 	/**
 	 * call the game to play a word
 	 */

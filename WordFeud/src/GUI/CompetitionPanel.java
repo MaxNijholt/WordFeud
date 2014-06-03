@@ -273,8 +273,10 @@ public class CompetitionPanel extends JPanel {
 			
 			owner.setMinimumSize(new Dimension(200,30));
 			owner.setMaximumSize(new Dimension(200,30));
+			owner.setPreferredSize(new Dimension(200,30));
 			description.setMinimumSize(new Dimension(200,30));
 			description.setMaximumSize(new Dimension(200,30));
+			description.setPreferredSize(new Dimension(200,30));
 			spectate.setMinimumSize(spectate.getPreferredSize());
 			spectate.setMaximumSize(spectate.getPreferredSize());
 			
@@ -312,8 +314,11 @@ public class CompetitionPanel extends JPanel {
 			
 			owner.setMinimumSize(new Dimension(200,30));
 			owner.setMaximumSize(new Dimension(200,30));
+			owner.setPreferredSize(new Dimension(200,30));
 			description.setMinimumSize(new Dimension(200,30));
 			description.setMaximumSize(new Dimension(200,30));
+			description.setPreferredSize(new Dimension(200,30));
+			join.setPreferredSize(new Dimension(220, 40));
 			join.setMinimumSize(join.getPreferredSize());
 			join.setMaximumSize(join.getPreferredSize());
 			

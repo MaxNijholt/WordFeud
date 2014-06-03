@@ -53,11 +53,6 @@ public class SpectatorCompetitionsPanel extends JPanel{
 
 		//create the scrollpane as container for the gameContent
 		scrollPane 		= 	new AScrollPane(1000, 500, gameContent, false, true);
-//		scrollPane.setBorder(null);
-//		scrollPane.setPreferredSize(new Dimension(1000, 500));
-//		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-//		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		allPanel.add(scrollPane);
 			
 		ArrayList<Integer> compInts;
@@ -103,7 +98,7 @@ public class SpectatorCompetitionsPanel extends JPanel{
 		SButton select 	= new SButton("Select", SButton.GREY, 220, 40);
 		
 		owner.add(new SLabel(gui.getCompetitionOwner(compID), SLabel.CENTER, new Font("Arial", Font.BOLD, 25)));
-		description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 25)));
+		description.add(new SLabel(gui.getCompetitionDescription(compID), SLabel.CENTER, new Font("Arial", Font.PLAIN, 15)));
 		
 		owner.setMinimumSize(new Dimension(250,50));
 		owner.setPreferredSize(new Dimension(250,50));
