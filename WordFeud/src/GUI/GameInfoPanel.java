@@ -3,15 +3,10 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import Utility.AScrollPane;
 import Utility.DBCommunicator;
 import Utility.SButton;
 import Utility.SLabel;
@@ -19,33 +14,51 @@ import Utility.SLabel;
 @SuppressWarnings("serial")
 public class GameInfoPanel extends JPanel {
 	private SLabel score = new SLabel("", SLabel.CENTER, 200, 40);
+	private SLabel vs = new SLabel("", SLabel.CENTER, 200, 40);
 	private int turnScore = 0;
+	private int yourScore = 0;
+	private int opponentScore = 0;
 
-	public GameInfoPanel() {
+	public GameInfoPanel(GamePanel gamepanel) {
 		this.setPreferredSize(new Dimension(195, 315));
 		this.setBackground(new Color(23, 26, 30));
+		this.updateInfo(0, gamepanel.getGameScores());
 		score.setName("Turn score : " + turnScore);
 		score.setOpaque(true);
 		score.drawBackground(true);
 		score.changeTextColor(SButton.WHITE, SButton.GREEN);
 		score.setFont(new Font("Arial", Font.BOLD, 10));
 		score.setSize(new Dimension(100, 30));
+		score.setCustomRounded(true, true, true, true);
+		vs.setName("you : "+yourScore+"_vs_ opponent : "+opponentScore+"");
+		vs.setOpaque(true);
+		vs.drawBackground(true);
+		vs.changeTextColor(SButton.WHITE, SButton.CYAN);
+		vs.setFont(new Font("Arial", Font.BOLD, 10));
+		vs.setSize(new Dimension(100, 30));
+		vs.setCustomRounded(true, true, true, true);
+		
 		this.add(score);
 		score.setBounds(0, 0, 180, 40);
+		this.add(vs);
+		score.setBounds(0, 40, 180, 40);
 
 	}
 
-	public void updateInfo(int scoreTurn)
+
+	public void updateInfo(int scoreTurn,int[] playerScores)
 	{
 		this.turnScore = scoreTurn;
+		this.yourScore=playerScores[0];
+		this.opponentScore=playerScores[1];
 		score.setName("Turn score : " + turnScore);
-
+		vs.setName("you : "+yourScore+"_vs_ opponent : "+opponentScore+"");
 	}
 
 	public void deniedReqeust(ArrayList<String> deniedWords)
 	{
 		int x = 0;
-		int y = 0;
+		int y = 50;
 
 		if (deniedWords != null && deniedWords.size() != 0)
 		{
@@ -60,7 +73,7 @@ public class GameInfoPanel extends JPanel {
 					error.drawBackground(true);
 					error.setCustomRounded(true, true, true, true);
 					this.add(error);
-					error.setBounds(0, 50, 180, 40);
+					error.setBounds(0, 100, 180, 40);
 				}
 				else
 				{
@@ -147,6 +160,7 @@ public class GameInfoPanel extends JPanel {
 	{
 		this.removeAll();
 		this.add(score);
+		this.add(vs);
 	}
 
 }

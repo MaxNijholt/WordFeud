@@ -52,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	private int 							mouseX, mouseY;
 	private JFrame 							questionFrame, swapFrame;
 	private SLabel 							turn;
-	private GameInfoPanel					gip=new GameInfoPanel();
+	private GameInfoPanel					gip=new GameInfoPanel(this);
 //	private MasterThread mt;
 	
 	/**
@@ -64,8 +64,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 //		mt = mt.getInstance();
 //		mt.addObserver(this);
 		init(gui);
-
-			
+		
 		turn = new SLabel("", SLabel.CENTER);
 		if(gui.getApplication().getMyTurn(gui.getApplication().getSelectedGame().getID())) {
 			turn.setName("It's your turn");
@@ -83,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 		add(bp);
 		bp.setBounds(10, 50, bp.getPreferredSize().width, bp.getPreferredSize().height);
 		add(scoreBar);
-		scoreBar.setBounds(10, 320, 195, 315);
+		scoreBar.setBounds(10, 290, 195, 315);
 		add(cp);
 		cp.setBounds(GUI.WIDTH - cp.getPreferredSize().width - 10, 10, cp.getPreferredSize().width, cp.getPreferredSize().height);
 	
@@ -218,7 +217,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 							currentGameStone = t.getGameStone();
 							t.setPickablity(false);
 							gip.emptyPanel();
-							gip.updateInfo(gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true));
+							gip.updateInfo(gui.removeGameStone(t.getXPos() + "," + t.getYPos(), true),gui.getApplication().getSelectedGame().getGameScores());
 							t.setGameStone(null);
 						}
 					}
@@ -261,7 +260,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 								t.setPickablity(true);
 							}
 							gip.emptyPanel();
-							gip.updateInfo( gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())));
+							gip.updateInfo( gui.layGameStone(currentGameStone, (t.getXPos() + "," + t.getYPos())),gui.getApplication().getSelectedGame().getGameScores());
 							
 							currentGameStone = null;
 						}
@@ -479,6 +478,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 				if(!turn.getName().equals("It is your opponents turn")){
 					ArrayList<String> word = gui.playWord();
 					gip.deniedReqeust(word);
+					gip.updateInfo(0,gui.getApplication().getSelectedGame().getGameScores());
 					for(int i = 0; i < field.size(); i++) {
 						if(field.get(i).getGameStone() != null) {
 							if(field.get(i).getGameStone().getHand()) {
@@ -568,5 +568,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 	public void update(Observable o, Object arg) {
 		System.out.println("[GamePanel] update revalidate");
 //		revalidate();
+	}
+	public int[] getGameScores(){
+		return gui.getApplication().getSelectedGame().getGameScores();
 	}
 }

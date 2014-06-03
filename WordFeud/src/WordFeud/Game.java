@@ -526,4 +526,8 @@ public class Game {
 		else return false;
 		
 	}
+
+	public int[] getGameScores(){
+		return app.getGameScores();
+	}
 }
