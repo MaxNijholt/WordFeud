@@ -20,6 +20,7 @@ public class MasterThread extends Observable implements Runnable {
 		 t = new Thread(this);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void stopThread() {
 		t.stop();
 		System.out.println("[MasterThread] MasterThread has stopped");

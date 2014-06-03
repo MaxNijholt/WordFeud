@@ -19,7 +19,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import Utility.AScrollPane;
 import Utility.Loader;
@@ -156,7 +155,7 @@ public class SpectatorPanel extends JPanel {
 					playerFrame.setResizable(false);
 					playerFrame.setTitle(name);
 					playerFrame.setAlwaysOnTop(true);
-					playerFrame.setDefaultCloseOperation(playerFrame.DISPOSE_ON_CLOSE);
+					playerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					
 					JPanel competition	= new JPanel();
 					JPanel numberGames	= new JPanel();

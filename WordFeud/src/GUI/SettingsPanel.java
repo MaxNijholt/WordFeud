@@ -8,11 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -52,6 +49,7 @@ public class SettingsPanel extends JPanel{
 		this.gui = gui;
 		this.user = user;
 		this.showmenu = true;
+		this.save				= new SButton("Save", SButton.GREY);
 		init();
 	}
 	public SettingsPanel(GUI gui, Account user, final JFrame frame){
@@ -71,6 +69,7 @@ public class SettingsPanel extends JPanel{
             }
  
         });
+		this.save				= new SButton("Save or Cancel", SButton.GREY);
 		init();
 	}
 	
@@ -98,7 +97,7 @@ public class SettingsPanel extends JPanel{
 		this.username			= new SLabel("New username:", 0);
 
 		this.userfield			= new STextField(user.getUsername(), 120, 30);
-		this.save				= new SButton("Save or Cancel", SButton.GREY);
+//		this.save				= new SButton("Save or Cancel", SButton.GREY);
 		this.save.addActionListener(aa);
 
 
@@ -131,8 +130,11 @@ public class SettingsPanel extends JPanel{
 			  public void insertUpdate(DocumentEvent e) { if(!userfield.getText().equals("")){userChange=true;}else{userChange=false;}}
 		});
 		passwordfield.getDocument().addDocumentListener(new DocumentListener() {
+			@SuppressWarnings("deprecation")
 			public void changedUpdate(DocumentEvent e) { if(!passwordfield.getText().equals("")){passChange=true;}else{passChange=false;}}
+			@SuppressWarnings("deprecation")
 			public void removeUpdate(DocumentEvent e) { if(!passwordfield.getText().equals("")){passChange=true;}else{passChange=false;}}
+			@SuppressWarnings("deprecation")
 			public void insertUpdate(DocumentEvent e) { if(!passwordfield.getText().equals("")){passChange=true;}else{passChange=false;}}
 		});
 	}
@@ -144,7 +146,10 @@ public class SettingsPanel extends JPanel{
 				if (e.getSource().equals(save)) {
 					if(passwordfield.getText().equals(passwordControle.getText()) && passChange)
 						gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
-					else {
+					else if(!passChange){
+						String s =  "No changes!";
+						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.orange);
+					} else {
 						String s =  "Passwords do not match!";
 						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
 					}
@@ -155,7 +160,10 @@ public class SettingsPanel extends JPanel{
 					if(passwordfield.getText().equals(passwordControle.getText())){
 						if(!passwordfield.getText().equals("") && passChange)
 							gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
-					} else {
+					}else if(!passChange){
+						String s =  "No changes!";
+						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.orange);
+					}  else {
 						String s =  "Passwords do not match!";
 						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
 					}

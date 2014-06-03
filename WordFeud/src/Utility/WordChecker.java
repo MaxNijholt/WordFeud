@@ -37,13 +37,13 @@ public class WordChecker {
 			else
 			{
 				deniedWords
-						.add("played stones have no connection with the field stones");
+						.add("Error");
 			}
 
 		}
 		else
 		{
-			deniedWords.add("incorrect played stones");
+			deniedWords.add("Error");
 		}
 
 		return deniedWords;
