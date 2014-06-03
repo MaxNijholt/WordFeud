@@ -81,6 +81,11 @@ public class Spectator {
 						+ "' and id = '" + turn + "'").equals("Pass")) {
 
 			turnText = playerName + " has passed";
+		} else if (DBCommunicator.requestData(
+				"SELECT aktie_type FROM beurt where spel_id = '" + gameID
+						+ "' and id = '" + turn + "'").equals("Resign")) {
+
+			turnText = playerName + " has resigned";
 		} else if (turn == 2) {
 			turnText = "First turn";
 		} else {
@@ -90,7 +95,6 @@ public class Spectator {
 			int points = DBCommunicator
 					.requestInt("SELECT score FROM beurt where spel_id = '"
 							+ gameID + "' and id = '" + turn + "'");
-
 			playedWord = playedWord.replaceAll(",", "");
 
 			turnText = playerName + " played: " + playedWord + " for: "
