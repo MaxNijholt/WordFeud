@@ -86,4 +86,11 @@ public class Spectator {
 		System.out.println(turnText);
 		return turnText;
 	}
+	
+	public String[] players(int gameID, int turn){
+		String[] players = new String[2];
+		players[0] = DBCommunicator.requestData("SELECT account_naam FROM beurt where spel_id = '" + gameID + "' and id = '" + turn + "'");
+		players[1] = DBCommunicator.requestData("SELECT account_naam FROM beurt where spel_id = '" + gameID + "' and id = '" + (turn -1) + "'");
+		return players;
+	}
 }
