@@ -172,7 +172,7 @@ public class CompetitionPlayersPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		gameInts = gui.getApplication().getRequestedGames(true, true);
+		gameInts = gui.getApplication().getRequestedGames(true, true, compID);
 		if (gameInts.size() != 0) {
 			gameContent.add(addLabel("Denied", 1));
 			gameContent.add(Box.createRigidArea(new Dimension(500, 10)));
