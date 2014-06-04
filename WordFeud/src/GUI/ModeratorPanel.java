@@ -61,7 +61,7 @@ public class ModeratorPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String wordTooAdd = JOptionPane.showInputDialog(
-						"What word would you like to add?", null);
+						"What word would you like to add? (max 15 characters)", null);
 				if (wordTooAdd != null) {
 					wordTooAdd.toLowerCase();
 					if (wordTooAdd.equals("")) {
