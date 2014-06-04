@@ -151,14 +151,15 @@ public class PointCounter {
 					else
 					{
 
-						if (field.get(x + "," + y).getBonus().equals("*"))
-						{
-							wordScore = wordScore
-									+ (field.get(x + "," + y).getGameStone()
-											.getValue());
-						}
+
 						if (!field.get(x + "," + y).isBonusUsed())
 						{
+							if (field.get(x + "," + y).getBonus().equals("*"))
+							{
+								wordScore = wordScore
+										+ (field.get(x + "," + y).getGameStone()
+												.getValue());
+							}
 
 							if (field.get(x + "," + y).getBonus().equals("DL"))
 							{
