@@ -8,8 +8,9 @@ import Utility.DBCommunicator;
 public class Administrator{
 
 	public void addPrivilege(String player, String right){
-		DBCommunicator.writeData("INSERT INTO accountrol (account_naam, rol_type) VALUES('" + player + "','" + right + "')");
-		
+		if(DBCommunicator.requestData("SELECT rol_type FROM accountrol WHERE account_naam='"+ player +"' AND rol_type='"+ right +"'")==null){
+			DBCommunicator.writeData("INSERT INTO accountrol (account_naam, rol_type) VALUES('" + player + "','" + right + "')");
+		}
 	}
 	
 	public void removePrivilege(String player, String right){
