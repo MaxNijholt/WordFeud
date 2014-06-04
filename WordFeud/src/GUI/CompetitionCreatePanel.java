@@ -156,7 +156,7 @@ public class CompetitionCreatePanel extends JPanel implements ActionListener {
 		if(e.getSource().equals(create)){
 			
 			if(!name.getText().isEmpty() && !player.getText().isEmpty() && getInt(player.getText()) > 1 && !year.getText().isEmpty() 
-					&& !month.getText().isEmpty() && !day.getText().isEmpty() && getInt(player.getText()) < 24
+					&& !month.getText().isEmpty() && !day.getText().isEmpty() && getInt(player.getText()) <= 24
 					&& getMonth(getInt(year.getText()), getInt(month.getText()), getInt(day.getText())) == true){
 				
 				if(getInt(day.getText()) <= getDaysOfMonth(getInt(month.getText())) && getInt(day.getText()) > 0){

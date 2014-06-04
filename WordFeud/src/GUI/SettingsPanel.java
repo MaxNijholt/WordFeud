@@ -39,7 +39,8 @@ public class SettingsPanel extends JPanel{
 	private JPanel 			allPanel;
 	private MenuPanel 		mp;
 	private ActionAdapter 	aa = new ActionAdapter();
-	private SPopupMenu		pop = new SPopupMenu();
+	private SPopupMenu		pop = new SPopupMenu(),
+							pop2 = new SPopupMenu();
 	private JFrame 			frame = null;
 	private boolean			passChange = false,
 							userChange= false,
@@ -148,12 +149,19 @@ public class SettingsPanel extends JPanel{
 						gui.getApplication().getCurrentAccount().changePassword(passwordfield.getText());
 					else if(!passChange){
 						String s =  "No changes!";
-						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.orange);
+						Color c = Color.orange;
+						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, c);
 					} else {
 						String s =  "Passwords do not match!";
-						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
+						Color c = Color.red;
+						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, c);
 					}
-					if(userChange)gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
+					if(userChange){
+						gui.getApplication().getCurrentAccount().changeUsername(userfield.getText());
+						String s = "Username changed";
+						Color c = Color.green;
+						pop2.show(gui, passwordfield.getX()+100, userfield.getY(), 300, 20, s, c);
+					}
 				}
 			} else{
 				if(e.getSource().equals(save)){
@@ -162,13 +170,19 @@ public class SettingsPanel extends JPanel{
 							gui.getApplication().getCurrentAccount().getAdmin().changePassword(user, passwordfield.getText());
 					}else if(!passChange){
 						String s =  "No changes!";
-						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.orange);
+						Color c = Color.orange;
+						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, c);
 					}  else {
 						String s =  "Passwords do not match!";
-						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, Color.red);
+						Color c = Color.red;
+						pop.show(gui, passwordfield.getX()+100, passwordfield.getY(), 300, 20, s, c);
 					}
-					if(!userfield.getText().equals("") && userChange) 
+					if(!userfield.getText().equals("") && userChange) {
 						gui.getApplication().getCurrentAccount().getAdmin().changeUsername(user, userfield.getText());
+						String s = "Username changed";
+						Color c = Color.green;
+						pop2.show(gui, passwordfield.getX()+100, userfield.getY(), 300, 20, s, c);
+					}
 					frame.dispose();
 				}
 			}
