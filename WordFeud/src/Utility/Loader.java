@@ -21,6 +21,7 @@ public class Loader {
 	public static BufferedImage				TW_TILE;
 	public static BufferedImage				DL_TILE;
 	public static BufferedImage				DW_TILE;
+	public static BufferedImage 			GAMESTONE;
 	
 	
 	public static HashMap<String, String>	TILEVALUES;
@@ -37,14 +38,19 @@ public class Loader {
 			TW_TILE 			= ImageIO.read(getClass().getResourceAsStream("/images/tw_tile.png"));
 			DL_TILE				= ImageIO.read(getClass().getResourceAsStream("/images/dl_tile.png"));
 			DW_TILE 			= ImageIO.read(getClass().getResourceAsStream("/images/dw_tile.png"));
+			GAMESTONE 			= ImageIO.read(getClass().getResourceAsStream("/images/tile.png"));
 			
 			System.out.println("All images have been loaded succesfully");
 			
 			TILEVALUES			= new HashMap<String, String>();
 			for(char i = 'A'; i < 'Z'; i++) {
-				TILEVALUES.put(
-						DBCommunicator.requestData("SELECT karakter FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + i + "'"), 
-						DBCommunicator.requestData("SELECT waarde FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + i + "'"));
+				String character 	= "";
+				String value 		= "";
+				if(DBCommunicator.checkConnection() != null) {
+					character 	= DBCommunicator.requestData("SELECT karakter FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + i + "'");
+					value		= DBCommunicator.requestData("SELECT waarde FROM lettertype WHERE letterset_code = 'EN' AND karakter = '" + i + "'");
+				}
+				TILEVALUES.put(character, value);
 			}
 			
 			System.out.println("All Characters have been loaded succesfully");
