@@ -154,7 +154,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		}
 
 		
-		this.add(test, BorderLayout.NORTH);
+		this.add(mp, BorderLayout.NORTH);
 		this.add(allPanel, BorderLayout.CENTER);
 		
 		gui.setLoadingCursor(false);
