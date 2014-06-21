@@ -26,10 +26,20 @@ public class PlayerPanel extends JPanel implements ActionListener {
 	private JPanel gameContent;
 	private GUI gui;
 	private MenuPanel mp;
+	private SButton test;
 
-	public PlayerPanel(GUI gui){
+	public PlayerPanel(final GUI gui){
 		this.gui = gui;
 		this.mp = new MenuPanel(gui, null);
+		test = new SButton("test", SButton.GREY);
+		test.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				gui.switchPanel(new CompetitionPanel(gui));
+				
+			}
+		});
 		
 		gui.setLoadingCursor(true);
 		
@@ -144,7 +154,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		}
 
 		
-		this.add(mp, BorderLayout.NORTH);
+		this.add(test, BorderLayout.NORTH);
 		this.add(allPanel, BorderLayout.CENTER);
 		
 		gui.setLoadingCursor(false);
